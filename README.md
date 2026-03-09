@@ -19,7 +19,7 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 - 📐 **22 個產品框架** — 涵蓋 Discovery → Define → Develop → Deliver 全流程
 - 🔄 **變更傳播引擎** — 修改任何步驟，自動更新所有下游產出
 - 📎 **檔案智慧整合** — 上傳數據、截圖、文件，AI 自動整合到對應步驟
-- 🔗 **開發銜接** — 產出 CLAUDE.md + TASKS.md，無縫銜接 Claude Code 開發
+- 🔗 **開發銜接** — 產出 CLAUDE.md + TASKS.md + TICKETS.md，無縫銜接 Claude Code 開發
 - 📊 **多格式產出** — HTML 報告、PRD、PowerPoint、開發交接包
 
 **用一句話觸發整個流程：**
@@ -224,6 +224,7 @@ the-product-playbook/
 📦 開發交接包
 ├── CLAUDE.md          → Claude Code 專案記憶
 ├── TASKS.md           → 功能拆解 + Phase 分期
+├── TICKETS.md         → 開票清單（可直接在 Jira/Asana/Linear 開票）
 ├── docs/
 │   ├── PRD.md         → 完整 PRD
 │   ├── ARCHITECTURE.md → DB Schema + API + 目錄結構
@@ -311,7 +312,7 @@ cp -r the-product-playbook/commands/* ~/.claude/commands/
 | `/product-build <描述>` | 直接實作模式 — 跳過 Discovery，直接進解法 |
 | `/product-prd` | 產出 PRD 工程師交付包 |
 | `/product-report` | 產出 HTML 企劃報告 |
-| `/product-dev` | 產出開發交接包（CLAUDE.md + TASKS.md） |
+| `/product-dev` | 產出開發交接包（CLAUDE.md + TASKS.md + TICKETS.md） |
 
 ### 💬 對話中的自然語言指令
 
@@ -398,3 +399,7 @@ cp -r the-product-playbook/commands/* ~/.claude/commands/
 <p align="center">
   <strong>Built with ❤️ for Product Managers who want to build things that matter.</strong>
 </p>
+
+---
+
+Copyright (c) 2026 Charles Chen. All rights reserved.

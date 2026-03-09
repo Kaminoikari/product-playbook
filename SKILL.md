@@ -158,7 +158,7 @@ description: |
 21. GTM 策略 — Go-to-Market 上市與獲客策略
 
 【開發銜接】
-22. Dev Handoff / 開發交接包 — 產出 CLAUDE.md + TASKS.md，銜接 Claude Code 開發
+22. Dev Handoff / 開發交接包 — 產出 CLAUDE.md + TASKS.md + TICKETS.md，銜接 Claude Code 開發
 
 請輸入框架編號或名稱（可多選，用逗號分隔）：
 ```
@@ -196,7 +196,7 @@ description: |
 | `「幫我找出瓶頸」` | 分析最影響 Aha Moment 到達率的障礙 |
 | `「我要改版，不是新產品」` | 切換改版模式（見改版模式步驟序列） |
 | `「我要說服老闆批准」` | 切換老闆模式，突出商業價值和資源邏輯 |
-| `「進入開發」` / `「產出開發交接包」` | 讀取 `references/07-dev-handoff.md`，確認技術棧後產出完整開發交接包（CLAUDE.md + TASKS.md + ARCHITECTURE.md + setup.sh），附帶 Claude Code 銜接引導 |
+| `「進入開發」` / `「產出開發交接包」` | 讀取 `references/07-dev-handoff.md`，確認技術棧後產出完整開發交接包（CLAUDE.md + TASKS.md + TICKETS.md + ARCHITECTURE.md + setup.sh），附帶 Claude Code 銜接引導 |
 | `「幫我建專案」` / `「接到 Claude Code」` | 同上，產出開發交接包 |
 | `「暫停」` / `「存檔」` / `「先做別的」` | 更新進度檔案並確認存檔完成，結束當前流程 |
 | `「繼續」` / `「回到企劃」` | 讀取進度檔案，從上次中斷處繼續 |
@@ -641,7 +641,7 @@ Claude 在產出最終整合內容前，必須先執行以下檢查：
 □ HTML 企劃報告（適合分享給所有人）
 □ PRD 工程師交付包（含流程圖、DB schema、UI wireframe）
 □ PowerPoint 簡報（適合會議報告）
-□ 開發交接包（CLAUDE.md + TASKS.md + 技術架構，可直接在 Claude Code 中開始開發）
+□ 開發交接包（CLAUDE.md + TASKS.md + TICKETS.md + 技術架構，可直接在 Claude Code 中開始開發）
 □ 以上都要
 
 也可以說「不用」直接結束，或指定特定文件。」
