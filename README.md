@@ -83,6 +83,18 @@ cp -r the-product-playbook ~/.claude/skills/the-product-playbook
 cp the-product-playbook/commands/* ~/.claude/commands/
 ```
 
+**在 Claude Code 中安裝：**
+
+啟動 Claude Code 後，貼上以下內容讓 Claude 自動執行：
+
+```
+請幫我安裝 the-product-playbook skill：
+git clone https://github.com/kaminoikari/the-product-playbook.git
+mkdir -p ~/.claude/skills ~/.claude/commands
+cp -r the-product-playbook ~/.claude/skills/the-product-playbook
+cp the-product-playbook/commands/* ~/.claude/commands/
+```
+
 </details>
 
 安裝完成後，在 Claude Code 中觸發：
