@@ -104,6 +104,18 @@ cp the-product-playbook/commands/* ~/.claude/commands/
 
 > 注意：Slash Commands 會引用 `~/.claude/skills/the-product-playbook/` 路徑中的 SKILL.md，所以建議搭配方法二一起安裝。
 
+### 更新到最新版本
+
+如果你之前已安裝過，執行以下指令即可同步更新：
+
+```bash
+cd the-product-playbook && git pull
+cp -r . ~/.claude/skills/the-product-playbook/
+cp commands/* ~/.claude/commands/
+```
+
+> 更新不會影響你之前的產品規劃檔案或進度，只會更新 Skill 本身的指令和框架內容。
+
 ---
 
 ## 📦 檔案結構

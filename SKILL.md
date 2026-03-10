@@ -509,7 +509,9 @@ North Star / 指標     → 假設驗證計畫、產品規格摘要
 
 確認後詢問：**「你想做的產品是什麼？簡單描述即可。」**
 
-**執行各階段前，讀取對應的 reference 檔：**
+**⚠️ Reference 檔案載入規則：僅在進入該階段時才讀取對應的 reference 檔。不要在流程開始時一次載入所有 reference。這是為了節省 context 空間。**
+
+**執行各階段前，才讀取對應的 reference 檔（不要預先全部載入）：**
 - 機會評估 → `references/00-opportunity-check.md`
 - 策略層 → `references/01-strategy.md`
 - Discovery 階段 → `references/02-discovery.md`
