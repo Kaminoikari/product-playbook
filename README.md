@@ -86,8 +86,7 @@ curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/ma
 npx the-product-playbook --uninstall
 ```
 
-<details>
-<summary>手動安裝</summary>
+#### 手動安裝
 
 ```bash
 git clone https://github.com/kaminoikari/the-product-playbook.git
@@ -95,8 +94,6 @@ mkdir -p ~/.claude/skills ~/.claude/commands
 cp -r the-product-playbook ~/.claude/skills/the-product-playbook
 cp the-product-playbook/commands/* ~/.claude/commands/
 ```
-
-</details>
 
 安裝完成後，在 Claude Code 中觸發：
 
