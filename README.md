@@ -51,7 +51,13 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 
 ### 方法二：Claude Code Skill（推薦）
 
-#### 複製貼上安裝（最簡單 — 推薦新手使用）
+| 方式 | 適合誰 | 需要什麼 |
+|------|--------|----------|
+| ① 複製貼上 | 新手 | 只要開 Claude Code |
+| ② 一鍵安裝 | 開發者 | 終端機 |
+| ③ 手動安裝 | 想自訂路徑 | 終端機 + git |
+
+#### ① 複製貼上安裝（最簡單）
 
 啟動 Claude Code 後，直接貼上以下內容，Claude 會自動幫你完成安裝：
 
@@ -66,7 +72,7 @@ rm -rf /tmp/the-product-playbook
 
 > 💡 更新也是貼上同一段，重新執行即可。
 
-#### 一鍵安裝（終端機）
+#### ② 一鍵安裝（終端機）
 
 ```bash
 # curl
@@ -86,7 +92,7 @@ curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/ma
 npx the-product-playbook --uninstall
 ```
 
-#### 手動安裝
+#### ③ 手動安裝
 
 ```bash
 git clone https://github.com/kaminoikari/the-product-playbook.git
@@ -111,20 +117,6 @@ cp the-product-playbook/commands/* ~/.claude/commands/
 > 用 JTBD 分析一下我的產品
 > 幫我做個 MVP 規劃
 ```
-
-### 方法三：只安裝 Slash Commands（最輕量）
-
-如果你只想要快捷指令，不需要完整 Skill：
-
-```bash
-git clone https://github.com/kaminoikari/the-product-playbook.git
-mkdir -p ~/.claude/commands
-cp the-product-playbook/commands/* ~/.claude/commands/
-```
-
-使用：`/product-quick 我想做一個記帳 App`
-
-> 注意：Slash Commands 會引用 `~/.claude/skills/the-product-playbook/` 路徑中的 SKILL.md，所以建議搭配方法二一起安裝。
 
 ---
 
