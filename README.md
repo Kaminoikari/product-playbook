@@ -51,13 +51,28 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 
 ### 方法二：Claude Code Skill（推薦）
 
-#### 一鍵安裝（推薦）
+#### 複製貼上安裝（最簡單 — 推薦新手使用）
+
+啟動 Claude Code 後，直接貼上以下內容，Claude 會自動幫你完成安裝：
+
+```
+請幫我安裝 the-product-playbook skill：
+git clone https://github.com/kaminoikari/the-product-playbook.git /tmp/the-product-playbook
+mkdir -p ~/.claude/skills ~/.claude/commands
+cp -r /tmp/the-product-playbook ~/.claude/skills/the-product-playbook
+cp /tmp/the-product-playbook/commands/* ~/.claude/commands/
+rm -rf /tmp/the-product-playbook
+```
+
+> 💡 更新也是貼上同一段，重新執行即可。
+
+#### 一鍵安裝（終端機）
 
 ```bash
-# 方式一：curl
+# curl
 curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash
 
-# 方式二：npx（需要 Node.js）
+# npx（需要 Node.js）
 npx the-product-playbook
 ```
 
@@ -71,24 +86,10 @@ curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/ma
 npx the-product-playbook --uninstall
 ```
 
-#### 手動安裝
-
 <details>
-<summary>展開手動安裝步驟</summary>
+<summary>手動安裝</summary>
 
 ```bash
-git clone https://github.com/kaminoikari/the-product-playbook.git
-mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r the-product-playbook ~/.claude/skills/the-product-playbook
-cp the-product-playbook/commands/* ~/.claude/commands/
-```
-
-**在 Claude Code 中安裝：**
-
-啟動 Claude Code 後，貼上以下內容讓 Claude 自動執行：
-
-```
-請幫我安裝 the-product-playbook skill：
 git clone https://github.com/kaminoikari/the-product-playbook.git
 mkdir -p ~/.claude/skills ~/.claude/commands
 cp -r the-product-playbook ~/.claude/skills/the-product-playbook
