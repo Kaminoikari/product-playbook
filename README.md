@@ -51,6 +51,8 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 
 ### 方法二：Claude Code Skill（推薦）
 
+> 💡 更新方式：重新執行安裝指令即可覆蓋更新。
+
 | 方式 | 適合誰 | 需要什麼 |
 |------|--------|----------|
 | ① 複製貼上 | 新手 | 只要開 Claude Code |
@@ -70,8 +72,6 @@ cp /tmp/the-product-playbook/commands/* ~/.claude/commands/
 rm -rf /tmp/the-product-playbook
 ```
 
-> 💡 更新也是貼上同一段，重新執行即可。
-
 #### ② 一鍵安裝（終端機）
 
 ```bash
@@ -81,8 +81,6 @@ curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/ma
 # npx（需要 Node.js）
 npx the-product-playbook
 ```
-
-更新也是同一行指令，重新執行即可。
 
 解除安裝：
 
