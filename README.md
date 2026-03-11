@@ -64,7 +64,9 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 啟動 Claude Code 後，直接貼上以下內容，Claude 會自動幫你完成安裝：
 
 ```
-請幫我安裝 the-product-playbook skill：
+請幫我執行以下指令來安裝（或更新）the-product-playbook skill，
+執行完畢後告訴我結果：
+
 git clone https://github.com/kaminoikari/the-product-playbook.git /tmp/the-product-playbook
 mkdir -p ~/.claude/skills ~/.claude/commands
 cp -r /tmp/the-product-playbook ~/.claude/skills/the-product-playbook
