@@ -108,7 +108,12 @@ do_install() {
   if [ -n "$script_dir" ] && [ -f "$script_dir/SKILL.md" ]; then
     info "偵測到本地 repo，使用本地檔案安裝..."
     src_dir="$script_dir"
-    commit_hash=$(git -C "$src_dir" rev-parse --short HEAD 2>/dev/null || echo "unknown")
+    commit_hash=$(git -C "$src_dir" rev-parse --short HEAD 2>/dev/null || echo "")
+    # 無 git 時（npx 安裝），使用 package.json version
+    if [ -z "$commit_hash" ] && [ -f "$src_dir/package.json" ]; then
+      commit_hash=$(grep '"version"' "$src_dir/package.json" | head -1 | sed 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+    fi
+    commit_hash="${commit_hash:-unknown}"
   else
     info "從 GitHub 下載最新版本..."
     git clone --depth 1 "$REPO_URL" "$TMP_DIR" 2>/dev/null
