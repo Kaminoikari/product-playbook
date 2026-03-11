@@ -1,6 +1,6 @@
 {
   "name": "the-product-playbook",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "世界頂尖產品規劃實作框架引導工具 for Claude Code",
   "bin": {
     "the-product-playbook": "./install.sh"
