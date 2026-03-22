@@ -13,6 +13,22 @@
 
 違反此規則的行為：自行判斷「剩下的步驟不重要」而跳過、將未完成的步驟標記為已完成、合併多個步驟一次產出。
 
+## 📦 產品上下文自動萃取
+
+所有步驟完成後、產出最終整合內容的同時，讀取 `references/rules-context.md` Section 8 執行上下文萃取：
+
+1. **檢查 `.product-context.md` 是否存在**
+   - 不存在 → 建立新檔案
+   - 存在 → 依規則更新（Identity/Core Strategy 覆寫，Decision History 追加，Architecture 合併，Insights 合併去重）
+
+2. **萃取內容**（依流程類型對應 `rules-context.md` Section 8 表格）
+
+3. **告知使用者**：在最終產出後顯示：
+   「✅ 產品上下文已更新至 `.product-context.md`，下次規劃時將自動載入。」
+
+4. **版控提醒**（僅首次建立時）：
+   「⚠️ 建議將 `.product-context.md` 加入 `.gitignore`，此檔案可能包含敏感的產品策略資訊。」
+
 ## 最佳切入點分析（完整模式適用）
 
 ```

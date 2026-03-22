@@ -112,13 +112,24 @@ description: |
 
 確認產品類型後，讀取 `references/rules-product-type.md` 取得 B2B/B2C 差異化調整。
 
+觸發產品上下文讀取/寫入時，讀取 `references/rules-context.md` 取得上下文累積規則。
+
 使用者要求列出框架、使用補充指令時，讀取 `references/rules-commands.md`。
 
 ---
 
 ## 啟動流程
 
-**啟動前置檢查**：觸發 skill 後，第一步先檢查專案目錄下是否存在 `.product-playbook-progress.md`。若存在，優先詢問是否恢復進度（規則見 `references/rules-progress.md`），再進入漸進式確認流程。
+**啟動前置檢查**：觸發 skill 後，依序執行兩項檢查：
+
+1. **進度檔案檢查**：檢查專案目錄下是否存在 `.product-playbook-progress.md`。若存在，優先詢問是否恢復進度（規則見 `references/rules-progress.md`）。
+
+2. **產品上下文檢查**：檢查專案目錄下是否存在 `.product-context.md`（規則見 `references/rules-context.md`）。
+   - 若存在且有完整策略資訊 → 顯示「📦 偵測到 **[產品名]** 的產品上下文，將作為本次規劃的基線。」
+   - 若存在但僅有部分資訊（有 Decision History 但缺 Core Strategy）→ 顯示已知資訊摘要，提供補充選項
+   - 若不存在 → 記錄此狀態，在進入功能擴充或改版模式時觸發 Context Bootstrap
+
+完成前置檢查後，再進入漸進式確認流程。
 
 觸發後，**按漸進式確認流程執行**（見上方三步漸進），確認執行模式 / 產品類型 / 產出對象。若使用者已給出明確指令，直接執行，不必再問。
 
