@@ -121,6 +121,25 @@ Rationale: [Comprehensive judgment based on impact scope, complexity, and risk]
 
 **Feature development spec**: Problem statement → Selected solution + rationale → Impact scope → Execution scope + acceptance criteria → Risk list
 
+### Incremental Document Output (when source document is available)
+
+If the user uploaded a source document (PRD, spec, etc.) during the process:
+
+1. **Incremental version** (default when source document exists):
+   - Insert/modify sections in the original document structure
+   - Maintain the original file's format, style, and naming conventions
+   - New content marked with `[NEW]`
+   - Modified content marked with `[UPDATED]` with original preserved as reference
+   - Sections unrelated to the new feature remain completely untouched
+
+2. **Standalone version** (when no source document):
+   - Use the standard Feature development spec format (as defined above)
+
+3. **Ask the user before generating**:
+   "I detected that you uploaded a [document type]. How would you like the output?
+    A) Incremental update on the original document (recommended)
+    B) Standalone feature development spec"
+
 ### Reference Loading Instructions
 
 | Step | Reference File |

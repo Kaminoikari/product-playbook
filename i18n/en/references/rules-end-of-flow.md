@@ -70,6 +70,7 @@ After completing the final integrated output, proactively ask:
 ```
 "The planning content has been fully integrated! Would you like me to generate any of the following documents?
 
+□ Updated [document type] (incremental update based on your uploaded source document) ← only show this option when a source document was uploaded
 □ HTML planning report (suitable for sharing with everyone)
 □ PRD engineer delivery package (includes flowchart, DB schema, UI wireframe)
 □ PowerPoint presentation (suitable for meeting presentations)
@@ -80,6 +81,7 @@ You can also say 'No thanks' to finish, or specify a particular document."
 ```
 
 **Option display rules**:
+- Source document uploaded → "Updated [document type]" listed first with "(recommended)" label
 - Target audience is engineers → PRD and dev handoff package listed first
 - Target audience is executives/leadership → Presentation listed first
 - Target audience is cross-functional → Both HTML report and presentation listed

@@ -121,6 +121,25 @@ Justificación: [Juicio integral basado en alcance de impacto, complejidad y rie
 
 **Especificación de desarrollo de feature**: Declaración del problema → Solución seleccionada + justificación → Alcance de impacto → Alcance de ejecución + criterios de aceptación → Lista de riesgos
 
+### Salida Incremental de Documento (cuando hay documento fuente disponible)
+
+Si el usuario subió un documento fuente (PRD, especificación, etc.) durante el proceso:
+
+1. **Versión incremental** (predeterminada cuando existe documento fuente):
+   - Insertar/modificar secciones en la estructura del documento original
+   - Mantener el formato, estilo y convenciones de nomenclatura del archivo original
+   - Contenido nuevo marcado con `[NEW]`
+   - Contenido modificado marcado con `[UPDATED]` con el original preservado como referencia
+   - Las secciones no relacionadas con la nueva funcionalidad permanecen completamente intactas
+
+2. **Versión independiente** (cuando no hay documento fuente):
+   - Usar el formato estándar de especificación de desarrollo de feature (como se definió arriba)
+
+3. **Preguntar al usuario antes de generar**:
+   "Detecté que subiste un [tipo de documento]. ¿Cómo deseas la salida?
+    A) Actualización incremental sobre el documento original (recomendado)
+    B) Especificación de desarrollo de feature independiente"
+
 ### Instrucciones de Carga de Referencias
 
 | Paso | Archivo de Referencia |

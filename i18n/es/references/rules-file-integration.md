@@ -41,3 +41,24 @@
 3. **Marcar la fuente**: Anota en el output qué contenido provino del archivo subido (p.ej., "✦ Del reporte de investigación de usuarios subido")
 4. **Datos tienen prioridad**: Cuando datos reales entran en conflicto con suposiciones previas, priorizar los datos reales
 5. **Impacto cross-paso**: Un solo archivo puede afectar múltiples pasos — listar todos los pasos afectados a la vez
+
+## 📎 Identificación de Documento Fuente y Actualización Incremental
+
+Cuando un usuario sube un archivo durante la **Extensión de Funcionalidades** o el **Modo Revisión**, determinar si es un "documento fuente" (un documento que debe actualizarse incrementalmente con la nueva planificación):
+
+### Criterios de Identificación
+- Tipo de archivo: PRD, especificación de producto, documento de arquitectura, documento de requisitos, documento de diseño
+- El usuario dice explícitamente: "este es nuestro PRD actual", "actualiza este documento", "construye sobre esta especificación", etc.
+- Subido durante S1 (recopilación de contexto) de Extensión de Funcionalidades o Modo Revisión
+
+### Cuando Se Identifica un Documento Fuente
+1. Marcarlo: "📎 Documento fuente detectado — la salida final será una actualización incremental basada en este archivo"
+2. Analizar la estructura del documento (encabezados de sección, convenciones de formato, patrones de nomenclatura)
+3. Registrar el formato y estilo del documento para una salida consistente
+4. Durante S1, usar el documento para prellenar el contexto del sistema existente (stack tecnológico, módulos, funcionalidades)
+
+### Reglas de Salida Incremental (aplicadas en la etapa de Salida Final)
+- El contenido nuevo se inserta en las secciones correspondientes, marcado con `[NEW]`
+- El contenido modificado se marca con `[UPDATED]`, el contenido original se preserva como comentario
+- Las secciones no relacionadas con la nueva funcionalidad permanecen intactas
+- El documento de salida mantiene el formato, estilo y convenciones de nomenclatura del archivo original

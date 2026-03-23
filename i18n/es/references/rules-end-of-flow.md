@@ -70,6 +70,7 @@ Después de completar el output final integrado, preguntar proactivamente:
 ```
 "¡El contenido de planificación ha sido completamente integrado! ¿Te gustaría que genere alguno de los siguientes documentos?
 
+□ [Tipo de documento] actualizado (actualización incremental basada en el documento fuente subido) ← solo mostrar cuando se subió un documento fuente
 □ Reporte de planificación HTML (adecuado para compartir con todos)
 □ Paquete de entrega de ingeniería PRD (incluye diagramas de flujo, DB Schema, wireframes)
 □ Presentación PowerPoint (adecuada para presentaciones en reuniones)
@@ -80,6 +81,7 @@ También puedes decir 'No, gracias' para terminar, o especificar un documento en
 ```
 
 **Reglas de visualización de opciones**:
+- Documento fuente subido → "[Tipo de documento] actualizado" listado primero con etiqueta "(recomendado)"
 - Audiencia objetivo son ingenieros → PRD y paquete de handoff de desarrollo listados primero
 - Audiencia objetivo son ejecutivos/liderazgo → Presentación listada primero
 - Audiencia objetivo es cross-funcional → Tanto reporte HTML como presentación listados
