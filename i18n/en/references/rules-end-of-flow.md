@@ -71,19 +71,28 @@ After completing the final integrated output, proactively ask:
 "The planning content has been fully integrated! Would you like me to generate any of the following documents?
 
 □ Updated [document type] (incremental update based on your uploaded source document) ← only show this option when a source document was uploaded
-□ HTML planning report (suitable for sharing with everyone)
+□ PDF document (professional layout with bookmark navigation, suitable for formal sharing)
+□ HTML planning report (interactive, suitable for online sharing)
+□ Word document (suitable for collaborative editing)
 □ PRD engineer delivery package (includes flowchart, DB schema, UI wireframe)
-□ PowerPoint presentation (suitable for meeting presentations)
+□ Presentation PPTX (suitable for meeting reports, recommend polishing with Keynote / PowerPoint after export)
 □ Dev handoff package (CLAUDE.md + TASKS.md + TICKETS.md + technical architecture — ready to start development in Claude Code)
 □ All of the above
 
-You can also say 'No thanks' to finish, or specify a particular document."
+You can also say 'No thanks' to finish, or specify a particular document.
+You can also use /export [pdf|docx|pptx|html|md] to export at any time."
 ```
 
 **Option display rules**:
 - Source document uploaded → "Updated [document type]" listed first with "(recommended)" label
 - Target audience is engineers → PRD and dev handoff package listed first
-- Target audience is executives/leadership → Presentation listed first
-- Target audience is cross-functional → Both HTML report and presentation listed
-- Quick Mode → Only ask if a presentation is needed
+- Target audience is executives/leadership → PDF and presentation listed first
+- Target audience is cross-functional → PDF, HTML report, and presentation all listed
+- Quick Mode → Only ask if PDF or presentation is needed
 - Target audience is yourself → Dev handoff package listed first
+
+**Export trigger rules**:
+- User selects PDF / Word / Presentation PPTX → Load `rules-export-document.md`
+- First time triggering document export → Load `rules-document-tools.md` first to check and install necessary tools
+- User selects HTML planning report → Load `06-html-report.md` (existing rules)
+- User selects "All of the above" → Execute each format export in sequence

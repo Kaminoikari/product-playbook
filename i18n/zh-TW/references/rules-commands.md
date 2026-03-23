@@ -88,5 +88,7 @@
 | `「暫停」` / `「存檔」` / `「先做別的」` | 依 `references/rules-progress.md` 存檔 |
 | `「繼續」` / `「回到企劃」` | 依 `references/rules-progress.md` 恢復 |
 | `「清除進度」` / `「重新開始」` | 刪除進度檔案，從頭開始 |
+| `/export [format]` | 匯出為指定格式。format = `pdf` / `docx` / `pptx` / `html` / `md`。讀取 `references/rules-export-document.md`，首次使用時先載入 `references/rules-document-tools.md` 檢查工具。 |
+| `/parse [file]` | 解析上傳的文件為 Markdown。支援 PDF / DOCX / PPTX / 圖片。讀取 `references/rules-import-document.md`，首次使用時先載入 `references/rules-document-tools.md` 檢查工具。 |
 
 **上下文相關指令提示**：每個步驟完成時，根據當前進度主動提示 2-3 個最相關的可用指令。

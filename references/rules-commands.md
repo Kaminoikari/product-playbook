@@ -1,92 +1,94 @@
-# 🔧 框架選單 + 補充指令
+# 🔧 Framework Menu + Supplementary Commands
 
-> 當使用者要求「列出框架」「給我看有哪些框架」或使用補充指令時載入。
+> Loaded when the user requests "list frameworks," "show me the available frameworks," or uses a supplementary command.
 
-## 指定框架
+## Specify a Framework
 
-**觸發方式有兩種：**
+**Two ways to trigger:**
 
-**方式 A（使用者直接說框架名稱）：** 直接進入該框架引導流程，不需要再問。
+**Method A (User directly names a framework):** Go straight into that framework's guided flow — no need to ask again.
 
-**方式 B（使用者說「我想指定框架」「列出所有框架」等）：** 呈現以下選單：
+**Method B (User says "I want to pick a framework," "list all frameworks," etc.):** Present the following menu:
 
 ```
-📚 可指定的框架清單，請填寫編號或名稱：
+📚 Available frameworks — enter a number or name:
 
-【理解用戶】
- 1. JTBD（Jobs to Be Done）— 找出用戶真正想完成的工作
- 2. Persona — 建立用途/任務/動機導向的用戶角色
- 3. User Journey Map — 繪製用戶完整體驗旅程
- 4. Continuous Discovery — 建立每週接觸用戶的持續習慣
+【Understanding Users】
+ 1. JTBD (Jobs to Be Done) — Identify the job users truly want to accomplish
+ 2. Persona — Build usage/task/motivation-driven user profiles
+ 3. User Journey Map — Map the complete user experience journey
+ 4. Continuous Discovery — Build a weekly habit of engaging with users
 
-【定義問題】
- 5. OST / 機會解法樹 — 系統化連結機會與解法
- 6. Positioning / April Dunford — 找出真正的競爭場域和差異化
- 7. HMW — 將痛點轉化為設計問題
+【Defining the Problem】
+ 5. OST / Opportunity Solution Tree — Systematically link opportunities to solutions
+ 6. Positioning / April Dunford — Find the real competitive arena and differentiation
+ 7. HMW — Reframe pain points as design questions
 
-【解法設計】
- 8. Working Backwards / PR-FAQ — 從用戶結果出發倒推解法
- 9. Pre-mortem / 事前驗屍 — 在失敗前預測並預防失敗
-10. GEM — Growth / Engagement / Monetization 三維優先排序
-11. RICE — 量化功能優先排序
-12. MVP — 定義最小可行產品範圍
+【Solution Design】
+ 8. Working Backwards / PR-FAQ — Start from user outcomes and work backwards to the solution
+ 9. Pre-mortem — Predict and prevent failure before it happens
+10. GEM — Growth / Engagement / Monetization three-dimensional prioritization
+11. RICE — Quantitative feature prioritization
+12. MVP — Define minimum viable product scope
 
-【策略層】
-13. Strategy / Strategy Blocks — Mission → Vision → Strategy 層級結構
-14. DHM Model — Delight / Hard to copy / Margin-enhancing 機會檢驗
-15. LNO Framework — Leverage / Neutral / Overhead 時間分配
-16. Empowered Teams — 賦能型團隊 vs 功能型團隊
+【Strategy Layer】
+13. Strategy / Strategy Blocks — Mission → Vision → Strategy hierarchy
+14. DHM Model — Delight / Hard to copy / Margin-enhancing opportunity assessment
+15. LNO Framework — Leverage / Neutral / Overhead time allocation
+16. Empowered Teams — Empowered teams vs. feature teams
 
-【衡量層】
-17. North Star / 北極星指標 — 定義代表核心用戶價值的單一指標
-18. PMF — 判斷產品市場契合度的四個等級
-19. Sean Ellis Score — 量化 PMF 熱情程度
+【Measurement Layer】
+17. North Star / North Star Metric — Define the single metric representing core user value
+18. PMF — Four levels of Product-Market Fit assessment
+19. Sean Ellis Score — Quantify PMF enthusiasm level
 
-【商業層】
-20. 商業模式與定價 — 收費模式選擇與價值定價對齊
-21. GTM 策略 — Go-to-Market 上市與獲客策略
+【Business Layer】
+20. Business Model & Pricing — Revenue model selection and value-based pricing alignment
+21. GTM Strategy — Go-to-Market launch and customer acquisition strategy
 
-【開發銜接】
-22. Dev Handoff / 開發交接包 — 產出 CLAUDE.md + TASKS.md + TICKETS.md，銜接 Claude Code 開發
+【Dev Handoff】
+22. Dev Handoff — Generate CLAUDE.md + TASKS.md + TICKETS.md to hand off to Claude Code for development
 
-請輸入框架編號或名稱（可多選，用逗號分隔）：
+Enter a framework number or name (multiple selections allowed, separated by commas):
 ```
 
-## 跳過 Discovery / 直接進實作
+## Skip Discovery / Go Straight to Build
 
-當使用者說「跳過用戶研究」「問題已知」「直接進到 Develop」時，讀取 `references/rules-build.md` 並依照直接實作模式步驟序列執行。
+When the user says "skip user research," "problem is already known," "go straight to Develop," read `references/rules-build.md` and follow the Build Mode step sequence.
 
-> 提醒使用者：「跳過用戶研究階段，代表解法建立在假設上。建議執行後盡快進行 Continuous Discovery 驗證。」
+> Remind the user: "Skipping the user research phase means your solution is built on assumptions. We recommend conducting Continuous Discovery as soon as possible after execution to validate."
 
-## 補充指令
+## Supplementary Commands
 
-| 指令 | 行為 |
-|------|------|
-| `「切換到 [框架]」` | 立即切換，保留已完成內容 |
-| `「我想改變目標對象」` | 重新調整框架優先序和呈現方式 |
-| `「跳過這個步驟」` | 提醒必要性後尊重決定，進入下一步 |
-| `「回到 [步驟/框架名稱]」` | 回到指定的任意步驟重新引導（見 `references/rules-change-propagation.md`） |
-| `「幫我簡化」` / `「幫我展開」` | 濃縮核心要點 / 深入補充分析 |
-| `「產出報告」` | 讀取 `references/06-html-report.md`，產出 HTML 企劃報告 |
-| `「產出 PRD」` / `「產出給工程師的文件」` | 讀取 `references/04b-solutions.md`，整合 PR-FAQ + MVP + User Story + Pre-mortem，**自動一併產出：流程圖（Mermaid）+ DB schema（Mermaid ERD）+ UI wireframe（HTML）** |
-| `「產出流程圖」` / `「幫我畫流程圖」` | 以 Mermaid 語法產出流程圖（單獨觸發） |
-| `「產出 DB schema」` / `「幫我設計資料庫」` | 產出 DB schema（Mermaid ERD 語法）（單獨觸發） |
-| `「產出 UI wireframe」` / `「幫我畫線框圖」` | 以 HTML/SVG 產出低保真 UI 線框圖（單獨觸發） |
-| `「產出簡報」` / `「幫我做成 PPT」` | 呼叫系統 pptx skill |
-| `「把文件調整成給 [對象] 看的版本」` | 重新編排框架重點和呈現語言 |
-| `「我只有 15 分鐘」` | 給出最關鍵的三個決策問題或行動 |
-| `「幫我做完整性評估」` | 評估哪些環節完整、哪些有風險 |
-| `「幫我找出假設」` | 識別所有尚未驗證的核心假設清單 |
-| `「做一次 Pre-mortem」` | 對任何解法立即進行事前驗屍 |
-| `「產出給不同對象的版本」` | 自動產出多個對象版本的摘要 |
-| `「這個產品在 PMF 哪個等級？」` | 判斷 PMF 等級並說明下一步里程碑 |
-| `「幫我找出瓶頸」` | 分析最影響 Aha Moment 到達率的障礙 |
-| `「我要改版，不是新產品」` | 切換改版模式（讀取 `references/rules-revision.md`） |
-| `「我要說服老闆批准」` | 切換老闆模式，突出商業價值和資源邏輯 |
-| `「進入開發」` / `「產出開發交接包」` | 讀取 `references/07a-handoff-core.md`，確認技術棧後產出完整開發交接包 |
-| `「幫我建專案」` / `「接到 Claude Code」` | 同上 |
-| `「暫停」` / `「存檔」` / `「先做別的」` | 依 `references/rules-progress.md` 存檔 |
-| `「繼續」` / `「回到企劃」` | 依 `references/rules-progress.md` 恢復 |
-| `「清除進度」` / `「重新開始」` | 刪除進度檔案，從頭開始 |
+| Command | Behavior |
+|---------|----------|
+| `"Switch to [framework]"` | Switch immediately, preserving completed content |
+| `"I want to change the target audience"` | Re-adjust framework priority and presentation style |
+| `"Skip this step"` | Remind of necessity, then respect the decision and move to the next step |
+| `"Go back to [step/framework name]"` | Return to the specified step for re-guidance (see `references/rules-change-propagation.md`) |
+| `"Simplify"` / `"Expand"` | Condense to key points / Add in-depth analysis |
+| `"Generate report"` | Read `references/06-html-report.md`, produce an HTML planning report |
+| `"Generate PRD"` / `"Generate engineer docs"` | Read `references/04b-solutions.md`, integrate PR-FAQ + MVP + User Story + Pre-mortem, **automatically also generate: flowchart (Mermaid) + DB schema (Mermaid ERD) + UI wireframe (HTML)** |
+| `"Generate flowchart"` / `"Draw me a flowchart"` | Output a flowchart in Mermaid syntax (standalone trigger) |
+| `"Generate DB schema"` / `"Design the database"` | Output a DB schema in Mermaid ERD syntax (standalone trigger) |
+| `"Generate UI wireframe"` / `"Draw me a wireframe"` | Output a low-fidelity UI wireframe in HTML/SVG (standalone trigger) |
+| `"Generate presentation"` / `"Make a PPT"` | Invoke the system pptx skill |
+| `"Adapt this document for [audience]"` | Re-organize framework highlights and language for the specified audience |
+| `"I only have 15 minutes"` | Provide the three most critical decision questions or actions |
+| `"Run a completeness assessment"` | Assess which areas are solid and which carry risk |
+| `"Help me find the assumptions"` | Identify all unvalidated core assumptions |
+| `"Run a Pre-mortem"` | Immediately run a pre-mortem on any solution |
+| `"Generate versions for different audiences"` | Automatically produce summaries tailored to multiple audiences |
+| `"What PMF level is this product at?"` | Determine the PMF level and explain the next milestone |
+| `"Help me find the bottleneck"` | Analyze the biggest obstacle to achieving the Aha Moment |
+| `"This is a revision, not a new product"` | Switch to Revision Mode (read `references/rules-revision.md`) |
+| `"I need to convince my boss to approve"` | Switch to Boss Mode — emphasize business value and resource logic |
+| `"Start development"` / `"Generate dev handoff package"` | Read `references/07a-handoff-core.md`, confirm tech stack, then generate the full dev handoff package |
+| `"Set up the project"` / `"Connect to Claude Code"` | Same as above |
+| `"Pause"` / `"Save"` / `"Do something else first"` | Save progress per `references/rules-progress.md` |
+| `"Continue"` / `"Back to planning"` | Resume per `references/rules-progress.md` |
+| `"Clear progress"` / `"Start over"` | Delete progress file and start from scratch |
+| `/export [format]` | Export to specified format. format = `pdf` / `docx` / `pptx` / `html` / `md`. Read `references/rules-export-document.md`. On first use, load `references/rules-document-tools.md` first to check tools. |
+| `/parse [file]` | Parse an uploaded document to Markdown. Supports PDF / DOCX / PPTX / images. Read `references/rules-import-document.md`. On first use, load `references/rules-document-tools.md` first to check tools. |
 
-**上下文相關指令提示**：每個步驟完成時，根據當前進度主動提示 2-3 個最相關的可用指令。
+**Context-aware command hints**: After each step is completed, proactively suggest 2-3 of the most relevant available commands based on the current progress.

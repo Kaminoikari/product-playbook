@@ -88,5 +88,7 @@ When the user says "skip user research," "problem is already known," "go straigh
 | `"Pause"` / `"Save"` / `"Do something else first"` | Save progress per `references/rules-progress.md` |
 | `"Continue"` / `"Back to planning"` | Resume per `references/rules-progress.md` |
 | `"Clear progress"` / `"Start over"` | Delete progress file and start from scratch |
+| `/export [format]` | Export to specified format. format = `pdf` / `docx` / `pptx` / `html` / `md`. Read `references/rules-export-document.md`. On first use, load `references/rules-document-tools.md` first to check tools. |
+| `/parse [file]` | Parse an uploaded document to Markdown. Supports PDF / DOCX / PPTX / images. Read `references/rules-import-document.md`. On first use, load `references/rules-document-tools.md` first to check tools. |
 
 **Context-aware command hints**: After each step is completed, proactively suggest 2-3 of the most relevant available commands based on the current progress.

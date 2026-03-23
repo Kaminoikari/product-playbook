@@ -74,7 +74,7 @@
 | `「产出 UI wireframe」` / `「帮我画线框图」` | 以 HTML/SVG 产出低保真 UI 线框图（单独触发） |
 | `「产出简报」` / `「帮我做成 PPT」` | 呼叫系统 pptx skill |
 | `「把文件调整成给 [对象] 看的版本」` | 重新编排框架重点和呈现语言 |
-| `「我只有 15 分钟」` | 给出最关键的三个决策问题或移动 |
+| `「我只有 15 分钟」` | 给出最关键的三个决策问题或行动 |
 | `「帮我做完整性评估」` | 评估哪些环节完整、哪些有风险 |
 | `「帮我找出假设」` | 识别所有尚未验证的核心假设清单 |
 | `「做一次 Pre-mortem」` | 对任何解法立即进行事前验尸 |
@@ -88,5 +88,7 @@
 | `「暂停」` / `「存档」` / `「先做别的」` | 依 `references/rules-progress.md` 存档 |
 | `「继续」` / `「回到企划」` | 依 `references/rules-progress.md` 恢复 |
 | `「清除进度」` / `「重新开始」` | 删除进度文件，从头开始 |
+| `/export [format]` | 导出为指定格式。format = `pdf` / `docx` / `pptx` / `html` / `md`。读取 `references/rules-export-document.md`，首次使用时先载入 `references/rules-document-tools.md` 检查工具。 |
+| `/parse [file]` | 解析上传的文件为 Markdown。支持 PDF / DOCX / PPTX / 图片。读取 `references/rules-import-document.md`，首次使用时先载入 `references/rules-document-tools.md` 检查工具。 |
 
 **上下文相关指令提示**：每个步骤完成时，根据当前进度主动提示 2-3 个最相关的可用指令。

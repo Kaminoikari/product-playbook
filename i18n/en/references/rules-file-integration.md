@@ -7,10 +7,11 @@
 | File Type | Common Scenarios | Integration Method |
 |-----------|-----------------|-------------------|
 | **Images** | Competitor screenshots, whiteboard photos, hand-drawn journey maps, app interface screenshots, data report screenshots | Recognize content and integrate into the corresponding step |
-| **PDF** | Market reports, internal documents, user research reports, legacy PRDs | Extract key information and integrate |
+| **PDF** | Market reports, internal documents, user research reports, legacy PRDs | Load `rules-import-document.md` for three-layer parsing (pymupdf direct extraction → Claude Vision semantic parsing → Tesseract fallback). On first use, load `rules-document-tools.md` to check tools. |
 | **CSV / Excel** | User behavior data, retention data, NPS survey results, sales data | Analyze data and use for quantitative assessment |
 | **Text files** | Interview transcripts, existing requirements documents, meeting notes | Extract Persona clues, pain points, JTBD evidence |
-| **DOCX** | Existing PRDs, product spec documents, user research reports | Extract key information and integrate |
+| **DOCX** | Existing PRDs, product spec documents, user research reports | Load `rules-import-document.md`, use Pandoc to convert to Markdown then integrate. On first use, load `rules-document-tools.md` to check tools. |
+| **PPTX** | Existing presentations, product intro slides | Load `rules-import-document.md`, use Pandoc to convert to Markdown then integrate. |
 
 ## Not Directly Supported but Guidance Available
 

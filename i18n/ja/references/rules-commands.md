@@ -88,5 +88,7 @@
 | `「一時停止」` / `「保存」` / `「他のことをする」` | `references/rules-progress.md`に従い進捗を保存 |
 | `「続行」` / `「企画に戻る」` | `references/rules-progress.md`に従い再開 |
 | `「進捗をクリア」` / `「最初からやり直す」` | 進捗ファイルを削除しゼロから開始 |
+| `/export [format]` | 指定フォーマットでエクスポート。format = `pdf` / `docx` / `pptx` / `html` / `md`。`references/rules-export-document.md` を読み込み、初回使用時はまず `references/rules-document-tools.md` を読み込みツールを確認。 |
+| `/parse [file]` | アップロードされたドキュメントを Markdown に解析。PDF / DOCX / PPTX / 画像に対応。`references/rules-import-document.md` を読み込み、初回使用時はまず `references/rules-document-tools.md` を読み込みツールを確認。 |
 
 **コンテキスト対応コマンドヒント**：各ステップ完了後、現在の進捗に基づいて最も関連性の高い利用可能なコマンドを2-3個積極的に提案してください。

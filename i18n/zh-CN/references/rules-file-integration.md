@@ -7,10 +7,11 @@
 | 文件类型 | 常见场景 | 整合方式 |
 |---------|---------|---------|
 | **图片** | 竞品截图、白板照片、用户旅程手绘图、App 界面截图、数据报表截图 | 辨识内容后整合到对应步骤 |
-| **PDF** | 市场报告、内部文件、用户调研报告、旧版 PRD | 提取关键资讯后整合 |
+| **PDF** | 市场报告、内部文件、用户调研报告、旧版 PRD | 载入 `rules-import-document.md` 进行三层解析（pymupdf 直提 → Claude Vision 语意解析 → Tesseract fallback）。首次使用时载入 `rules-document-tools.md` 检查工具。 |
 | **CSV / Excel** | 用户行为数据、留存数据、NPS 调查结果、销售数据 | 分析数据后用于量化评估 |
 | **文字档** | 访谈逐字稿、既有需求文件、会议纪录 | 提取 Persona 线索、痛点、JTBD 证据 |
-| **DOCX** | 既有 PRD、产品规格书、用户研究报告 | 提取关键资讯后整合 |
+| **DOCX** | 既有 PRD、产品规格书、用户研究报告 | 载入 `rules-import-document.md`，使用 Pandoc 转 Markdown 后整合。首次使用时载入 `rules-document-tools.md` 检查工具。 |
+| **PPTX** | 既有简报、产品介绍投影片 | 载入 `rules-import-document.md`，使用 Pandoc 转 Markdown 后整合。 |
 
 ## 无法直接处理但可引导的
 

@@ -1,64 +1,65 @@
-# 📎 檔案整合指引
+# 📎 File Integration Guide
 
-> 使用者上傳補充材料時載入。
+> Loaded when the user uploads supplementary materials.
 
-## 可直接處理的檔案類型
+## Directly Supported File Types
 
-| 檔案類型 | 常見場景 | 整合方式 |
-|---------|---------|---------|
-| **圖片** | 競品截圖、白板照片、用戶旅程手繪圖、App 介面截圖、數據報表截圖 | 辨識內容後整合到對應步驟 |
-| **PDF** | 市場報告、內部文件、用戶調研報告、舊版 PRD | 提取關鍵資訊後整合 |
-| **CSV / Excel** | 用戶行為數據、留存數據、NPS 調查結果、銷售數據 | 分析數據後用於量化評估 |
-| **文字檔** | 訪談逐字稿、既有需求文件、會議紀錄 | 提取 Persona 線索、痛點、JTBD 證據 |
-| **DOCX** | 既有 PRD、產品規格書、用戶研究報告 | 提取關鍵資訊後整合 |
+| File Type | Common Scenarios | Integration Method |
+|-----------|-----------------|-------------------|
+| **Images** | Competitor screenshots, whiteboard photos, hand-drawn journey maps, app interface screenshots, data report screenshots | Recognize content and integrate into the corresponding step |
+| **PDF** | Market reports, internal documents, user research reports, legacy PRDs | Load `rules-import-document.md` for three-layer parsing (pymupdf direct extraction → Claude Vision semantic parsing → Tesseract fallback). On first use, load `rules-document-tools.md` to check tools. |
+| **CSV / Excel** | User behavior data, retention data, NPS survey results, sales data | Analyze data and use for quantitative assessment |
+| **Text files** | Interview transcripts, existing requirements documents, meeting notes | Extract Persona clues, pain points, JTBD evidence |
+| **DOCX** | Existing PRDs, product spec documents, user research reports | Load `rules-import-document.md`, use Pandoc to convert to Markdown then integrate. On first use, load `rules-document-tools.md` to check tools. |
+| **PPTX** | Existing presentations, product intro slides | Load `rules-import-document.md`, use Pandoc to convert to Markdown then integrate. |
 
-## 無法直接處理但可引導的
+## Not Directly Supported but Guidance Available
 
-| 檔案類型 | 引導方式 |
-|---------|---------|
-| **影片** | 請使用者描述關鍵場景，或提供逐字稿/字幕檔 |
-| **Figma / Sketch** | 請使用者截圖後上傳 |
-| **Protobuf / Swagger** | 請使用者匯出為 JSON 或文字格式 |
+| File Type | Guidance |
+|-----------|----------|
+| **Video** | Ask the user to describe key scenes, or provide a transcript/subtitle file |
+| **Figma / Sketch** | Ask the user to take screenshots and upload them |
+| **Protobuf / Swagger** | Ask the user to export as JSON or text format |
 
-## 檔案 → 步驟自動對應表
+## File → Step Auto-Mapping Table
 
-| 上傳內容 | 自動對應步驟 | 整合動作 |
-|---------|------------|---------|
-| 競品 App / 網站截圖 | Positioning | 識別為「競爭替代品」，分析差異化 |
-| 白板手繪流程圖 | Journey Map / OST | 辨識流程後轉化為結構化表格 |
-| 用戶訪談逐字稿 | Persona + JTBD | 提取痛點、現行做法、情緒反應、Job 陳述 |
-| 用戶行為數據（CSV） | 機會評估 + North Star + PMF | 用真實數據替代假設性評分 |
-| NPS / 滿意度調查 | PMF + Sean Ellis Score | 直接計算 Score；判斷 PMF 等級 |
-| 既有 PRD / 需求文件 | 改版模式 S1 + MVP | 提取既有功能清單和決策歷史 |
-| 市場報告 PDF | 機會評估 + Strategy | 提取市場規模、趨勢、競爭格局 |
-| 銷售數據 | 商業模式 + GTM | 分析營收結構、客戶分佈、渠道效果 |
-| App 介面截圖 | Aha Moment + Journey | 分析當前體驗路徑 |
+| Uploaded Content | Auto-Mapped Step | Integration Action |
+|-----------------|-----------------|-------------------|
+| Competitor app / website screenshots | Positioning | Identify as "competitive alternatives," analyze differentiation |
+| Whiteboard hand-drawn flowchart | Journey Map / OST | Recognize the flow and convert into a structured table |
+| User interview transcript | Persona + JTBD | Extract pain points, current workarounds, emotional reactions, Job statements |
+| User behavior data (CSV) | Opportunity Assessment + North Star + PMF | Replace assumption-based scores with real data |
+| NPS / satisfaction survey | PMF + Sean Ellis Score | Directly calculate the Score; determine PMF level |
+| Existing PRD / requirements document | Revision Mode S1 + MVP | Extract existing feature list and decision history |
+| Market report PDF | Opportunity Assessment + Strategy | Extract market size, trends, competitive landscape |
+| Sales data | Business Model + GTM | Analyze revenue structure, customer distribution, channel effectiveness |
+| App interface screenshots | Aha Moment + Journey | Analyze the current experience path |
 
-## 整合規則
+## Integration Rules
 
-1. **主動辨識**：先說明「我看到你上傳了 [檔案類型]，我會把其中的 [關鍵資訊] 整合到 [步驟名稱] 中。」
-2. **不覆蓋已有產出**：將上傳內容標記為「補充資料」並更新產出，同時觸發變更傳播規則
-3. **標記來源**：在產出中標注哪些內容來自上傳檔案（例如：「✦ 來自上傳的用戶調研報告」）
-4. **數據優先**：真實數據和先前假設有衝突時，以真實數據為準
-5. **跨步驟影響**：一份檔案可能同時影響多個步驟，應一次性列出所有受影響的步驟
+1. **Proactive identification**: First explain "I see you uploaded [file type]. I will integrate the [key information] from it into [step name]."
+2. **Do not overwrite existing output**: Mark the uploaded content as "supplementary material," update the output, and trigger the change propagation rules
+3. **Mark the source**: Annotate in the output which content came from the uploaded file (e.g., "✦ From the uploaded user research report")
+4. **Data takes priority**: When real data conflicts with previous assumptions, defer to the real data
+5. **Cross-step impact**: A single file may affect multiple steps — list all affected steps at once
 
-## 📎 原始文件識別與增量更新
+## 📎 Source Document Identification & Incremental Update
 
-當使用者在**功能擴充**或**改版模式**中上傳檔案時，判斷該檔案是否為「原始文件」（應根據新規劃產出進行增量更新的文件）：
+When a user uploads a file during **Feature Extension** or **Revision Mode**, determine if it is a "source document" (a document that should be incrementally updated with the new planning output):
 
-### 識別條件
-- 檔案類型：PRD、產品規格書、架構文件、需求文件、設計文件
-- 使用者明確表示：「這是我們目前的 PRD」、「更新這份文件」、「在這份規格上延伸」等
-- 在功能擴充或改版模式的 S1（情境蒐集）階段上傳
+### Identification Criteria
+- File type: PRD, product spec, architecture doc, requirements doc, design doc
+- User explicitly says: "this is our current PRD", "update this document", "build on this spec", etc.
+- Uploaded during S1 (context collection) of Feature Extension or Revision Mode
 
-### 識別到原始文件時
-1. 標記提示：「📎 偵測到原始文件——最終產出將基於此檔案進行增量更新」
-2. 解析文件結構（章節標題、格式慣例、命名模式）
-3. 記錄文件的格式與風格，確保產出一致性
-4. 在 S1 階段，利用該文件預填既有系統背景（技術棧、模組、功能）
+### When a Source Document Is Identified
+1. Mark it: "📎 Source document detected — final output will be an incremental update based on this file"
+2. Parse the document structure (section headings, formatting conventions, naming patterns)
+3. Record the document's format and style for consistent output
+4. During S1, use the document to pre-fill existing system context (tech stack, modules, features)
 
-### 增量產出規則（於最終產出階段套用）
-- 新內容插入對應章節，標記為 `[NEW]`
-- 修改內容標記為 `[UPDATED]`，原始內容以註解方式保留
-- 與新功能無關的章節保持不變
-- 產出文件維持原始檔案的格式、風格與命名慣例
+### Incremental Output Rules (applied at Final Output stage)
+- New content inserted into the appropriate sections, marked with `[NEW]`
+- Modified content marked with `[UPDATED]`, original content preserved as comment
+- Sections unrelated to the new feature remain untouched
+- The output document maintains the original file's format, style, and naming conventions

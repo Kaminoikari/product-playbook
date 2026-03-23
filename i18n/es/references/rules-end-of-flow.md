@@ -71,19 +71,28 @@ Después de completar el output final integrado, preguntar proactivamente:
 "¡El contenido de planificación ha sido completamente integrado! ¿Te gustaría que genere alguno de los siguientes documentos?
 
 □ [Tipo de documento] actualizado (actualización incremental basada en el documento fuente subido) ← solo mostrar cuando se subió un documento fuente
-□ Reporte de planificación HTML (adecuado para compartir con todos)
-□ Paquete de entrega de ingeniería PRD (incluye diagramas de flujo, DB Schema, wireframes)
-□ Presentación PowerPoint (adecuada para presentaciones en reuniones)
+□ Documento PDF (diseño profesional con navegación por marcadores, adecuado para compartir formalmente)
+□ Reporte de planificación HTML (interactivo, adecuado para compartir en línea)
+□ Documento Word (adecuado para edición colaborativa)
+□ Paquete de entrega de ingeniería PRD (incluye diagramas de flujo, DB Schema, wireframes UI)
+□ Presentación PPTX (adecuada para reportes en reuniones, se recomienda pulir con Keynote / PowerPoint después de exportar)
 □ Paquete de handoff de desarrollo (CLAUDE.md + TASKS.md + TICKETS.md + arquitectura técnica — listo para iniciar desarrollo en Claude Code)
 □ Todo lo anterior
 
-También puedes decir 'No, gracias' para terminar, o especificar un documento en particular."
+También puedes decir 'No, gracias' para terminar, o especificar un documento en particular.
+También puedes usar /export [pdf|docx|pptx|html|md] para exportar en cualquier momento."
 ```
 
 **Reglas de visualización de opciones**:
 - Documento fuente subido → "[Tipo de documento] actualizado" listado primero con etiqueta "(recomendado)"
 - Audiencia objetivo son ingenieros → PRD y paquete de handoff de desarrollo listados primero
-- Audiencia objetivo son ejecutivos/liderazgo → Presentación listada primero
-- Audiencia objetivo es cross-funcional → Tanto reporte HTML como presentación listados
-- Modo Rápido → Solo preguntar si se necesita una presentación
+- Audiencia objetivo son ejecutivos/liderazgo → PDF y presentación listados primero
+- Audiencia objetivo es cross-funcional → PDF, reporte HTML y presentación todos listados
+- Modo Rápido → Solo preguntar si se necesita PDF o presentación
 - Audiencia objetivo eres tú mismo → Paquete de handoff de desarrollo listado primero
+
+**Reglas de activación de exportación**:
+- El usuario selecciona PDF / Word / Presentación PPTX → Cargar `rules-export-document.md`
+- Primera vez que se activa exportación de documentos → Cargar `rules-document-tools.md` primero para verificar e instalar herramientas necesarias
+- El usuario selecciona reporte de planificación HTML → Cargar `06-html-report.md` (reglas existentes)
+- El usuario selecciona "Todo lo anterior" → Ejecutar cada exportación de formato en secuencia

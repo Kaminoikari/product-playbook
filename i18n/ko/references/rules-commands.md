@@ -88,5 +88,7 @@
 | `"일시 정지"` / `"저장"` / `"다른 것 먼저"` | `references/rules-progress.md`에 따라 진행 저장 |
 | `"계속"` / `"기획으로 돌아가기"` | `references/rules-progress.md`에 따라 재개 |
 | `"진행 초기화"` / `"처음부터 다시"` | 진행 파일 삭제 후 처음부터 시작 |
+| `/export [format]` | 지정된 형식으로 내보내기. format = `pdf` / `docx` / `pptx` / `html` / `md`. `references/rules-export-document.md`를 읽음. 최초 사용 시 먼저 `references/rules-document-tools.md`를 로드하여 도구 확인. |
+| `/parse [file]` | 업로드된 문서를 Markdown으로 파싱. PDF / DOCX / PPTX / 이미지 지원. `references/rules-import-document.md`를 읽음. 최초 사용 시 먼저 `references/rules-document-tools.md`를 로드하여 도구 확인. |
 
 **컨텍스트 인식 명령 힌트**: 각 단계 완료 후, 현재 진행 상황에 맞게 가장 관련 있는 사용 가능한 명령 2-3개를 능동적으로 제안하세요.

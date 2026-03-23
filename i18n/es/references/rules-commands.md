@@ -88,5 +88,7 @@ Cuando el usuario dice "omitir investigación de usuarios," "el problema ya es c
 | `"Pausar"` / `"Guardar"` / `"Hacer otra cosa primero"` | Guardar progreso según `references/rules-progress.md` |
 | `"Continuar"` / `"Volver a planificación"` | Retomar según `references/rules-progress.md` |
 | `"Limpiar progreso"` / `"Empezar de nuevo"` | Eliminar archivo de progreso y comenzar desde cero |
+| `/export [formato]` | Exportar al formato especificado. formato = `pdf` / `docx` / `pptx` / `html` / `md`. Leer `references/rules-export-document.md`. En el primer uso, cargar `references/rules-document-tools.md` primero para verificar herramientas. |
+| `/parse [archivo]` | Analizar un documento subido a Markdown. Soporta PDF / DOCX / PPTX / imágenes. Leer `references/rules-import-document.md`. En el primer uso, cargar `references/rules-document-tools.md` primero para verificar herramientas. |
 
 **Sugerencias de comandos con contexto**: Después de completar cada paso, sugerir proactivamente 2-3 de los comandos disponibles más relevantes según el progreso actual.

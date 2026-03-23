@@ -7,10 +7,11 @@
 | Tipo de Archivo | Escenarios Comunes | Método de Integración |
 |----------------|-------------------|----------------------|
 | **Imágenes** | Capturas de pantalla de competidores, fotos de pizarrón, journey maps dibujados a mano, capturas de interfaz de app, capturas de reportes de datos | Reconocer contenido e integrar al paso correspondiente |
-| **PDF** | Reportes de mercado, documentos internos, reportes de investigación de usuarios, PRDs existentes | Extraer información clave e integrar |
+| **PDF** | Reportes de mercado, documentos internos, reportes de investigación de usuarios, PRDs existentes | Cargar `rules-import-document.md` para análisis de tres capas (extracción directa pymupdf → análisis semántico Claude Vision → fallback Tesseract). En el primer uso, cargar `rules-document-tools.md` para verificar herramientas. |
 | **CSV / Excel** | Datos de comportamiento de usuario, datos de retención, resultados de encuestas NPS, datos de ventas | Analizar datos y usar para evaluación cuantitativa |
 | **Archivos de texto** | Transcripciones de entrevistas, documentos de requisitos existentes, notas de reuniones | Extraer pistas de Persona, puntos de dolor, evidencia JTBD |
-| **DOCX** | PRDs existentes, documentos de especificación de producto, reportes de investigación de usuarios | Extraer información clave e integrar |
+| **DOCX** | PRDs existentes, documentos de especificación de producto, reportes de investigación de usuarios | Cargar `rules-import-document.md`, usar Pandoc para convertir a Markdown luego integrar. En el primer uso, cargar `rules-document-tools.md` para verificar herramientas. |
+| **PPTX** | Presentaciones existentes, diapositivas de introducción de producto | Cargar `rules-import-document.md`, usar Pandoc para convertir a Markdown luego integrar. |
 
 ## No Directamente Soportados pero con Guía Disponible
 

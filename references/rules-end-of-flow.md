@@ -1,89 +1,98 @@
-# 🏁 流程結束規則
+# 🏁 End-of-Flow Rules
 
-> 所有步驟完成時載入。
+> Loaded when all steps are completed.
 
-## ⛔ 結束條件檢查
+## ⛔ End Condition Check
 
-產出最終整合內容前，必須先執行：
+Before producing the final integrated output, the following must be verified:
 
-1. 確認進度指示器中所有步驟都已標記 ✅
-2. 若有步驟被跳過（使用者明確要求），在最終產出中標記「⚠️ 已跳過」
-3. 若有步驟標記為 ⬜（未執行），不得進入最終產出
-4. **安全性快速檢查**：若使用者將進入開發階段（產出開發交接包），在最終產出中附上安全性提醒，並在產出開發交接包時自動讀取 `references/08-security-checklist.md` 生成對應的安全架構段落
+1. Confirm that all steps in the progress indicator are marked ✅
+2. If any steps were skipped (at the user's explicit request), mark them as "⚠️ Skipped" in the final output
+3. If any steps are marked ⬜ (not executed), do not proceed to the final output
+4. **Security quick check**: If the user will be entering the development phase (generating a dev handoff package), include a security reminder in the final output, and when generating the dev handoff package, automatically read `references/08-security-checklist.md` to produce the corresponding security architecture section
 
-違反此規則的行為：自行判斷「剩下的步驟不重要」而跳過、將未完成的步驟標記為已完成、合併多個步驟一次產出。
+Violations of this rule include: Independently deciding that "the remaining steps are not important" and skipping them, marking incomplete steps as completed, or combining multiple steps into a single output.
 
-## 📦 產品上下文自動萃取
+## 📦 Product Context Auto-Extraction
 
-所有步驟完成後、產出最終整合內容的同時，讀取 `references/rules-context.md` Section 8 執行上下文萃取：
+After all steps are completed and while producing the final integrated output, read `references/rules-context.md` Section 8 to perform context extraction:
 
-1. **檢查 `.product-context.md` 是否存在**
-   - 不存在 → 建立新檔案
-   - 存在 → 依規則更新（Identity/Core Strategy 覆寫，Decision History 追加，Architecture 合併，Insights 合併去重）
+1. **Check whether `.product-context.md` exists**
+   - Does not exist → Create a new file
+   - Exists → Update per the rules (Identity/Core Strategy overwrite, Decision History append, Architecture merge, Insights merge and deduplicate)
 
-2. **萃取內容**（依流程類型對應 `rules-context.md` Section 8 表格）
+2. **Extract content** (according to the flow type mapping in `rules-context.md` Section 8 table)
 
-3. **告知使用者**：在最終產出後顯示：
-   「✅ 產品上下文已更新至 `.product-context.md`，下次規劃時將自動載入。」
+3. **Inform the user**: After the final output, display:
+   "✅ Product context has been updated in `.product-context.md` — it will be automatically loaded in your next planning session."
 
-4. **版控提醒**（僅首次建立時）：
-   「⚠️ 建議將 `.product-context.md` 加入 `.gitignore`，此檔案可能包含敏感的產品策略資訊。」
+4. **Version control reminder** (first creation only):
+   "⚠️ We recommend adding `.product-context.md` to `.gitignore` — this file may contain sensitive product strategy information."
 
-## 最佳切入點分析（完整模式適用）
-
-```
-[Persona 痛點] → [JTBD 陳述] → [OST 機會] → [HMW 問題]
-    → [定位（April Dunford）] → [PR-FAQ 驗證] → [解法選定]
-        → [Aha Moment] → [北極星指標] → [PMF 等級判定]
-```
-
-分析要點：最值得解決的問題 / 核心 JTBD / 產品定位 / PMF 等級與下一里程碑 / 第一步行動 / Pre-mortem 風險警示
-
-## 各模式最終產出
-
-| 模式 | 最後自動整合產出 |
-|------|----------------|
-| ⚡ 功能擴充（直接實作變體） | 功能開發規格：問題 → 選定解法 → 影響範圍 → 執行範圍 → 風險 |
-| 🚀 快速模式 | 一頁式方向摘要：問題 → 解法 → 成功定義 |
-| 📦 完整模式 | 最佳切入點分析 ＋ 產品規格摘要 |
-| 🔄 改版模式 | 改版產品規格摘要：改版前後對照 + 改什麼/不改什麼 + 成功指標 |
-| ✏️ 自訂模式 | 產品規格摘要（未執行欄位標記「未執行」） |
-| ⚡ 直接實作模式 | 工程師導向的執行摘要 |
-
-### 產出語言覆寫
-
-使用者可以要求以不同於規劃會議的語言產出文件：
-- 「用日文產出 PR-FAQ」
-- 「用西班牙文輸出報告」
-- 「用中文撰寫 PRD」
-
-當收到語言覆寫請求時：
-1. 以請求的語言生成產出內容
-2. 保持框架名稱為英文（JTBD、PR-FAQ、North Star 等）
-3. 產出完成後回到規劃會議的原始語言
-4. 注意：這僅影響產出文件的語言，不影響參考檔案或規劃流程
-
-## 延伸產出詢問
-
-完成最終整合產出後，主動詢問：
+## Best Entry Point Analysis (Full Mode only)
 
 ```
-「企劃內容已整合完成！需要我幫你產出以下文件嗎？
-
-□ 更新版 [文件類型]（基於上傳的原始文件增量更新）← 僅在有上傳原始文件時顯示
-□ HTML 企劃報告（適合分享給所有人）
-□ PRD 工程師交付包（含流程圖、DB schema、UI wireframe）
-□ PowerPoint 簡報（適合會議報告）
-□ 開發交接包（CLAUDE.md + TASKS.md + TICKETS.md + 技術架構，可直接在 Claude Code 中開始開發）
-□ 以上都要
-
-也可以說「不用」直接結束，或指定特定文件。」
+[Persona Pain Points] → [JTBD Statement] → [OST Opportunity] → [HMW Question]
+    → [Positioning (April Dunford)] → [PR-FAQ Validation] → [Solution Selected]
+        → [Aha Moment] → [North Star Metric] → [PMF Level Assessment]
 ```
 
-**選項顯示規則**：
-- 有上傳原始文件 → 「更新版 [文件類型]」列在最前，標註「（推薦）」
-- 產出對象為工程師 → PRD 和開發交接包排前
-- 產出對象為老闆/高層 → 簡報排第一位
-- 產出對象為跨部門 → HTML 報告和簡報都列出
-- 快速模式 → 只問是否需要簡報
-- 產出對象為自己 → 開發交接包排第一位
+Analysis points: Most worthwhile problem to solve / Core JTBD / Product positioning / PMF level and next milestone / First action step / Pre-mortem risk alerts
+
+## Final Output by Mode
+
+| Mode | Final Integrated Output |
+|------|------------------------|
+| ⚡ Feature Extension (Build Mode variant) | Feature development spec: Problem → Selected solution → Impact scope → Execution scope → Risks |
+| 🚀 Quick Mode | One-page direction summary: Problem → Solution → Success Definition |
+| 📦 Full Mode | Best Entry Point Analysis + Product Spec Summary |
+| 🔄 Revision Mode | Revision product spec summary: Before/after comparison + What to change/What not to change + Success metrics |
+| ✏️ Custom Mode | Product Spec Summary (unexecuted fields marked "Not Executed") |
+| ⚡ Build Mode | Engineer-oriented execution summary |
+
+### Output Language Override
+
+Users can request outputs in a different language than the planning session:
+- "Generate the PR-FAQ in Japanese"
+- "Output the report in Spanish"
+- "Write the PRD in Chinese"
+
+When a language override is requested:
+1. Generate the output content in the requested language
+2. Keep framework names in English (JTBD, PR-FAQ, North Star, etc.)
+3. Return to the planning session's original language after output generation
+4. Note: This only affects the output document language, not the reference files or planning flow
+
+## Extended Output Prompt
+
+After completing the final integrated output, proactively ask:
+
+```
+"The planning content has been fully integrated! Would you like me to generate any of the following documents?
+
+□ Updated [document type] (incremental update based on your uploaded source document) ← only show this option when a source document was uploaded
+□ PDF document (professional layout with bookmark navigation, suitable for formal sharing)
+□ HTML planning report (interactive, suitable for online sharing)
+□ Word document (suitable for collaborative editing)
+□ PRD engineer delivery package (includes flowchart, DB schema, UI wireframe)
+□ Presentation PPTX (suitable for meeting reports, recommend polishing with Keynote / PowerPoint after export)
+□ Dev handoff package (CLAUDE.md + TASKS.md + TICKETS.md + technical architecture — ready to start development in Claude Code)
+□ All of the above
+
+You can also say 'No thanks' to finish, or specify a particular document.
+You can also use /export [pdf|docx|pptx|html|md] to export at any time."
+```
+
+**Option display rules**:
+- Source document uploaded → "Updated [document type]" listed first with "(recommended)" label
+- Target audience is engineers → PRD and dev handoff package listed first
+- Target audience is executives/leadership → PDF and presentation listed first
+- Target audience is cross-functional → PDF, HTML report, and presentation all listed
+- Quick Mode → Only ask if PDF or presentation is needed
+- Target audience is yourself → Dev handoff package listed first
+
+**Export trigger rules**:
+- User selects PDF / Word / Presentation PPTX → Load `rules-export-document.md`
+- First time triggering document export → Load `rules-document-tools.md` first to check and install necessary tools
+- User selects HTML planning report → Load `06-html-report.md` (existing rules)
+- User selects "All of the above" → Execute each format export in sequence
