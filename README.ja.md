@@ -4,10 +4,12 @@
 
 **世界トップクラスのプロダクト企画AIスキル — アイデアから開発まで、すべてを網羅するフレームワーク**
 
+[![npm version](https://img.shields.io/npm/v/the-product-playbook.svg)](https://www.npmjs.com/package/the-product-playbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://code.claude.com)
 [![Claude.ai](https://img.shields.io/badge/Claude.ai-Custom%20Skill-blue)](https://claude.ai)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![i18n](https://img.shields.io/badge/i18n-6%20languages-green)](README.md)
 
 > Lenny's Podcastの最もインパクトのあるPMフレームワーク（Teresa Torres、Shreyas Doshi、Gibson Biddle、April Dunford、Todd Jackson、Marty Cagan、Richard Rumeltなど）を統合 — AIをあなたのシニアプロダクトマネージャーコーチに変えます。
 

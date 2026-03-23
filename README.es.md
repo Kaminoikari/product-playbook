@@ -4,10 +4,12 @@
 
 **Skill de IA de planificación de producto de clase mundial — de la idea al desarrollo, un framework para gobernarlos a todos**
 
+[![npm version](https://img.shields.io/npm/v/the-product-playbook.svg)](https://www.npmjs.com/package/the-product-playbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://code.claude.com)
 [![Claude.ai](https://img.shields.io/badge/Claude.ai-Custom%20Skill-blue)](https://claude.ai)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![i18n](https://img.shields.io/badge/i18n-6%20languages-green)](README.md)
 
 > Integra los frameworks de PM de mayor impacto de Lenny's Podcast (Teresa Torres, Shreyas Doshi, Gibson Biddle, April Dunford, Todd Jackson, Marty Cagan, Richard Rumelt, y otros) — convirtiendo a la IA en tu coach senior de product management.
 

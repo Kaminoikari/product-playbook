@@ -4,10 +4,12 @@
 
 **세계 수준의 제품 기획 AI 스킬 — 아이디어에서 개발까지, 하나의 프레임워크로 모든 것을**
 
+[![npm version](https://img.shields.io/npm/v/the-product-playbook.svg)](https://www.npmjs.com/package/the-product-playbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://code.claude.com)
 [![Claude.ai](https://img.shields.io/badge/Claude.ai-Custom%20Skill-blue)](https://claude.ai)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![i18n](https://img.shields.io/badge/i18n-6%20languages-green)](README.md)
 
 > Lenny's Podcast에서 소개된 가장 영향력 있는 PM 프레임워크(Teresa Torres, Shreyas Doshi, Gibson Biddle, April Dunford, Todd Jackson, Marty Cagan, Richard Rumelt 등)를 통합하여 — AI를 당신의 시니어 프로덕트 매니저 코치로 변환합니다.
 

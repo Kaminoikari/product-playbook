@@ -4,10 +4,12 @@
 
 **世界級產品規劃 AI Skill — 從 Idea 到開發，一套框架全搞定**
 
+[![npm version](https://img.shields.io/npm/v/the-product-playbook.svg)](https://www.npmjs.com/package/the-product-playbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://code.claude.com)
 [![Claude.ai](https://img.shields.io/badge/Claude.ai-Custom%20Skill-blue)](https://claude.ai)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![i18n](https://img.shields.io/badge/i18n-6%20languages-green)](README.md)
 
 > 整合 Lenny's Podcast 歷來最重要的 PM 框架（Teresa Torres、Shreyas Doshi、Gibson Biddle、April Dunford、Todd Jackson、Marty Cagan、Richard Rumelt 等），讓 AI 成為你的資深產品經理教練。
 
@@ -35,7 +37,7 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 ## 🎬 Demo
 
 <p align="center">
-  <img src="assets/demo-build.gif" alt="The Product Playbook Demo — Build Mode" width="800">
+  <img src="assets/demo-build-zh-TW.gif" alt="The Product Playbook Demo — Build Mode" width="800">
 </p>
 
 > 上圖展示**直接實作模式**：輸入需求 → 掃描 codebase → 偵測技術棧 → 引用框架進行問題釐清，直接進入解法設計。
@@ -131,7 +133,7 @@ the-product-playbook/
 ├── README.md                         # English README
 ├── README.zh-TW.md                   # 繁體中文 README（本文件）
 ├── assets/
-│   └── demo.gif                      # README 動態展示圖
+│   └── demo-build-zh-TW.gif          # README 動態展示圖
 ├── commands/                         # Claude Code CLI Slash Commands（可選安裝）
 │   ├── product-quick.md              # /product-quick — 快速模式
 │   ├── product-full.md               # /product-full — 完整模式
