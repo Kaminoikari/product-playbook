@@ -58,6 +58,10 @@ When the user says "skip user research," "problem is already known," "go straigh
 
 > Remind the user: "Skipping the user research phase means your solution is built on assumptions. We recommend conducting Continuous Discovery as soon as possible after execution to validate."
 
+## Feature Extension Mode Trigger
+
+- "Add a feature" / "I want to add a new feature" / "new feature for existing product" → triggers Feature Extension Mode (reads `references/rules-build.md` → Feature Extension Quick Path)
+
 ## Supplementary Commands
 
 | Command | Behavior |

@@ -13,6 +13,58 @@ Antes de producir el output final integrado, lo siguiente debe verificarse:
 
 Violaciones a esta regla incluyen: Decidir independientemente que "los pasos restantes no son importantes" y omitirlos, marcar pasos incompletos como completados, o combinar múltiples pasos en un solo output.
 
+## 🔍 Verificación de Consistencia de Decisiones
+
+Antes de generar el output final integrado, escanear TODOS los pasos completados y verificar la consistencia entre pasos:
+
+### Verificaciones por Modo
+
+**🚀 Modo Rápido** (3 pasos — verificar 2 referencias cruzadas):
+1. JTBD ↔ PR-FAQ: ¿El PR-FAQ aborda el mismo problema que la declaración JTBD?
+2. PR-FAQ ↔ North Star: ¿El North Star mide el resultado que el PR-FAQ promete?
+
+**📦 Modo Completo** (20 pasos — verificar las 7):
+1. Usuario Objetivo — ¿se referencia la misma persona en JTBD, Posicionamiento, PR-FAQ y North Star?
+2. Problema Central / JTBD — ¿el PR-FAQ aborda el mismo problema? ¿El MVP lo resuelve?
+3. Posicionamiento — ¿se refleja en el titular del PR-FAQ y la dirección de la solución?
+4. Dirección de la Solución — ¿la solución seleccionada coincide con el alcance del MVP?
+5. Alcance del MVP — ¿es consistente con las promesas del PR-FAQ? ¿Se respetan los elementos "No Hacer"?
+6. North Star Metric — ¿mide el resultado del JTBD? ¿Es alcanzable con el alcance del MVP?
+7. Riesgos Pre-mortem — ¿siguen siendo relevantes dada la solución final y el MVP?
+
+**🔄 Modo Revisión** (12 pasos — verificar 4):
+1. JTBD existente ↔ Puntos de Dolor ↔ Posicionamiento: ¿consistentes después de la reevaluación?
+2. PR-FAQ ↔ Alcance del MVP: ¿el alcance de la revisión coincide con lo que describe el PR-FAQ?
+3. North Star ↔ Antes/Después: ¿la comparación de métricas es lógica?
+4. Riesgos Pre-mortem: ¿siguen siendo relevantes para el producto revisado?
+
+**⚡ Modo Build** (7 pasos — verificar 4):
+1. Declaración del Problema ↔ PR-FAQ: ¿se aborda el mismo problema?
+2. Dirección de la Solución ↔ Alcance del MVP: ¿la solución seleccionada coincide con el MVP?
+3. North Star ↔ MVP: ¿la métrica es alcanzable con el alcance del MVP?
+4. Riesgos Pre-mortem: ¿siguen siendo relevantes para la solución final?
+
+**🔧 Modo Extensión de Feature** (4 pasos — verificar 3):
+1. Problema ↔ Solución Seleccionada: ¿la solución aborda directamente el problema planteado?
+2. Solución ↔ Alcance de Ejecución: ¿el alcance implementa correctamente la solución seleccionada?
+3. Evaluación de Riesgos: ¿los riesgos identificados siguen siendo relevantes para el alcance de ejecución?
+
+**✏️ Modo Personalizado** — solo verificar referencias cruzadas entre los pasos que el usuario realmente ejecutó. Omitir verificaciones de pasos que no formaron parte de la selección personalizada.
+
+### Ejecución
+1. Listar cada decisión clave en una línea (ej., "Usuario Objetivo: Fundadores de startups en etapa temprana")
+2. Verificar si existen contradicciones o referencias desactualizadas entre pasos
+3. Si se encuentran inconsistencias:
+   - Mostrar: "⚠️ La verificación de consistencia encontró [N] problema(s) antes del output final:"
+   - Listar cada problema con los pasos afectados
+   - Preguntar al usuario: "¿Debo corregir estos problemas antes de generar el output final, o proceder tal como está?"
+4. Si todo es consistente:
+   - Mostrar: "✅ Verificación de consistencia de decisiones aprobada — todos los pasos están alineados."
+   - Proceder al output final
+
+### Por Qué Esto Es Importante
+Durante la planificación iterativa, los usuarios pueden modificar decisiones anteriores (ej., cambiar el JTBD) mientras algunos pasos posteriores retienen contenido desactualizado. Esta verificación detecta esas brechas antes de que se produzca el documento final, evitando entregables inconsistentes.
+
 ## 📦 Auto-Extracción de Contexto de Producto
 
 Después de que todos los pasos estén completos y mientras se produce el output final integrado, lee `references/rules-context.md` Sección 8 para realizar la extracción de contexto:
@@ -43,7 +95,7 @@ Puntos de análisis: Problema más valioso a resolver / JTBD Central / Posiciona
 
 | Modo | Output Final Integrado |
 |------|----------------------|
-| ⚡ Extensión de Feature (variante Modo Build) | Especificación de desarrollo de feature: Problema → Solución seleccionada → Alcance de impacto → Alcance de ejecución → Riesgos |
+| 🔧 Modo Extensión de Feature | Especificación de desarrollo de feature: Problema → Solución seleccionada → Alcance de impacto → Alcance de ejecución → Riesgos |
 | 🚀 Modo Rápido | Resumen de dirección de una página: Problema → Solución → Definición de Éxito |
 | 📦 Modo Completo | Análisis del Mejor Punto de Entrada + Resumen de Spec de Producto |
 | 🔄 Modo Revisión | Resumen de spec de producto de revisión: Comparación antes/después + Qué cambiar/Qué no cambiar + Métricas de éxito |

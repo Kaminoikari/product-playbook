@@ -188,6 +188,8 @@ When the context file exists but some sections are empty, determine whether to s
 | Decision History | Can skip | Include if available, skip if not | The flow itself will produce this |
 | Accumulated Insights | Can skip | Include if available, skip if not | The flow itself will produce this |
 
+| Feature Extension | Identity (confirm only), Architecture & Tech Stack (required), Core Strategy (skip allowed) |
+
 **Principle**: Empty sections **do not block the flow**. Only sections that are "required" for the current mode and are empty will trigger collection.
 
 ---

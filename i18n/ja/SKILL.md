@@ -128,7 +128,7 @@ description: |
 | 🔄 リビジョンモード | `references/rules-revision.md` |
 | ✏️ カスタムモード | `references/rules-custom.md` |
 | ⚡ ビルドモード | `references/rules-build.md` |
-| 🔧 機能拡張モード | `references/rules-build.md`（機能拡張パスセクション） |
+| 🔧 機能拡張モード | `references/rules-build.md` → 「🔧 機能拡張クイックパス」セクションに直接ジャンプ |
 
 プロダクトタイプ確認後、`references/rules-product-type.md`を読み込み、B2B/B2Cの差異調整を適用してください。
 

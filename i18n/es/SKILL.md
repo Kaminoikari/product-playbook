@@ -128,7 +128,7 @@ Después de confirmar el modo, **lee el archivo de reglas del modo correspondien
 | 🔄 Modo Revisión | `references/rules-revision.md` |
 | ✏️ Modo Personalizado | `references/rules-custom.md` |
 | ⚡ Modo Build | `references/rules-build.md` |
-| 🔧 Modo Extensión de Feature | `references/rules-build.md` (sección de ruta de Extensión de Feature) |
+| 🔧 Modo Extensión de Feature | `references/rules-build.md` → saltar directamente a la sección "🔧 Ruta Rápida de Extensión de Feature" |
 
 Después de confirmar el tipo de producto, lee `references/rules-product-type.md` para ajustes de diferenciación B2B/B2C.
 

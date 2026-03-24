@@ -128,7 +128,7 @@ After confirming the mode, **read the corresponding mode rules file** for the st
 | 🔄 Revision Mode | `references/rules-revision.md` |
 | ✏️ Custom Mode | `references/rules-custom.md` |
 | ⚡ Build Mode | `references/rules-build.md` |
-| 🔧 Feature Extension Mode | `references/rules-build.md` (Feature Extension path section) |
+| 🔧 Feature Extension Mode | `references/rules-build.md` → jump directly to "🔧 Feature Extension Quick Path" section |
 
 After confirming the product type, read `references/rules-product-type.md` for B2B/B2C differentiation adjustments.
 

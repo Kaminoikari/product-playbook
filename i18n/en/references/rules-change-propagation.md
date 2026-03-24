@@ -42,6 +42,15 @@ North Star / Metrics      → Hypothesis Validation Plan, Product Spec Summary
 Product Spec Summary      → HTML Report, PRD (if already generated)
 ```
 
+### Feature Extension dependency:
+```
+Feature Extension dependency:
+─────────────────────────────────────────────────────
+S1 (Problem + Context)  → S2 (Solutions), S3 (Risks), S4 (Execution Scope)
+S2 (Selected Solution)  → S3 (Risks), S4 (Execution Scope)
+S3 (Risk Assessment)    → S4 (Execution Scope)
+```
+
 ## Execution Process
 
 1. **Inform the user of the impact scope**: "You modified [step]. This affects [list of downstream steps]. I will update each one."

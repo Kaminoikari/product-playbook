@@ -58,6 +58,10 @@ Cuando el usuario dice "omitir investigación de usuarios," "el problema ya es c
 
 > Recuerda al usuario: "Omitir la fase de investigación de usuarios significa que tu solución está construida sobre suposiciones. Recomendamos realizar Descubrimiento Continuo lo antes posible después de la ejecución para validar."
 
+## Activación del Modo Extensión de Funcionalidad
+
+- "Agregar una funcionalidad" / "Quiero agregar una nueva funcionalidad" / "nueva funcionalidad para producto existente" → activa el Modo Extensión de Funcionalidad (lee `references/rules-build.md` → Ruta Rápida de Extensión de Funcionalidad)
+
 ## Comandos Complementarios
 
 | Comando | Comportamiento |

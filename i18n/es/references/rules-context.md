@@ -188,6 +188,8 @@ Cuando el archivo de contexto existe pero algunas secciones están vacías, dete
 | Historial de Decisiones | Puede omitirse | Incluir si disponible, omitir si no | El flujo mismo producirá esto |
 | Insights Acumulados | Puede omitirse | Incluir si disponible, omitir si no | El flujo mismo producirá esto |
 
+| Extensión de Funcionalidad | Identity (solo confirmar), Architecture & Tech Stack (requerido), Core Strategy (se permite omitir) |
+
 **Principio**: Las secciones vacías **no bloquean el flujo**. Solo las secciones que son "requeridas" para el modo actual y están vacías activarán la recopilación.
 
 ---

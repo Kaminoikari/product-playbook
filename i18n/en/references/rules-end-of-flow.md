@@ -13,6 +13,58 @@ Before producing the final integrated output, the following must be verified:
 
 Violations of this rule include: Independently deciding that "the remaining steps are not important" and skipping them, marking incomplete steps as completed, or combining multiple steps into a single output.
 
+## 🔍 Decision Consistency Check
+
+Before generating the final integrated output, scan ALL completed steps and verify cross-step consistency:
+
+### Checks by Mode
+
+**🚀 Quick Mode** (3 steps — check 2 cross-references):
+1. JTBD ↔ PR-FAQ: Does the PR-FAQ address the same problem as the JTBD statement?
+2. PR-FAQ ↔ North Star: Does the North Star measure the outcome the PR-FAQ promises?
+
+**📦 Full Mode** (20 steps — check all 7):
+1. Target User — same persona referenced across JTBD, Positioning, PR-FAQ, and North Star?
+2. Core Problem / JTBD — PR-FAQ addresses the same problem? MVP solves it?
+3. Positioning — reflected in PR-FAQ headline and solution direction?
+4. Solution Direction — selected solution matches MVP scope?
+5. MVP Scope — consistent with PR-FAQ promises? "Not Doing" items respected?
+6. North Star Metric — measures JTBD outcome? Achievable with MVP scope?
+7. Pre-mortem Risks — still relevant given final solution and MVP?
+
+**🔄 Revision Mode** (12 steps — check 4):
+1. Existing JTBD ↔ Pain Points ↔ Positioning: consistent after re-evaluation?
+2. PR-FAQ ↔ MVP Scope: revision scope matches what PR-FAQ describes?
+3. North Star ↔ Before/After: metric comparison is logical?
+4. Pre-mortem Risks: still relevant for the revised product?
+
+**⚡ Build Mode** (7 steps — check 4):
+1. Problem Statement ↔ PR-FAQ: same problem addressed?
+2. Solution Direction ↔ MVP Scope: selected solution matches MVP?
+3. North Star ↔ MVP: metric achievable with MVP scope?
+4. Pre-mortem Risks: still relevant for final solution?
+
+**🔧 Feature Extension Mode** (4 steps — check 3):
+1. Problem ↔ Selected Solution: solution directly addresses the stated problem?
+2. Solution ↔ Execution Scope: scope correctly implements the selected solution?
+3. Risk Assessment: identified risks still relevant for the execution scope?
+
+**✏️ Custom Mode** — only check cross-references between steps the user actually executed. Skip checks for steps that were not part of the custom selection.
+
+### Execution
+1. List each core decision as a one-liner (e.g., "Target User: Early-stage startup founders")
+2. Check for contradictions or outdated references between steps
+3. If inconsistencies are found:
+   - Display: "⚠️ Consistency check found [N] issue(s) before final output:"
+   - List each issue with the affected steps
+   - Ask user: "Should I fix these before generating the final output, or proceed as-is?"
+4. If all consistent:
+   - Display: "✅ Decision consistency check passed — all steps aligned."
+   - Proceed to final output
+
+### Why This Matters
+During iterative planning, users may modify upstream decisions (e.g., change JTBD) while some downstream steps retain outdated content. This check catches those gaps before the final document is produced, preventing inconsistent deliverables.
+
 ## 📦 Product Context Auto-Extraction
 
 After all steps are completed and while producing the final integrated output, read `references/rules-context.md` Section 8 to perform context extraction:
@@ -43,7 +95,7 @@ Analysis points: Most worthwhile problem to solve / Core JTBD / Product position
 
 | Mode | Final Integrated Output |
 |------|------------------------|
-| ⚡ Feature Extension (Build Mode variant) | Feature development spec: Problem → Selected solution → Impact scope → Execution scope → Risks |
+| 🔧 Feature Extension Mode | Feature development spec: Problem → Selected solution → Impact scope → Execution scope → Risks |
 | 🚀 Quick Mode | One-page direction summary: Problem → Solution → Success Definition |
 | 📦 Full Mode | Best Entry Point Analysis + Product Spec Summary |
 | 🔄 Revision Mode | Revision product spec summary: Before/after comparison + What to change/What not to change + Success metrics |

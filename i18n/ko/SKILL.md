@@ -128,7 +128,7 @@ description: |
 | 🔄 리비전 모드 | `references/rules-revision.md` |
 | ✏️ 커스텀 모드 | `references/rules-custom.md` |
 | ⚡ 빌드 모드 | `references/rules-build.md` |
-| 🔧 기능 확장 모드 | `references/rules-build.md` (기능 확장 경로 섹션) |
+| 🔧 기능 확장 모드 | `references/rules-build.md` → 「🔧 기능 확장 빠른 경로」 섹션으로 바로 이동 |
 
 제품 유형을 확인한 후, `references/rules-product-type.md`를 읽어 B2B/B2C 차별화 조정을 적용하세요.
 

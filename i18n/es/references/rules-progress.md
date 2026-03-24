@@ -29,6 +29,16 @@ Después de completar cada paso, crear o actualizar `.product-playbook-progress.
 - ...
 ```
 
+### Ejemplo de Modo Extensión de Funcionalidad
+```markdown
+Modo: Extensión de Funcionalidad
+Paso: S2/S4
+S1: Problema + contexto del sistema existente ✅
+S2: Tres soluciones paralelas + recomendación de IA ▶️
+S3: Evaluación de riesgos ⬜
+S4: Alcance de ejecución ⬜
+```
+
 ## Reglas de Activación
 
 1. **Auto-guardado**: Después de completar cada paso y ser confirmado por el usuario, actualizar inmediatamente el archivo de progreso

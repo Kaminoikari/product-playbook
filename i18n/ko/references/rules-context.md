@@ -188,6 +188,8 @@
 | Decision History | 건너뛸 수 있음 | 있으면 포함, 없으면 건너뛰기 | 플로우 자체가 이를 생성 |
 | Accumulated Insights | 건너뛸 수 있음 | 있으면 포함, 없으면 건너뛰기 | 플로우 자체가 이를 생성 |
 
+| 기능 확장 | Identity（확인만）、Architecture & Tech Stack（필수）、Core Strategy（건너뛰기 가능） |
+
 **원칙**: 빈 섹션은 **플로우를 차단하지 않습니다**. 현재 모드에 "필수"이면서 비어있는 섹션만 수집을 트리거합니다.
 
 ---

@@ -42,6 +42,15 @@ North Star / Métricas      → Plan de Validación de Hipótesis, Resumen de Sp
 Resumen de Spec de Producto      → Reporte HTML, PRD (si ya se generó)
 ```
 
+### Dependencia de Extensión de Funcionalidad:
+```
+Dependencia de Extensión de Funcionalidad:
+─────────────────────────────────────────────────────
+S1 (Problema + Contexto)      → S2 (Soluciones), S3 (Riesgos), S4 (Alcance de Ejecución)
+S2 (Solución Seleccionada)    → S3 (Riesgos), S4 (Alcance de Ejecución)
+S3 (Evaluación de Riesgos)    → S4 (Alcance de Ejecución)
+```
+
 ## Proceso de Ejecución
 
 1. **Informar al usuario del alcance del impacto**: "Modificaste [paso]. Esto afecta [lista de pasos downstream]. Actualizaré cada uno."

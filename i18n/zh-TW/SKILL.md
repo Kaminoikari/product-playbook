@@ -128,7 +128,7 @@ description: |
 | 🔄 改版模式 | `references/rules-revision.md` |
 | ✏️ 自訂模式 | `references/rules-custom.md` |
 | ⚡ 直接實作模式 | `references/rules-build.md` |
-| 🔧 功能擴充模式 | `references/rules-build.md`（功能擴充路徑段落） |
+| 🔧 功能擴充模式 | `references/rules-build.md` → 直接跳到「🔧 功能擴充快速路徑」段落 |
 
 確認產品類型後，讀取 `references/rules-product-type.md` 取得 B2B/B2C 差異化調整。
 

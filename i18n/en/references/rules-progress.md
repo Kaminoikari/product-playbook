@@ -29,6 +29,16 @@ After each step is completed, create or update `.product-playbook-progress.md` i
 - ...
 ```
 
+### Feature Extension Mode Example
+```markdown
+Mode: Feature Extension
+Step: S2/S4
+S1: Problem + existing system context ✅
+S2: Three parallel solutions + AI recommendation ▶️
+S3: Risk assessment ⬜
+S4: Execution scope ⬜
+```
+
 ## Trigger Rules
 
 1. **Auto-save**: After each step is completed and confirmed by the user, immediately update the progress file
