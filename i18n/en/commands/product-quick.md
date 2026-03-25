@@ -3,8 +3,8 @@ description: Quick Mode Product Planning — Run through JTBD → PR-FAQ → Nor
 argument-hint: <product description>
 ---
 
-Please read ~/.claude/skills/the-product-playbook/SKILL.md.
-Then read ~/.claude/skills/the-product-playbook/references/rules-quick.md for the step sequence.
+Please read ~/.claude/skills/product-playbook/SKILL.md.
+Then read ~/.claude/skills/product-playbook/references/rules-quick.md for the step sequence.
 When executing each step, load the corresponding reference files as indicated in rules-quick.md.
 
 Execution mode: Quick Mode

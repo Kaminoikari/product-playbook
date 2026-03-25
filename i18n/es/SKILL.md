@@ -1,5 +1,5 @@
 ---
-name: the-product-playbook
+name: product-playbook
 description: |
   Una herramienta de planificación de producto de clase mundial que integra los frameworks de PM más importantes de Lenny's Podcast (Teresa Torres, Shreyas Doshi, Gibson Biddle, April Dunford, Todd Jackson, Marty Cagan, Richard Rumelt, y más) para guiarte sistemáticamente desde 0 hasta 1 y hasta la escalabilidad en planificación de producto.
 
@@ -146,10 +146,10 @@ Cuando el usuario pida listar frameworks o use comandos complementarios, lee `re
 
 Antes de comenzar, verifica silenciosamente si hay una versión más nueva disponible:
 
-- Ejecuta: `timeout 3 npm view the-product-playbook version 2>/dev/null || echo ""`
-- Lee la versión instalada: `cat ~/.claude/skills/the-product-playbook/.version 2>/dev/null || echo ""`
+- Ejecuta: `timeout 3 npm view product-playbook version 2>/dev/null || echo ""`
+- Lee la versión instalada: `cat ~/.claude/skills/product-playbook/.version 2>/dev/null || echo ""`
 - Si la versión de npm es más nueva que la versión instalada, muestra:
-   `📦 Actualización disponible: v[instalada] → v[última]. Ejecute: npx the-product-playbook`
+   `📦 Actualización disponible: v[instalada] → v[última]. Ejecute: npx product-playbook`
 - Si la verificación falla, se agota el tiempo, o las versiones coinciden → no digas nada, continúa silenciosamente
 - Procede al siguiente paso sin importar el resultado — nunca bloquees por la verificación de versión
 

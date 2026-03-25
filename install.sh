@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # The Product Playbook — Install Script
-# https://github.com/kaminoikari/the-product-playbook
+# https://github.com/kaminoikari/product-playbook
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash
 #   bash install.sh
 #   bash install.sh --lang en
 #   bash install.sh --lang zh-TW
@@ -25,9 +25,9 @@ else
 fi
 
 # ─── Constants ────────────────────────────────────────────────────────────────
-REPO_URL="https://github.com/kaminoikari/the-product-playbook.git"
-TMP_DIR="${TMPDIR:-/tmp}/the-product-playbook-install-$$"
-SKILL_DIR="$HOME/.claude/skills/the-product-playbook"
+REPO_URL="https://github.com/kaminoikari/product-playbook.git"
+TMP_DIR="${TMPDIR:-/tmp}/product-playbook-install-$$"
+SKILL_DIR="$HOME/.claude/skills/product-playbook"
 COMMANDS_DIR="$HOME/.claude/commands"
 SUPPORTED_LANGS="en zh-TW ja zh-CN es ko"
 INSTALL_LANG=""
@@ -157,7 +157,7 @@ Usage:
   bash install.sh --help           $(msg usage_help)
 
 $(msg usage_paths)
-  Skill      → ~/.claude/skills/the-product-playbook/
+  Skill      → ~/.claude/skills/product-playbook/
   Commands   → ~/.claude/commands/product-*.md
 EOF
 }

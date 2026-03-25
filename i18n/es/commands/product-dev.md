@@ -2,7 +2,7 @@
 description: Generar Paquete de Handoff de Desarrollo — Produce CLAUDE.md + TASKS.md + TICKETS.md + ARCHITECTURE.md + setup.sh, listo para iniciar desarrollo en Claude Code
 ---
 
-Por favor lee ~/.claude/skills/the-product-playbook/SKILL.md.
+Por favor lee ~/.claude/skills/product-playbook/SKILL.md.
 Luego lee los siguientes archivos de referencia en orden:
 1. `references/07a-handoff-core.md` (plantilla CLAUDE.md + confirmación de stack tecnológico)
 2. `references/07b-tasks-tickets.md` (plantillas TASKS.md + TICKETS.md)

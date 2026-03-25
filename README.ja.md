@@ -4,7 +4,7 @@
 
 **世界トップクラスのプロダクト企画AIスキル — アイデアから開発まで、すべてを網羅するフレームワーク**
 
-[![npm version](https://img.shields.io/npm/v/the-product-playbook.svg)](https://www.npmjs.com/package/the-product-playbook)
+[![npm version](https://img.shields.io/npm/v/product-playbook.svg)](https://www.npmjs.com/package/product-playbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://code.claude.com)
 [![Claude.ai](https://img.shields.io/badge/Claude.ai-Custom%20Skill-blue)](https://claude.ai)
@@ -51,7 +51,7 @@ The Product Playbookは、ゼロから一まで体系的にプロダクト企画
 
 1. このリポジトリをzipファイルとしてダウンロード
 2. [Claude.ai](https://claude.ai) → 設定 → カスタムスキルに移動
-3. `the-product-playbook/`フォルダ全体をアップロード
+3. `product-playbook/`フォルダ全体をアップロード
 4. 会話で「プロダクトを作りたい」と言ってスキルをトリガー
 
 ### オプション2：Claude Codeスキル（推奨）
@@ -69,48 +69,48 @@ The Product Playbookは、ゼロから一まで体系的にプロダクト企画
 Claude Codeを起動後、以下を貼り付けるとClaudeが自動的にインストールを処理します：
 
 ```
-以下のコマンドを実行してthe-product-playbookスキルをインストール（または更新）してください。
+以下のコマンドを実行してproduct-playbookスキルをインストール（または更新）してください。
 完了したら結果を教えてください：
 
-git clone https://github.com/kaminoikari/the-product-playbook.git /tmp/the-product-playbook
+git clone https://github.com/kaminoikari/product-playbook.git /tmp/product-playbook
 mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r /tmp/the-product-playbook ~/.claude/skills/the-product-playbook
-cp /tmp/the-product-playbook/commands/* ~/.claude/commands/
-rm -rf /tmp/the-product-playbook
+cp -r /tmp/product-playbook ~/.claude/skills/product-playbook
+cp /tmp/product-playbook/commands/* ~/.claude/commands/
+rm -rf /tmp/product-playbook
 ```
 
 #### ② ワンラインインストール（ターミナル）
 
 ```bash
 # curl
-curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash
 
 # npx（Node.jsが必要）
-npx the-product-playbook
+npx product-playbook
 ```
 
 アンインストール：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash -s -- --uninstall
+curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash -s -- --uninstall
 # または
-npx the-product-playbook --uninstall
+npx product-playbook --uninstall
 ```
 
 #### ③ 手動インストール
 
 ```bash
-git clone https://github.com/kaminoikari/the-product-playbook.git
+git clone https://github.com/kaminoikari/product-playbook.git
 mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r the-product-playbook ~/.claude/skills/the-product-playbook
-cp the-product-playbook/commands/* ~/.claude/commands/
+cp -r product-playbook ~/.claude/skills/product-playbook
+cp product-playbook/commands/* ~/.claude/commands/
 ```
 
 インストール後、Claude Codeでトリガー：
 
 ```bash
 # メインスキルコマンド
-> /the-product-playbook
+> /product-playbook
 
 # スラッシュコマンド（インストール後に利用可能）
 > /product-quick 家計簿アプリを作りたい
@@ -128,7 +128,7 @@ cp the-product-playbook/commands/* ~/.claude/commands/
 ## 📦 ファイル構造
 
 ```
-the-product-playbook/
+product-playbook/
 ├── SKILL.md                          # コアエンジン：モード定義、ステップ順序、コマンドシステム
 ├── LICENSE                           # MIT License
 ├── README.md                         # 英語README
@@ -405,13 +405,13 @@ Claude Codeは自動的に：
 
 | コマンド | 説明 |
 |---------|-------------|
-| `/the-product-playbook` | 完全なプロダクト企画ガイドフローを起動 |
+| `/product-playbook` | 完全なプロダクト企画ガイドフローを起動 |
 
 より細かいショートカットとして、`commands/`フォルダのプリビルトスラッシュコマンドをインストール：
 
 ```bash
 # すべてのスラッシュコマンドをインストール
-cp -r the-product-playbook/commands/* ~/.claude/commands/
+cp -r product-playbook/commands/* ~/.claude/commands/
 ```
 
 | コマンド | 説明 |

@@ -3,8 +3,8 @@ description: 풀 모드 제품 기획 — 모든 프레임워크의 20단계를 
 argument-hint: <제품 설명>
 ---
 
-~/.claude/skills/the-product-playbook/SKILL.md를 읽어 주세요.
-그 다음 ~/.claude/skills/the-product-playbook/references/rules-full.md를 읽어 단계 시퀀스를 확인하세요.
+~/.claude/skills/product-playbook/SKILL.md를 읽어 주세요.
+그 다음 ~/.claude/skills/product-playbook/references/rules-full.md를 읽어 단계 시퀀스를 확인하세요.
 각 단계를 실행할 때, rules-full.md에 명시된 대로 해당 레퍼런스 파일을 로드하세요.
 
 실행 모드: 풀 모드

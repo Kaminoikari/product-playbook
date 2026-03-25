@@ -4,7 +4,7 @@
 
 **世界級產品規劃 AI Skill — 從 Idea 到開發，一套框架全搞定**
 
-[![npm version](https://img.shields.io/npm/v/the-product-playbook.svg)](https://www.npmjs.com/package/the-product-playbook)
+[![npm version](https://img.shields.io/npm/v/product-playbook.svg)](https://www.npmjs.com/package/product-playbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://code.claude.com)
 [![Claude.ai](https://img.shields.io/badge/Claude.ai-Custom%20Skill-blue)](https://claude.ai)
@@ -51,7 +51,7 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 
 1. 下載本 repo 的 zip 檔
 2. 前往 [Claude.ai](https://claude.ai) → 設定 → 自訂 Skill
-3. 上傳整個 `the-product-playbook/` 資料夾
+3. 上傳整個 `product-playbook/` 資料夾
 4. 在對話中說「我想做一個產品」即可觸發
 
 ### 方法二：Claude Code Skill（推薦）
@@ -69,48 +69,48 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 啟動 Claude Code 後，直接貼上以下內容，Claude 會自動幫你完成安裝：
 
 ```
-請幫我執行以下指令來安裝（或更新）the-product-playbook skill，
+請幫我執行以下指令來安裝（或更新）product-playbook skill，
 執行完畢後告訴我結果：
 
-git clone https://github.com/kaminoikari/the-product-playbook.git /tmp/the-product-playbook
+git clone https://github.com/kaminoikari/product-playbook.git /tmp/product-playbook
 mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r /tmp/the-product-playbook ~/.claude/skills/the-product-playbook
-cp /tmp/the-product-playbook/commands/* ~/.claude/commands/
-rm -rf /tmp/the-product-playbook
+cp -r /tmp/product-playbook ~/.claude/skills/product-playbook
+cp /tmp/product-playbook/commands/* ~/.claude/commands/
+rm -rf /tmp/product-playbook
 ```
 
 #### ② 一鍵安裝（終端機）
 
 ```bash
 # curl
-curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash
 
 # npx（需要 Node.js）
-npx the-product-playbook
+npx product-playbook
 ```
 
 解除安裝：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash -s -- --uninstall
+curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash -s -- --uninstall
 # 或
-npx the-product-playbook --uninstall
+npx product-playbook --uninstall
 ```
 
 #### ③ 手動安裝
 
 ```bash
-git clone https://github.com/kaminoikari/the-product-playbook.git
+git clone https://github.com/kaminoikari/product-playbook.git
 mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r the-product-playbook ~/.claude/skills/the-product-playbook
-cp the-product-playbook/commands/* ~/.claude/commands/
+cp -r product-playbook ~/.claude/skills/product-playbook
+cp product-playbook/commands/* ~/.claude/commands/
 ```
 
 安裝完成後，在 Claude Code 中觸發：
 
 ```bash
 # Skill 主指令
-> /the-product-playbook
+> /product-playbook
 
 # Slash Commands（安裝後可用）
 > /product-quick 我想做一個記帳 App
@@ -128,7 +128,7 @@ cp the-product-playbook/commands/* ~/.claude/commands/
 ## 📦 檔案結構
 
 ```
-the-product-playbook/
+product-playbook/
 ├── SKILL.md                          # 主控核心：模式定義、步驟序列、指令系統
 ├── LICENSE                           # MIT License
 ├── README.md                         # English README
@@ -404,13 +404,13 @@ Claude Code 會自動：
 
 | 指令 | 說明 |
 |------|------|
-| `/the-product-playbook` | 啟動完整產品規劃引導流程 |
+| `/product-playbook` | 啟動完整產品規劃引導流程 |
 
 如需更細粒度的快捷指令，可安裝 `commands/` 資料夾中的預建 slash commands：
 
 ```bash
 # 安裝所有 slash commands
-cp -r the-product-playbook/commands/* ~/.claude/commands/
+cp -r product-playbook/commands/* ~/.claude/commands/
 ```
 
 | 指令 | 說明 |

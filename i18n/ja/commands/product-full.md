@@ -3,8 +3,8 @@ description: フルモードプロダクト企画 — 全20ステップ、すべ
 argument-hint: <プロダクトの説明>
 ---
 
-~/.claude/skills/the-product-playbook/SKILL.md を読み込んでください。
-次に ~/.claude/skills/the-product-playbook/references/rules-full.md でステップ順序を確認してください。
+~/.claude/skills/product-playbook/SKILL.md を読み込んでください。
+次に ~/.claude/skills/product-playbook/references/rules-full.md でステップ順序を確認してください。
 各ステップ実行時に、rules-full.md で指定されたリファレンスファイルを読み込んでください。
 
 実行モード：フルモード

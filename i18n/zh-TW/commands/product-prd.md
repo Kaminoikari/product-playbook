@@ -2,8 +2,8 @@
 description: 產出 PRD 工程師交付包 — 整合 PR-FAQ + MVP + User Story + Pre-mortem，含流程圖、DB Schema、UI Wireframe
 ---
 
-請讀取 ~/.claude/skills/the-product-playbook/SKILL.md。
-然後讀取 ~/.claude/skills/the-product-playbook/references/04b-solutions.md（含 PRD 模板 + 流程圖/DB Schema/UI Wireframe 規格）。
+請讀取 ~/.claude/skills/product-playbook/SKILL.md。
+然後讀取 ~/.claude/skills/product-playbook/references/04b-solutions.md（含 PRD 模板 + 流程圖/DB Schema/UI Wireframe 規格）。
 
 根據目前對話中已完成的產品規劃內容，產出完整的 PRD 工程師交付包：
 1. PRD 文件（背景目標 + 功能範圍 + User Story + 功能規格 + 技術考量 + 風險 + 里程碑）

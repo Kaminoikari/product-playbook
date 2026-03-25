@@ -15,7 +15,7 @@
 
 ```markdown
 # Product Context
-<!-- Auto-maintained by the-product-playbook. Do not delete. -->
+<!-- Auto-maintained by product-playbook. Do not delete. -->
 <!-- last-updated: [ISO 타임스탬프] -->
 
 ## Identity

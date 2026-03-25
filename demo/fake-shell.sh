@@ -7,7 +7,7 @@ read -r INPUT
 
 if [[ "$INPUT" == /product-build* ]]; then
     printf "\n"
-    bash /Users/charles/the-product-playbook/demo/build-sim.sh
+    bash /Users/charles/product-playbook/demo/build-sim.sh
 else
     printf "\n⚠️  unknown command: %s\n" "$INPUT"
 fi

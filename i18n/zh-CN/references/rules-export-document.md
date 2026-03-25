@@ -252,7 +252,7 @@ pandoc /tmp/export-{timestamp}.md \
   -o "{output_path}" \
   --from markdown \
   --to docx \
-  --reference-doc="~/.claude/skills/the-product-playbook/references/templates/reference.docx" \
+  --reference-doc="~/.claude/skills/product-playbook/references/templates/reference.docx" \
   --toc \
   --toc-depth=2
 ```

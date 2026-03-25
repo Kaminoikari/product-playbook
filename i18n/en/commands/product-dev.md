@@ -2,7 +2,7 @@
 description: Generate Dev Handoff Package — Produces CLAUDE.md + TASKS.md + TICKETS.md + ARCHITECTURE.md + setup.sh, ready to start development in Claude Code
 ---
 
-Please read ~/.claude/skills/the-product-playbook/SKILL.md.
+Please read ~/.claude/skills/product-playbook/SKILL.md.
 Then read the following reference files in order:
 1. `references/07a-handoff-core.md` (CLAUDE.md template + tech stack confirmation)
 2. `references/07b-tasks-tickets.md` (TASKS.md + TICKETS.md templates)

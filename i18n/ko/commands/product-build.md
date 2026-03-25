@@ -3,8 +3,8 @@ description: 빌드 모드 — 문제가 명확한 경우 디스커버리를 건
 argument-hint: <문제 설명>
 ---
 
-~/.claude/skills/the-product-playbook/SKILL.md를 읽어 주세요.
-그 다음 ~/.claude/skills/the-product-playbook/references/rules-build.md를 읽어 단계 시퀀스를 확인하세요.
+~/.claude/skills/product-playbook/SKILL.md를 읽어 주세요.
+그 다음 ~/.claude/skills/product-playbook/references/rules-build.md를 읽어 단계 시퀀스를 확인하세요.
 각 단계를 실행할 때, rules-build.md에 명시된 대로 해당 레퍼런스 파일을 로드하세요.
 
 실행 모드: ⚡ 빌드 모드

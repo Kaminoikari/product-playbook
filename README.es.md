@@ -4,7 +4,7 @@
 
 **Skill de IA de planificación de producto de clase mundial — de la idea al desarrollo, un framework para gobernarlos a todos**
 
-[![npm version](https://img.shields.io/npm/v/the-product-playbook.svg)](https://www.npmjs.com/package/the-product-playbook)
+[![npm version](https://img.shields.io/npm/v/product-playbook.svg)](https://www.npmjs.com/package/product-playbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://code.claude.com)
 [![Claude.ai](https://img.shields.io/badge/Claude.ai-Custom%20Skill-blue)](https://claude.ai)
@@ -51,7 +51,7 @@ Quiero construir un producto
 
 1. Descarga este repositorio como archivo zip
 2. Ve a [Claude.ai](https://claude.ai) → Configuración → Skills Personalizados
-3. Sube toda la carpeta `the-product-playbook/`
+3. Sube toda la carpeta `product-playbook/`
 4. Di "Quiero construir un producto" en una conversación para activar el skill
 
 ### Opción 2: Skill de Claude Code (Recomendado)
@@ -69,48 +69,48 @@ Quiero construir un producto
 Después de abrir Claude Code, pega lo siguiente y Claude manejará la instalación automáticamente:
 
 ```
-Por favor ejecuta los siguientes comandos para instalar (o actualizar) el skill the-product-playbook,
+Por favor ejecuta los siguientes comandos para instalar (o actualizar) el skill product-playbook,
 y dime el resultado cuando termines:
 
-git clone https://github.com/kaminoikari/the-product-playbook.git /tmp/the-product-playbook
+git clone https://github.com/kaminoikari/product-playbook.git /tmp/product-playbook
 mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r /tmp/the-product-playbook ~/.claude/skills/the-product-playbook
-cp /tmp/the-product-playbook/commands/* ~/.claude/commands/
-rm -rf /tmp/the-product-playbook
+cp -r /tmp/product-playbook ~/.claude/skills/product-playbook
+cp /tmp/product-playbook/commands/* ~/.claude/commands/
+rm -rf /tmp/product-playbook
 ```
 
 #### ② Instalación en una línea (Terminal)
 
 ```bash
 # curl
-curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash
 
 # npx (requiere Node.js)
-npx the-product-playbook
+npx product-playbook
 ```
 
 Desinstalar:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash -s -- --uninstall
+curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash -s -- --uninstall
 # o
-npx the-product-playbook --uninstall
+npx product-playbook --uninstall
 ```
 
 #### ③ Instalación Manual
 
 ```bash
-git clone https://github.com/kaminoikari/the-product-playbook.git
+git clone https://github.com/kaminoikari/product-playbook.git
 mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r the-product-playbook ~/.claude/skills/the-product-playbook
-cp the-product-playbook/commands/* ~/.claude/commands/
+cp -r product-playbook ~/.claude/skills/product-playbook
+cp product-playbook/commands/* ~/.claude/commands/
 ```
 
 Una vez instalado, activa en Claude Code:
 
 ```bash
 # Comando principal del skill
-> /the-product-playbook
+> /product-playbook
 
 # Comandos Slash (disponibles después de instalar)
 > /product-quick Quiero construir una app de seguimiento de gastos
@@ -128,7 +128,7 @@ Una vez instalado, activa en Claude Code:
 ## 📦 Estructura de Archivos
 
 ```
-the-product-playbook/
+product-playbook/
 ├── SKILL.md                          # Motor central: definiciones de modos, secuencias de pasos, sistema de comandos
 ├── LICENSE                           # Licencia MIT
 ├── README.md                         # README en inglés
@@ -404,13 +404,13 @@ El comando principal disponible después de instalar el Skill:
 
 | Comando | Descripción |
 |---------|-------------|
-| `/the-product-playbook` | Lanzar el flujo guiado completo de planificación de producto |
+| `/product-playbook` | Lanzar el flujo guiado completo de planificación de producto |
 
 Para atajos más granulares, instala los comandos slash pre-construidos de la carpeta `commands/`:
 
 ```bash
 # Instalar todos los comandos slash
-cp -r the-product-playbook/commands/* ~/.claude/commands/
+cp -r product-playbook/commands/* ~/.claude/commands/
 ```
 
 | Comando | Descripción |

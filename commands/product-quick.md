@@ -3,8 +3,8 @@ description: 快速模式產品規劃 — 30 分鐘內跑完 JTBD → PR-FAQ →
 argument-hint: <產品描述>
 ---
 
-請讀取 ~/.claude/skills/the-product-playbook/SKILL.md。
-然後讀取 ~/.claude/skills/the-product-playbook/references/rules-quick.md 取得步驟序列。
+請讀取 ~/.claude/skills/product-playbook/SKILL.md。
+然後讀取 ~/.claude/skills/product-playbook/references/rules-quick.md 取得步驟序列。
 執行各步驟時，依 rules-quick.md 中的 Reference 載入指示讀取對應的 reference 檔。
 
 執行模式：🚀 快速模式

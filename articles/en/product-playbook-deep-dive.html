@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Product Playbook Deep Dive</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    font-size: 17px;
+  }
+  h1 { font-size: 2em; line-height: 1.3; margin-top: 2em; }
+  h2 { font-size: 1.5em; margin-top: 2em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
+  h3 { font-size: 1.2em; margin-top: 1.5em; }
+  p { margin: 1em 0; }
+  blockquote {
+    border-left: 4px solid #e94560;
+    margin: 1.5em 0;
+    padding: 0.5em 1em;
+    background: #f9f9f9;
+    color: #555;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 0.9em;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th { background: #f5f5f5; font-weight: 600; }
+  tr:nth-child(even) { background: #fafafa; }
+  code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  pre {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  strong { color: #1a1a1a; }
+  em { color: #555; }
+  a { color: #533483; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  hr { border: none; border-top: 2px solid #eee; margin: 2em 0; }
+  ul, ol { padding-left: 1.5em; }
+  li { margin: 0.3em 0; }
+  .subtitle { font-size: 1.1em; color: #666; font-style: italic; margin-top: -0.5em; }
+</style>
+</head>
+<body>
+<h1>One Open-Source Claude Skill Replaces Your Entire PM Toolkit — 22 Curated Frameworks, 6 Execution Modes, and a Change Propagation Engine No Other Tool Has</h1>
+<p><em>Everyone has an AI copilot. Nobody has an AI product manager.</em></p>
+<p><strong>Star on GitHub: <a href="https://github.com/kaminoikari/product-playbook">github.com/kaminoikari/product-playbook</a></strong></p>
+<pre><code class="language-bash">npx product-playbook
+</code></pre>
+<hr>
+<h1>Part I: The Problem</h1>
+<p>GitHub Copilot has 1.8 million paid subscribers. Cursor raised $900M at a $9B valuation. The AI coding arms race is real. But nobody is asking the harder question: <strong>what code should these tools be writing?</strong></p>
+<p>We automated the easy part — turning specs into software — and left the genuinely hard part to gut instinct and duct tape. The result: 35% of startups fail because they build something nobody wants (CB Insights). The most expensive line of code solves the wrong problem, and AI coding tools are happy to help you write it faster than ever.</p>
+<p>The typical PM&#39;s day is a mess. Notion for the PRD, ChatGPT for brainstorming, Google Docs for positioning, Figma for design context, Jira for tickets — six tools, four formats, zero connections between them. Framework knowledge stays shallow. Documents drift apart after every change. The handoff to engineering always reveals that the spec doesn&#39;t match the real system.</p>
+<p>I built The Product Playbook because I lived this problem. I watched PMs (including myself) waste weeks producing plans that sounded good but fell apart the moment they hit engineering reality. I wanted a single tool that could enforce the rigor of a senior PM coach while staying grounded in the actual codebase. Not another document generator — a complete operating system for product thinking.</p>
+<hr>
+<h1>Part II: What It Is</h1>
+<p>The Product Playbook is a Claude AI Skill — a system-level instruction set that gives Claude persistent capabilities, file system access, and multi-session context. It&#39;s open source (MIT), supports six languages (English, Traditional Chinese, Japanese, Simplified Chinese, Spanish, Korean), and works in both Claude Code and Claude.ai.</p>
+<p>Install with one command. Type &quot;I want to build a product.&quot; The system guides you through structured frameworks with quality gates, progress tracking, and change propagation. Every step produces a concrete output. Every output is reviewed. Every change ripples to all downstream dependencies.</p>
+<h2>The 6 Execution Modes</h2>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Steps</th>
+<th>Duration</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Quick Mode</td>
+<td>3</td>
+<td>~30 min</td>
+<td>Rapid validation, pitch prep</td>
+</tr>
+<tr>
+<td>Full Mode</td>
+<td>20</td>
+<td>Several hours</td>
+<td>Comprehensive product plans</td>
+</tr>
+<tr>
+<td>Revision Mode</td>
+<td>12</td>
+<td>1-2 hours</td>
+<td>Optimizing existing products</td>
+</tr>
+<tr>
+<td>Custom Mode</td>
+<td>4-16</td>
+<td>Varies</td>
+<td>Specific framework gaps</td>
+</tr>
+<tr>
+<td>Build Mode</td>
+<td>7</td>
+<td>~1 hour</td>
+<td>Problem known, need execution</td>
+</tr>
+<tr>
+<td>Feature Extension</td>
+<td>4</td>
+<td>~30 min</td>
+<td>Adding to existing product</td>
+</tr>
+</tbody></table>
+<h2>The 22 Frameworks — Curated from Lenny&#39;s Podcast</h2>
+<p>The frameworks aren&#39;t random. I spent years studying Lenny&#39;s Podcast — hundreds of hours of episodes featuring the world&#39;s best product minds: Teresa Torres, Shreyas Doshi, Gibson Biddle, April Dunford, Marty Cagan, Richard Rumelt, Todd Jackson, Sean Ellis, Clayton Christensen. I noticed that many popular frameworks overlap. Some are variations of the same idea. Others are genuinely distinct but never get connected in practice.</p>
+<p>I removed the redundancy and kept the 22 that actually drive product decisions, organized by phase:</p>
+<ul>
+<li><strong>Understanding Users (5):</strong> JTBD, Persona, User Journey Map, Continuous Discovery Habits, Opportunity Solution Trees</li>
+<li><strong>Defining the Problem (2):</strong> April Dunford Positioning, HMW Reframing</li>
+<li><strong>Solution Design (5):</strong> PR-FAQ (Working Backwards), Pre-mortem, GEM Model, RICE Scoring, MVP Definition</li>
+<li><strong>Strategy (4):</strong> Strategy Blocks, Good Strategy Kernel, DHM Model, Empowered Teams</li>
+<li><strong>Measurement &amp; Delivery (6):</strong> North Star Metric, Three-Layer Signals, Aha Moment, Four-Level PMF, Sean Ellis Score, GTM Strategy</li>
+</ul>
+<p>The critical point: these frameworks are <strong>connected</strong>. JTBD feeds into Positioning, which feeds the PR-FAQ headline. Pre-mortem risks shape MVP scope. North Star must measure the JTBD outcome. The change propagation engine enforces these connections automatically.</p>
+<h2>Who It&#39;s For</h2>
+<p><strong>Solo PMs, indie hackers, startup founders, and product-oriented engineers</strong> — people who need rigorous product planning without a team of senior PMs to coach them. The solo PM doesn&#39;t have time to read twelve books. The indie hacker needs 30 minutes of validation before committing weekends. The engineer-turned-founder knows how to build but has never written a JTBD statement.</p>
+<hr>
+<h1>Part III: Key Differentiators</h1>
+<h2>1. Change Propagation Engine</h2>
+<p>Product planning isn&#39;t linear. You discover new insights in Step 7 that invalidate Step 3. In every other tool, this creates silent inconsistency — documents drift apart and nobody knows what&#39;s outdated.</p>
+<p>The Product Playbook tracks explicit dependencies. Modify your JTBD, and the system flags every downstream output that needs updating: HMW, Positioning, PR-FAQ, North Star, Product Spec. Minor changes propagate automatically. Major shifts prompt you for confirmation. This alone is worth the install — it&#39;s the difference between a living plan and a collection of stale documents.</p>
+<h2>2. Dev Handoff Package</h2>
+<p>One command generates a complete development starter kit:</p>
+<pre><code>├── CLAUDE.md         → Project context for Claude Code
+├── TASKS.md          → Feature breakdown + phased delivery
+├── TICKETS.md        → Jira/Linear-ready tickets
+├── docs/PRD.md       → Full product requirements
+├── docs/ARCHITECTURE.md → DB schema + API + directory structure
+└── scripts/setup.sh  → One-click project initialization
+</code></pre>
+<p>Engineers open Claude Code, read <code>CLAUDE.md</code>, and start building. Security is baked in — OWASP Top 10 checklist, auth/CORS/CSP architecture, <code>.gitignore</code> with sensitive file exclusions. The handoff gap disappears because planning and development happen in the same tool, same context, same project directory.</p>
+<h2>3. Quality Hard Gates</h2>
+<p>Every step includes a quality checklist. The hard gate rule: <strong>at least one item must be marked as failed.</strong> The AI cannot rubber-stamp its own work — it must identify the weakest aspect and explain how to strengthen it.</p>
+<p>Without this, AI self-review is theater. The benchmark shows a +100% delta: without the Skill, Claude never critiques its own output (0% pass rate). With it, every step gets genuine self-critique. This is the difference between a first draft and a senior PM&#39;s systematic review.</p>
+<h2>4. Codebase-Aware Planning</h2>
+<p>Launch the Skill in a project directory and it auto-scans your <code>package.json</code>, database schema, API routes, Dockerfiles, and module structure. It then uses this real knowledge throughout planning:</p>
+<ul>
+<li><strong>Pre-mortem risks</strong> reference your actual architecture</li>
+<li><strong>MVP scope</strong> references your actual modules</li>
+<li><strong>Dev handoff</strong> produces incremental deltas, not greenfield diagrams</li>
+</ul>
+<p>This collapses the traditional two-step process — PM imagines the system, then engineers correct the imagination — into one step grounded in reality from the start.</p>
+<h2>5. Decision Consistency Check</h2>
+<p>Before any final output, the system runs a structured cross-step audit. For Full Mode, it checks seven dimensions: target user consistency, JTBD reflection in PR-FAQ, positioning alignment, solution direction, MVP-PR-FAQ match, North Star measurability, and pre-mortem relevance. Inconsistencies surface before you finalize — not after engineering starts building.</p>
+<hr>
+<h1>Part IV: Benchmark Results</h1>
+<p>The Skill includes an open-source eval suite: 9 test scenarios, 49 expectations, same model (Claude Sonnet), same prompts, only variable is whether the Skill is installed.</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th align="center">With Skill</th>
+<th align="center">Without Skill</th>
+<th align="center">Delta</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mode Selection</td>
+<td align="center">100%</td>
+<td align="center">0%</td>
+<td align="center"><strong>+100%</strong></td>
+</tr>
+<tr>
+<td>Quick Mode JTBD Analysis</td>
+<td align="center">100%</td>
+<td align="center">43%</td>
+<td align="center">+57%</td>
+</tr>
+<tr>
+<td>JTBD Depth (B2B + Five Whys)</td>
+<td align="center">100%</td>
+<td align="center">57%</td>
+<td align="center">+43%</td>
+</tr>
+<tr>
+<td>PR-FAQ Writing Quality</td>
+<td align="center">100%</td>
+<td align="center">33%</td>
+<td align="center"><strong>+67%</strong></td>
+</tr>
+<tr>
+<td>Revision Mode Recognition</td>
+<td align="center">100%</td>
+<td align="center">67%</td>
+<td align="center">+33%</td>
+</tr>
+<tr>
+<td>Quality Self-check Hard Gate</td>
+<td align="center">100%</td>
+<td align="center">0%</td>
+<td align="center"><strong>+100%</strong></td>
+</tr>
+<tr>
+<td>Feature Extension Mode</td>
+<td align="center">100%</td>
+<td align="center">17%</td>
+<td align="center"><strong>+83%</strong></td>
+</tr>
+<tr>
+<td>Security Integration</td>
+<td align="center">100%</td>
+<td align="center">25%</td>
+<td align="center"><strong>+75%</strong></td>
+</tr>
+<tr>
+<td>Context Bootstrap</td>
+<td align="center">100%</td>
+<td align="center">0%</td>
+<td align="center"><strong>+100%</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Overall: 100% vs. ~27% — a +73% improvement.</strong></p>
+<p>Three tests show +100% deltas: Mode Selection, Quality Self-check, and Context Bootstrap. These capabilities simply don&#39;t exist without the Skill. Claude doesn&#39;t spontaneously offer structured mode selection, doesn&#39;t critique its own output, and doesn&#39;t collect product context before planning. These behaviors only emerge with the Skill installed.</p>
+<p>The remaining tests show +33% to +83% deltas — areas where Claude can partially perform the task but with significantly less depth and structure.</p>
+<hr>
+<h1>Part V: Competitive Landscape</h1>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th align="center">Product Playbook</th>
+<th align="center">ChatPRD</th>
+<th align="center">PM-Skills (Dean)</th>
+<th align="center">Lenny&#39;s Skills</th>
+<th align="center">pm-skills</th>
+<th align="center">Notion AI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PM Frameworks</td>
+<td align="center">22</td>
+<td align="center">~5</td>
+<td align="center">46</td>
+<td align="center">86</td>
+<td align="center">27</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>Connected Workflow</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Change Propagation</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Execution Modes</td>
+<td align="center">6</td>
+<td align="center">1</td>
+<td align="center">N/A</td>
+<td align="center">N/A</td>
+<td align="center">1</td>
+<td align="center">N/A</td>
+</tr>
+<tr>
+<td>Dev Handoff</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Codebase-Aware</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Quality Hard Gates</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Cross-Session Context</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Team Collaboration</td>
+<td align="center">No</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">Yes</td>
+</tr>
+<tr>
+<td>Pricing</td>
+<td align="center">Free (MIT)</td>
+<td align="center">$15-24/mo</td>
+<td align="center">Free</td>
+<td align="center">Free</td>
+<td align="center">Free</td>
+<td align="center">$10/mo+</td>
+</tr>
+</tbody></table>
+<p>The market splits into three categories:</p>
+<ol>
+<li><strong>Broad but shallow</strong> (Lenny&#39;s 86 standalone skills, Dean&#39;s 46 — independent, no connected workflow)</li>
+<li><strong>Deep but narrow</strong> (ChatPRD does PRD well, but no JTBD, Pre-mortem, or dev handoff)</li>
+<li><strong>General purpose</strong> (Notion AI doesn&#39;t know what a PR-FAQ format is)</li>
+</ol>
+<p>The Product Playbook occupies a unique position: depth + connectivity + integration. Fair acknowledgment: ChatPRD wins on team collaboration, Lenny&#39;s Skills wins on topic breadth. No tool is best in every dimension — choose based on your biggest pain point.</p>
+<hr>
+<h1>Part VI: Get Started</h1>
+<p><strong>Step 1: Install.</strong></p>
+<pre><code class="language-bash">npx product-playbook
+</code></pre>
+<p><strong>Step 2: Open Claude Code and type:</strong></p>
+<pre><code>I want to build a product
+</code></pre>
+<p>Or use a slash command: <code>/product-quick</code>, <code>/product-full</code>, <code>/product-build</code>, <code>/product-revision</code>.</p>
+<p><strong>Step 3: Follow the guided flow.</strong> Choose a mode, describe your product, and let the system walk you through each framework. Quick Mode gives you a validated direction in 30 minutes. Full Mode gives you a comprehensive plan in an afternoon.</p>
+<hr>
+<p><strong>Star on GitHub: <a href="https://github.com/kaminoikari/product-playbook">github.com/kaminoikari/product-playbook</a></strong></p>
+<pre><code class="language-bash">npx product-playbook
+</code></pre>
+<p><em>The Product Playbook is open source under the MIT License. Created by Charles Chen.</em></p>
+</body>
+</html>

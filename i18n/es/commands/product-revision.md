@@ -3,8 +3,8 @@ description: Planificación de Producto Modo Revisión — Optimiza e itera sobr
 argument-hint: <nombre del producto y objetivos de revisión>
 ---
 
-Por favor lee ~/.claude/skills/the-product-playbook/SKILL.md.
-Luego lee ~/.claude/skills/the-product-playbook/references/rules-revision.md para la secuencia de pasos.
+Por favor lee ~/.claude/skills/product-playbook/SKILL.md.
+Luego lee ~/.claude/skills/product-playbook/references/rules-revision.md para la secuencia de pasos.
 Al ejecutar cada paso, carga los archivos de referencia correspondientes según se indica en rules-revision.md.
 
 Modo de ejecución: Modo Revisión

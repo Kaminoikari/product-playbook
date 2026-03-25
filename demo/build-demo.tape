@@ -9,7 +9,7 @@ Set Framerate 30
 Set TypingSpeed 80ms
 
 Hide
-Type "clear && bash /Users/charles/the-product-playbook/demo/fake-shell.sh"
+Type "clear && bash /Users/charles/product-playbook/demo/fake-shell.sh"
 Enter
 Sleep 500ms
 Show

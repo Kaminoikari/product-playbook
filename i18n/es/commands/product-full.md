@@ -3,8 +3,8 @@ description: Planificación de Producto Modo Completo — Recorre los 20 pasos a
 argument-hint: <descripción del producto>
 ---
 
-Por favor lee ~/.claude/skills/the-product-playbook/SKILL.md.
-Luego lee ~/.claude/skills/the-product-playbook/references/rules-full.md para la secuencia de pasos.
+Por favor lee ~/.claude/skills/product-playbook/SKILL.md.
+Luego lee ~/.claude/skills/product-playbook/references/rules-full.md para la secuencia de pasos.
 Al ejecutar cada paso, carga los archivos de referencia correspondientes según se indica en rules-full.md.
 
 Modo de ejecución: Modo Completo

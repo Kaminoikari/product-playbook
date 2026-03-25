@@ -4,7 +4,7 @@
 
 **World-class product planning AI Skill — from idea to development, one framework to rule them all**
 
-[![npm version](https://img.shields.io/npm/v/the-product-playbook.svg)](https://www.npmjs.com/package/the-product-playbook)
+[![npm version](https://img.shields.io/npm/v/product-playbook.svg)](https://www.npmjs.com/package/product-playbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://code.claude.com)
 [![Claude.ai](https://img.shields.io/badge/Claude.ai-Custom%20Skill-blue)](https://claude.ai)
@@ -51,7 +51,7 @@ I want to build a product
 
 1. Download this repo as a zip file
 2. Go to [Claude.ai](https://claude.ai) → Settings → Custom Skills
-3. Upload the entire `the-product-playbook/` folder
+3. Upload the entire `product-playbook/` folder
 4. Say "I want to build a product" in a conversation to trigger the skill
 
 ### Option 2: Claude Code Skill (Recommended)
@@ -69,48 +69,48 @@ I want to build a product
 After launching Claude Code, paste the following and Claude will handle the installation automatically:
 
 ```
-Please run the following commands to install (or update) the-product-playbook skill,
+Please run the following commands to install (or update) product-playbook skill,
 and tell me the result when done:
 
-git clone https://github.com/kaminoikari/the-product-playbook.git /tmp/the-product-playbook
+git clone https://github.com/kaminoikari/product-playbook.git /tmp/product-playbook
 mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r /tmp/the-product-playbook ~/.claude/skills/the-product-playbook
-cp /tmp/the-product-playbook/commands/* ~/.claude/commands/
-rm -rf /tmp/the-product-playbook
+cp -r /tmp/product-playbook ~/.claude/skills/product-playbook
+cp /tmp/product-playbook/commands/* ~/.claude/commands/
+rm -rf /tmp/product-playbook
 ```
 
 #### ② One-line Install (Terminal)
 
 ```bash
 # curl
-curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash
 
 # npx (requires Node.js)
-npx the-product-playbook
+npx product-playbook
 ```
 
 Uninstall:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kaminoikari/the-product-playbook/main/install.sh | bash -s -- --uninstall
+curl -fsSL https://raw.githubusercontent.com/kaminoikari/product-playbook/main/install.sh | bash -s -- --uninstall
 # or
-npx the-product-playbook --uninstall
+npx product-playbook --uninstall
 ```
 
 #### ③ Manual Install
 
 ```bash
-git clone https://github.com/kaminoikari/the-product-playbook.git
+git clone https://github.com/kaminoikari/product-playbook.git
 mkdir -p ~/.claude/skills ~/.claude/commands
-cp -r the-product-playbook ~/.claude/skills/the-product-playbook
-cp the-product-playbook/commands/* ~/.claude/commands/
+cp -r product-playbook ~/.claude/skills/product-playbook
+cp product-playbook/commands/* ~/.claude/commands/
 ```
 
 Once installed, trigger in Claude Code:
 
 ```bash
 # Main skill command
-> /the-product-playbook
+> /product-playbook
 
 # Slash Commands (available after install)
 > /product-quick I want to build an expense tracking app
@@ -128,7 +128,7 @@ Once installed, trigger in Claude Code:
 ## 📦 File Structure
 
 ```
-the-product-playbook/
+product-playbook/
 ├── SKILL.md                          # Core engine: mode definitions, step sequences, command system
 ├── LICENSE                           # MIT License
 ├── README.md                         # English README (this file)
@@ -404,13 +404,13 @@ The main command available after installing the Skill:
 
 | Command | Description |
 |---------|-------------|
-| `/the-product-playbook` | Launch the full product planning guided flow |
+| `/product-playbook` | Launch the full product planning guided flow |
 
 For more granular shortcuts, install the pre-built slash commands from the `commands/` folder:
 
 ```bash
 # Install all slash commands
-cp -r the-product-playbook/commands/* ~/.claude/commands/
+cp -r product-playbook/commands/* ~/.claude/commands/
 ```
 
 | Command | Description |
@@ -507,7 +507,7 @@ This project is licensed under the [MIT License](LICENSE) — free to use, modif
 
 If this project helps you, give it a ⭐ so more people can find it!
 
-[![Star History Chart](https://api.star-history.com/svg?repos=kaminoikari/the-product-playbook&type=Date)](https://star-history.com/#kaminoikari/the-product-playbook&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=kaminoikari/product-playbook&type=Date)](https://star-history.com/#kaminoikari/product-playbook&Date)
 
 ---
 

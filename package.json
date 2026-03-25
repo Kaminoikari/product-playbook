@@ -1,9 +1,9 @@
 {
-  "name": "the-product-playbook",
-  "version": "2.6.2",
+  "name": "product-playbook",
+  "version": "1.0.0",
   "description": "World-class product planning AI skill for Claude Code — 22 PM frameworks, 6 modes, from idea to dev handoff",
   "bin": {
-    "the-product-playbook": "./install.sh"
+    "product-playbook": "./install.sh"
   },
   "keywords": [
     "claude",
@@ -19,12 +19,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaminoikari/the-product-playbook.git"
+    "url": "git+https://github.com/kaminoikari/product-playbook.git"
   },
   "bugs": {
-    "url": "https://github.com/kaminoikari/the-product-playbook/issues"
+    "url": "https://github.com/kaminoikari/product-playbook/issues"
   },
-  "homepage": "https://github.com/kaminoikari/the-product-playbook#readme",
+  "homepage": "https://github.com/kaminoikari/product-playbook#readme",
   "files": [
     "install.sh",
     "SKILL.md",

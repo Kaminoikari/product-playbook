@@ -3,8 +3,8 @@ description: Modo Build — El problema es conocido, salta Discovery, ir directo
 argument-hint: <descripción del problema>
 ---
 
-Por favor lee ~/.claude/skills/the-product-playbook/SKILL.md.
-Luego lee ~/.claude/skills/the-product-playbook/references/rules-build.md para la secuencia de pasos.
+Por favor lee ~/.claude/skills/product-playbook/SKILL.md.
+Luego lee ~/.claude/skills/product-playbook/references/rules-build.md para la secuencia de pasos.
 Al ejecutar cada paso, carga los archivos de referencia correspondientes según se indica en rules-build.md.
 
 Modo de ejecución: ⚡ Modo Build

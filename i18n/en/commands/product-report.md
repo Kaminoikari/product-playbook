@@ -2,7 +2,7 @@
 description: Generate HTML Planning Report — Compile all product planning content into a single offline-readable HTML report
 ---
 
-Please read ~/.claude/skills/the-product-playbook/SKILL.md and its references/06-html-report.md.
+Please read ~/.claude/skills/product-playbook/SKILL.md and its references/06-html-report.md.
 
 Based on the product planning content completed in the current conversation, generate a full HTML planning report following the design specs in 06-html-report.md:
 - Single HTML file (CSS + JS inline, Google Fonts CDN loading Noto Sans TC)

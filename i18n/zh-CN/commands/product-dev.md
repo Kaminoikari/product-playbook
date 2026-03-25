@@ -2,7 +2,7 @@
 description: 产出开发交接包 — 生成 CLAUDE.md + TASKS.md + TICKETS.md + ARCHITECTURE.md + setup.sh，可直接在 Claude Code 中开始开发
 ---
 
-请读取 ~/.claude/skills/the-product-playbook/SKILL.md。
+请读取 ~/.claude/skills/product-playbook/SKILL.md。
 然后依序读取以下 reference 档：
 1. `references/07a-handoff-core.md`（CLAUDE.md 模板 + 技术栈确认）
 2. `references/07b-tasks-tickets.md`（TASKS.md + TICKETS.md 模板）

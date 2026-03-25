@@ -3,8 +3,8 @@ description: Planificación de Producto Modo Rápido — Recorre JTBD → PR-FAQ
 argument-hint: <descripción del producto>
 ---
 
-Por favor lee ~/.claude/skills/the-product-playbook/SKILL.md.
-Luego lee ~/.claude/skills/the-product-playbook/references/rules-quick.md para la secuencia de pasos.
+Por favor lee ~/.claude/skills/product-playbook/SKILL.md.
+Luego lee ~/.claude/skills/product-playbook/references/rules-quick.md para la secuencia de pasos.
 Al ejecutar cada paso, carga los archivos de referencia correspondientes según se indica en rules-quick.md.
 
 Modo de ejecución: Modo Rápido

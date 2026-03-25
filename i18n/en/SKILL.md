@@ -1,5 +1,5 @@
 ---
-name: the-product-playbook
+name: product-playbook
 description: |
   A world-class product planning framework tool that integrates the most important PM frameworks from Lenny's Podcast (Teresa Torres, Shreyas Doshi, Gibson Biddle, April Dunford, Todd Jackson, Marty Cagan, Richard Rumelt, and more) to systematically guide you from 0-to-1 through scale-up product planning.
 
@@ -146,10 +146,10 @@ When the user asks to list frameworks or uses supplementary commands, read `refe
 
 Before starting, silently check if a newer version is available:
 
-- Run: `timeout 3 npm view the-product-playbook version 2>/dev/null || echo ""`
-- Read installed version: `cat ~/.claude/skills/the-product-playbook/.version 2>/dev/null || echo ""`
+- Run: `timeout 3 npm view product-playbook version 2>/dev/null || echo ""`
+- Read installed version: `cat ~/.claude/skills/product-playbook/.version 2>/dev/null || echo ""`
 - If the npm version is newer than the installed version, display:
-   `📦 Update available: v[installed] → v[latest]. Run: npx the-product-playbook`
+   `📦 Update available: v[installed] → v[latest]. Run: npx product-playbook`
 - If the check fails, times out, or versions match → say nothing, continue silently
 - Proceed to the next step regardless — never block on version check
 

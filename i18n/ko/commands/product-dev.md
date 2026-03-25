@@ -2,7 +2,7 @@
 description: 개발 핸드오프 패키지 생성 — CLAUDE.md + TASKS.md + TICKETS.md + ARCHITECTURE.md + setup.sh를 생성하여 Claude Code에서 바로 개발 시작 준비
 ---
 
-~/.claude/skills/the-product-playbook/SKILL.md를 읽어 주세요.
+~/.claude/skills/product-playbook/SKILL.md를 읽어 주세요.
 그 다음 아래 레퍼런스 파일을 순서대로 읽으세요:
 1. `references/07a-handoff-core.md` (CLAUDE.md 템플릿 + 기술 스택 확인)
 2. `references/07b-tasks-tickets.md` (TASKS.md + TICKETS.md 템플릿)

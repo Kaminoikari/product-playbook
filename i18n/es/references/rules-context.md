@@ -15,7 +15,7 @@
 
 ```markdown
 # Contexto de Producto
-<!-- Mantenido automáticamente por the-product-playbook. No eliminar. -->
+<!-- Mantenido automáticamente por product-playbook. No eliminar. -->
 <!-- last-updated: [timestamp ISO] -->
 
 ## Identidad

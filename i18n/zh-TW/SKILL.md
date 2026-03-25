@@ -1,5 +1,5 @@
 ---
-name: the-product-playbook
+name: product-playbook
 description: |
   世界頂尖產品規劃實作框架引導工具，整合 Lenny's Podcast 歷來最重要的 PM 框架（Teresa Torres、Shreyas Doshi、Gibson Biddle、April Dunford、Todd Jackson、Marty Cagan、Richard Rumelt 等），系統性完成從 0 到 1 乃至規模化的產品企劃。
 
@@ -146,9 +146,9 @@ description: |
 
 啟動前，靜默檢查是否有更新版本：
 
-- 執行：`timeout 3 npm view the-product-playbook version 2>/dev/null || echo ""`
-- 讀取已安裝版本：`cat ~/.claude/skills/the-product-playbook/.version 2>/dev/null || echo ""`
-- 若 npm 版本較新，顯示：`📦 有新版本：v[已安裝] → v[最新]。執行 npx the-product-playbook 更新`
+- 執行：`timeout 3 npm view product-playbook version 2>/dev/null || echo ""`
+- 讀取已安裝版本：`cat ~/.claude/skills/product-playbook/.version 2>/dev/null || echo ""`
+- 若 npm 版本較新，顯示：`📦 有新版本：v[已安裝] → v[最新]。執行 npx product-playbook 更新`
 - 若檢查失敗、逾時或版本一致 → 不顯示任何訊息，靜默繼續
 - 無論結果如何都繼續下一步 — 絕不因版本檢查而阻塞
 

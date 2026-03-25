@@ -1,5 +1,5 @@
 ---
-name: the-product-playbook
+name: product-playbook
 description: |
   Lenny's Podcast（Teresa Torres、Shreyas Doshi、Gibson Biddle、April Dunford、Todd Jackson、Marty Cagan、Richard Rumeltなど）の最も重要なPMフレームワークを統合した、世界トップクラスのプロダクト企画フレームワークツールです。0→1からスケールアップまで、体系的にプロダクト企画をガイドします。
 
@@ -146,10 +146,10 @@ description: |
 
 開始前に、新しいバージョンが利用可能かサイレントにチェックします：
 
-- 実行：`timeout 3 npm view the-product-playbook version 2>/dev/null || echo ""`
-- インストール済みバージョンを読み取り：`cat ~/.claude/skills/the-product-playbook/.version 2>/dev/null || echo ""`
+- 実行：`timeout 3 npm view product-playbook version 2>/dev/null || echo ""`
+- インストール済みバージョンを読み取り：`cat ~/.claude/skills/product-playbook/.version 2>/dev/null || echo ""`
 - npmバージョンがインストール済みバージョンより新しい場合、表示：
-   `📦 新しいバージョンがあります：v[インストール済み] → v[最新]。更新: npx the-product-playbook`
+   `📦 新しいバージョンがあります：v[インストール済み] → v[最新]。更新: npx product-playbook`
 - チェックが失敗、タイムアウト、またはバージョンが一致する場合 → 何も表示せず、サイレントに続行
 - 結果に関係なく次のステップに進む — バージョンチェックでブロックしない
 

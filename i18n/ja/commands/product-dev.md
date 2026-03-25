@@ -2,7 +2,7 @@
 description: 開発ハンドオフパッケージを生成 — CLAUDE.md + TASKS.md + TICKETS.md + ARCHITECTURE.md + setup.sh を作成し、Claude Codeでの開発をすぐに開始可能
 ---
 
-~/.claude/skills/the-product-playbook/SKILL.md を読み込んでください。
+~/.claude/skills/product-playbook/SKILL.md を読み込んでください。
 次に以下のリファレンスファイルを順番に読み込んでください：
 1. `references/07a-handoff-core.md`（CLAUDE.mdテンプレート + 技術スタック確認）
 2. `references/07b-tasks-tickets.md`（TASKS.md + TICKETS.mdテンプレート）
