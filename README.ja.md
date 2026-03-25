@@ -141,6 +141,7 @@ product-playbook/
 │   ├── product-full.md               # /product-full — フルモード
 │   ├── product-revision.md           # /product-revision — リビジョンモード
 │   ├── product-build.md              # /product-build — ビルドモード
+│   ├── product-feature.md            # /product-feature — 機能拡張モード
 │   ├── product-prd.md                # /product-prd — PRD生成
 │   ├── product-report.md             # /product-report — HTMLレポート生成
 │   └── product-dev.md                # /product-dev — 開発ハンドオフパッケージ生成
@@ -316,7 +317,7 @@ cd /path/to/your-existing-project
 claude
 
 # 3. ビルドモードを使用して追加したい機能を説明
-> /product-build 既存システムにリアルタイム通知を追加したい
+> /product-feature 既存システムにリアルタイム通知を追加したい
 ```
 
 Claude Codeは自動的に：
@@ -420,6 +421,7 @@ cp -r product-playbook/commands/* ~/.claude/commands/
 | `/product-full <説明>` | フルモード — 20ステップの完全なプロダクト企画 |
 | `/product-revision <説明>` | リビジョンモード — 既存プロダクトの改善と最適化 |
 | `/product-build <説明>` | ビルドモード — ディスカバリーをスキップ、ソリューションに直行 |
+| `/product-feature <説明>` | 機能拡張モード — 既存プロダクトに単一機能を追加（4ステップ） |
 | `/product-prd` | PRDエンジニアリングハンドオフパッケージを生成 |
 | `/product-report` | HTML企画レポートを生成 |
 | `/product-dev` | 開発ハンドオフパッケージを生成（CLAUDE.md + TASKS.md + TICKETS.md） |

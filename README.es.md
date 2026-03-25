@@ -140,6 +140,7 @@ product-playbook/
 │   ├── product-full.md               # /product-full — Modo completo
 │   ├── product-revision.md           # /product-revision — Modo revisión
 │   ├── product-build.md              # /product-build — Modo build
+│   ├── product-feature.md            # /product-feature — Modo extensión de funcionalidad
 │   ├── product-prd.md                # /product-prd — Generar PRD
 │   ├── product-report.md             # /product-report — Generar reporte HTML
 │   └── product-dev.md                # /product-dev — Generar paquete de handoff de desarrollo
@@ -315,7 +316,7 @@ cd /ruta/a/tu-proyecto-existente
 claude
 
 # 3. Usa el Modo Build y describe la funcionalidad que quieres agregar
-> /product-build Quiero agregar notificaciones en tiempo real a mi sistema existente
+> /product-feature Quiero agregar notificaciones en tiempo real a mi sistema existente
 ```
 
 Claude Code automáticamente:
@@ -419,6 +420,7 @@ cp -r product-playbook/commands/* ~/.claude/commands/
 | `/product-full <descripción>` | Modo Completo — plan de producto completo de 20 pasos |
 | `/product-revision <descripción>` | Modo Revisión — iterar y optimizar un producto existente |
 | `/product-build <descripción>` | Modo Build — omitir Discovery, ir directo a soluciones |
+| `/product-feature <descripción>` | Modo Extensión — añade una funcionalidad a un producto existente (4 pasos) |
 | `/product-prd` | Generar paquete de entrega de ingeniería PRD |
 | `/product-report` | Generar reporte de planificación HTML |
 | `/product-dev` | Generar paquete de handoff de desarrollo (CLAUDE.md + TASKS.md + TICKETS.md) |

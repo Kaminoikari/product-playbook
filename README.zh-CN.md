@@ -140,6 +140,7 @@ product-playbook/
 │   ├── product-full.md               # /product-full — 完整模式
 │   ├── product-revision.md           # /product-revision — 改版模式
 │   ├── product-build.md              # /product-build — 直接实作模式
+│   ├── product-feature.md            # /product-feature — 功能扩展模式
 │   ├── product-prd.md                # /product-prd — 产出 PRD
 │   ├── product-report.md             # /product-report — 产出 HTML 报告
 │   └── product-dev.md                # /product-dev — 产出开发交接包
@@ -315,7 +316,7 @@ cd /path/to/your-existing-project
 claude
 
 # 3. 使用直接实作模式，描述你要加的功能
-> /product-build 我想在现有系统加上即时通知功能
+> /product-feature 我想在现有系统加上即时通知功能
 ```
 
 Claude Code 会自动：
@@ -419,6 +420,7 @@ cp -r product-playbook/commands/* ~/.claude/commands/
 | `/product-full <描述>` | 完整模式 — 完整 20 步产品企划 |
 | `/product-revision <描述>` | 改版模式 — 既有产品改版优化 |
 | `/product-build <描述>` | 直接实作模式 — 跳过 Discovery，直接进解法 |
+| `/product-feature <描述>` | 功能扩展模式 — 在现有产品新增单一功能（4 步） |
 | `/product-prd` | 产出 PRD 工程师交付包 |
 | `/product-report` | 产出 HTML 企划报告 |
 | `/product-dev` | 产出开发交接包（CLAUDE.md + TASKS.md + TICKETS.md） |

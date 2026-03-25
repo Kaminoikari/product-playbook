@@ -167,7 +167,7 @@ npx product-playbook
 I want to build a product
 ```
 
-Or use a slash command: `/product-quick`, `/product-full`, `/product-build`, `/product-revision`.
+Or use a slash command: `/product-quick`, `/product-full`, `/product-build`, `/product-revision`, `/product-feature`.
 
 **Step 3: Follow the guided flow.** Choose a mode, describe your product, and let the system walk you through each framework. Quick Mode gives you a validated direction in 30 minutes. Full Mode gives you a comprehensive plan in an afternoon.
 

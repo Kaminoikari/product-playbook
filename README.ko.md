@@ -140,6 +140,7 @@ product-playbook/
 │   ├── product-full.md               # /product-full — 풀 모드
 │   ├── product-revision.md           # /product-revision — 리비전 모드
 │   ├── product-build.md              # /product-build — 빌드 모드
+│   ├── product-feature.md            # /product-feature — 기능 확장 모드
 │   ├── product-prd.md                # /product-prd — PRD 생성
 │   ├── product-report.md             # /product-report — HTML 보고서 생성
 │   └── product-dev.md                # /product-dev — 개발 핸드오프 패키지 생성
@@ -315,7 +316,7 @@ cd /path/to/your-existing-project
 claude
 
 # 3. 빌드 모드를 사용하여 추가할 기능 설명
-> /product-build 기존 시스템에 실시간 알림 기능을 추가하고 싶어요
+> /product-feature 기존 시스템에 실시간 알림 기능을 추가하고 싶어요
 ```
 
 Claude Code가 자동으로:
@@ -419,6 +420,7 @@ cp -r product-playbook/commands/* ~/.claude/commands/
 | `/product-full <설명>` | 풀 모드 — 완전한 20단계 제품 기획 |
 | `/product-revision <설명>` | 리비전 모드 — 기존 제품 반복 최적화 |
 | `/product-build <설명>` | 빌드 모드 — 디스커버리 건너뛰고 솔루션으로 바로 |
+| `/product-feature <설명>` | 기능 확장 모드 — 기존 제품에 단일 기능 추가 (4단계) |
 | `/product-prd` | PRD 엔지니어링 핸드오프 패키지 생성 |
 | `/product-report` | HTML 기획 보고서 생성 |
 | `/product-dev` | 개발 핸드오프 패키지 생성 (CLAUDE.md + TASKS.md + TICKETS.md) |
