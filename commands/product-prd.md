@@ -1,14 +1,14 @@
 ---
-description: 產出 PRD 工程師交付包 — 整合 PR-FAQ + MVP + User Story + Pre-mortem，含流程圖、DB Schema、UI Wireframe
+description: Generate PRD Engineering Package — Integrates PR-FAQ + MVP + User Story + Pre-mortem, including flowcharts, DB Schema, and UI Wireframes
 ---
 
-觸發 product-playbook skill。
-然後讀取 references/04b-solutions.md（含 PRD 模板 + 流程圖/DB Schema/UI Wireframe 規格）。
+Invoke the product-playbook skill.
+Then read references/04b-solutions.md (contains PRD template + flowchart/DB Schema/UI Wireframe specs).
 
-根據目前對話中已完成的產品規劃內容，產出完整的 PRD 工程師交付包：
-1. PRD 文件（背景目標 + 功能範圍 + User Story + 功能規格 + 技術考量 + 風險 + 里程碑）
-2. 流程圖（Mermaid flowchart）
-3. DB Schema（Mermaid erDiagram）
-4. UI Wireframe（HTML 低保真線框圖）
+Based on the product planning content completed in the current conversation, generate the full PRD engineering package:
+1. PRD document (background & goals + feature scope + User Stories + feature specs + technical considerations + risks + milestones)
+2. Flowchart (Mermaid flowchart)
+3. DB Schema (Mermaid erDiagram)
+4. UI Wireframe (HTML low-fidelity wireframe)
 
-如果對話中尚無產品規劃內容，提示使用者先執行產品規劃流程。
+If no product planning content exists in the conversation, prompt the user to run a product planning flow first.

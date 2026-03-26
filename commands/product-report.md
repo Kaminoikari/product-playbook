@@ -1,12 +1,12 @@
 ---
-description: 產出 HTML 企劃報告 — 將所有產品規劃內容整合為單一可離線閱讀的 HTML 報告
+description: Generate HTML Planning Report — Compile all product planning content into a single offline-readable HTML report
 ---
 
-觸發 product-playbook skill 及讀取 references/06-html-report.md。
+Invoke the product-playbook skill. Then read references/06-html-report.md.
 
-根據目前對話中已完成的產品規劃內容，依照 06-html-report.md 的設計規範產出完整的 HTML 企劃報告：
-- 單一 HTML 檔案（CSS + JS 內嵌，Google Fonts CDN 載入 Noto Sans TC）
-- 依已完成的階段動態呈現，未完成的階段直接跳過
-- 包含 Sticky 目錄導航、卡片式排版、互動效果
+Based on the product planning content completed in the current conversation, generate a full HTML planning report following the design specs in 06-html-report.md:
+- Single HTML file (CSS + JS inline, Google Fonts CDN loading Noto Sans TC)
+- Dynamically render completed stages; skip any stages not yet completed
+- Include sticky table-of-contents navigation, card-based layout, and interactive effects
 
-如果對話中尚無產品規劃內容，提示使用者先執行產品規劃流程。
+If no product planning content exists in the conversation, prompt the user to run a product planning flow first.

@@ -1,21 +1,21 @@
 ---
-description: 產出開發交接包 — 生成 CLAUDE.md + TASKS.md + TICKETS.md + ARCHITECTURE.md + setup.sh，可直接在 Claude Code 中開始開發
+description: Generate Dev Handoff Package — Produces CLAUDE.md + TASKS.md + TICKETS.md + ARCHITECTURE.md + setup.sh, ready to start development in Claude Code
 ---
 
-觸發 product-playbook skill。
-然後依序讀取以下 reference 檔：
-1. `references/07a-handoff-core.md`（CLAUDE.md 模板 + 技術棧確認）
-2. `references/07b-tasks-tickets.md`（TASKS.md + TICKETS.md 模板）
-3. `references/07c-architecture-setup.md`（ARCHITECTURE.md + setup.sh + 使用者引導）
+Invoke the product-playbook skill.
+Then read the following reference files in order:
+1. `references/07a-handoff-core.md` (CLAUDE.md template + tech stack confirmation)
+2. `references/07b-tasks-tickets.md` (TASKS.md + TICKETS.md templates)
+3. `references/07c-architecture-setup.md` (ARCHITECTURE.md + setup.sh + user guidance)
 
-根據目前對話中已完成的產品規劃內容，產出完整的開發交接包：
-1. 確認技術棧（如使用者未指定，根據產品特性推薦）
-2. 產出 CLAUDE.md（Claude Code 專案記憶）
-3. 產出 TASKS.md（功能拆解 + Phase 分期 + 驗收標準）
-4. 產出 TICKETS.md（開票清單）
-5. 產出 docs/ARCHITECTURE.md（目錄結構 + DB Schema + API Endpoints）
-6. 產出 docs/PRD.md + docs/PRODUCT-SPEC.md
-7. 產出 scripts/setup.sh（一鍵初始化）
-8. 顯示 Claude Code 銜接引導
+Based on the product planning content completed in the current conversation, generate the full dev handoff package:
+1. Confirm the tech stack (if not specified by the user, recommend one based on product characteristics)
+2. Generate CLAUDE.md (Claude Code project memory)
+3. Generate TASKS.md (feature breakdown + phased releases + acceptance criteria)
+4. Generate TICKETS.md (ticket list)
+5. Generate docs/ARCHITECTURE.md (directory structure + DB Schema + API Endpoints)
+6. Generate docs/PRD.md + docs/PRODUCT-SPEC.md
+7. Generate scripts/setup.sh (one-click initialization)
+8. Display Claude Code transition guide
 
-如果對話中尚無產品規劃內容，提示使用者先執行產品規劃流程。
+If no product planning content exists in the conversation, prompt the user to run a product planning flow first.

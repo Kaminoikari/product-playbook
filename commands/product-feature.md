@@ -1,13 +1,13 @@
 ---
-description: 功能擴充模式 — 在既有產品上新增單一功能，4 步精簡流程
-argument-hint: <功能描述>
+description: Feature Extension Mode — Add a single feature to an existing product in 4 streamlined steps
+argument-hint: <feature description>
 ---
 
-觸發 product-playbook skill。
-然後讀取 references/rules-build.md，直接跳到「🔧 Feature Extension Quick Path」段落。
-執行各步驟時，依該段落中的 Reference 載入指示讀取對應的 reference 檔。
+Invoke the product-playbook skill.
+Then read references/rules-build.md and jump directly to the "🔧 Feature Extension Quick Path" section.
+When executing each step, load the corresponding reference files as indicated.
 
-執行模式：🔧 功能擴充模式
-功能描述：$ARGUMENTS
+Execution mode: 🔧 Feature Extension Mode
+Feature description: $ARGUMENTS
 
-依照 Feature Extension 步驟序列（S1 → S4）執行。先依 rules-context.md 載入產品上下文。每步驟顯示進度指示器。
+Follow the Feature Extension step sequence (S1 → S4). Load product context first per rules-context.md. Display a progress indicator at each step.

@@ -1,13 +1,13 @@
 ---
-description: 完整模式產品規劃 — 20 步完整跑過所有框架，產出可交付企劃文件
-argument-hint: <產品描述>
+description: Full Mode Product Planning — Run through all 20 steps across every framework, producing deliverable planning documents
+argument-hint: <product description>
 ---
 
-觸發 product-playbook skill。
-然後讀取 references/rules-full.md 取得步驟序列。
-執行各步驟時，依 rules-full.md 中的 Reference 載入指示讀取對應的 reference 檔。
+Invoke the product-playbook skill.
+Then read references/rules-full.md for the step sequence.
+When executing each step, load the corresponding reference files as indicated in rules-full.md.
 
-執行模式：📦 完整模式
-產品描述：$ARGUMENTS
+Execution mode: Full Mode
+Product description: $ARGUMENTS
 
-依照 rules-full.md 的步驟序列（S1 → S20）執行。先確認產品類型（B2B/B2C）和產出對象，然後開始第一步。每步驟顯示進度指示器。
+Follow the step sequence in rules-full.md (S1 → S20). First confirm the product type (B2B/B2C) and target audience, then begin the first step. Display a progress indicator at each step.

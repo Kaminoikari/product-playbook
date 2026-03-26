@@ -1,13 +1,13 @@
 ---
-description: 改版模式產品規劃 — 針對既有產品改版優化，有用戶數據和功能基礎
-argument-hint: <產品名稱與改版目標>
+description: Revision Mode Product Planning — Optimize and iterate on an existing product, leveraging user data and feature foundations
+argument-hint: <product name and revision goals>
 ---
 
-觸發 product-playbook skill。
-然後讀取 references/rules-revision.md 取得步驟序列。
-執行各步驟時，依 rules-revision.md 中的 Reference 載入指示讀取對應的 reference 檔。
+Invoke the product-playbook skill.
+Then read references/rules-revision.md for the step sequence.
+When executing each step, load the corresponding reference files as indicated in rules-revision.md.
 
-執行模式：🔄 改版模式
-產品描述：$ARGUMENTS
+Execution mode: Revision Mode
+Product description: $ARGUMENTS
 
-依照 rules-revision.md 的步驟序列（S1 → S12）執行。S1 會主動詢問既有產品數據（DAU/MAU、留存率、主要用戶反饋等）。每步驟顯示進度指示器。
+Follow the step sequence in rules-revision.md (S1 → S12). S1 will proactively ask about existing product metrics (DAU/MAU, retention rate, key user feedback, etc.). Display a progress indicator at each step.
