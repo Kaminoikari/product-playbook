@@ -59,8 +59,8 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 在 Claude Code 中執行：
 
 ```
-/install marketplace kaminoikari/product-playbook
-/install product-playbook
+/plugin marketplace add kaminoikari/product-playbook
+/plugin install product-playbook
 ```
 
 > 第一行指令新增 marketplace（只需執行一次），第二行安裝 plugin。

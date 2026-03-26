@@ -59,8 +59,8 @@ I want to build a product
 In Claude Code, run:
 
 ```
-/install marketplace kaminoikari/product-playbook
-/install product-playbook
+/plugin marketplace add kaminoikari/product-playbook
+/plugin install product-playbook
 ```
 
 > The first command adds the marketplace (one-time setup). The second installs the plugin.
