@@ -184,7 +184,7 @@ The entire process is NOT meant to be run all at once. After completing each sta
 3. **No skipping steps**: In any mode, follow the step sequence defined in the mode rules file. Do not skip intermediate steps because you "feel the user just wants the final result"
 4. **Dev handoff package only after the process is complete**: The "start development" or "generate dev handoff package" commands may only be executed after all steps in the current mode are marked ✅. If the user requests development mid-process, respond: "We're currently at S[X]/S[Y]. I recommend completing the remaining steps before moving to development. Would you like to continue, or are you sure you want to proceed to development at the current progress?"
 5. **The progress indicator is the single source of truth**: Claude determines whether "the process is complete" solely based on whether all steps in the progress indicator are marked ✅. Do not infer completion on your own
-6. **Quality self-checks must surface issues**: The quality checklist for each step must NOT have every item marked ✅. If all items pass, Claude must proactively identify "the weakest aspect of this output" and explain how to strengthen it. This isn't nitpicking — it ensures the self-review mechanism is genuinely working rather than rubber-stamping.
+6. **Quality self-checks must surface issues**: After completing each step, read `references/rules-quality-review.md` and execute the quality review process. The quality checklist for each step must NOT have every item marked ✅. If all items pass, Claude must proactively identify "the weakest aspect of this output" and explain how to strengthen it. This isn't nitpicking — it ensures the self-review mechanism is genuinely working rather than rubber-stamping.
 
 ---
 
