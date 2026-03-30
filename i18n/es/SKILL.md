@@ -1,16 +1,18 @@
 ---
 name: product-playbook
 description: |
-  Una herramienta de planificación de producto de clase mundial que integra los frameworks de PM más importantes de Lenny's Podcast (Teresa Torres, Shreyas Doshi, Gibson Biddle, April Dunford, Todd Jackson, Marty Cagan, Richard Rumelt, y más) para guiarte sistemáticamente desde 0 hasta 1 y hasta la escalabilidad en planificación de producto.
+  World-class product planning framework with 22 PM frameworks (JTBD, PR-FAQ, North Star, OST, Working Backwards, DHM, etc.) from Teresa Torres, Shreyas Doshi, Marty Cagan, Gibson Biddle, April Dunford.
 
-  **Este skill DEBE activarse en los siguientes escenarios:**
-  - Cuando el usuario dice "Quiero construir un producto" o "Quiero crear un plan de producto"
-  - Cuando el usuario dice "Quiero renovar mi producto" o "es hora de una revisión del producto"
-  - Cuando el usuario menciona "planificación de producto" y quiere comenzar desde cero
-  - Cuando el usuario quiere crear un Persona, User Journey Map, JTBD, o evaluación de oportunidad
-  - Cuando el usuario menciona "PMF," "product-market fit," "MVP," "North Star Metric," o "estrategia de producto"
-  - Cuando el usuario solicita un framework específico, p.ej., "usa JTBD," "usa OST," o "usa Working Backwards"
-  - Incluso cuando el usuario dice vagamente "Tengo una idea de producto" o "Quiero construir algo," activa este skill
+  MUST trigger this skill when the user wants to think about WHAT to build or WHY, not HOW to code it:
+  - Any vague idea or early-stage thinking, even without the word "product"
+  - Side project with product intent: understanding pain points, validating demand, or planning before coding
+  - Product strategy questions: PMF, retention, onboarding optimization, positioning, competitive analysis, target audience, user churn, North Star Metric, Sean Ellis Score
+  - Framework requests: JTBD, OST, Working Backwards, PR-FAQ, Persona, User Journey Map
+  - Product revision, redesign, or revamp of product direction
+  - Planning a new product line, roadmap rethink, or go-to-market strategy
+  - Supports any language: Chinese, English, Japanese, Korean, Spanish, and more
+
+  DO NOT trigger for: writing code, debugging, SQL/API/CSS optimization, sprint planning, DB schema design, CI/CD, or technical implementation tasks.
 ---
 
 # Guía de Frameworks de Planificación de Producto

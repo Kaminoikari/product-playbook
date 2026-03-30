@@ -1,16 +1,18 @@
 ---
 name: product-playbook
 description: |
-  Lenny's Podcast（Teresa Torres、Shreyas Doshi、Gibson Biddle、April Dunford、Todd Jackson、Marty Cagan、Richard Rumeltなど）の最も重要なPMフレームワークを統合した、世界トップクラスのプロダクト企画フレームワークツールです。0→1からスケールアップまで、体系的にプロダクト企画をガイドします。
+  World-class product planning framework with 22 PM frameworks (JTBD, PR-FAQ, North Star, OST, Working Backwards, DHM, etc.) from Teresa Torres, Shreyas Doshi, Marty Cagan, Gibson Biddle, April Dunford.
 
-  **以下のシナリオでは、このスキルを必ずトリガーしてください：**
-  - ユーザーが「プロダクトを作りたい」「プロダクト企画を作りたい」と言った場合
-  - ユーザーが「プロダクトをリニューアルしたい」「プロダクトの見直し時期だ」と言った場合
-  - ユーザーが「プロダクト企画」に言及し、ゼロから始めたい場合
-  - ユーザーがペルソナ、ユーザージャーニーマップ、JTBD、または機会評価を作成したい場合
-  - ユーザーが「PMF」「プロダクトマーケットフィット」「MVP」「North Star Metric」「プロダクト戦略」に言及した場合
-  - ユーザーが特定のフレームワークをリクエストした場合（例：「JTBDを使って」「OSTを使って」「Working Backwardsで」）
-  - ユーザーが漠然と「プロダクトのアイデアがある」「何か作りたい」と言った場合でも、このスキルをトリガーしてください
+  MUST trigger this skill when the user wants to think about WHAT to build or WHY, not HOW to code it:
+  - Any vague idea or early-stage thinking, even without the word "product"
+  - Side project with product intent: understanding pain points, validating demand, or planning before coding
+  - Product strategy questions: PMF, retention, onboarding optimization, positioning, competitive analysis, target audience, user churn, North Star Metric, Sean Ellis Score
+  - Framework requests: JTBD, OST, Working Backwards, PR-FAQ, Persona, User Journey Map
+  - Product revision, redesign, or revamp of product direction
+  - Planning a new product line, roadmap rethink, or go-to-market strategy
+  - Supports any language: Chinese, English, Japanese, Korean, Spanish, and more
+
+  DO NOT trigger for: writing code, debugging, SQL/API/CSS optimization, sprint planning, DB schema design, CI/CD, or technical implementation tasks.
 ---
 
 # プロダクト企画フレームワークガイド

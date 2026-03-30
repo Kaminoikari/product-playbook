@@ -1,16 +1,18 @@
 ---
 name: product-playbook
 description: |
-  世界顶尖产品规划实作框架引导工具，整合 Lenny's Podcast 历来最重要的 PM 框架（Teresa Torres、Shreyas Doshi、Gibson Biddle、April Dunford、Todd Jackson、Marty Cagan、Richard Rumelt 等），系统性完成从 0 到 1 乃至规模化的产品企划。
+  World-class product planning framework with 22 PM frameworks (JTBD, PR-FAQ, North Star, OST, Working Backwards, DHM, etc.) from Teresa Torres, Shreyas Doshi, Marty Cagan, Gibson Biddle, April Dunford.
 
-  **务必在以下情境触发此 skill：**
-  - 当使用者说「我要做一个产品」「我想做个产品」「我想做产品企划」
-  - 当使用者说「我想做个产品改版」「我要改版」「产品要改版了」
-  - 当使用者提到「产品企划」「产品规划」并且想要从头开始规划
-  - 当使用者想要建立 Persona、User Journey Map、JTBD、机会评估
-  - 当使用者提到「PMF」「产品市场契合」「MVP」「北极星指标」「产品策略」
-  - 当使用者指定使用某个框架，例如「用 JTBD」「用 OST」「用 Working Backwards」
-  - 即使使用者只是模糊地说「我有一个产品 idea」「我想做个东西」也要触发
+  MUST trigger this skill when the user wants to think about WHAT to build or WHY, not HOW to code it:
+  - Any vague idea or early-stage thinking, even without the word "product"
+  - Side project with product intent: understanding pain points, validating demand, or planning before coding
+  - Product strategy questions: PMF, retention, onboarding optimization, positioning, competitive analysis, target audience, user churn, North Star Metric, Sean Ellis Score
+  - Framework requests: JTBD, OST, Working Backwards, PR-FAQ, Persona, User Journey Map
+  - Product revision, redesign, or revamp of product direction
+  - Planning a new product line, roadmap rethink, or go-to-market strategy
+  - Supports any language: Chinese, English, Japanese, Korean, Spanish, and more
+
+  DO NOT trigger for: writing code, debugging, SQL/API/CSS optimization, sprint planning, DB schema design, CI/CD, or technical implementation tasks.
 ---
 
 # 产品企划实作框架引导

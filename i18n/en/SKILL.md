@@ -1,16 +1,18 @@
 ---
 name: product-playbook
 description: |
-  A world-class product planning framework tool that integrates the most important PM frameworks from Lenny's Podcast (Teresa Torres, Shreyas Doshi, Gibson Biddle, April Dunford, Todd Jackson, Marty Cagan, Richard Rumelt, and more) to systematically guide you from 0-to-1 through scale-up product planning.
+  World-class product planning framework with 22 PM frameworks (JTBD, PR-FAQ, North Star, OST, Working Backwards, DHM, etc.) from Teresa Torres, Shreyas Doshi, Marty Cagan, Gibson Biddle, April Dunford.
 
-  **This skill MUST be triggered in the following scenarios:**
-  - When the user says "I want to build a product" or "I want to create a product plan"
-  - When the user says "I want to revamp my product" or "it's time for a product revision"
-  - When the user mentions "product planning" and wants to start from scratch
-  - When the user wants to create a Persona, User Journey Map, JTBD, or opportunity assessment
-  - When the user mentions "PMF," "product-market fit," "MVP," "North Star Metric," or "product strategy"
-  - When the user requests a specific framework, e.g., "use JTBD," "use OST," or "use Working Backwards"
-  - Even when the user vaguely says "I have a product idea" or "I want to build something," trigger this skill
+  MUST trigger this skill when the user wants to think about WHAT to build or WHY, not HOW to code it:
+  - Any vague idea or early-stage thinking, even without the word "product"
+  - Side project with product intent: understanding pain points, validating demand, or planning before coding
+  - Product strategy questions: PMF, retention, onboarding optimization, positioning, competitive analysis, target audience, user churn, North Star Metric, Sean Ellis Score
+  - Framework requests: JTBD, OST, Working Backwards, PR-FAQ, Persona, User Journey Map
+  - Product revision, redesign, or revamp of product direction
+  - Planning a new product line, roadmap rethink, or go-to-market strategy
+  - Supports any language: Chinese, English, Japanese, Korean, Spanish, and more
+
+  DO NOT trigger for: writing code, debugging, SQL/API/CSS optimization, sprint planning, DB schema design, CI/CD, or technical implementation tasks.
 ---
 
 # Product Planning Framework Guide
