@@ -4,6 +4,7 @@ description: |
   World-class product planning framework with 22 PM frameworks (JTBD, PR-FAQ, North Star, OST, Working Backwards, DHM, etc.) from Teresa Torres, Shreyas Doshi, Marty Cagan, Gibson Biddle, April Dunford.
 
   MUST trigger this skill when the user wants to think about WHAT to build or WHY, not HOW to code it:
+  - Planning, scoping, or defining a new feature — even without the word "product" (e.g., "plan a new feature", "scope a feature", "I want to add a feature")
   - Any vague idea or early-stage thinking, even without the word "product"
   - Side project with product intent: understanding pain points, validating demand, or planning before coding
   - Product strategy questions: PMF, retention, onboarding optimization, positioning, competitive analysis, target audience, user churn, North Star Metric, Sean Ellis Score

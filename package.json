@@ -1,6 +1,6 @@
 {
   "name": "product-playbook",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "World-class product planning AI skill for Claude Code — 22 PM frameworks, 6 modes, from idea to dev handoff",
   "bin": {
     "product-playbook": "./install.sh"
