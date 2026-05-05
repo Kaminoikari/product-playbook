@@ -118,7 +118,7 @@
         "Identifies this as a feature extension scenario (adding a new feature to an existing product)",
         "Before feature planning, collects or confirms basic product information (product name TaskPro, product type B2B/B2C, one-line description, etc.)",
         "Confirms or references the tech stack already provided by the user (React + Node.js + MongoDB) without asking for re-description",
-        "Enters the 4-step feature extension flow (not the full 7-step or 12-step revision flow)",
+        "Enters the 4-step feature extension flow (not the full 9–11 step Full Mode or 6–8 step Revision Mode)",
         "Mentions that product context will be saved for future use (or references .product-context.md)"
       ]
     }

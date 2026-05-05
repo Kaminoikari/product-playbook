@@ -47,8 +47,8 @@ When the user triggers this skill, use a **progressive confirmation** approach �
 Select a mode (enter a number or name), or just tell me about your product and I'll recommend the best mode:
 
 1. 🚀 **Quick Mode** — 3 steps, ~30 min (JTBD → PR-FAQ → North Star)
-2. 📦 **Full Mode** — 20 steps, comprehensive planning document
-3. 🔄 **Revision Mode** — 12 steps, optimize existing product
+2. 📦 **Full Mode** — 9–11 steps (8 Core + 1 Default-ON Journey + 2 Default-OFF Optionals; 8 if flow is too simple to map), comprehensive planning document
+3. 🔄 **Revision Mode** — 6–8 steps (6 Core + 2 Optional), optimize existing product
 4. ✏️ **Custom Mode** — Choose your own framework combination
 5. ⚡ **Build Mode** — 7 steps, skip Discovery, go straight to solution
 6. 🔧 **Feature Extension Mode** — 4 steps, add a feature to existing product
@@ -84,17 +84,17 @@ Who is this plan primarily for?
 | Mode | Description | Fixed Outputs | Best For |
 |------|-------------|---------------|----------|
 | 🚀 **Quick Mode** | Actionable direction in 30 min; three fixed steps, no skipping | ① JTBD Statement ② PR-FAQ ③ North Star Metric | Quick alignment, idea validation, preparing a pitch |
-| 📦 **Full Mode** | Run through all frameworks; produce a deliverable plan | All frameworks (see step sequence) | New product planning, major revamps |
-| 🔄 **Revision Mode** | Optimize an existing product with user data and a feature baseline | Current state analysis → Pain point synthesis → Solution → Validation | Feature revamps, UX optimization, product repositioning |
+| 📦 **Full Mode** | 8 Core + 1 Default-ON Journey Map + 2 Default-OFF Optionals; produces a deliverable plan | Strategy → Persona → **Journey Map (default ON)** → JTBD → Pain+HMW+Ranking → PR-FAQ → Solution Evaluation → MVP → North Star (+ optional Positioning, PMF/GTM/Validation) | New product planning, major revamps |
+| 🔄 **Revision Mode** | 6 Core steps + 2 Optional, baseline-aware | Current state + JTBD re-validation → Pain points → Pain+HMW+Ranking (+optional Positioning) → PR-FAQ (+optional Pre-mortem) → MVP → North Star + Validation | Feature revamps, UX optimization, product repositioning |
 | ✏️ **Custom Mode** | Choose your own framework combination or completeness level | User-specified | Filling in specific gaps |
 | ⚡ **Build Mode** | Skip Discovery, go straight to solutions | PR-FAQ + Pre-mortem + GEM/RICE + MVP + North Star | Problem is known; need fast execution |
 | 🔧 **Feature Extension Mode** | Add a single feature to an existing product; streamlined 4-step flow | Problem + Context → Three parallel solutions + AI recommendation → Risk assessment → Execution scope | Adding features to an existing product; clear feature requirements |
 
 ### 📊 Completeness Levels (Custom Mode only)
 
-**🔴 Low (Lean)**: JTBD Statement → One HMW → PR-FAQ → North Star (any step can be swapped)
-**🟡 Medium (Standard)**: Persona + JTBD → Pain Points + HMW + Positioning → Parallel Solutions + MVP → North Star + PMF + Product Spec Summary
-**🟢 High (Comprehensive)**: Medium + Journey Map + OST + Strategy Blocks + RICE + Pre-mortem + Hypothesis Validation
+**🔴 Low (Lean — 4 steps)**: JTBD Statement → One HMW → PR-FAQ → North Star (any step can be swapped)
+**🟡 Medium (Standard — 8 or 9 steps)**: Persona → **(Journey Map auto-inserted unless flow is too simple)** → JTBD → Pain+HMW+Ranking → Positioning → PR-FAQ → Solution Evaluation → MVP → North Star
+**🟢 High (Comprehensive — 11 steps)**: Standard + Strategy Diagnosis + **Journey Map (bundled with Persona, default ON)** + PMF/GTM/BM/Validation
 
 ### 👥 Target Audience
 
@@ -127,6 +127,23 @@ After confirming the mode, **read the corresponding mode rules file** for the st
 After confirming the product type, read `references/rules-product-type.md` for B2B/B2C differentiation adjustments.
 
 When product context read/write is triggered, read `references/rules-context.md` for context accumulation rules.
+
+**For any mode that contains Optional steps (Full / Revision / Comprehensive Custom), read `references/rules-optional-trigger.md` for trigger conditions, the Persona-Journey bundling rule, and the Phase Decision Point output format.**
+
+---
+
+## 🔗 Global Rule: Persona-Journey Bundling
+
+**Whenever a mode includes a Persona step, Journey Map is included by DEFAULT in the very next step.** Persona defines Who; Journey Map describes the journey Who experiences. This applies equally to 0-to-1 and existing products — the relevant variable is whether the user's Job spans multiple stages, not whether the product already exists. (Teresa Torres, Indi Young, and Amazon Working Backwards all treat Journey Map as essential during 0-to-1.)
+
+Skip Journey Map only when one of the following holds:
+1. **Single interaction point** — the Job is solved by a single API call, single button, backend service, or pure config tool
+2. **Flow is only 1–2 steps** — too short for stage transitions; Journey Map degenerates into a list
+3. **User explicitly requests skip** — e.g., "skip Journey Map"
+
+When skipping, surface the decision rather than silently dropping it: *"Persona is complete. Based on context ([single interaction point / flow has only N steps]), Journey Map is being skipped. Reply 'add journey' to add it back."*
+
+Full skip logic, Custom Mode conditional insert behavior, and Phase Decision Point format live in `references/rules-optional-trigger.md`.
 
 When the user asks to list frameworks or uses supplementary commands, read `references/rules-commands.md`.
 

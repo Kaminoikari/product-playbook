@@ -1,64 +1,95 @@
-# 🔄 Revision Mode Step Sequence (12 Steps + Final Output)
+# 🔄 Revision Mode Step Sequence (6 Core + 2 Optional, total 6–8 steps)
 
-> This file is the authoritative step definition for Revision Mode. Loaded by the SKILL.md core dispatcher.
+> Authoritative step definition for Revision Mode. Dispatched from SKILL.md.
+
+**Slimmed from the original 12-step flow (v1.0.x) by merging redundant frameworks and gating optional ones behind trigger conditions.** See `references/rules-optional-trigger.md` for trigger logic and Phase Decision Point format.
 
 ## Step Sequence
 
 ```
 Phase 0: Current State Analysis
-  S1.  Existing product review (user data overview + core metrics + known issues + security status)
-  S2.  Re-examine existing user JTBD (which jobs are being done well? which aren't?)
+  S1.  Current State Review + JTBD Re-validation  [Core]
+       (Merged: data inventory + which existing Jobs are done well/poorly)
 
 Phase 1: Problem Convergence
-  S3.  User pain point collection (retention/churn analysis + user feedback synthesis + behavioral data)
-  S4.  Pain point summary table → load references/03-define.md → 2.1
-  S5.  Positioning re-evaluation → load references/03-define.md → 2.2 (focus: does positioning need adjustment?)
-  S6.  HMW question reframing → load references/03-define.md → 2.3
-  S7.  Opportunity assessment table → load references/03-define.md → 2.4
+  S2.  User Pain Points Collection  [Core]
+       (Retention/churn analysis + feedback synthesis + behavior data)
+  S3.  Pain Points + HMW + Opportunity Ranking  [Core]
+       → references/03-define.md
+       (Merged: Pain Points Summary + HMW + Opportunity Assessment Table)
+  S4.  Positioning Re-assessment  [Optional — see triggers]
+       → references/03-define.md
 
 Phase 2: Solution Design
-  S8.  PR-FAQ → load references/04a-prfaq.md (describe the post-revision experience)
-  S9.  Pre-mortem → load references/04b-solutions.md → 3.3
-  S10. MVP scope + Not Doing List → load references/04c-mvp.md (focus: what to change / what not to change)
+  S5.  PR-FAQ (post-revision experience)  [Core]
+       → references/04a-prfaq.md
+  S6.  Pre-mortem  [Optional — see triggers]
+       → references/04b-solutions.md
+  S7.  MVP + Not Doing List  [Core]
+       → references/04c-mvp.md
 
 Phase 3: Validation
-  S11. North Star + Aha Moment → load references/05a-northstar-aha.md (compare pre- vs. post-revision metrics)
-  S12. Hypothesis validation plan → load references/05c-validation-spec.md
+  S8.  North Star + Aha (before/after comparison) + Hypothesis Validation Plan  [Core]
+       → references/05a-northstar-aha.md + references/05c-validation-spec.md
+       (Merged: any revision must validate hypotheses; tightly coupled)
+
 ────
-Final Output → Product spec summary (revision edition)
+Final output → Product Spec Summary (revision edition)
 ```
 
 ### S1 Pre-step: Product Context Loading
 
-Before entering S1, load `references/rules-context.md` and check `.product-context.md`:
+Before entering S1, read `references/rules-context.md` and check `.product-context.md`:
 
-- **Full context available (Scenario 1)**: Auto-populate PMF level, North Star, known pain points, security status, and the 3 most recent Decision History entries. S1 guidance switches to **delta mode**: "Last time we assessed, your PMF level was [X] and your North Star metric was [Y]. Has anything changed? What are the latest DAU/MAU and retention numbers?" — Previously collected decision history and known pain points do not need to be re-gathered.
-- **No context available (Scenario 2)**: Trigger Context Bootstrap (`rules-context.md` Section 4, Round 1 + 3), then proceed to standard S1 data collection below.
-- **Partial context (Scenario 3)**: Pull in feature change history from Decision History (know which modules were changed and what risks were identified), but ask about overall product strategy and metrics (previous work only covered feature expansion and lacks a holistic view).
+- **Full context (Scenario 1)**: Auto-fill PMF level, North Star, known pain points, security posture, last 3 Decision History entries. Switch S1 to **diff-style prompting**: "Last assessment had your PMF level at [X] and North Star at [Y]. Have these changed? What are the latest DAU/MAU and retention numbers?" — historical decisions and known pain points do not need to be re-collected.
+- **No context (Scenario 2)**: Trigger Context Bootstrap (`rules-context.md` Section 4, Round 1 + 3), then enter standard S1 data collection.
+- **Partial context (Scenario 3)**: Pull feature change history from Decision History (which modules have been touched, which risks have been identified), but ask about overall product strategy and metrics (previously only feature extension was done — global view is missing).
 
-### S1 Standard Guidance
+### S1 Standard Prompting
 
-> Revision Mode's S1 proactively asks the user to provide existing product data: DAU/MAU, retention rates, key user feedback, past version decisions, etc. If context already pre-fills some answers, confirm rather than re-collect.
-> S1 also collects current security status: existing auth/authorization mechanisms, known security vulnerabilities or tech debt, recent security incidents. This information affects the revision's risk assessment and Pre-mortem.
+> Revision Mode's S1 actively asks the user for existing product data: DAU/MAU, retention, primary user feedback, key decisions from past versions, etc. If context already pre-fills some answers, switch to confirmation rather than re-collection.
+> S1 also collects current security posture: existing auth/authz mechanisms, known security gaps or tech debt, recent security incidents. This data feeds into revision risk assessment and Pre-mortem (if triggered).
 
 ### Fast Path
 
-When the user provides sufficient data at S1 (including user feedback, metrics, and pain points), S4–S7 (pain points → positioning → HMW → opportunity assessment) can be produced in a single conversation turn, requiring only one confirmation instead of four. Trigger condition: the pain point list gathered in S3 already has clear prioritization and data support. Hard Gate rules remain unchanged — each step's output must still be fully presented; only the confirmation cadence is accelerated.
+When the user provides sufficient data in S1 (with feedback, metrics, priorities), S3 may be produced in a single back-and-forth instead of multiple confirmations. Trigger condition: the pain point list collected in S2 already has explicit priorities and data backing. Hard Gate rules remain — each step's output must still be presented in full; only the confirmation cadence accelerates.
+
+## Optional Trigger Rules
+
+Read `references/rules-optional-trigger.md` for the authoritative trigger conditions and Phase Decision Point output format.
+
+**Quick reference:**
+- **S4 Positioning Re-assessment** triggers when: user mentions "positioning drift" / "market changed" / audience includes Sales/Marketing
+- **S6 Pre-mortem** triggers when: change scope ≥30% of existing functionality / touches payments-permissions-data migration
+
+## Phase Decision Point Requirement
+
+Before entering Phase 1 and Phase 2, render the Phase Decision Point block (format defined in `rules-optional-trigger.md`). Phase 0 and Phase 3 contain only Core steps and skip the decision point.
 
 ## Reference Loading Instructions
 
 | Step | Reference File |
 |------|---------------|
-| S1–S3 | No external reference needed (guide the user to provide data directly) |
-| S4–S7 | `references/03-define.md` |
-| S8 | `references/04a-prfaq.md` |
-| S9 | `references/04b-solutions.md` |
-| S10 | `references/04c-mvp.md` |
-| S11 | `references/05a-northstar-aha.md` |
-| S12 + Final Output | `references/05c-validation-spec.md` |
+| S1–S2 | (no external reference; direct user-data collection) |
+| S3 | `references/03-define.md` |
+| S4 (if triggered) | `references/03-define.md` |
+| S5 | `references/04a-prfaq.md` |
+| S6 (if triggered) | `references/04b-solutions.md` |
+| S7 | `references/04c-mvp.md` |
+| S8 + final output | `references/05a-northstar-aha.md` + `references/05c-validation-spec.md` |
+
+## Step Count Summary
+
+| Scenario | Steps |
+|----------|-------|
+| Default (Core only) | **6** |
+| All Optional triggered | 8 |
+| (Legacy 12-step flow) | 12 |
 
 ## Final Output Format
 
-**Revision Product Spec Summary**: Before/after comparison + what to change / what not to change + success metrics
+**Revision Product Spec Summary**: before/after comparison + what's changing / what's not + success metrics.
 
-Upon completion, execute end-of-flow rules per `references/rules-end-of-flow.md`.
+The summary MUST disclose any skipped Optional steps and offer a one-command path to add them back (per `rules-optional-trigger.md` Section 6).
+
+After completion, follow `references/rules-end-of-flow.md` for end-of-flow rules.

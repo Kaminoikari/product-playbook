@@ -10,4 +10,4 @@ Al ejecutar cada paso, carga los archivos de referencia correspondientes según 
 Modo de ejecución: Modo Revisión
 Descripción del producto: $ARGUMENTS
 
-Sigue la secuencia de pasos en rules-revision.md (S1 → S12). S1 preguntará proactivamente sobre métricas del producto existente (DAU/MAU, tasa de retención, feedback clave de usuarios, etc.). Muestra un indicador de progreso en cada paso.
+Sigue la secuencia de pasos en rules-revision.md (S1 → S8, los pasos Optional están condicionados por los disparadores en rules-optional-trigger.md). S1 preguntará proactivamente sobre métricas del producto existente (DAU/MAU, tasa de retención, feedback clave de usuarios, etc.). Renderiza un bloque Punto de Decisión de Fase antes de cualquier fase que contenga pasos Optional, y muestra un indicador de progreso en cada paso.

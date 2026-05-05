@@ -182,8 +182,8 @@ product-playbook/
 | Mode | Steps | Duration | Best for |
 |------|-------|----------|----------|
 | 🚀 **Quick Mode** | 3 steps | ~30 min | Rapid idea validation, pitch prep |
-| 📦 **Full Mode** | 20 steps | Several hours | New product planning, major revamps |
-| 🔄 **Revision Mode** | 12 steps | 1-2 hours | Iterating on existing products |
+| 📦 **Full Mode** | 9–11 steps (8 Core + 1 Default-ON Journey Map + 2 Default-OFF Optionals) | 1-2 hours | New product planning, major revamps |
+| 🔄 **Revision Mode** | 6–8 steps (6 Core + 2 Optional) | <1 hour | Iterating on existing products |
 | ✏️ **Custom Mode** | 4-16 steps | Varies | Filling specific gaps |
 | ⚡ **Build Mode** | 7 steps | ~1 hour | Problem is known, jump to solutions |
 | 🔧 **Feature Expansion** | 4 steps | ~30 min | Adding a single feature to an existing product |
@@ -401,7 +401,7 @@ By comparing response quality between "with Skill guidance" and "without Skill g
 
 - **Quality Self-check Hard Gate** (+100%): Whether the AI proactively critiques its own output with strict standards, flags gaps, and demands improvement after completing a deliverable — 0% pass rate without the Skill
 - **Context Bootstrap** (+100%): Whether the AI collects foundational product information before starting to plan, rather than jumping straight into technical implementation — completely skipped without the Skill
-- **Feature Expansion Mode** (+83%): Whether the AI recognizes "adding a feature to an existing product" scenarios and activates a streamlined 4-step flow instead of the full 7-12 steps — without the Skill, it jumps straight to technical solutions
+- **Feature Expansion Mode** (+83%): Whether the AI recognizes "adding a feature to an existing product" scenarios and activates a streamlined 4-step flow instead of the full 6-11 steps — without the Skill, it jumps straight to technical solutions
 - **Security Integration** (+75%): Whether the dev handoff includes security architecture, .gitignore templates, and platform-specific security measures — without the Skill, security is reduced to a single summary table
 
 > See [`evals/`](./evals/) for detailed methodology and data.
@@ -428,7 +428,7 @@ cp -r product-playbook/commands/* ~/.claude/commands/
 | Command | Description |
 |---------|-------------|
 | `/product-quick <description>` | Quick Mode — run through JTBD → PR-FAQ → North Star in under 30 min |
-| `/product-full <description>` | Full Mode — complete 20-step product plan |
+| `/product-full <description>` | Full Mode — comprehensive plan (9–11 steps; Journey Map default ON) |
 | `/product-revision <description>` | Revision Mode — iterate and optimize an existing product |
 | `/product-build <description>` | Build Mode — skip Discovery, jump straight to solutions |
 | `/product-feature <description>` | Feature Extension — add a single feature to an existing product (4 steps) |

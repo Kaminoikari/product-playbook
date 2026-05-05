@@ -1,66 +1,102 @@
-# 📦 完整模式步驟序列（共 20 步 + 最終產出）
+# 📦 Full Mode Step Sequence (8 Core + 1 Default-ON + 2 Optional, total 9–11 steps)
 
-> 此檔案為完整模式的權威步驟定義。由 SKILL.md 核心派發載入。
+> Authoritative step definition for Full Mode. Dispatched from SKILL.md.
 
-## 步驟序列
+**Slimmed from the original 20-step flow (v1.0.x) by merging redundant frameworks and gating optional ones behind trigger conditions.** See `references/rules-optional-trigger.md` for trigger logic and Phase Decision Point format.
+
+**Note on Journey Map (S3)**: Default ON. Persona-Journey is a bundled pair regardless of whether the product is 0-to-1 or an existing product — the relevant variable is whether the user's Job spans multiple stages. Skip only when the situation is genuinely too simple (single API/button, flow ≤2 steps, or user explicitly requests skip).
+
+## Step Sequence
 
 ```
-Phase 0：前置
-  S1.  機會評估 + DHM → 讀取 references/00-opportunity-check.md
-  S2.  Strategy Blocks + Rumelt 策略內核 → 讀取 references/01-strategy.md
+Phase 0: Strategy
+  S1.  Strategy Diagnosis  [Core]
+       → references/00-opportunity-check.md + references/01-strategy.md
+       (Merged: Opportunity + DHM + Strategy Blocks + Rumelt Kernel)
 
-Phase 1：Discovery
-  S3.  Persona Table → 讀取 references/02a-persona.md
-  S4.  Persona 卡片 → 讀取 references/02a-persona.md
-  S5.  JTBD 分析 → 讀取 references/02b-jtbd.md
-  S6.  機會解法樹 OST → 讀取 references/02c-ost-journey.md
-  S7.  User Journey Map → 讀取 references/02c-ost-journey.md
+Phase 1: Discovery
+  S2.  Persona (Table + Cards)  [Core]
+       → references/02a-persona.md
+  S3.  User Journey Map  [Default ON — skip only if situation is too simple]
+       → references/02c-ost-journey.md
+  S4.  JTBD Analysis  [Core]
+       → references/02b-jtbd.md
 
-Phase 2：Define
-  S8.  痛點彙整表 → 讀取 references/03-define.md
-  S9.  April Dunford 定位 → 讀取 references/03-define.md
-  S10. HMW 問題轉化 → 讀取 references/03-define.md
-  S11. 機會評估表 → 讀取 references/03-define.md
+Phase 2: Define
+  S5.  Pain Points + HMW + Opportunity Ranking  [Core]
+       → references/03-define.md
+       (Merged: Pain Points Summary + HMW + Opportunity Assessment;
+        OST tree visualization is an optional sub-format inside this step)
+  S6.  April Dunford Positioning  [Optional — see triggers]
+       → references/03-define.md
 
-Phase 3：Develop
-  S12. PR-FAQ → 讀取 references/04a-prfaq.md
-  S13. 平行原型 → 讀取 references/04b-solutions.md
-  S14. Pre-mortem → 讀取 references/04b-solutions.md
-  S15. GEM + RICE 優先排序 → 讀取 references/04b-solutions.md
-  S16. User Story → 讀取 references/04b-solutions.md
-  S17. MVP + Not Doing List → 讀取 references/04c-mvp.md
+Phase 3: Develop
+  S7.  PR-FAQ (Working Backwards)  [Core]
+       → references/04a-prfaq.md
+  S8.  Solution Evaluation  [Core]
+       → references/04b-solutions.md
+       (Merged: Parallel Prototypes + Pre-mortem + GEM + RICE)
+  S9.  MVP + Not Doing List  [Core]
+       → references/04c-mvp.md
 
-Phase 4：Deliver
-  S18. North Star + 三層訊號 + Aha Moment → 讀取 references/05a-northstar-aha.md
-  S19. PMF 等級判定 + GTM 策略 + 商業模式 → 讀取 references/05b-pmf-gtm.md
-  S20. 假設驗證計畫 → 讀取 references/05c-validation-spec.md
+Phase 4: Deliver
+  S10. North Star + Three-Layer Signals + Aha Moment  [Core]
+       → references/05a-northstar-aha.md
+  S11. PMF + GTM + Business Model + Hypothesis Validation Plan  [Optional — see triggers]
+       → references/05b-pmf-gtm.md + references/05c-validation-spec.md
+
 ────
-最終產出 → 產品規格摘要（references/05c-validation-spec.md → 4.6）+ 最佳切入點分析
+Final output → Product Spec Summary (references/05c-validation-spec.md → 4.6) + Best Entry Point Analysis
 ```
 
-> 完整模式中 4.1 Empowered Teams 在產出對象為老闆/跨部門時加入 S18 之前，否則跳過。
+> When the audience is Executives or Cross-functional Alignment, prepend the Empowered Teams framework before S10.
 
-## Reference 載入指示
+## Optional Trigger Rules
 
-進入各步驟時，僅讀取對應的 reference 檔案（不要預先全部載入）：
+Read `references/rules-optional-trigger.md` for the authoritative trigger conditions and Phase Decision Point output format.
 
-| 步驟 | Reference 檔案 |
+**Quick reference:**
+- **S3 Journey Map** (Default ON): proceed unless single interaction point / flow ≤2 steps / user requests skip
+- **S6 Positioning** (Default OFF): trigger on new product launch / repositioning / audience includes Sales-BD-Marketing
+- **S11 PMF/GTM/BM/Validation** (Default OFF): trigger on product launch / audience is Exec or Data Scientist / user requests validation plan
+
+## Phase Decision Point Requirement
+
+Before entering Phase 1, Phase 2, and Phase 4, render the Phase Decision Point block (format defined in `rules-optional-trigger.md`). Phase 0 and Phase 3 contain only Core steps and skip the decision point.
+
+## Reference Loading Instructions
+
+Load each reference file ONLY when entering its corresponding step (do not pre-load all references):
+
+| Step | Reference File |
 |------|---------------|
-| S1 | `references/00-opportunity-check.md` |
-| S2 | `references/01-strategy.md` |
-| S3-S4 | `references/02a-persona.md` |
-| S5 | `references/02b-jtbd.md` |
-| S6-S7 | `references/02c-ost-journey.md` |
-| S8-S11 | `references/03-define.md` |
-| S12 | `references/04a-prfaq.md` |
-| S13-S16 | `references/04b-solutions.md` |
-| S17 | `references/04c-mvp.md` |
-| S18 | `references/05a-northstar-aha.md` |
-| S19 | `references/05b-pmf-gtm.md` |
-| S20 + 最終產出 | `references/05c-validation-spec.md` |
+| S1 | `references/00-opportunity-check.md` + `references/01-strategy.md` |
+| S2 | `references/02a-persona.md` |
+| S3 (if triggered) | `references/02c-ost-journey.md` |
+| S4 | `references/02b-jtbd.md` |
+| S5 | `references/03-define.md` |
+| S6 (if triggered) | `references/03-define.md` |
+| S7 | `references/04a-prfaq.md` |
+| S8 | `references/04b-solutions.md` |
+| S9 | `references/04c-mvp.md` |
+| S10 | `references/05a-northstar-aha.md` |
+| S11 (if triggered) | `references/05b-pmf-gtm.md` + `references/05c-validation-spec.md` |
+| Final output | `references/05c-validation-spec.md` |
 
-## 最終產出格式
+## Step Count Summary
 
-**最佳切入點分析**（完整邏輯鏈）＋ **產品規格摘要**
+| Scenario | Steps |
+|----------|-------|
+| Default (8 Core + S3 Journey ON) | **9** |
+| Simple flow (S3 skipped) | 8 |
+| 1 Default-OFF Optional triggered (S6 or S11) | 10 |
+| All Optionals triggered | 11 |
+| (Legacy 20-step flow) | 20 |
 
-完成後，依 `references/rules-end-of-flow.md` 執行流程結束規則。
+## Final Output Format
+
+**Best Entry Point Analysis** (full reasoning chain) + **Product Spec Summary**.
+
+The Product Spec Summary MUST disclose any skipped Optional steps and offer a one-command path to add them back (per `rules-optional-trigger.md` Section 6).
+
+After completion, follow `references/rules-end-of-flow.md` for end-of-flow rules.

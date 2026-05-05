@@ -23,7 +23,7 @@ Before generating the final integrated output, scan ALL completed steps and veri
 1. JTBD ↔ PR-FAQ: Does the PR-FAQ address the same problem as the JTBD statement?
 2. PR-FAQ ↔ North Star: Does the North Star measure the outcome the PR-FAQ promises?
 
-**📦 Full Mode** (20 steps — check all 7):
+**📦 Full Mode** (9–11 steps, 8 Core + 1 Default-ON + 2 Optional — check all 7):
 1. Target User — same persona referenced across JTBD, Positioning, PR-FAQ, and North Star?
 2. Core Problem / JTBD — PR-FAQ addresses the same problem? MVP solves it?
 3. Positioning — reflected in PR-FAQ headline and solution direction?
@@ -32,7 +32,7 @@ Before generating the final integrated output, scan ALL completed steps and veri
 6. North Star Metric — measures JTBD outcome? Achievable with MVP scope?
 7. Pre-mortem Risks — still relevant given final solution and MVP?
 
-**🔄 Revision Mode** (12 steps — check 4):
+**🔄 Revision Mode** (6–8 steps, 6 Core + 2 Optional — check 4):
 1. Existing JTBD ↔ Pain Points ↔ Positioning: consistent after re-evaluation?
 2. PR-FAQ ↔ MVP Scope: revision scope matches what PR-FAQ describes?
 3. North Star ↔ Before/After: metric comparison is logical?

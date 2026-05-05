@@ -182,8 +182,8 @@ product-playbook/
 | Modo | Pasos | Duración | Ideal para |
 |------|-------|----------|-----------|
 | 🚀 **Modo Rápido** | 3 pasos | ~30 min | Validación rápida de ideas, preparación de pitch |
-| 📦 **Modo Completo** | 20 pasos | Varias horas | Planificación de nuevo producto, grandes renovaciones |
-| 🔄 **Modo Revisión** | 12 pasos | 1-2 horas | Iteración sobre productos existentes |
+| 📦 **Modo Completo** | 9–11 pasos (8 Core + 1 Journey Map por defecto ON + 2 Optional por defecto OFF) | 1-2 horas | Planificación de nuevo producto, grandes renovaciones |
+| 🔄 **Modo Revisión** | 6–8 pasos (6 Core + 2 Optional) | <1 hora | Iteración sobre productos existentes |
 | ✏️ **Modo Personalizado** | 4-16 pasos | Variable | Llenar vacíos específicos |
 | ⚡ **Modo Build** | 7 pasos | ~1 hora | El problema es conocido, ir directo a soluciones |
 | 🔧 **Expansión de Funcionalidades** | 4 pasos | ~30 min | Agregar una sola funcionalidad a un producto existente |
@@ -401,7 +401,7 @@ Comparando la calidad de respuesta entre "con guía del Skill" y "sin guía del 
 
 - **Hard Gate de Autoevaluación de Calidad** (+100%): Si la IA critica proactivamente su propio output con estándares estrictos, señala brechas y exige mejoras después de completar un entregable — 0% de tasa de aprobación sin el Skill
 - **Context Bootstrap** (+100%): Si la IA recopila información foundacional del producto antes de comenzar a planificar, en lugar de saltar directamente a implementación técnica — completamente omitido sin el Skill
-- **Modo Expansión de Funcionalidades** (+83%): Si la IA reconoce escenarios de "agregar una funcionalidad a un producto existente" y activa un flujo simplificado de 4 pasos en lugar de los 7-12 pasos completos — sin el Skill, salta directamente a soluciones técnicas
+- **Modo Expansión de Funcionalidades** (+83%): Si la IA reconoce escenarios de "agregar una funcionalidad a un producto existente" y activa un flujo simplificado de 4 pasos en lugar de los 6-11 pasos completos — sin el Skill, salta directamente a soluciones técnicas
 - **Integración de Seguridad** (+75%): Si el handoff de desarrollo incluye arquitectura de seguridad, plantillas .gitignore y medidas de seguridad específicas de plataforma — sin el Skill, la seguridad se reduce a una tabla resumen
 
 > Ver [`evals/`](./evals/) para metodología detallada y datos.
@@ -428,7 +428,7 @@ cp -r product-playbook/commands/* ~/.claude/commands/
 | Comando | Descripción |
 |---------|-------------|
 | `/product-quick <descripción>` | Modo Rápido — recorre JTBD → PR-FAQ → North Star en menos de 30 min |
-| `/product-full <descripción>` | Modo Completo — plan de producto completo de 20 pasos |
+| `/product-full <descripción>` | Modo Completo — plan de producto completo (9–11 pasos; Journey Map por defecto ON) |
 | `/product-revision <descripción>` | Modo Revisión — iterar y optimizar un producto existente |
 | `/product-build <descripción>` | Modo Build — omitir Discovery, ir directo a soluciones |
 | `/product-feature <descripción>` | Modo Extensión — añade una funcionalidad a un producto existente (4 pasos) |

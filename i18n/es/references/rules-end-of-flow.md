@@ -23,7 +23,7 @@ Antes de generar el output final integrado, escanear TODOS los pasos completados
 1. JTBD ↔ PR-FAQ: ¿El PR-FAQ aborda el mismo problema que la declaración JTBD?
 2. PR-FAQ ↔ North Star: ¿El North Star mide el resultado que el PR-FAQ promete?
 
-**📦 Modo Completo** (20 pasos — verificar las 7):
+**📦 Modo Completo** (9–11 pasos, 8 Core + 1 Por defecto ON + 2 Optional — verificar las 7):
 1. Usuario Objetivo — ¿se referencia la misma persona en JTBD, Posicionamiento, PR-FAQ y North Star?
 2. Problema Central / JTBD — ¿el PR-FAQ aborda el mismo problema? ¿El MVP lo resuelve?
 3. Posicionamiento — ¿se refleja en el titular del PR-FAQ y la dirección de la solución?
@@ -32,7 +32,7 @@ Antes de generar el output final integrado, escanear TODOS los pasos completados
 6. North Star Metric — ¿mide el resultado del JTBD? ¿Es alcanzable con el alcance del MVP?
 7. Riesgos Pre-mortem — ¿siguen siendo relevantes dada la solución final y el MVP?
 
-**🔄 Modo Revisión** (12 pasos — verificar 4):
+**🔄 Modo Revisión** (6–8 pasos, 6 Core + 2 Optional — verificar 4):
 1. JTBD existente ↔ Puntos de Dolor ↔ Posicionamiento: ¿consistentes después de la reevaluación?
 2. PR-FAQ ↔ Alcance del MVP: ¿el alcance de la revisión coincide con lo que describe el PR-FAQ?
 3. North Star ↔ Antes/Después: ¿la comparación de métricas es lógica?

@@ -1,5 +1,5 @@
 ---
-description: Full Mode Product Planning — Run through all 20 steps across every framework, producing deliverable planning documents
+description: Full Mode Product Planning — Run 8 Core + up to 3 Optional steps (8–11 total) across the most relevant frameworks, producing deliverable planning documents
 argument-hint: <product description>
 ---
 
@@ -10,4 +10,4 @@ When executing each step, load the corresponding reference files as indicated in
 Execution mode: Full Mode
 Product description: $ARGUMENTS
 
-Follow the step sequence in rules-full.md (S1 → S20). First confirm the product type (B2B/B2C) and target audience, then begin the first step. Display a progress indicator at each step.
+Follow the step sequence in rules-full.md (S1 → S11, with Optional steps gated by triggers in rules-optional-trigger.md). First confirm the product type (B2B/B2C) and target audience, then begin the first step. Render a Phase Decision Point block before any phase that contains Optional steps, and display a progress indicator at each step.

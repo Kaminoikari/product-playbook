@@ -47,8 +47,8 @@ description: |
 모드를 선택하세요 (번호 또는 이름을 입력), 또는 만들고 싶은 제품에 대해 말씀해 주시면 가장 적합한 모드를 추천해 드리겠습니다:
 
 1. 🚀 **퀵 모드** — 3단계, 약 30분 (JTBD → PR-FAQ → North Star)
-2. 📦 **풀 모드** — 20단계, 포괄적인 기획 문서
-3. 🔄 **리비전 모드** — 12단계, 기존 제품 최적화
+2. 📦 **풀 모드** — 9–11 단계 (8 Core + 1 기본 활성화 Journey + 2 기본 비활성화 Optional; 플로우가 너무 단순하면 8 단계), 포괄적인 기획 문서
+3. 🔄 **리비전 모드** — 6–8 단계 (6 Core + 2 Optional), 기존 제품 최적화
 4. ✏️ **커스텀 모드** — 프레임워크 조합 직접 선택
 5. ⚡ **빌드 모드** — 7단계, 디스커버리 생략, 솔루션으로 바로 진행
 6. 🔧 **기능 확장 모드** — 4단계, 기존 제품에 기능 추가
@@ -84,17 +84,17 @@ description: |
 | 모드 | 설명 | 고정 산출물 | 적합한 경우 |
 |------|------|------------|------------|
 | 🚀 **퀵 모드** | 30분 이내 실행 가능한 방향; 3개 고정 단계, 건너뛰기 불가 | ① JTBD 선언문 ② PR-FAQ ③ North Star Metric | 빠른 정렬, 아이디어 검증, 피칭 준비 |
-| 📦 **풀 모드** | 모든 프레임워크 실행; 납품 가능한 기획서 작성 | 모든 프레임워크 (단계 시퀀스 참조) | 신규 제품 기획, 대규모 개편 |
-| 🔄 **리비전 모드** | 사용자 데이터와 기능 기반으로 기존 제품 최적화 | 현상 분석 → 페인포인트 종합 → 솔루션 → 검증 | 기능 개편, UX 최적화, 제품 재포지셔닝 |
+| 📦 **풀 모드** | 8 Core + 1 기본 활성화 Journey Map + 2 기본 비활성화 Optional; 납품 가능한 기획서 작성 | Strategy → Persona → **Journey Map (기본 ON)** → JTBD → 페인포인트+HMW+우선순위 → PR-FAQ → 솔루션 평가 → MVP → North Star (+ 옵션 Positioning, PMF/GTM/Validation) | 신규 제품 기획, 대규모 개편 |
+| 🔄 **리비전 모드** | 6 Core 단계 + 2 Optional, 기준선 인지 | 현상 + JTBD 재검증 → 페인포인트 → 페인포인트+HMW+우선순위 (+옵션 Positioning) → PR-FAQ (+옵션 Pre-mortem) → MVP → North Star + 검증 | 기능 개편, UX 최적화, 제품 재포지셔닝 |
 | ✏️ **커스텀 모드** | 프레임워크 조합 또는 완성도 수준 직접 선택 | 사용자 지정 | 특정 부분 보완 |
 | ⚡ **빌드 모드** | 디스커버리 생략, 솔루션으로 바로 진행 | PR-FAQ + Pre-mortem + GEM/RICE + MVP + North Star | 문제가 명확한 경우; 빠른 실행 필요 |
 | 🔧 **기능 확장 모드** | 기존 제품에 단일 기능 추가; 간소화된 4단계 플로우 | 문제 + 컨텍스트 → 3개 병렬 솔루션 + AI 추천 → 리스크 평가 → 실행 범위 | 기존 제품에 기능 추가; 기능 요구사항이 명확한 경우 |
 
 ### 📊 완성도 수준 (커스텀 모드 전용)
 
-**🔴 낮음 (린)**: JTBD 선언문 → HMW 1개 → PR-FAQ → North Star (모든 단계 교체 가능)
-**🟡 중간 (표준)**: Persona + JTBD → 페인포인트 + HMW + 포지셔닝 → 병렬 솔루션 + MVP → North Star + PMF + 제품 스펙 요약
-**🟢 높음 (종합)**: 중간 + Journey Map + OST + Strategy Blocks + RICE + Pre-mortem + 가설 검증
+**🔴 낮음 (Lean — 4 단계)**: JTBD 진술 → 하나의 HMW → PR-FAQ → North Star (모든 단계 교체 가능)
+**🟡 중간 (Standard — 8 또는 9 단계)**: Persona → (플로우가 여러 단계에 걸치면 Journey Map 자동 삽입) → JTBD → 페인포인트+HMW+순위 → Positioning → PR-FAQ → 솔루션 평가 → MVP → North Star
+**🟢 높음 (Comprehensive — 11 단계)**: Standard + Strategy Diagnosis + **Journey Map(Persona와 번들링, 기본 ON)** + PMF/GTM/BM/검증 계획
 
 ### 👥 대상 독자
 
@@ -129,6 +129,23 @@ description: |
 제품 컨텍스트 읽기/쓰기가 트리거되면, `references/rules-context.md`를 읽어 컨텍스트 축적 규칙을 확인하세요.
 
 사용자가 프레임워크 목록을 요청하거나 보조 명령을 사용할 때, `references/rules-commands.md`를 읽으세요.
+
+**Optional 단계를 포함하는 모든 모드(Full / Revision / Comprehensive Custom)는 `references/rules-optional-trigger.md`를 읽어 트리거 조건, Persona-Journey 번들링 규칙, Phase 결정 포인트 출력 형식을 가져와야 합니다.**
+
+---
+
+## 🔗 전역 규칙: Persona-Journey 번들링
+
+**모드에 Persona 단계가 포함될 때마다, 바로 다음 단계로 Journey Map이 기본 ON으로 포함됩니다.** Persona는 Who(누구)를 정의하고, Journey Map은 Who가 경험하는 여정을 묘사합니다. 이는 0-to-1 제품과 기존 제품 모두에 동일하게 적용됩니다 — 관련 변수는 사용자의 Job이 여러 단계에 걸쳐 있는지 여부이지, 제품이 이미 존재하는지가 아닙니다. (Teresa Torres, Indi Young, Amazon Working Backwards는 모두 0-to-1 단계에서 Journey Map을 필수 요소로 취급합니다.)
+
+다음 중 하나가 충족될 때만 Journey Map을 스킵하세요:
+1. **단일 상호작용 지점** — Job이 단일 API 호출, 단일 버튼, 백엔드 서비스 또는 순수 설정 도구로 해결됨
+2. **플로우가 1–2 단계뿐** — 단계 전환을 만들기에 너무 짧음; Journey Map이 단순 목록으로 변질됨
+3. **사용자가 명시적으로 스킵 요청** — 예: "Journey Map 스킵"
+
+스킵 시, 조용히 빠뜨리지 말고 결정을 드러내세요: *"Persona가 완성되었습니다. 컨텍스트([단일 상호작용 지점 / 플로우가 N 단계뿐])를 기반으로 Journey Map을 스킵합니다. 'add journey'로 답변하시면 다시 추가할 수 있습니다."*
+
+전체 스킵 로직, Custom Mode 조건부 삽입 동작, Phase 결정 포인트 형식은 `references/rules-optional-trigger.md`에 있습니다.
 
 ---
 

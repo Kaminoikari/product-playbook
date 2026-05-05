@@ -23,7 +23,7 @@
 1. JTBD ↔ PR-FAQ：PR-FAQ 是否针对与 JTBD 陈述相同的问题？
 2. PR-FAQ ↔ North Star：北极星指标是否衡量了 PR-FAQ 承诺的成果？
 
-**📦 完整模式**（20 步骤 — 检查全部 7 项）：
+**📦 完整模式**（9–11 步骤,8 Core + 1 Default-ON + 2 Optional — 检查全部 7 项）：
 1. 目标用户 — 在 JTBD、定位、PR-FAQ 和 North Star 中是否引用相同的人物画像？
 2. 核心问题 / JTBD — PR-FAQ 针对相同问题？MVP 是否解决？
 3. 定位 — 是否反映在 PR-FAQ 标题和解法方向中？
@@ -32,7 +32,7 @@
 6. North Star Metric — 是否衡量 JTBD 成果？在 MVP 范围内是否可达成？
 7. Pre-mortem 风险 — 鉴于最终解法和 MVP，是否仍然相关？
 
-**🔄 改版模式**（12 步骤 — 检查 4 项）：
+**🔄 改版模式**（6–8 步骤,6 Core + 2 Optional — 检查 4 项）：
 1. 既有 JTBD ↔ 痛点 ↔ 定位：重新评估后是否一致？
 2. PR-FAQ ↔ MVP 范围：改版范围是否与 PR-FAQ 描述一致？
 3. North Star ↔ 改版前后：指标比较是否合乎逻辑？

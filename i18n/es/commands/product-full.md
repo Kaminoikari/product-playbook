@@ -1,5 +1,5 @@
 ---
-description: Planificación de Producto Modo Completo — Recorre los 20 pasos a través de todos los frameworks, produciendo documentos de planificación entregables
+description: Planificación de Producto Modo Completo — Ejecuta 8 pasos Core + hasta 3 Optional (8–11 totales) a través de los frameworks más relevantes, produciendo documentos de planificación entregables
 argument-hint: <descripción del producto>
 ---
 
@@ -10,4 +10,4 @@ Al ejecutar cada paso, carga los archivos de referencia correspondientes según 
 Modo de ejecución: Modo Completo
 Descripción del producto: $ARGUMENTS
 
-Sigue la secuencia de pasos en rules-full.md (S1 → S20). Primero confirma el tipo de producto (B2B/B2C) y la audiencia objetivo, luego comienza el primer paso. Muestra un indicador de progreso en cada paso.
+Sigue la secuencia de pasos en rules-full.md (S1 → S11, los pasos Optional están condicionados por los disparadores en rules-optional-trigger.md). Primero confirma el tipo de producto (B2B/B2C) y la audiencia objetivo, luego comienza el primer paso. Renderiza un bloque Punto de Decisión de Fase antes de cualquier fase que contenga pasos Optional, y muestra un indicador de progreso en cada paso.

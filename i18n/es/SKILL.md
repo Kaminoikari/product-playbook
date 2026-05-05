@@ -47,8 +47,8 @@ Cuando el usuario activa este skill, usa un enfoque de **confirmación progresiv
 Selecciona un modo (ingresa un número o nombre), o simplemente cuéntame sobre tu producto y te recomendaré el mejor modo:
 
 1. 🚀 **Modo Rápido** — 3 pasos, ~30 min (JTBD → PR-FAQ → North Star)
-2. 📦 **Modo Completo** — 20 pasos, documento de planificación integral
-3. 🔄 **Modo Revisión** — 12 pasos, optimizar producto existente
+2. 📦 **Modo Completo** — 9–11 pasos (8 Core + 1 Journey activado por defecto + 2 Optional desactivados por defecto; 8 si el flujo es demasiado simple), documento de planificación integral
+3. 🔄 **Modo Revisión** — 6–8 pasos (6 Core + 2 Optional), optimizar producto existente
 4. ✏️ **Modo Personalizado** — Elige tu propia combinación de frameworks
 5. ⚡ **Modo Build** — 7 pasos, salta Discovery, directo a solución
 6. 🔧 **Modo Extensión de Feature** — 4 pasos, agregar funcionalidad a producto existente
@@ -84,17 +84,17 @@ Este producto es:
 | Modo | Descripción | Outputs Fijos | Ideal Para |
 |------|-------------|---------------|------------|
 | 🚀 **Modo Rápido** | Dirección accionable en 30 min; tres pasos fijos, sin omitir | ① Declaración JTBD ② PR-FAQ ③ North Star Metric | Alineación rápida, validación de ideas, preparar un pitch |
-| 📦 **Modo Completo** | Recorre todos los frameworks; produce un plan entregable | Todos los frameworks (ver secuencia de pasos) | Planificación de nuevo producto, grandes renovaciones |
-| 🔄 **Modo Revisión** | Optimiza un producto existente con datos de usuarios y una base de funcionalidades | Análisis estado actual → Síntesis de puntos de dolor → Solución → Validación | Renovación de funcionalidades, optimización UX, reposicionamiento de producto |
+| 📦 **Modo Completo** | 8 Core + 1 Journey Map Por defecto ON + 2 Optional Por defecto OFF; produce un plan entregable | Estrategia → Persona → **Journey Map (por defecto ON)** → JTBD → Puntos de Dolor+HMW+Ranking → PR-FAQ → Evaluación de Soluciones → MVP → North Star (+ Posicionamiento, PMF/GTM/Validación opcionales) | Planificación de nuevo producto, grandes renovaciones |
+| 🔄 **Modo Revisión** | 6 pasos Core + 2 Optional, consciente de la línea base | Estado actual + Re-validación de JTBD → Puntos de dolor → Puntos de Dolor+HMW+Ranking (+Posicionamiento opcional) → PR-FAQ (+Pre-mortem opcional) → MVP → North Star + Validación | Renovación de funcionalidades, optimización UX, reposicionamiento de producto |
 | ✏️ **Modo Personalizado** | Elige tu propia combinación de frameworks o nivel de completitud | Especificado por el usuario | Llenar vacíos específicos |
 | ⚡ **Modo Build** | Salta Discovery, ir directo a soluciones | PR-FAQ + Pre-mortem + GEM/RICE + MVP + North Star | El problema es conocido; se necesita ejecución rápida |
 | 🔧 **Modo Extensión de Feature** | Agregar una sola funcionalidad a un producto existente; flujo simplificado de 4 pasos | Problema + Contexto → Tres soluciones paralelas + recomendación AI → Evaluación de riesgos → Alcance de ejecución | Agregar funcionalidades a un producto existente; requisitos claros |
 
 ### 📊 Niveles de Completitud (solo Modo Personalizado)
 
-**🔴 Bajo (Lean)**: Declaración JTBD → Un HMW → PR-FAQ → North Star (cualquier paso puede intercambiarse)
-**🟡 Medio (Estándar)**: Persona + JTBD → Puntos de Dolor + HMW + Posicionamiento → Soluciones Paralelas + MVP → North Star + PMF + Resumen de Spec de Producto
-**🟢 Alto (Integral)**: Medio + Journey Map + OST + Strategy Blocks + RICE + Pre-mortem + Validación de Hipótesis
+**🔴 Bajo (Lean — 4 pasos)**: Declaración JTBD → Un HMW → PR-FAQ → North Star (cualquier paso intercambiable)
+**🟡 Medio (Standard — 8 o 9 pasos)**: Persona → **(Journey Map auto-insertado si el flujo abarca múltiples etapas)** → JTBD → Puntos de Dolor+HMW+Ranking → Posicionamiento → PR-FAQ → Evaluación de Soluciones → MVP → North Star
+**🟢 Alto (Comprehensive — 11 pasos)**: Standard + Diagnóstico Estratégico + **Journey Map (emparejado con Persona)** + PMF/GTM/BM/Plan de Validación
 
 ### 👥 Audiencia Objetivo
 
@@ -129,6 +129,23 @@ Después de confirmar el tipo de producto, lee `references/rules-product-type.md
 Cuando se active la lectura/escritura de contexto de producto, lee `references/rules-context.md` para reglas de acumulación de contexto.
 
 Cuando el usuario pida listar frameworks o use comandos complementarios, lee `references/rules-commands.md`.
+
+**Cualquier modo que contenga pasos Optional (Full / Revision / Comprehensive Custom) debe leer `references/rules-optional-trigger.md` para obtener las condiciones de disparo, la regla de emparejamiento Persona-Journey y el formato de salida del Punto de Decisión de Fase.**
+
+---
+
+## 🔗 Regla Global: Emparejamiento Persona-Journey
+
+**Siempre que un modo incluya un paso de Persona, el Journey Map se incluye por DEFECTO en el paso inmediatamente siguiente.** La Persona define Quién; el Journey Map describe el viaje que ese Quién experimenta. Esto aplica por igual a productos 0-a-1 y a productos existentes — la variable relevante es si el Job del usuario abarca múltiples etapas, no si el producto ya existe. (Teresa Torres, Indi Young y el Working Backwards de Amazon tratan el Journey Map como esencial durante el 0-a-1.)
+
+Saltar el Journey Map solo cuando se cumpla alguna de las siguientes:
+1. **Punto de interacción único** — el Job se resuelve con una sola llamada a una API, un único botón, un servicio backend o una herramienta de configuración pura
+2. **El flujo tiene solo 1–2 pasos** — demasiado corto para transiciones de etapa; el Journey Map degenera en una lista
+3. **El usuario solicita explícitamente saltarlo** — p. ej. "saltar Journey Map", "skip Journey Map"
+
+Cuando se salte, comunica la decisión en lugar de omitirla en silencio: *"Persona está completa. Según el contexto ([punto de interacción único / el flujo solo tiene N pasos]), se omite el Journey Map. Responde 'add journey' para añadirlo de vuelta."*
+
+La lógica completa de salto, el comportamiento de inserción condicional del Modo Custom y el formato del Punto de Decisión de Fase viven en `references/rules-optional-trigger.md`.
 
 ---
 

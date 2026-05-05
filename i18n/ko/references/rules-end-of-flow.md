@@ -23,7 +23,7 @@
 1. JTBD ↔ PR-FAQ: PR-FAQ가 JTBD 선언문과 동일한 문제를 다루고 있는가?
 2. PR-FAQ ↔ North Star: North Star Metric이 PR-FAQ가 약속한 성과를 측정하고 있는가?
 
-**📦 풀 모드** (20 단계 — 전체 7항목 검사):
+**📦 풀 모드** (9–11 단계, 8 Core + 1 기본 ON + 2 Optional — 전체 7항목 검사):
 1. 타겟 사용자 — JTBD, 포지셔닝, PR-FAQ, North Star에서 동일한 페르소나를 참조하고 있는가?
 2. 핵심 문제 / JTBD — PR-FAQ가 동일한 문제를 다루는가? MVP가 이를 해결하는가?
 3. 포지셔닝 — PR-FAQ 헤드라인과 솔루션 방향에 반영되어 있는가?
@@ -32,7 +32,7 @@
 6. North Star Metric — JTBD 성과를 측정하는가? MVP 범위 내에서 달성 가능한가?
 7. Pre-mortem 리스크 — 최종 솔루션과 MVP를 고려할 때 여전히 관련성이 있는가?
 
-**🔄 리비전 모드** (12 단계 — 4항목 검사):
+**🔄 리비전 모드** (6–8 단계, 6 Core + 2 Optional — 4항목 검사):
 1. 기존 JTBD ↔ 페인포인트 ↔ 포지셔닝: 재평가 후에도 일관성이 있는가?
 2. PR-FAQ ↔ MVP 범위: 리비전 범위가 PR-FAQ 설명과 일치하는가?
 3. North Star ↔ 전후 비교: 지표 비교가 논리적인가?

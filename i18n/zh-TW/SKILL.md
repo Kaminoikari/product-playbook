@@ -47,8 +47,8 @@ description: |
 請選擇一個模式（輸入編號或名稱），或直接告訴我你想做什麼產品，我會幫你判斷最適合的模式：
 
 1. 🚀 **快速模式** — 3 步、約 30 分鐘（JTBD → PR-FAQ → North Star）
-2. 📦 **完整模式** — 20 步、完整企劃文件
-3. 🔄 **改版模式** — 12 步、既有產品優化
+2. 📦 **完整模式** — 9–11 步（8 Core + 1 預設啟用 Journey + 2 預設停用 Optional；若流程過於簡單則 8 步），完整企劃文件
+3. 🔄 **改版模式** — 6–8 步（6 Core + 2 Optional），既有產品優化
 4. ✏️ **自訂模式** — 自選框架組合或完整性等級
 5. ⚡ **直接實作模式** — 7 步、跳過 Discovery 直接進解法
 6. 🔧 **功能擴充模式** — 4 步、在既有產品新增單一功能
@@ -84,17 +84,17 @@ description: |
 | 模式 | 說明 | 固定產出 | 適合情境 |
 |------|------|---------|---------|
 | 🚀 **快速模式（Quick）** | 30 分鐘內產出可行動方向，三步固定不可跳過 | ① JTBD 陳述 ② PR-FAQ ③ North Star Metric | 快速對齊、驗證想法、準備簡報 |
-| 📦 **完整模式（Full）** | 完整跑過所有框架，產出可交付企劃文件 | 全部框架（見步驟序列） | 新產品規劃、重大改版 |
-| 🔄 **改版模式（Revision）** | 針對既有產品改版，有用戶數據和功能基礎 | 現況分析 → 痛點收斂 → 解法 → 驗證 | 功能改版、體驗優化、產品重新定位 |
+| 📦 **完整模式（Full）** | 8 Core + 1 預設啟用 Journey Map + 2 預設停用 Optional，產出可交付企劃文件 | 策略 → Persona → **Journey Map（預設啟用）** → JTBD → 痛點+HMW+排序 → PR-FAQ → 解法評估 → MVP → North Star（+ 選用 Positioning、PMF/GTM/驗證） | 新產品規劃、重大改版 |
+| 🔄 **改版模式（Revision）** | 6 Core 步驟 + 2 Optional，具基線意識 | 現況回顧 + JTBD 重新檢驗 → 痛點收集 → 痛點+HMW+排序（+選用 Positioning）→ PR-FAQ（+選用 Pre-mortem）→ MVP → North Star + 驗證 | 功能改版、體驗優化、產品重新定位 |
 | ✏️ **自訂模式（Custom）** | 自選框架組合或完整性等級 | 依使用者指定 | 想補足特定環節 |
 | ⚡ **直接實作模式（Build）** | 跳過 Discovery，直接進解法 | PR-FAQ + Pre-mortem + GEM/RICE + MVP + North Star | 問題已知、需要快速執行 |
 | 🔧 **功能擴充模式（Feature Extension）** | 在既有產品上新增單一功能，4 步精簡流程 | 問題+上下文 → 三平行解法+AI推薦 → 風險評估 → 執行範圍 | 既有產品加功能、功能需求明確 |
 
 ### 📊 完整性等級（自訂模式適用）
 
-**🔴 低（Lean）**：JTBD 陳述 → HMW 一個 → PR-FAQ → North Star（可自由替換任一步驟）
-**🟡 中（Standard）**：Persona + JTBD → 痛點 + HMW + Positioning → 平行解法 + MVP → North Star + PMF + 產品規格摘要
-**🟢 高（Comprehensive）**：中完整性 + Journey Map + OST + Strategy Blocks + RICE + Pre-mortem + 假設驗證
+**🔴 低（Lean — 4 步）**：JTBD 陳述 → 一個 HMW → PR-FAQ → North Star（任一步驟可替換）
+**🟡 中（Standard — 8 或 9 步）**：Persona →（若流程跨多階段則自動插入 Journey Map）→ JTBD → 痛點+HMW+排序 → Positioning → PR-FAQ → 解法評估 → MVP → North Star
+**🟢 高（Comprehensive — 11 步）**：Standard + Strategy Diagnosis + **Journey Map（與 Persona 捆綁）** + PMF/GTM/BM/驗證計畫
 
 ### 👥 產出對象
 
@@ -129,6 +129,23 @@ description: |
 觸發產品上下文讀取/寫入時，讀取 `references/rules-context.md` 取得上下文累積規則。
 
 使用者要求列出框架、使用補充指令時，讀取 `references/rules-commands.md`。
+
+**任何包含 Optional 步驟的模式（Full / Revision / Comprehensive Custom），需讀取 `references/rules-optional-trigger.md` 取得觸發條件、Persona-Journey 捆綁規則，以及 Phase 決策點輸出格式。**
+
+---
+
+## 🔗 全域規則：Persona-Journey 捆綁
+
+**任何模式只要包含 Persona 步驟，下一步就會 DEFAULT（預設 ON）納入 User Journey Map。** Persona 定義「Who」，Journey Map 描繪「Who 所經歷的旅程」。此規則對 0-to-1 與既有產品同樣適用——關鍵變數是使用者的 Job 是否跨越多個階段，而不是產品是否已經存在。（Teresa Torres、Indi Young、Amazon Working Backwards 都將 Journey Map 視為 0-to-1 階段不可或缺的工具。）
+
+僅在以下任一條件成立時跳過 Journey Map：
+1. **單一互動點** — 該 Job 由單一 API 呼叫、單一按鈕、後端服務或純設定工具完成
+2. **流程僅 1–2 步** — 太短，無法形成階段轉換；Journey Map 退化為一張清單
+3. **使用者明確要求跳過** — 例如「skip Journey Map」
+
+跳過時必須揭露決策，不得無聲略過：*「Persona 已完成。基於目前的上下文（[單一互動點 / 流程僅有 N 步]），Journey Map 將被跳過。回覆『add journey』即可補上。」*
+
+完整跳過邏輯、Custom Mode 條件式插入行為，以及 Phase 決策點格式定義於 `references/rules-optional-trigger.md`。
 
 ---
 
