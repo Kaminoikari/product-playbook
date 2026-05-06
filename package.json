@@ -31,6 +31,7 @@
     "install.sh",
     "SKILL.md",
     "commands/",
+    "hooks/",
     "references/",
     "i18n/",
     "README.zh-TW.md",

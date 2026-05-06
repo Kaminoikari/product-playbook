@@ -11,3 +11,8 @@ Thumbs.db
 # Archives
 *.zip
 .playwright-mcp/
+
+# product-playbook session state
+.product-dev-active
+.product-playbook-progress.md
+.product-context.md

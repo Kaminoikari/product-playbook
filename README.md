@@ -280,6 +280,18 @@ Generate a complete dev handoff package and kick off Claude Code development wit
 > Please read CLAUDE.md and TASKS.md, start executing Phase 0
 ```
 
+### 🪝 Lifecycle Hooks
+
+Three plugin hooks turn the playbook's core rules from "Claude needs to remember" into harness-enforced behavior. All hooks emit advisory `systemMessage` reminders — none of them block the user.
+
+| Event | Trigger | What it does |
+|-------|---------|--------------|
+| `SessionStart` | Every new / resumed session | Auto-injects `.product-playbook-progress.md` and `.product-context.md` into the model's context so a planning session resumes from the exact step it was paused at. |
+| `UserPromptSubmit` | Each user prompt during an active planning session | Detects (a) off-topic prompts (debug / error / "fix this code") and reminds Claude to follow the off-topic save-progress rule, and (b) change-intent keywords (`改 step 2`, `update persona`, `重做 JTBD`) and reminds Claude to apply the Change Propagation rules. |
+| `PreToolUse` (Write/Edit/MultiEdit) | Each file-write attempt | If the project is still in planning mode (no `.product-dev-active` marker) and the target is a source-code file (`.ts/.tsx/.py/.go/...`), reminds Claude that planning produces docs, not code. The marker is auto-created when `/product-dev` runs. |
+
+Hooks are auto-loaded from `hooks/hooks.json` when the plugin is installed. They no-op outside playbook projects, so installing the plugin has zero effect on unrelated codebases.
+
 ### 📄 Document Import & Export
 
 **Import** any existing document into the planning flow — no manual copy-paste:

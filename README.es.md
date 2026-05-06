@@ -280,6 +280,18 @@ Genera un paquete completo de handoff de desarrollo e inicia desarrollo en Claud
 > Por favor lee CLAUDE.md y TASKS.md, comienza ejecutando la Fase 0
 ```
 
+### 🪝 Hooks de Ciclo de Vida
+
+Tres hooks del plugin convierten las reglas centrales del playbook de "Claude debe recordarlas" a "el harness las aplica de forma determinista". Todos los hooks inyectan recordatorios suaves vía `systemMessage` — **ninguno bloquea al usuario**.
+
+| Evento | Disparador | Acción |
+|--------|-----------|--------|
+| `SessionStart` | Cada sesión nueva o reanudada | Inyecta automáticamente `.product-playbook-progress.md` y `.product-context.md` en el contexto del modelo, para que una sesión de planificación interrumpida se reanude exactamente desde el paso pausado |
+| `UserPromptSubmit` | Cada prompt durante una sesión de planificación activa | Detecta (a) prompts off-topic (debug / error / "arregla este código") y recuerda a Claude aplicar la regla de guardar progreso de SKILL.md; (b) palabras clave de intención de cambio (`改 step 2`, `update persona`, `rehacer JTBD`) y recuerda aplicar las reglas de Change Propagation |
+| `PreToolUse` (Write/Edit/MultiEdit) | Antes de cada escritura de archivo | Si el proyecto sigue en fase de planificación (sin marcador `.product-dev-active`) y el destino es código fuente (`.ts/.tsx/.py/.go/...`), recuerda a Claude que la planificación produce documentos, no código. El marcador se crea automáticamente al ejecutar `/product-dev` |
+
+Los hooks se cargan automáticamente desde `hooks/hooks.json` al instalar el plugin. Operan como no-op fuera de proyectos product-playbook, por lo que instalar el plugin no afecta a otros codebases.
+
 ### 📄 Importación y Exportación de Documentos
 
 **Importa** cualquier documento existente al flujo de planificación — sin copiar y pegar manualmente:

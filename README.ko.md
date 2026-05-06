@@ -280,6 +280,18 @@ MVP 수정  → User Stories, DB Schema, 제품 스펙 요약 자동 업데이�
 > CLAUDE.md와 TASKS.md를 읽고, Phase 0 실행 시작
 ```
 
+### 🪝 라이프사이클 훅
+
+세 개의 플러그인 훅이 Playbook의 핵심 규칙을 "Claude가 알아서 기억"에서 "하네스가 강제 실행"으로 끌어올립니다. 모든 훅은 `systemMessage` 형태의 소프트 리마인더만 주입하며, **사용자를 막지 않습니다**.
+
+| 이벤트 | 트리거 시점 | 역할 |
+|--------|------------|------|
+| `SessionStart` | 새 세션 또는 재개 시마다 | `.product-playbook-progress.md`와 `.product-context.md`를 자동으로 모델 context에 주입하여, 중단된 기획을 직전 단계에서 매끄럽게 이어가도록 함 |
+| `UserPromptSubmit` | 기획 진행 중 프롬프트 제출마다 | (a) 주제 이탈 메시지(debug / 에러 / "이 코드 고쳐주세요")를 감지해 SKILL.md의 진행 상황 저장 규칙을 따르도록 Claude에 지시. (b) 변경 의도 키워드(`改 step 2`, `update persona`, `JTBD 다시 작성`)를 감지해 Change Propagation 규칙 적용을 환기 |
+| `PreToolUse` (Write/Edit/MultiEdit) | 파일 쓰기 전마다 | 프로젝트가 기획 단계(`.product-dev-active` 마커 없음)이고 대상이 소스 코드 확장자(`.ts/.tsx/.py/.go/...`)일 경우, "기획은 문서만 생성, 코드는 생성하지 않는다"는 원칙을 Claude에 리마인드. 마커는 `/product-dev` 실행 시 자동 생성됨 |
+
+훅은 플러그인 설치 시 `hooks/hooks.json`에서 자동 로드됩니다. product-playbook 프로젝트가 아닌 곳에서는 완전히 no-op이므로 다른 codebase에 영향을 주지 않습니다.
+
 ### 📄 문서 가져오기 및 내보내기
 
 **가져오기** — 기존 문서를 기획 플로우에 직접 투입, 수동 복사 붙여넣기 불필요:
