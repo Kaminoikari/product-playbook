@@ -190,7 +190,7 @@ Todo el proceso NO está pensado para ejecutarse de una sola vez. Después de co
 
 **Las siguientes reglas son innegociables, independientemente de si el usuario tiene permisos de bypass habilitados:**
 
-1. **No código durante el proceso de planificación**: A lo largo del flujo de este Skill, Claude NO DEBE usar las herramientas Write / Edit / Bash para crear o modificar archivos de código (.ts / .js / .py / .html / .css / .json, etc.). Las únicas excepciones son generar reportes HTML (`references/06-html-report.md`) y diagramas Mermaid
+1. **No código durante el proceso de planificación**: A lo largo del flujo de este Skill, Claude NO DEBE usar las herramientas Write / Edit / Bash para crear o modificar archivos de código (.ts / .js / .py / .html / .css / .json, etc.). Las únicas excepciones son generar reportes HTML (`references/06-html-report.md`) y diagramas Mermaid. *(A partir de v1.2.0, el hook `PreToolUse` del plugin también emite un recordatorio cuando se intenta escribir código fuente antes de que exista el marcador `.product-dev-active`. La regla anterior sigue siendo autoritativa — el hook es una red de seguridad, no un sustituto.)*
 2. **Cada paso debe esperar confirmación del usuario antes de continuar**: Después de completar el output de un paso, debes pedir feedback al usuario y esperar respuesta. No avances automáticamente al siguiente paso. Incluso si el usuario dice "solo ejecuta todo automáticamente," pausa después del output de cada paso para que el usuario tenga oportunidad de revisar
 3. **No omitir pasos**: En cualquier modo, sigue la secuencia de pasos definida en el archivo de reglas del modo. No omitas pasos intermedios porque "sientes que el usuario solo quiere el resultado final"
 4. **Paquete de handoff de desarrollo solo después de completar el proceso**: Los comandos "iniciar desarrollo" o "generar paquete de handoff de desarrollo" solo pueden ejecutarse después de que todos los pasos del modo actual estén marcados ✅. Si el usuario solicita desarrollo a mitad del proceso, responde: "Actualmente estamos en S[X]/S[Y]. Recomiendo completar los pasos restantes antes de pasar a desarrollo. ¿Quieres continuar, o estás seguro de que quieres proceder a desarrollo con el progreso actual?"
@@ -200,6 +200,8 @@ Todo el proceso NO está pensado para ejecutarse de una sola vez. Después de co
 ---
 
 ### 🔀 Manejo de Prompts Fuera de Tema
+
+> *A partir de v1.2.0, el hook `UserPromptSubmit` del plugin auto-detecta prompts fuera de tema y emite un recordatorio. Las reglas a continuación siguen siendo autoritativas — el hook solo asegura que Claude no las olvide.*
 
 **Cuando se recibe un prompt fuera de tema durante el proceso, Claude debe:**
 
@@ -238,7 +240,7 @@ Todo el proceso NO está pensado para ejecutarse de una sola vez. Después de co
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-Cuando el usuario regresa a un paso completado para hacer cambios, lee `references/rules-change-propagation.md` para reglas de propagación de cambios.
+Cuando el usuario regresa a un paso completado para hacer cambios, lee `references/rules-change-propagation.md` para reglas de propagación de cambios. *(A partir de v1.2.0, el hook `UserPromptSubmit` del plugin detecta palabras clave de intención de cambio y recuerda aplicar estas reglas.)*
 
 Cuando el usuario sube un archivo, lee `references/rules-file-integration.md` para guías de integración.
 

@@ -190,7 +190,7 @@ The entire process is NOT meant to be run all at once. After completing each sta
 
 **The following rules are non-negotiable, regardless of whether the user has bypass permission enabled:**
 
-1. **No code during the planning process**: Throughout this Skill's workflow, Claude must NOT use Write / Edit / Bash tools to create or modify any code files (.ts / .js / .py / .html / .css / .json, etc.). The only exceptions are generating HTML reports (`references/06-html-report.md`) and Mermaid diagrams
+1. **No code during the planning process**: Throughout this Skill's workflow, Claude must NOT use Write / Edit / Bash tools to create or modify any code files (.ts / .js / .py / .html / .css / .json, etc.). The only exceptions are generating HTML reports (`references/06-html-report.md`) and Mermaid diagrams. *(As of v1.2.0, the plugin's `PreToolUse` hook also emits an advisory reminder when a source-code write is attempted before the `.product-dev-active` marker exists. The rule above remains authoritative — the hook is a safety net, not a substitute.)*
 2. **Each step must wait for user confirmation before proceeding**: After completing the output for a step, you must ask for user feedback and wait for a response. Do not auto-advance to the next step. Even if the user says "just run everything automatically," pause after each step's output so the user has a chance to review
 3. **No skipping steps**: In any mode, follow the step sequence defined in the mode rules file. Do not skip intermediate steps because you "feel the user just wants the final result"
 4. **Dev handoff package only after the process is complete**: The "start development" or "generate dev handoff package" commands may only be executed after all steps in the current mode are marked ✅. If the user requests development mid-process, respond: "We're currently at S[X]/S[Y]. I recommend completing the remaining steps before moving to development. Would you like to continue, or are you sure you want to proceed to development at the current progress?"
@@ -200,6 +200,8 @@ The entire process is NOT meant to be run all at once. After completing each sta
 ---
 
 ### 🔀 Off-topic Prompt Handling
+
+> *As of v1.2.0, the plugin's `UserPromptSubmit` hook auto-detects off-topic prompts and emits an advisory reminder. The rules below remain authoritative — the hook only ensures Claude doesn't forget.*
 
 **When an off-topic prompt is received during the process, Claude must:**
 
@@ -238,7 +240,7 @@ The entire process is NOT meant to be run all at once. After completing each sta
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-When the user goes back to a completed step to make changes, read `references/rules-change-propagation.md` for change propagation rules.
+When the user goes back to a completed step to make changes, read `references/rules-change-propagation.md` for change propagation rules. *(As of v1.2.0, the plugin's `UserPromptSubmit` hook detects change-intent keywords and emits a reminder to apply these rules.)*
 
 When the user uploads a file, read `references/rules-file-integration.md` for integration guidelines.
 
