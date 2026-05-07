@@ -190,7 +190,7 @@ description: |
 
 **以下规则不可违反，无论使用者是否开启 bypass permission：**
 
-1. **禁止在规划流程中写代码**：整个 Skill 流程期间，Claude 不得使用 Write / Edit / Bash 工具建立或修改任何代码文件（.ts / .js / .py / .html / .css / .json 等）。唯一例外是产出 HTML 报告（references/06-html-report.md）和 Mermaid 图表
+1. **禁止在规划流程中写代码**：整个 Skill 流程期间，Claude 不得使用 Write / Edit / Bash 工具建立或修改任何代码文件（.ts / .js / .py / .html / .css / .json 等）。唯一例外是产出 HTML 报告（references/06-html-report.md）和 Mermaid 图表。*（自 v1.2.0 起，plugin 的 `PreToolUse` hook 会在尚未建立 `.product-dev-active` 标记时，检测源代码写入并发出软提醒。上述规则仍为权威 — hook 只是安全网，不取代规则。）*
 2. **每一步必须等待使用者确认才能进入下一步**：完成当前步骤的产出后，必须询问使用者回馈并等待回复，不得自动进入下一步。即使使用者说「全部自动跑完」，也要在每个步骤产出后暂停，至少显示产出让使用者有机会检视
 3. **不得跳步**：在任何模式中，必须依照模式规则档定义的顺序逐步执行。不得因为「感觉使用者想要的是最终结果」而跳过中间步骤
 4. **开发交接包只在流程结束后产出**：「进入开发」「产出开发交接包」指令只有在当前模式的所有步骤都标记为 ✅ 后才可执行。若使用者在流程中途要求进入开发，回复：「目前还在 S[X]/S[Y]，建议先完成剩余步骤再进入开发。你想继续完成，还是确定要在当前进度直接进入开发？」
@@ -200,6 +200,8 @@ description: |
 ---
 
 ### 🔀 流程中断处理（Off-topic Prompt）
+
+> *自 v1.2.0 起，plugin 的 `UserPromptSubmit` hook 会自动检测离题消息并发出软提醒。下方规则仍为权威 — hook 只确保 Claude 不会忘记。*
 
 **当流程进行中收到与产品规划无关的 prompt 时，Claude 必须：**
 
@@ -238,7 +240,7 @@ description: |
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-使用者回到已完成步骤进行修改时，读取 `references/rules-change-propagation.md` 取得变更传播规则。
+使用者回到已完成步骤进行修改时，读取 `references/rules-change-propagation.md` 取得变更传播规则。*（自 v1.2.0 起，plugin 的 `UserPromptSubmit` hook 会检测变更意图关键字并提醒套用此规则。）*
 
 使用者上传文件时，读取 `references/rules-file-integration.md` 取得整合指引。
 
