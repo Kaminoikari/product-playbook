@@ -17,7 +17,7 @@
 - [ ] **T0.1** 初始化專案（`scripts/setup.sh` 或手動）
   - 驗收：
     - [ ] `npm run dev` / `python manage.py runserver` 等指令可啟動
-    - [ ] `.gitignore` 已建立，包含 `.env`、`.env.local`、`node_modules/`、`.product-playbook-progress.md` 等敏感檔案
+    - [ ] `.gitignore` 已建立，包含 `.env`、`.env.local`、`node_modules/`、`.product-playbook-progress.md`、`.product-dev-active` 等敏感檔案
     - [ ] `.env.example` 已建立（只有 key 名稱，沒有實際值）
 - [ ] **T0.2** 設定 linter + formatter
   - 驗收：lint 通過無錯誤

@@ -17,7 +17,7 @@ Principios fundamentales para desglose de funcionalidades:
 - [ ] **T0.1** Inicializar proyecto (`scripts/setup.sh` o manual)
   - Aceptación:
     - [ ] `npm run dev` / `python manage.py runserver` o comando equivalente inicia exitosamente
-    - [ ] `.gitignore` creado, incluye `.env`, `.env.local`, `node_modules/`, `.product-playbook-progress.md`, y otros archivos sensibles
+    - [ ] `.gitignore` creado, incluye `.env`, `.env.local`, `node_modules/`, `.product-playbook-progress.md`, `.product-dev-active`, y otros archivos sensibles
     - [ ] `.env.example` creado (solo nombres de claves, sin valores reales)
 - [ ] **T0.2** Configurar linter + formatter
   - Aceptación: lint pasa sin errores

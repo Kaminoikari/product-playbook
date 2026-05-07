@@ -10,7 +10,7 @@ Then read the following reference files in order:
 
 Based on the product planning content completed in the current conversation, generate the full dev handoff package:
 1. Confirm the tech stack (if not specified by the user, recommend one based on product characteristics)
-2. Create the `.product-dev-active` marker file at the project root (empty file). This signals the plugin's PreToolUse hook that the project has officially entered the dev-handoff phase, so subsequent source-code writes are no longer gated.
+2. Create the `.product-dev-active` marker file at the project root (empty file), and add `.product-dev-active` to the project's `.gitignore` (create the file if absent, or append the entry if missing — do not duplicate). This signals the plugin's PreToolUse hook that the project has officially entered the dev-handoff phase, so subsequent source-code writes are no longer gated.
 3. Generate CLAUDE.md (Claude Code project memory)
 4. Generate TASKS.md (feature breakdown + phased releases + acceptance criteria)
 5. Generate TICKETS.md (ticket list)
@@ -21,4 +21,4 @@ Based on the product planning content completed in the current conversation, gen
 
 If no product planning content exists in the conversation, prompt the user to run a product planning flow first.
 
-Note: `.product-dev-active` is a session-local marker (gitignored by the plugin). Delete it if the project ever returns to planning-only mode.
+Note: `.product-dev-active` is a session-local marker and must not be committed — step 2 ensures it's listed in the project's own `.gitignore`. Delete the marker if the project ever returns to planning-only mode.

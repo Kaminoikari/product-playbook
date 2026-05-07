@@ -90,6 +90,8 @@
 
 # 產品規劃進度（可能包含敏感商業資訊）
 .product-playbook-progress.md
+# Product-playbook 開發交接標記（session-local，請勿 commit）
+.product-dev-active
 
 # IDE 與作業系統
 .idea/

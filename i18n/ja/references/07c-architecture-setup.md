@@ -90,6 +90,8 @@
 
 # プロダクト企画進捗（機密ビジネス情報を含む可能性あり）
 .product-playbook-progress.md
+# Product-playbook 開発ハンドオフマーカー（session-local；commit 禁止）
+.product-dev-active
 
 # IDEとOS
 .idea/

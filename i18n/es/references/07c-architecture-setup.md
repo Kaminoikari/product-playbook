@@ -90,6 +90,8 @@
 
 # Progreso de planificación de producto (puede contener información de negocio sensible)
 .product-playbook-progress.md
+# Marcador de handoff de desarrollo de Product-playbook (session-local; no commitear)
+.product-dev-active
 
 # IDE y OS
 .idea/

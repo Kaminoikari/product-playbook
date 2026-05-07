@@ -90,6 +90,8 @@
 
 # 제품 기획 진행 상황 (민감한 비즈니스 정보 포함 가능)
 .product-playbook-progress.md
+# Product-playbook 개발 핸드오프 마커 (session-local; commit 금지)
+.product-dev-active
 
 # IDE 및 OS
 .idea/

@@ -17,7 +17,7 @@ Core principles for feature breakdown:
 - [ ] **T0.1** Initialize project (`scripts/setup.sh` or manual)
   - Acceptance:
     - [ ] `npm run dev` / `python manage.py runserver` or equivalent command starts successfully
-    - [ ] `.gitignore` created, includes `.env`, `.env.local`, `node_modules/`, `.product-playbook-progress.md`, and other sensitive files
+    - [ ] `.gitignore` created, includes `.env`, `.env.local`, `node_modules/`, `.product-playbook-progress.md`, `.product-dev-active`, and other sensitive files
     - [ ] `.env.example` created (key names only, no actual values)
 - [ ] **T0.2** Set up linter + formatter
   - Acceptance: lint passes with no errors

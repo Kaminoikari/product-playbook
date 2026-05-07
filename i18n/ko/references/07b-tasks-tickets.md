@@ -17,7 +17,7 @@
 - [ ] **T0.1** 프로젝트 초기화 (`scripts/setup.sh` 또는 수동)
   - 인수:
     - [ ] `npm run dev` / `python manage.py runserver` 또는 동등 명령이 성공적으로 시작됨
-    - [ ] `.gitignore` 생성됨, `.env`, `.env.local`, `node_modules/`, `.product-playbook-progress.md` 등 민감 파일 포함
+    - [ ] `.gitignore` 생성됨, `.env`, `.env.local`, `node_modules/`, `.product-playbook-progress.md`, `.product-dev-active` 등 민감 파일 포함
     - [ ] `.env.example` 생성됨 (키 이름만, 실제 값 없음)
 - [ ] **T0.2** 린터 + 포매터 설정
   - 인수: lint가 에러 없이 통과

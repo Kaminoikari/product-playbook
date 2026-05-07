@@ -10,7 +10,7 @@ description: 产出开发交接包 — 生成 CLAUDE.md + TASKS.md + TICKETS.md 
 
 根据目前对话中已完成的产品规划内容，产出完整的开发交接包：
 1. 确认技术栈（如使用者未指定，根据产品特性推荐）
-2. 在专案根目录建立 `.product-dev-active` 标记文件（空文件即可）。此文件向 plugin 的 PreToolUse hook 宣告专案已正式进入开发交接阶段，后续写入源代码不再被 hook 拦截提醒。
+2. 在专案根目录建立 `.product-dev-active` 标记文件（空文件即可），并将 `.product-dev-active` 写入专案的 `.gitignore`（文件不存在就新建，已存在就 append；不要重复加）。此文件向 plugin 的 PreToolUse hook 宣告专案已正式进入开发交接阶段，后续写入源代码不再被 hook 拦截提醒。
 3. 产出 CLAUDE.md（Claude Code 专案记忆）
 4. 产出 TASKS.md（功能拆解 + Phase 分期 + 验收标准）
 5. 产出 TICKETS.md（开票清单）
@@ -21,4 +21,4 @@ description: 产出开发交接包 — 生成 CLAUDE.md + TASKS.md + TICKETS.md 
 
 如果对话中尚无产品规划内容，提示使用者先执行产品规划流程。
 
-注：`.product-dev-active` 为 session-local 标记（已由 plugin 的 .gitignore 排除）。若专案未来回到纯规划模式，删除此文件即可。
+注：`.product-dev-active` 为 session-local 标记，不应被 commit — 步骤 2 已确保它列入专案自身的 `.gitignore`。若专案未来回到纯规划模式，删除此标记文件即可。

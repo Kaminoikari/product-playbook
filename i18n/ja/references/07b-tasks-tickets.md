@@ -17,7 +17,7 @@
 - [ ] **T0.1** プロジェクト初期化（`scripts/setup.sh`またはマニュアル）
   - 受入基準：
     - [ ] `npm run dev` / `python manage.py runserver`または同等のコマンドが正常に起動
-    - [ ] `.gitignore`が作成され、`.env`、`.env.local`、`node_modules/`、`.product-playbook-progress.md`、その他の機密ファイルを含む
+    - [ ] `.gitignore`が作成され、`.env`、`.env.local`、`node_modules/`、`.product-playbook-progress.md`、`.product-dev-active`、その他の機密ファイルを含む
     - [ ] `.env.example`が作成（キー名のみ、実際の値なし）
 - [ ] **T0.2** Linter + Formatterの設定
   - 受入基準：lintがエラーなしでパス

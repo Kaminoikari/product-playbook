@@ -90,6 +90,8 @@
 
 # Product planning progress (may contain sensitive business information)
 .product-playbook-progress.md
+# Product-playbook dev-handoff marker (session-local; do not commit)
+.product-dev-active
 
 # IDE and OS
 .idea/
