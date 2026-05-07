@@ -1,6 +1,6 @@
 {
   "name": "product-playbook",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "MUST use when user wants to plan or strategize a product/feature. 22 PM frameworks, 6 modes, from idea to dev handoff",
   "bin": {
     "product-playbook": "./install.sh"
@@ -31,6 +31,7 @@
     "install.sh",
     "SKILL.md",
     "commands/",
+    "hooks/",
     "references/",
     "i18n/",
     "README.zh-TW.md",

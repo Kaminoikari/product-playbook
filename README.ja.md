@@ -281,6 +281,18 @@ MVPを修正 → User Stories、DBスキーマ、プロダクトスペックサ�
 > CLAUDE.mdとTASKS.mdを読んで、Phase 0の実行を開始してください
 ```
 
+### 🪝 ライフサイクルフック
+
+3つのプラグインフックで、Playbook の中核ルールを「Claude の記憶頼み」から「ハーネスによる強制実行」へ昇格させます。すべてのフックは `systemMessage` によるソフトリマインダーを注入するのみで、**ユーザーを止めることはありません**。
+
+| イベント | トリガー | 役割 |
+|---------|---------|------|
+| `SessionStart` | 新規 / 再開セッションごと | `.product-playbook-progress.md` と `.product-context.md` を自動でモデルの context に注入し、中断した企画を直前のステップから途切れなく再開 |
+| `UserPromptSubmit` | 企画進行中のプロンプト送信ごと | (a) 脱線メッセージ（debug / エラー / "このコード直して"）を検出して SKILL.md の進捗保存ルールを実行するよう Claude に指示。(b) 変更意図キーワード（`改 step 2`、`update persona`、`JTBD やり直し`）を検出して Change Propagation ルールの適用を促す |
+| `PreToolUse` (Write/Edit/MultiEdit) | ファイル書き込み前 | プロジェクトが企画フェーズ（`.product-dev-active` マーカー無し）で、対象がソースコード拡張子（`.ts/.tsx/.py/.go/...`）の場合、「企画はドキュメントのみ、コードは生成しない」と Claude にリマインド。マーカーは `/product-dev` 実行時に自動生成 |
+
+フックはプラグインインストール時に `hooks/hooks.json` から自動ロードされます。product-playbook プロジェクト外では完全に no-op で動作するため、他のコードベースへの影響はありません。
+
 ### 📄 ドキュメントインポート＆エクスポート
 
 **インポート** — 既存のドキュメントを企画フローに直接取り込み、手動コピペ不要：

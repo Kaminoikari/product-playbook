@@ -280,6 +280,18 @@ product-playbook/
 > 请读取 CLAUDE.md 和 TASKS.md，开始执行 Phase 0
 ```
 
+### 🪝 生命周期 Hooks
+
+三个 plugin hook 将 playbook 的核心规则从「靠 Claude 自己记得」转为「由 harness 强制执行」。所有 hook 只注入 `systemMessage` 软提醒，**不阻挡用户**。
+
+| 事件 | 触发时机 | 作用 |
+|------|---------|------|
+| `SessionStart` | 每次新 session 或 resume | 自动将 `.product-playbook-progress.md` 与 `.product-context.md` 注入模型 context，让中断的规划从原步骤无缝接续 |
+| `UserPromptSubmit` | 规划进行中每次提交 prompt | 检测（a）离题消息（debug / 错误 / "帮我改 code"）→ 提醒 Claude 执行 SKILL.md 的存档规则；（b）变更意图关键字（`改 step 2`、`update persona`、`重做 JTBD`）→ 提醒套用 Change Propagation 规则 |
+| `PreToolUse` (Write/Edit/MultiEdit) | 每次写文件前 | 若项目仍在规划阶段（无 `.product-dev-active` 标记）且目标是源代码后缀（`.ts/.tsx/.py/.go/...`），提醒 Claude「规划只产文档、不产 code」。`/product-dev` 执行时会自动建立该标记 |
+
+Hooks 由 `hooks/hooks.json` 在 plugin 安装时自动加载。在非 product-playbook 项目中完全 no-op，安装 plugin 不会影响其他 codebase。
+
 ### 📄 文档导入与导出
 
 **导入**任何现有文档到规划流程中 — 无需手动复制粘贴：
