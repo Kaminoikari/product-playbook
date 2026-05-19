@@ -134,6 +134,67 @@ description: |
 
 ---
 
+## 🤝 Sub-Agent 위임 규칙
+
+The Product Playbook에는 격리된 context window에서 작동하는 3개의 전문 subagent가 포함되어 있습니다. 모든 것을 main agent 자체의 context에서 처리하지 말고, 적절한 단계에서 이들에게 위임하세요 — 전문 에이전트는 필요한 프레임워크 지식만 보유하므로 더 날카로운 출력을 만들어냅니다.
+
+### `discovery-specialist`에 위임하는 시점
+
+다음 단계에서 위임합니다:
+
+- **Full Mode**: S2(Persona) → S3(JTBD) → S4(OST) → S5(Journey Map) → S6(Continuous Discovery 가설)
+- **Revision Mode**: S2(현황 사용자 분석) → S3(페인포인트 통합) → S4(기회 식별)
+- **Build Mode**: S2(JTBD 관점의 문제 명확화)
+- **Custom Mode**: Persona / JTBD / OST / Journey Map / Continuous Discovery를 선택한 모든 단계
+
+호출 방법:
+
+> `discovery-specialist` subagent를 사용하여 [제품 설명]에 대한 [Persona | JTBD | OST | Journey Map]을 생성하세요. 타깃 고객: [B2C / B2B / B2B2C]. 사용 가능한 리서치 데이터: [업로드된 파일 나열, 또는 "없음 — low confidence로 표시"]. [언어]로 답변하세요.
+
+반환된 YAML을 현재 단계의 출력에 통합합니다. 단계의 확인 프롬프트의 일부로 specialist의 `open_questions`를 사용자에게 제시하세요.
+
+### `strategy-critic`에 위임하는 시점
+
+사용자가 전략 산출물을 확정한 **직후**에 위임합니다:
+
+- Strategy Blocks 완료 후(Full Mode S7)
+- Rumelt Good Strategy Kernel 완료 후(Full Mode S8)
+- DHM Model 완료 후(Full Mode S9)
+- Empowered Teams charter 완료 후(이를 포함하는 모든 모드)
+- 사용자가 프레임워크 이름 없이 평문으로 "이것이 우리의 전략이다"라고 작성할 때
+
+호출 방법:
+
+> `strategy-critic` subagent를 사용하여 다음 전략 산출물을 비평하세요: [그대로 붙여넣기]. 이 산출물은 [프레임워크 이름, 또는 "generic strategy doc"]입니다. [언어]로 답변하세요.
+
+Critic은 비평을 반환하며, 재작성하지 않습니다. critic의 `three_questions_to_ask_the_writer`를 사용자에게 그대로 제시하고, 완화하지 마세요. 사용자가 이에 따라 수정하면 수정된 버전에 대해 critic을 다시 호출하세요.
+
+### `pre-mortem-runner`에 위임하는 시점
+
+다음 단계에서 위임합니다:
+
+- **Full Mode**: S10(MVP scoping 완료 후)
+- **Build Mode**: S4(architecture-grounded pre-mortem)
+- **Revision Mode**: S8
+- **Feature Extension Mode**: S3(리스크 평가)
+- 사용자가 pre-mortem / 리스크 분석 / "무엇이 잘못될 수 있는가"를 명시적으로 요청할 때
+
+호출 방법:
+
+> `pre-mortem-runner` subagent를 사용하여 다음 [제품 | 기능 | 전략]에 대해 pre-mortem을 실행하세요: [그대로 붙여넣기]. Mode: [build_mode_architecture_grounded | standard | feature_extension]. build mode인 경우, 사용 가능한 architecture context: [관련 파일 내용 또는 요약 붙여넣기]. [언어]로 답변하세요.
+
+Runner는 15개 이상의 scenario를 반환합니다. 사용자 대상 출력에서는 `priority_three`와 `pre_launch_experiments`를 먼저 제시하세요. 전체 scenario 목록은 접을 수 있는 섹션이나 첨부 파일로 제시합니다.
+
+### 위임 위생 규칙
+
+1. **한 단계당 하나의 sub-agent**. 한 턴에서 여러 sub-agent를 연쇄하지 마세요 — 사용자가 중간 출력을 확인한 후 다음 전문 에이전트를 호출하세요.
+2. **언어를 명시적으로 전달**. Sub-agent는 당신의 prompt에서 언어를 감지합니다. 당신의 prompt가 영어이지만 사용자가 한국어로 작업 중이라면, sub-agent는 영어로 답변합니다. 항상 사용자의 작업 언어를 지정하세요.
+3. **`status: out_of_scope`를 존중**. Sub-agent가 요청을 거부하면 그 라우팅 권장 사항을 진지하게 받아들이세요 — sub-agent의 scope refusal은 기능이지 실패가 아닙니다.
+4. **Hard Gate 상속**. Sub-agent는 "기획 중 코드 작성 금지" 규칙을 상속합니다. 당신이 요청해도 파일 작성이나 bash 실행을 거부합니다. 이는 의도된 것입니다.
+5. **품질 셀프 체크는 계속 적용**. Sub-agent 출력을 단계에 통합한 후에도 `references/rules-quality-review.md`의 기존 품질 셀프 체크를 실행하세요 — sub-agent는 자체 셀프 체크를 했지만, 사용자 대상 단계 출력은 main agent가 책임집니다.
+
+---
+
 ## 🔗 전역 규칙: Persona-Journey 번들링
 
 **모드에 Persona 단계가 포함될 때마다, 바로 다음 단계로 Journey Map이 기본 ON으로 포함됩니다.** Persona는 Who(누구)를 정의하고, Journey Map은 Who가 경험하는 여정을 묘사합니다. 이는 0-to-1 제품과 기존 제품 모두에 동일하게 적용됩니다 — 관련 변수는 사용자의 Job이 여러 단계에 걸쳐 있는지 여부이지, 제품이 이미 존재하는지가 아닙니다. (Teresa Torres, Indi Young, Amazon Working Backwards는 모두 0-to-1 단계에서 Journey Map을 필수 요소로 취급합니다.)

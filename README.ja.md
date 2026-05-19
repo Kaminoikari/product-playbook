@@ -21,6 +21,7 @@ The Product Playbookは、ゼロから一まで体系的にプロダクト企画
 
 - 🧭 **6つの実行モード** — 30分の迅速な検証からフルスケールのプロダクト企画まで（機能拡張ファストトラックを含む）
 - 📐 **22のプロダクトフレームワーク** — Discovery → Define → Develop → Deliverの全パイプラインをカバー
+- 🤝 **3つの専門サブエージェント** — Discovery、戦略批評、Pre-mortem が独立した context window で動作し、フレームワーク固有の専門性を持つ
 - 🔄 **変更伝播エンジン** — 任意のステップを修正すると下流の全出力が自動更新
 - 📎 **スマートファイル統合** — データ、スクリーンショット、ドキュメントをアップロードするとAIが関連ステップに自動統合
 - 🔗 **開発ハンドオフ** — CLAUDE.md + TASKS.md + TICKETS.mdを生成してClaude Code開発にシームレスに接続
@@ -156,6 +157,10 @@ product-playbook/
 │   ├── product-prd.md                # /product-prd — PRD生成
 │   ├── product-report.md             # /product-report — HTMLレポート生成
 │   └── product-dev.md                # /product-dev — 開発ハンドオフパッケージ生成
+├── agents/                           # 専門サブエージェント（Claude Code プラグインが自動読み込み）
+│   ├── discovery-specialist.md       # Persona / JTBD / OST / Journey Map スペシャリスト
+│   ├── strategy-critic.md            # Rumelt 視点の戦略批評者
+│   └── pre-mortem-runner.md          # 15+ の失敗シナリオ + リーディングインジケーター
 └── references/
     ├── 00-opportunity-check.md       # 機会評価 + DHMモデル
     ├── 01-strategy.md                # Strategy Blocks + Rumelt + OKR

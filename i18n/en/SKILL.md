@@ -132,6 +132,67 @@ When product context read/write is triggered, read `references/rules-context.md`
 
 ---
 
+## 🤝 Sub-Agent Delegation Rules
+
+The Product Playbook ships with three specialist subagents that operate in isolated context windows. Delegate to them at the right step rather than handling everything in this main agent's context — specialists produce sharper output because they carry only the framework knowledge they need.
+
+### When to delegate to `discovery-specialist`
+
+Delegate at these steps:
+
+- **Full Mode**: S2 (Persona) → S3 (JTBD) → S4 (OST) → S5 (Journey Map) → S6 (Continuous Discovery hypotheses)
+- **Revision Mode**: S2 (current user analysis) → S3 (pain point synthesis) → S4 (opportunity identification)
+- **Build Mode**: S2 (problem clarification with JTBD lens)
+- **Custom Mode**: any step that selects Persona / JTBD / OST / Journey Map / Continuous Discovery
+
+How to invoke:
+
+> Use the `discovery-specialist` subagent to produce [Persona | JTBD | OST | Journey Map] for [product description]. Target audience: [B2C / B2B / B2B2C]. Available research data: [list uploaded files, or "none — flag low confidence"]. Reply in [language].
+
+Integrate the returned YAML into the current step's output. Surface the specialist's `open_questions` to the user as part of the step's confirmation prompt.
+
+### When to delegate to `strategy-critic`
+
+Delegate **immediately after** the user finalises any strategy artifact:
+
+- After Strategy Blocks completion (Full Mode S7)
+- After Rumelt Good Strategy Kernel completion (Full Mode S8)
+- After DHM Model completion (Full Mode S9)
+- After Empowered Teams charter (any mode that includes it)
+- Any time the user writes "this is our strategy" in plain prose without a named framework
+
+How to invoke:
+
+> Use the `strategy-critic` subagent to critique the following strategy artifact: [paste verbatim]. The artifact is [framework name or "generic strategy doc"]. Reply in [language].
+
+The critic returns critiques, not rewrites. Present the critic's `three_questions_to_ask_the_writer` to the user verbatim. Do not soften them. If the user revises in response, re-invoke the critic on the revised version.
+
+### When to delegate to `pre-mortem-runner`
+
+Delegate at these steps:
+
+- **Full Mode**: S10 (after MVP scoping is complete)
+- **Build Mode**: S4 (architecture-grounded pre-mortem)
+- **Revision Mode**: S8
+- **Feature Extension Mode**: S3 (risk assessment)
+- Any time the user explicitly requests pre-mortem / risk analysis / "what could go wrong"
+
+How to invoke:
+
+> Use the `pre-mortem-runner` subagent to pre-mortem the following [product | feature | strategy]: [paste verbatim]. Mode: [build_mode_architecture_grounded | standard | feature_extension]. If build mode, available architecture context: [paste relevant file contents or summary]. Reply in [language].
+
+The runner returns 15+ scenarios. In the user-facing output, lead with the `priority_three` and the `pre_launch_experiments`. Surface the full scenario list in a collapsible section or as an attached file.
+
+### Delegation hygiene
+
+1. **One sub-agent per step**. Do not chain sub-agents in a single turn — let the user confirm intermediate output before invoking the next specialist.
+2. **Pass language explicitly**. Sub-agents detect language from your prompt; if your prompt is in English but the user is working in 繁體中文, the sub-agent will reply in English. Always specify the user's working language.
+3. **Respect `status: out_of_scope`**. If a sub-agent refuses a request, take the routing recommendation seriously — the sub-agent's scope refusal is a feature, not a failure.
+4. **Hard Gate inheritance**. Sub-agents inherit the no-code-during-planning rule. They will refuse to write files or run bash even if you ask them to. This is intentional.
+5. **Quality self-check still applies**. After integrating sub-agent output into a step, run the existing quality self-check from `references/rules-quality-review.md` — the sub-agent did its own self-check, but the main agent owns the user-facing step output.
+
+---
+
 ## 🔗 Global Rule: Persona-Journey Bundling
 
 **Whenever a mode includes a Persona step, Journey Map is included by DEFAULT in the very next step.** Persona defines Who; Journey Map describes the journey Who experiences. This applies equally to 0-to-1 and existing products — the relevant variable is whether the user's Job spans multiple stages, not whether the product already exists. (Teresa Torres, Indi Young, and Amazon Working Backwards all treat Journey Map as essential during 0-to-1.)

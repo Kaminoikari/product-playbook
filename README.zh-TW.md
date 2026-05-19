@@ -21,6 +21,7 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 
 - 🧭 **6 種執行模式** — 從 30 分鐘快速驗證到完整企劃（含功能擴充快速路徑）
 - 📐 **22 個產品框架** — 涵蓋 Discovery → Define → Develop → Deliver 全流程
+- 🤝 **3 個專家 sub-agent** — Discovery、策略批判、Pre-mortem 在獨立 context window 中運作，各自攜帶專屬框架專業
 - 🔄 **變更傳播引擎** — 修改任何步驟，自動更新所有下游產出
 - 📎 **檔案智慧整合** — 上傳數據、截圖、文件，AI 自動整合到對應步驟
 - 🔗 **開發銜接** — 產出 CLAUDE.md + TASKS.md + TICKETS.md，無縫銜接 Claude Code 開發
@@ -155,6 +156,10 @@ product-playbook/
 │   ├── product-prd.md                # /product-prd — 產出 PRD
 │   ├── product-report.md             # /product-report — 產出 HTML 報告
 │   └── product-dev.md                # /product-dev — 產出開發交接包
+├── agents/                           # 專家 sub-agent（Claude Code plugin 自動載入）
+│   ├── discovery-specialist.md       # Persona / JTBD / OST / Journey Map 專家
+│   ├── strategy-critic.md            # Rumelt 視角的策略批判者
+│   └── pre-mortem-runner.md          # 15+ failure scenarios + leading indicators
 └── references/
     ├── 00-opportunity-check.md       # 機會評估 + DHM Model
     ├── 01-strategy.md                # Strategy Blocks + Rumelt + OKR

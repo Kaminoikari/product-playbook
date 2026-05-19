@@ -134,6 +134,67 @@ Cuando el usuario pida listar frameworks o use comandos complementarios, lee `re
 
 ---
 
+## 🤝 Reglas de Delegación a Sub-Agentes
+
+The Product Playbook incluye tres subagentes especialistas que operan en ventanas de contexto aisladas. Delega en ellos en el paso adecuado en lugar de manejar todo en el contexto de este agente principal — los especialistas producen resultados más nítidos porque solo cargan el conocimiento de framework que necesitan.
+
+### Cuándo delegar en `discovery-specialist`
+
+Delega en estos pasos:
+
+- **Full Mode**: S2 (Persona) → S3 (JTBD) → S4 (OST) → S5 (Journey Map) → S6 (hipótesis de Continuous Discovery)
+- **Revision Mode**: S2 (análisis del usuario actual) → S3 (síntesis de puntos de dolor) → S4 (identificación de oportunidades)
+- **Build Mode**: S2 (clarificación del problema con la lente JTBD)
+- **Custom Mode**: cualquier paso que seleccione Persona / JTBD / OST / Journey Map / Continuous Discovery
+
+Cómo invocar:
+
+> Usa el subagente `discovery-specialist` para producir [Persona | JTBD | OST | Journey Map] para [descripción del producto]. Público objetivo: [B2C / B2B / B2B2C]. Datos de investigación disponibles: [lista de archivos subidos, o "ninguno — marcar como low confidence"]. Responde en [idioma].
+
+Integra el YAML devuelto en el resultado del paso actual. Muestra al usuario las `open_questions` del especialista como parte del mensaje de confirmación del paso.
+
+### Cuándo delegar en `strategy-critic`
+
+Delega **inmediatamente después** de que el usuario finalice cualquier artefacto de estrategia:
+
+- Tras completar Strategy Blocks (Full Mode S7)
+- Tras completar el Rumelt Good Strategy Kernel (Full Mode S8)
+- Tras completar el DHM Model (Full Mode S9)
+- Tras completar el charter de Empowered Teams (cualquier modo que lo incluya)
+- Cada vez que el usuario escriba "esta es nuestra estrategia" en prosa sin nombrar un framework
+
+Cómo invocar:
+
+> Usa el subagente `strategy-critic` para criticar el siguiente artefacto de estrategia: [pegar textualmente]. El artefacto es [nombre del framework o "generic strategy doc"]. Responde en [idioma].
+
+El crítico devuelve críticas, no reescrituras. Presenta al usuario las `three_questions_to_ask_the_writer` del crítico textualmente. No las suavices. Si el usuario revisa en respuesta, vuelve a invocar al crítico sobre la versión revisada.
+
+### Cuándo delegar en `pre-mortem-runner`
+
+Delega en estos pasos:
+
+- **Full Mode**: S10 (tras completar el MVP scoping)
+- **Build Mode**: S4 (pre-mortem anclado en la arquitectura)
+- **Revision Mode**: S8
+- **Feature Extension Mode**: S3 (evaluación de riesgos)
+- Cada vez que el usuario solicite explícitamente un pre-mortem / análisis de riesgos / "qué podría salir mal"
+
+Cómo invocar:
+
+> Usa el subagente `pre-mortem-runner` para hacer un pre-mortem del siguiente [producto | feature | estrategia]: [pegar textualmente]. Mode: [build_mode_architecture_grounded | standard | feature_extension]. Si es build mode, contexto de arquitectura disponible: [pegar el contenido o resumen de los archivos relevantes]. Responde en [idioma].
+
+El runner devuelve más de 15 escenarios. En el resultado de cara al usuario, encabeza con `priority_three` y `pre_launch_experiments`. Muestra la lista completa de escenarios en una sección plegable o como archivo adjunto.
+
+### Higiene de delegación
+
+1. **Un sub-agente por paso**. No encadenes sub-agentes en un solo turno — deja que el usuario confirme el resultado intermedio antes de invocar al siguiente especialista.
+2. **Pasa el idioma explícitamente**. Los sub-agentes detectan el idioma de tu prompt; si tu prompt está en inglés pero el usuario trabaja en español, el sub-agente responderá en inglés. Especifica siempre el idioma de trabajo del usuario.
+3. **Respeta `status: out_of_scope`**. Si un sub-agente rechaza una solicitud, toma en serio su recomendación de enrutamiento — el rechazo de alcance del sub-agente es una característica, no un fallo.
+4. **Herencia del Hard Gate**. Los sub-agentes heredan la regla de no escribir código durante la planificación. Se negarán a escribir archivos o ejecutar bash aunque se lo pidas. Esto es intencionado.
+5. **La autoverificación de calidad sigue aplicando**. Tras integrar el resultado del sub-agente en un paso, ejecuta la autoverificación de calidad existente de `references/rules-quality-review.md` — el sub-agente hizo su propia autoverificación, pero el agente principal es responsable del resultado del paso de cara al usuario.
+
+---
+
 ## 🔗 Regla Global: Emparejamiento Persona-Journey
 
 **Siempre que un modo incluya un paso de Persona, el Journey Map se incluye por DEFECTO en el paso inmediatamente siguiente.** La Persona define Quién; el Journey Map describe el viaje que ese Quién experimenta. Esto aplica por igual a productos 0-a-1 y a productos existentes — la variable relevante es si el Job del usuario abarca múltiples etapas, no si el producto ya existe. (Teresa Torres, Indi Young y el Working Backwards de Amazon tratan el Journey Map como esencial durante el 0-a-1.)

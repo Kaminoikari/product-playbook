@@ -121,6 +121,45 @@
         "Enters the 4-step feature extension flow (not the full 9–11 step Full Mode or 6–8 step Revision Mode)",
         "Mentions that product context will be saved for future use (or references .product-context.md)"
       ]
+    },
+    {
+      "id": 10,
+      "name": "eval-subagent-discovery",
+      "prompt": "I'm planning a B2B product in Full Mode. The product is a calendar app for engineering team leads who manage 5-15 people. I'm now at the Persona and JTBD step. I have not done any user research yet. Please produce the Persona and JTBD analysis for this step.",
+      "expected_output": "Deep Discovery-stage analysis: a motivation-and-context-driven Persona (for B2B, separate buyer and user personas), a JTBD with all three layers (functional, emotional, social), with evidence-aware confidence flagged low because no research data was provided. Stays within the Discovery scope and does not drift into prioritization, MVP, PRD, or GTM.",
+      "expectations": [
+        "JTBD analysis includes all three layers explicitly: functional, emotional, and social",
+        "Persona is built on motivations and context (goals, pain points, triggering events) rather than demographics alone",
+        "Because no user research was provided, low-evidence claims are explicitly flagged as low confidence / requiring validation, instead of being presented as established facts",
+        "For this B2B product, the buyer persona and the daily-user persona are treated as separate roles",
+        "Output stays within Discovery scope and does not jump ahead into RICE, MVP, PRD, positioning, or GTM"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "eval-subagent-strategy-critic",
+      "prompt": "We're in the strategy step of Full Mode. Here is our strategy, please review it: 'Our mission is to delight customers. Our vision is to be the leader in calendar tools. Our strategy is to add more features faster than competitors.' Tell me how strong this strategy is.",
+      "expected_output": "A hostile-but-fair critique evaluating the strategy against Rumelt's Good Strategy Kernel. The diagnosis and guiding policy are scored weak or missing, every critique points at a specific quoted sentence and the principle it violates, at least one blind spot is surfaced, and concrete strengthening questions are returned to the writer. The strategy is critiqued, not rewritten.",
+      "expectations": [
+        "The overall verdict is not 'strong' — the response clearly identifies this as a weak strategy or not yet a strategy",
+        "The critique scores the diagnosis as missing or weak, explaining that the strategy names no central challenge (it states a goal and an aspiration instead)",
+        "Each critique points at a specific quoted sentence from the strategy and cites which principle is violated, rather than giving generic feedback",
+        "At least one blind spot is surfaced (e.g. no explicit trade-offs, no competitive landscape, no invalidating assumption, or no one who would object)",
+        "The response returns strengthening questions for the writer and does NOT rewrite the strategy on the user's behalf"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "eval-subagent-premortem",
+      "prompt": "We're using Build Mode on our existing calendar app (built with Next.js + PostgreSQL + Redis; modules: auth, scheduling, notifications). We're adding a real-time collaboration feature. I'm now at the risk-assessment step. Please run the pre-mortem for this feature.",
+      "expected_output": "A pre-mortem that assumes the feature has shipped and failed: 15 or more concrete failure scenarios spanning all five categories (product/UX, market/demand, team/execution, operational, external), each with a leading indicator that is observable before the failure becomes irreversible, and a top-3 priority set ranked by likelihood and impact with pre-launch countermeasures.",
+      "expectations": [
+        "Produces a substantial set of failure scenarios, targeting 15 or more, with at least 2 scenarios in each of the five categories",
+        "Coverage spans all five failure categories: product/UX, market/demand, team/execution, operational/infrastructure, and external/environment",
+        "Each failure scenario has a leading indicator that would warn the team before the failure is irreversible — a concrete signal with a threshold and a detection timeframe, not a lagging metric",
+        "Identifies a top-3 priority set ranked by likelihood times impact, each with a concrete countermeasure to apply before launch",
+        "Failure scenarios are concrete narratives with a metric, timing, and causal mechanism — not abstract hedges such as 'adoption may be low'"
+      ]
     }
   ]
 }

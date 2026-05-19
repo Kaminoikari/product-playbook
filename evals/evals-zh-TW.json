@@ -121,6 +121,45 @@
         "進入功能擴充 4 步流程（而非完整 7 步或 6-8 步改版）",
         "提及產品上下文將被保存供未來使用（或提及 .product-context.md）"
       ]
+    },
+    {
+      "id": 10,
+      "name": "eval-subagent-discovery",
+      "prompt": "我正在用完整模式規劃一個 B2B 產品。產品是一個給管理 5-15 人的工程團隊主管使用的行事曆 App。我現在進行到 Persona 和 JTBD 步驟。我目前還沒做任何使用者研究。請幫我產出這個步驟的 Persona 和 JTBD 分析。",
+      "expected_output": "深入的 Discovery 階段分析：以動機與情境驅動的 Persona（B2B 需區分 buyer 與 user 兩個角色），以及包含功能性/情感性/社交性三層的 JTBD；因為沒有提供研究資料，所有低證據宣稱都標記為 low confidence。輸出維持在 Discovery 範圍，不越界進入優先排序、MVP、PRD 或 GTM。",
+      "expectations": [
+        "JTBD 分析明確包含功能性（Functional）、情感性（Emotional）、社交性（Social）三層",
+        "Persona 建立在動機與情境上（目標、痛點、觸發事件），而非僅有人口統計資料",
+        "因為沒有提供使用者研究，低證據的宣稱被明確標記為 low confidence／需要驗證，而非當作既定事實呈現",
+        "針對這個 B2B 產品，buyer persona 與每日使用的 user persona 被視為兩個獨立角色",
+        "輸出維持在 Discovery 範圍，不提前跳進 RICE、MVP、PRD、Positioning 或 GTM"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "eval-subagent-strategy-critic",
+      "prompt": "我們在完整模式的策略步驟。這是我們的策略，請幫我檢視：「我們的使命是讓客戶感到愉悅。我們的願景是成為行事曆工具的領導者。我們的策略是比競爭對手更快地加入更多功能。」告訴我這個策略有多強。",
+      "expected_output": "一份無情但具體的批判，以 Rumelt 的 Good Strategy Kernel 評估此策略。diagnosis 與 guiding policy 被評為 weak 或 missing，每一條批判都指向策略中的特定引述句並指出違反的原則，至少揭露一個 blind spot，並回傳具體的 strengthening questions 給撰寫者。只批判，不代為改寫。",
+      "expectations": [
+        "整體評價（overall verdict）不是 strong——回應明確指出這是弱策略或尚未成為策略",
+        "批判將 diagnosis 評為 missing 或 weak，說明此策略沒有指出核心挑戰（它寫的是目標與願景式口號）",
+        "每一條批判都指向策略中的特定引述句並指出違反了哪條原則，而非泛泛的回饋",
+        "至少揭露一個 blind spot（如未說明明確取捨、未提競爭格局、未說明可被推翻的關鍵假設、或沒有人會反對）",
+        "回應回傳給撰寫者 strengthening questions，且未代替使用者改寫策略"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "eval-subagent-premortem",
+      "prompt": "我們在既有的行事曆 App 上使用直接實作模式（技術棧 Next.js + PostgreSQL + Redis；模組有 auth、scheduling、notifications）。我們要加一個即時協作功能。我現在進行到風險評估步驟。請幫我針對這個功能跑 pre-mortem。",
+      "expected_output": "一份假設功能已上線且失敗的 pre-mortem：15 個以上的具體失敗 scenario，涵蓋五大類別（產品/UX、市場/需求、團隊/執行、營運、外部），每個 scenario 都有在失敗變得不可逆之前可觀測的 leading indicator，並有依 likelihood 與 impact 排序的 top-3 優先清單及上線前對策。",
+      "expectations": [
+        "產出大量失敗 scenario，目標 15 個以上，且五大類別中每一類至少有 2 個 scenario",
+        "覆蓋五大失敗類別：產品/UX、市場/需求、團隊/執行、營運/基礎設施、外部/環境",
+        "每個失敗 scenario 都有在失敗不可逆之前能預警團隊的 leading indicator——具體訊號加上閾值與偵測時間點，而非落後指標",
+        "指出依 likelihood × impact 排序的 top-3 優先清單，每個都附上線前可執行的具體對策",
+        "失敗 scenario 是包含指標、時間、因果機制的具體敘事，而非『採用率可能偏低』這類抽象的模糊措辭"
+      ]
     }
   ]
 }

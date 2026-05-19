@@ -21,6 +21,7 @@ The Product Playbook is a **Claude AI Skill** that systematically guides you thr
 
 - 🧭 **6 execution modes** — from 30-minute rapid validation to full-blown product plans (including a feature expansion fast track)
 - 📐 **22 product frameworks** — covering the entire Discovery → Define → Develop → Deliver pipeline
+- 🤝 **3 specialist sub-agents** — Discovery, Strategy Critique, and Pre-mortem run as isolated context windows with framework-specific expertise
 - 🔄 **Change propagation engine** — modify any step and all downstream outputs update automatically
 - 📎 **Smart file integration** — upload data, screenshots, or documents; the AI automatically integrates them into the relevant step
 - 🔗 **Dev handoff** — generates CLAUDE.md + TASKS.md + TICKETS.md for seamless handoff to Claude Code development
@@ -155,6 +156,10 @@ product-playbook/
 │   ├── product-prd.md                # /product-prd — Generate PRD
 │   ├── product-report.md             # /product-report — Generate HTML report
 │   └── product-dev.md                # /product-dev — Generate dev handoff package
+├── agents/                           # Specialist sub-agents (auto-loaded by Claude Code plugin)
+│   ├── discovery-specialist.md       # Persona / JTBD / OST / Journey Map specialist
+│   ├── strategy-critic.md            # Rumelt-lens strategy critic
+│   └── pre-mortem-runner.md          # 15+ failure scenarios + leading indicators
 └── references/
     ├── 00-opportunity-check.md       # Opportunity assessment + DHM Model
     ├── 01-strategy.md                # Strategy Blocks + Rumelt + OKR

@@ -149,8 +149,9 @@ Sub-agent 檔案本身**不做** i18n 翻譯。每個 sub-agent 在 system promp
 
 ## 8. 後續工作
 
-- [ ] 同步六份 i18n SKILL.md 的 delegation rules
-- [ ] 新增 evals 第三組對比並取得量化數據
-- [ ] 更新 README（What Is This? + File Structure）
+- [x] 同步六份 i18n SKILL.md 的 delegation rules（en / zh-TW / zh-CN / ja / ko / es）
+- [x] 新增 evals sub-agent 對比測項（`evals.json` / `evals-zh-TW.json` 各新增 id 10-12）
+- [ ] 實際執行新 evals 取得量化數據（與「With Skill only」對比）
+- [x] 更新 README（What Is This? + File Structure，六份 README 皆已同步）
 - [ ] 第一波驗證有效後，評估第二波四個 sub-agent
 - [ ] L4：Asana handoff MCP server

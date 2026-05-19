@@ -134,6 +134,67 @@ description: |
 
 ---
 
+## 🤝 Sub-Agent 委派规则
+
+The Product Playbook 内建三个在独立 context window 中运作的专家 subagent。在对的步骤把工作委派给它们，而不是全部塞在 main agent 自己的 context 里——专家因为只携带它需要的框架知识，产出更锐利。
+
+### 何时委派给 `discovery-specialist`
+
+在这些步骤委派：
+
+- **Full Mode**：S2（Persona）→ S3（JTBD）→ S4（OST）→ S5（Journey Map）→ S6（Continuous Discovery 假设）
+- **Revision Mode**：S2（现状使用者分析）→ S3（痛点综整）→ S4（机会点辨识）
+- **Build Mode**：S2（以 JTBD 视角厘清问题）
+- **Custom Mode**：任何选用 Persona / JTBD / OST / Journey Map / Continuous Discovery 的步骤
+
+如何调用：
+
+> 使用 `discovery-specialist` subagent 为 [产品描述] 产出 [Persona | JTBD | OST | Journey Map]。目标客群：[B2C / B2B / B2B2C]。可用研究资料：[列出上传的文件，或「无 —— 标记为 low confidence」]。以 [语言] 回复。
+
+把回传的 YAML 整合进当前步骤的输出。在步骤的确认提示中，向使用者揭露 specialist 的 `open_questions`。
+
+### 何时委派给 `strategy-critic`
+
+在使用者**完成任何策略产物之后立即**委派：
+
+- Strategy Blocks 完成后（Full Mode S7）
+- Rumelt Good Strategy Kernel 完成后（Full Mode S8）
+- DHM Model 完成后（Full Mode S9）
+- Empowered Teams charter 完成后（任何包含它的模式）
+- 任何时候使用者用一般叙述写下「这就是我们的策略」而未指名框架
+
+如何调用：
+
+> 使用 `strategy-critic` subagent 批判以下策略产物：[逐字贴上]。此产物为 [框架名称，或「generic strategy doc」]。以 [语言] 回复。
+
+Critic 回传的是批判，不是改写。把 critic 的 `three_questions_to_ask_the_writer` 逐字呈现给使用者，不得软化。若使用者据此修订，对修订后版本重新调用 critic。
+
+### 何时委派给 `pre-mortem-runner`
+
+在这些步骤委派：
+
+- **Full Mode**：S10（MVP scoping 完成后）
+- **Build Mode**：S4（architecture-grounded pre-mortem）
+- **Revision Mode**：S8
+- **Feature Extension Mode**：S3（风险评估）
+- 任何时候使用者明确要求 pre-mortem / 风险分析 /「可能会出什么错」
+
+如何调用：
+
+> 使用 `pre-mortem-runner` subagent 对以下 [产品 | 功能 | 策略] 进行 pre-mortem：[逐字贴上]。Mode：[build_mode_architecture_grounded | standard | feature_extension]。若为 build mode，可用的 architecture context：[贴上相关文件内容或摘要]。以 [语言] 回复。
+
+Runner 回传 15+ 个 scenario。在面向使用者的输出中，先呈现 `priority_three` 与 `pre_launch_experiments`。完整 scenario 清单放在可折叠区块或以附件呈现。
+
+### 委派卫生守则
+
+1. **一个步骤一个 sub-agent**。不要在同一轮对话串接多个 sub-agent——让使用者确认中间产物后，再调用下一个专家。
+2. **明确传递语言**。Sub-agent 从你的 prompt 侦测语言；若你的 prompt 是英文但使用者正在用简体中文，sub-agent 会以英文回复。务必指明使用者的工作语言。
+3. **尊重 `status: out_of_scope`**。若 sub-agent 拒绝某个请求，请认真看待它的路由建议——sub-agent 的 scope refusal 是一项功能，不是失败。
+4. **Hard Gate 继承**。Sub-agent 继承「规划过程不写 code」的规则。即使你要求，它们也会拒绝写档或执行 bash。这是刻意设计。
+5. **质量自我检查仍适用**。把 sub-agent 的输出整合进步骤后，仍需执行 `references/rules-quality-review.md` 既有的质量自我检查——sub-agent 做了它自己的自我检查，但面向使用者的步骤输出由 main agent 负责。
+
+---
+
 ## 🔗 全局规则：Persona-Journey 捆绑
 
 **任何模式只要包含 Persona 步骤，下一步预设就是 Journey Map。** Persona 定义「谁」；Journey Map 描述「谁」经历的旅程。这条规则对 0-to-1 与既有产品同样适用 —— 真正相关的变量是使用者的 Job 是否横跨多个阶段，而不是产品是否已经存在。（Teresa Torres、Indi Young、Amazon Working Backwards 都把 Journey Map 视为 0-to-1 阶段的必要工具。）

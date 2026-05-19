@@ -21,6 +21,7 @@ The Product Playbook은 제로부터 원까지 제품 기획 전 과정을 체�
 
 - 🧭 **6가지 실행 모드** — 30분 빠른 검증부터 전체 제품 기획까지 (기능 확장 빠른 트랙 포함)
 - 📐 **22개 제품 프레임워크** — Discovery → Define → Develop → Deliver 전체 파이프라인 커버
+- 🤝 **3개 전문 서브에이전트** — Discovery, 전략 비평, Pre-mortem이 격리된 context window에서 작동하며 프레임워크별 전문성을 보유
 - 🔄 **변경 전파 엔진** — 어떤 단계든 수정하면 모든 하위 산출물이 자동 업데이트
 - 📎 **스마트 파일 통합** — 데이터, 스크린샷, 문서를 업로드하면 AI가 해당 단계에 자동 통합
 - 🔗 **개발 핸드오프** — CLAUDE.md + TASKS.md + TICKETS.md를 생성하여 Claude Code 개발로 원활하게 연결
@@ -155,6 +156,10 @@ product-playbook/
 │   ├── product-prd.md                # /product-prd — PRD 생성
 │   ├── product-report.md             # /product-report — HTML 보고서 생성
 │   └── product-dev.md                # /product-dev — 개발 핸드오프 패키지 생성
+├── agents/                           # 전문 서브에이전트 (Claude Code 플러그인이 자동 로드)
+│   ├── discovery-specialist.md       # Persona / JTBD / OST / Journey Map 스페셜리스트
+│   ├── strategy-critic.md            # Rumelt 관점의 전략 비평가
+│   └── pre-mortem-runner.md          # 15+ 실패 시나리오 + 선행 지표
 └── references/
     ├── 00-opportunity-check.md       # 기회 평가 + DHM Model
     ├── 01-strategy.md                # Strategy Blocks + Rumelt + OKR
