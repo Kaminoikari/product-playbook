@@ -134,9 +134,18 @@ Is this correct? Anything to add or correct?
 
 Only write to `.product-context.md` after the user confirms.
 
+### Bootstrap → S1 Sequencing (Hard Gate — Bootstrap does NOT block the flow)
+
+Bootstrap is Step 0; its purpose is to collect baseline context. **Bootstrap itself is not a pause point**:
+
+- **Default behavior**: Bootstrap and S1 MUST execute in the **same turn** as S0 → S1. The pause point is fixed at **after S1 completion**, awaiting user confirmation before S2 — not between S0 and S1.
+- **If the user message already provides the required fields** (per Section 7 mode requirements — e.g., Feature Extension requires Identity + Architecture & Tech Stack) → confirm the known fields in a table without re-asking, and proceed directly into S1.
+- **If some fields are missing** → Bootstrap surfaces a "known / pending" table in the same turn, then **immediately enters S1** with placeholders for unconfirmed fields, and folds the pending fields into the **S1 confirmation question** (so the user fills them when confirming S1).
+- **Forbidden**: pausing between S0 and S1 to wait for Round 1 answers. If your response shows S1 still as `⬜ pending` while the flow stops to wait for user input, you have failed this rule.
+
 ### After Bootstrap Completion
 
-Write the collected information to `.product-context.md`, leave uncollected sections empty (using placeholders), then proceed to the mode's formal S1.
+Write the collected information to `.product-context.md` (write a baseline even when some fields are placeholders — they will be overwritten after the user confirms during S1), then enter that mode's S1 in the same turn and produce the S1 content.
 
 ---
 

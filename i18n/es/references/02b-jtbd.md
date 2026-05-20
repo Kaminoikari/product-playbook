@@ -4,17 +4,34 @@
 
 > "La unidad de análisis no es el consumidor, sino el trabajo que el consumidor está tratando de realizar." — Clayton Christensen
 
-**Fórmula de Declaración JTBD:**
+**Forma Canónica JTBD (Hard Gate — se requiere estructura de tres cláusulas):**
+
+Cada declaración JTBD (Primary, Funcional, Emocional, Social — cada capa) DEBE escribirse como una oración completa de tres cláusulas en la forma canónica. Las tres cláusulas son obligatorias:
+
 ```
-[Cliente objetivo] + quiere, en [qué contexto de trabajo] + lograr [qué trabajo]
+Cuando [situación], quiero [motivación], para que [resultado].
 ```
 
-Ejemplo: Un comprador de vivienda primerizo comparando opciones de hipoteca quiere estimar rápidamente los pagos mensuales a altas horas de la noche cuando no puede contactar a un banco, para poder explicarle a su pareja su plan financiero.
+Al producir output en inglés, usar la forma canónica equivalente:
+```
+When [situation], I want to [motivation], so [outcome].
+```
+
+**Ejemplos no válidos** (fragmentos en celda de tabla, faltan cláusulas):
+- ❌ "Capturar ideas clave rápidamente" (falta Cuando; falta para que)
+- ❌ "Anotar pensamientos en el viaje al trabajo" (falta quiero; falta resultado)
+
+**Ejemplo válido** (las tres cláusulas presentes):
+- ✅ "**Cuando** acabo de terminar de leer un artículo y la idea clave todavía está fresca, **quiero** capturar una conclusión en 5 segundos, **para que** semanas después aún pueda encontrarla y conectarla con una nueva idea."
+
+Ejemplo: **Cuando** está comparando opciones de hipoteca a altas horas de la noche y no puede contactar a un banco, un comprador primerizo **quiere** estimar rápidamente los pagos mensuales, **para que** pueda explicarle a su pareja su plan financiero.
 
 **Tabla de Análisis de Cuatro Tipos JTBD:**
 
+Cada celda (Persona 1 / Persona 2) DEBE contener una oración JTBD completa de tres cláusulas. Las frases descriptivas sin la estructura "Cuando / quiero / para que" no son aceptables.
+
 ```
-| Tipo JTBD | Definición | Persona 1 | Persona 2 |
+| Tipo JTBD | Definición | Persona 1 (debe usar la forma completa "Cuando … quiero … para que …") | Persona 2 (igual) |
 |-----------|------------|-----------|-----------|
 | Job Funcional | Completar una tarea específica o lograr un objetivo funcional | | |
 | Job Emocional | Cómo se sienten o quieren sentirse | | |
@@ -37,17 +54,17 @@ Ejemplo: Un comprador de vivienda primerizo comparando opciones de hipoteca quie
 ### 📝 Lista de Verificación de Calidad JTBD
 
 Claude debe autoevaluar después de producir el output JTBD (cada ítem debe marcarse ✅ o ❌; ítems ❌ deben incluir cómo mejorar):
+- [ ] ¿**Las tres capas** (Funcional / Emocional / Social) están escritas en la forma canónica completa "Cuando … quiero … para que …" (en inglés "When … I want to … so …")? (Si a cualquier capa le falta una cláusula → marcar ❌)
 - [ ] ¿Incluye un contexto específico? (No "en cualquier momento y lugar" — sino "a altas horas de la noche cuando no puede contactar al banco")
 - [ ] ¿Se enfoca en un solo trabajo central? (No tres trabajos metidos en una sola oración)
-- [ ] ¿Se identifican los jobs funcionales, emocionales y sociales?
 - [ ] ¿Puede usarse para evaluar "¿Esta solución realmente aborda este trabajo?"
 - [ ] ¿Incluye "soluciones alternativas actuales" y "brecha"? (Brecha = oportunidad)
 - [ ] ¿La P5 de la Profundización alcanza motivación emocional / identidad profesional / miedo psicológico? (No solo descripciones funcionales)
 
 **Reglas de Ejecución (Hard Gate):**
 - Debe marcar cada ítem ✅ o ❌ — listas [ ] en blanco o ✅ sin explicación no están permitidas
-- Si todos los ítems son ✅, debe adicionalmente declarar "Cuál es la parte más débil de este análisis y cómo fortalecerla"
-- ❌ Problemas comunes: demasiado abstracto, demasiados jobs mezclados, falta contexto, sustituir funcionalidades del producto por descripciones de jobs, P5 quedándose a nivel funcional
+- **La checklist DEBE contener al menos un ❌** (ver regla "Crítica Obligatoria" en `references/rules-quality-review.md`). Un marcador de advertencia ⚠️ no puede reemplazar ❌; una nota de "aspecto más débil" añadida fuera de la checklist tampoco puede reemplazar un ❌ dentro de ella. Si después de una revisión honesta todos los ítems parecen aprobados, baja la vara y encuentra el ítem que más merece ser marcado ❌, especificando cómo fortalecerlo.
+- ❌ Problemas comunes: estructura de tres cláusulas incompleta (falta Cuando / quiero / para que), demasiado abstracto, demasiados jobs mezclados, falta contexto, sustituir funcionalidades del producto por descripciones de jobs, P5 quedándose a nivel funcional
 
 ---
 

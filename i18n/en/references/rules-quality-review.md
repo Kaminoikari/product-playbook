@@ -10,13 +10,16 @@ After producing the output for each step, Claude must execute the following revi
 
 1. Find the quality checklist corresponding to the current step (see the "Review Criteria" section below)
 2. Mark each item as ✅ or ❌
-3. Items marked ❌ must include a specific explanation of "how to improve"
+3. Items marked ❌ must include a specific explanation of "how to improve", and must state how the gap will block a downstream step or artifact (e.g., "this blocks PR-FAQ writing because without a concrete scenario the Lead paragraph can't be written")
 
-### Step 2: Mandatory Critique
+### Step 2: Mandatory Critique (Hard Gate)
 
-- **Not all items may be ✅**: If all items pass, you must proactively identify "the weakest aspect of this output" and explain how to strengthen it
-- This isn't nitpicking — it ensures that the self-review doesn't become a rubber stamp
-- Following the Amazon PR-FAQ spirit: quality comes from finding problems, not from confirming there are none
+- **At least one item MUST be marked ❌**: a self-check that is all ✅ does not pass. Claude must honestly identify at least one item that does not fully meet the bar and mark it ❌
+- ⚠️ **A warning marker (⚠️) does NOT substitute for ❌**: ⚠️ is an auxiliary marker (e.g., on a "weakest aspect" supplementary note) and cannot replace a ❌ inside the checklist itself
+- **No bypass via appendix**: writing the "weakest aspect" as a separate note outside the checklist while keeping every checklist item ✅ counts as failing the self-check
+- ❌ must point at a **substantive content gap**, not surface-level concerns like "formatting could be prettier" or "wording could be tighter"
+- If after honest review every item still feels like a pass, lower the bar and re-review — any planning artifact has some dimension that is weakest and has room to improve; mark that one ❌ and specify the concrete fix
+- Design intent: following the Amazon PR-FAQ critique culture — quality comes from proactively finding problems, not from passively confirming there are none
 
 ### Step 3: Presentation Format
 
@@ -24,9 +27,12 @@ After producing the output for each step, Claude must execute the following revi
 📝 Quality Self-Check:
 - ✅ [Check item]
 - ✅ [Check item]
-- ❌ [Check item] → Improvement direction: [specific explanation]
-⚠️ Weakest aspect: [description] → Strengthening suggestion: [specific action]
+- ✅ [Check item]
+- ❌ [Check item] → Content gap: [specific] → Downstream impact: [which step/artifact this blocks] → Improvement direction: [specific action]
+⚠️ Supplementary note (optional): [additional context — does NOT replace the ❌ above]
 ```
+
+**Self-check on the self-check**: if your output has no ❌, go back to Step 2 and redo.
 
 ---
 

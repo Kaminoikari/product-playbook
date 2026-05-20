@@ -10,13 +10,16 @@ Después de producir el output de cada paso, Claude debe ejecutar el siguiente p
 
 1. Buscar la lista de verificación de calidad correspondiente al paso actual (ver la sección "Criterios de Revisión" abajo)
 2. Marcar cada ítem como ✅ o ❌
-3. Los ítems marcados con ❌ deben incluir una explicación específica de "cómo mejorar"
+3. Los ítems marcados con ❌ deben incluir una explicación específica de "cómo mejorar" y especificar cómo esa brecha bloqueará un paso o artefacto downstream (p.ej., "esto bloquea la escritura del PR-FAQ porque sin un escenario concreto no se puede escribir el párrafo Lead")
 
-### Paso 2: Crítica Obligatoria
+### Paso 2: Crítica Obligatoria (Hard Gate)
 
-- **No todos los ítems pueden ser ✅**: Si todos los ítems pasan, se debe identificar proactivamente "el aspecto más débil de este output" y explicar cómo fortalecerlo
-- Esto no es ser quisquilloso — asegura que la autoevaluación no se convierta en un sello de goma
-- Siguiendo el espíritu de Amazon PR-FAQ: la calidad viene de encontrar problemas, no de confirmar que no hay ninguno
+- **Al menos un ítem DEBE marcarse ❌**: una autoevaluación con todos los ítems en ✅ no aprueba. Claude debe identificar honestamente al menos un ítem que no cumpla completamente la vara y marcarlo ❌
+- ⚠️ **Un marcador de advertencia (⚠️) NO sustituye al ❌**: ⚠️ es un marcador auxiliar (p.ej., para una nota suplementaria "aspecto más débil") y no puede reemplazar un ❌ dentro de la checklist misma
+- **Sin atajos por apéndice**: escribir el "aspecto más débil" como nota separada fuera de la checklist mientras se mantienen todos los ítems en ✅ cuenta como autoevaluación fallida
+- ❌ debe apuntar a una **brecha sustantiva de contenido**, no a preocupaciones superficiales como "el formato podría ser más bonito" o "la redacción podría ser más concisa"
+- Si tras una revisión honesta todos los ítems parecen aprobados, baja la vara y re-revisa — todo artefacto de planificación tiene alguna dimensión que es la más débil y tiene margen de mejora; marca ese ítem con ❌ y especifica la acción concreta
+- Intento de diseño: siguiendo la cultura de crítica del PR-FAQ de Amazon — la calidad viene de encontrar problemas proactivamente, no de confirmar pasivamente que no hay ninguno
 
 ### Paso 3: Formato de Presentación
 
@@ -24,9 +27,11 @@ Después de producir el output de cada paso, Claude debe ejecutar el siguiente p
 📝 Autoevaluación de Calidad:
 - ✅ [Ítem de verificación]
 - ✅ [Ítem de verificación]
-- ❌ [Ítem de verificación] → Dirección de mejora: [explicación específica]
-⚠️ Aspecto más débil: [descripción] → Sugerencia de fortalecimiento: [acción específica]
+- ❌ [Ítem de verificación] → Brecha de contenido: [específica] → Impacto downstream: [qué paso/artefacto bloquea] → Dirección de mejora: [acción específica]
+⚠️ Nota suplementaria (opcional): [contexto adicional — NO reemplaza el ❌ de arriba]
 ```
+
+**Autoevaluación sobre la autoevaluación**: si tu output no tiene ningún ❌, vuelve al Paso 2 y rehazlo.
 
 ---
 

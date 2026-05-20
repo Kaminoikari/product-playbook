@@ -4,17 +4,29 @@
 
 > "The unit of analysis is not the consumer, but the job the consumer is trying to get done." — Clayton Christensen
 
-**JTBD Statement Formula:**
+**JTBD Canonical Form (Hard Gate — three-clause structure required):**
+
+Every JTBD statement (Primary, Functional, Emotional, Social — every layer) MUST be written as a complete three-clause sentence in the canonical form. All three clauses are required:
+
 ```
-[Target customer] + wants to, in [what job context] + get [what job] done
+When [situation], I want to [motivation], so [outcome].
 ```
 
-Example: A first-time homebuyer comparing mortgage options wants to quickly estimate monthly payments late at night when they can't reach a bank, so they can walk their partner through their financial plan.
+**Failing examples** (fragments inside a table cell, missing clauses):
+- ❌ "Quickly capture key takeaways" (missing When; missing so)
+- ❌ "Jot down ideas during commute" (missing I want to; missing so outcome)
+
+**Passing example** (all three clauses present):
+- ✅ "**When** I've just finished reading an article and the key insight is still fresh, **I want to** capture one takeaway in 5 seconds, **so** weeks later I can still find it and connect it to a new idea."
+
+Example: **When** comparing mortgage options late at night and can't reach a bank, a first-time homebuyer **wants to** quickly estimate monthly payments, **so** they can walk their partner through their financial plan.
 
 **JTBD Four-Type Analysis Table:**
 
+Every cell (Persona 1 / Persona 2) MUST contain a complete three-clause JTBD sentence. Descriptive phrases without "When / I want to / so" structure are not acceptable.
+
 ```
-| JTBD Type | Definition | Persona 1 | Persona 2 |
+| JTBD Type | Definition | Persona 1 (must use "When … I want to … so …" full form) | Persona 2 (same) |
 |-----------|------------|-----------|-----------|
 | Functional Job | Completing a specific task or achieving a functional goal | | |
 | Emotional Job | How they feel or want to feel | | |
@@ -37,17 +49,17 @@ Example: A first-time homebuyer comparing mortgage options wants to quickly esti
 ### 📝 JTBD Quality Checklist
 
 Claude must self-check after producing JTBD output (each item must be marked ✅ or ❌; ❌ items must include how to improve):
+- [ ] Are **all three layers** (Functional / Emotional / Social) written in the full "When … I want to … so …" canonical form? (Any layer missing a clause → mark ❌)
 - [ ] Does it include a specific context? (Not "anytime, anywhere" — but "late at night when they can't reach a bank")
 - [ ] Does it focus on a single core job? (Not three jobs crammed into one sentence)
-- [ ] Are functional, emotional, and social jobs all identified?
 - [ ] Can it be used to evaluate "Does this solution actually address this job?"
 - [ ] Does it include "current workarounds" and "gap"? (Gap = opportunity)
 - [ ] Does Q5 of the Deep-Dive reach emotional motivation / professional identity / psychological fear? (Not just functional descriptions)
 
 **Execution Rules (Hard Gate):**
 - Must mark each item ✅ or ❌ — blank [ ] or unexplained ✅ lists are not allowed
-- If all items are ✅, must additionally state "What is the weakest part of this analysis and how to strengthen it"
-- ❌ Common issues: too abstract, too many jobs merged, missing context, substituting product features for job descriptions, Q5 staying at the functional level
+- **The checklist MUST contain at least one ❌** (see `references/rules-quality-review.md` "Mandatory Critique" rule). A ⚠️ warning marker cannot replace ❌; a "weakest aspect" note appended outside the checklist cannot replace a ❌ inside it. If after honest review every item still feels like a pass, lower the bar and find the item most worth marking ❌, then specify how to strengthen it.
+- ❌ Common issues: incomplete three-clause form (missing When / I want to / so), too abstract, too many jobs merged, missing context, substituting product features for job descriptions, Q5 staying at the functional level
 
 ---
 

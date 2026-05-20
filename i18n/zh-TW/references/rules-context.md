@@ -134,9 +134,18 @@
 
 使用者確認後才寫入 `.product-context.md`。
 
+### Bootstrap 與 S1 的順序（Hard Gate — 不阻塞流程）
+
+Bootstrap 是 Step 0，目的是收集 baseline context。**Bootstrap 本身不是暫停點**：
+
+- **預設行為**：Bootstrap 與 S1 必須在**同一個回合**內依序執行（S0 → S1），暫停點固定發生在 **S1 完成後**等待使用者確認進入 S2，不在 S0/S1 之間。
+- **若使用者訊息已提供必要欄位**（依 Section 7 各模式的「必要」欄位判定，例如功能擴充必要 = Identity + Architecture & Tech Stack）→ 直接以表格確認已知欄位，不再要使用者重述，並立即進入 S1。
+- **若部分欄位缺失** → Bootstrap **在同一回合內**以表格列出已知與待補欄位，然後**立即進入 S1**，使用 placeholder 標記未確認欄位，並把待補欄位作為 **S1 confirmation question 的一部分**（讓使用者在確認 S1 時一次補完）。
+- **禁止**：在 S0 與 S1 之間插入「等使用者回答 Round 1 才能進 S1」的 pause。如果你的回應裡 S1 仍是 `⬜ pending` 而流程已停下等使用者輸入，視同未通過 Bootstrap 規則。
+
 ### Bootstrap 完成後
 
-將收集到的資訊寫入 `.product-context.md`，未收集的 section 留空（使用 placeholder），然後進入模式的正式 S1。
+將收集到的資訊寫入 `.product-context.md`（即使部分欄位仍是 placeholder 也要先寫入 baseline，使用者於 S1 確認時補完後再覆寫），然後在同一回合內進入該模式的 S1 並產出 S1 內容。
 
 ---
 

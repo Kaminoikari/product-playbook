@@ -11,3 +11,5 @@ product-playbook skill을 실행합니다.
 기능 설명: $ARGUMENTS
 
 Feature Extension 단계 시퀀스(S1 → S4)를 따르세요. 먼저 rules-context.md에 따라 제품 컨텍스트를 로드하세요. 각 단계에서 진행 표시기를 표시하세요.
+
+**S0 → S1 순서 (중요)**: `.product-context.md`가 없어 Context Bootstrap(S0)이 트리거된 경우, **같은 턴 안에서** Bootstrap과 S1을 완료한 뒤 **S1 완료 후** 사용자 확인을 기다려 S2로 진행해야 합니다. S0과 S1 사이에서 멈추지 마세요 — 일부 Bootstrap 필드가 빠져 있더라도 플레이스홀더로 baseline `.product-context.md`를 기록하고 S1으로 진입한 뒤, 빠진 필드는 S1 확인 질문의 일부로 물어보세요. 자세한 내용은 `references/rules-context.md`「Bootstrap → S1 순서」를 참조하세요.

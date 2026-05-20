@@ -134,9 +134,18 @@ Detecté que tu proyecto usa:
 
 Solo escribir a `.product-context.md` después de que el usuario confirme.
 
+### Secuencia Bootstrap → S1 (Hard Gate — Bootstrap NO bloquea el flujo)
+
+Bootstrap es el Step 0; su propósito es recopilar el contexto baseline. **Bootstrap en sí no es un punto de pausa**:
+
+- **Comportamiento por defecto**: Bootstrap y S1 DEBEN ejecutarse en el **mismo turno** como S0 → S1. El punto de pausa está fijado **después de completar S1**, esperando confirmación del usuario antes de S2 — no entre S0 y S1.
+- **Si el mensaje del usuario ya proporciona los campos requeridos** (según los requisitos del modo en la Sección 7 — p.ej., Feature Extension requiere Identity + Architecture & Tech Stack) → confirmar los campos conocidos en una tabla sin re-preguntar, y proceder directamente a S1.
+- **Si faltan algunos campos** → Bootstrap presenta una tabla "conocido / pendiente" en el mismo turno, luego **entra inmediatamente a S1** con placeholders para campos no confirmados, y agrupa los campos pendientes dentro de la **pregunta de confirmación de S1** (para que el usuario los rellene al confirmar S1).
+- **Prohibido**: pausar entre S0 y S1 esperando respuestas de Round 1. Si tu respuesta muestra S1 todavía como `⬜ pending` mientras el flujo se detiene esperando input del usuario, has fallado esta regla.
+
 ### Después de Completar Bootstrap
 
-Escribir la información recopilada a `.product-context.md`, dejar secciones no recopiladas vacías (usando placeholders), luego proceder al S1 formal del modo.
+Escribir la información recopilada a `.product-context.md` (escribir un baseline incluso cuando algunos campos sean placeholders — se sobrescribirán después de que el usuario confirme durante S1), luego entrar al S1 de ese modo en el mismo turno y producir el contenido de S1.
 
 ---
 

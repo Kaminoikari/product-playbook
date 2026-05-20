@@ -11,3 +11,5 @@ product-playbook skill を起動してください。
 機能の説明：$ARGUMENTS
 
 Feature Extension のステップ順序（S1 → S4）に従ってください。まず rules-context.md に従ってプロダクトコンテキストを読み込んでください。各ステップで進捗インジケーターを表示してください。
+
+**S0 → S1 の順序（重要）**：`.product-context.md` が存在しないために Context Bootstrap（S0）がトリガーされた場合、**同じターン内**で Bootstrap と S1 を完了し、**S1 完了後**にユーザーの確認を待って S2 に進んでください。S0 と S1 の間で停止してはいけません — Bootstrap の一部フィールドが欠けていても、プレースホルダーで baseline `.product-context.md` を書き込み、S1 に進み、欠けているフィールドは S1 確認質問の一部として尋ねてください。詳細は `references/rules-context.md`「Bootstrap → S1 の順序」を参照。
