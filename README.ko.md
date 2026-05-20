@@ -423,6 +423,32 @@ Claude Code가 자동으로:
 
 > 상세한 방법론과 데이터는 [`evals/`](./evals/)를 참조하세요.
 
+### 반복 5: Sub-agent A/B 비교 (디스패치 관련 3개 평가 × 22개 기대값)
+
+v1.2.0+ 에서 도입된 3개의 전문 sub-agent (`discovery-specialist`, `strategy-critic`, `pre-mortem-runner`) 의 품질에 대한 한계 기여를 측정하는 집중 A/B 평가. 동일 스킬 버전(v1.2.3), 동일 프롬프트, 2개 arm:
+
+- **Sub-agent 있음**: executor 가 해당 `agents/*.md` 파일을 읽고, 전문가가 선언한 출력 스키마와 자체 점검을 따름. 응답에 dispatch 마커 기록.
+- **Sub-agent 없음**: executor 는 어떤 `agents/*.md` 도 읽지 못하며, delegation 을 언급하지 못함. `SKILL.md` + `commands/` + `references/` 만 사용하여 orchestrator 가 inline 으로 처리.
+
+| 평가 항목 | Sub-agent 있음 | Sub-agent 없음 | 차이 |
+|-----------|:--------:|:------------:|:-----:|
+| Discovery (Persona + JTBD) | 100% (7/7) | 85.7% (6/7) | +14.3% |
+| Strategy Critic | 100% (6/6) | 83.3% (5/6) | +16.7% |
+| **Pre-mortem (Build Mode 위험 평가)** | **100% (9/9)** | **22.2% (2/9)** | **+77.8% ✅** |
+| **합계** | **100% (22/22)** | **59.1% (13/22)** | **+40.9%** |
+
+두 arm 의 token 소비는 거의 동일함 (151K vs 154K) — 전문가를 유지하는 것이 inline 처리보다 더 비싸지 않음.
+
+**핵심 발견**
+
+- **Pre-mortem-runner 가 load-bearing** (+77.8%): 이것이 없으면 orchestrator 는 얇고 미래형인 위험 리스트만 생성하며, 시나리오 수 (≥15), 5개 카테고리 커버리지, leading indicator 규율, 저비용 pre-launch 실험, 과거형 "출시 후 실패" 내러티브 프레임을 놓침. 구조화된 전문가 스키마가 실제로 일을 하고 있으며, `references/` 만으로는 재구성할 수 없음.
+- **Discovery-specialist 와 strategy-critic 은 중간 기여자** (+14–17%): orchestrator 자체만으로도 Persona+JTBD 와 전략 비평을 합리적 수준에서 처리할 수 있음. 두 arm 에서 분기하는 유일한 assertion 은 dispatch 계약 자체이며, 구조적 품질이 아님.
+- **함의**: 3개 전문가 중 pre-mortem-runner 가 단독 품질 향상이 가장 크고 보존이 가장 정당화됨. 다른 2개는 원칙적으로 강화된 reference 페이지로 orchestrator 에 통합할 수 있지만, token 비용이 동일하므로 축소 동기는 없음.
+
+**Harness 주의사항**: 이 평가 환경의 `general-purpose` executor 는 nested `Task` 를 노출하지 않으므로, "Sub-agent 있음" arm 은 "전문가 `agents/*.md` 읽기 + dispatch 마커 + 스키마를 inline 으로 준수" 로 실제 dispatch 를 근사함. 구조적 대조는 실제이지만, 엔드투엔드 Task 도구 dispatch 를 완전히 검증하려면 top-session 실행이 필요함.
+
+> 원시 artifacts 와 assertion 별 분기는 [`~/product-playbook-workspace/iteration-3/benchmark.md`](./evals/) 참조.
+
 ---
 
 ## 💬 사용 가능한 명령

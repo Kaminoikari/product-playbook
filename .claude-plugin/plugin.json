@@ -1,7 +1,7 @@
 {
   "name": "product-playbook",
   "description": "MUST use when user wants to plan or strategize a product/feature. 22 PM frameworks, 6 modes, multi-language, from idea to dev handoff",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "author": {
     "name": "Charles Chen"
   },

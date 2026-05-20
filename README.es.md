@@ -423,6 +423,32 @@ Comparando la calidad de respuesta entre "con guía del Skill" y "sin guía del 
 
 > Ver [`evals/`](./evals/) para metodología detallada y datos.
 
+### Iteración 5: Comparación A/B de Sub-agent (3 evaluaciones relevantes a despacho × 22 expectativas)
+
+Una corrida A/B enfocada que mide la contribución marginal de calidad de los 3 sub-agents especialistas (`discovery-specialist`, `strategy-critic`, `pre-mortem-runner`) introducidos en v1.2.0+. Misma versión del skill (v1.2.3), mismos prompts, dos brazos:
+
+- **CON sub-agent**: el executor lee el archivo `agents/*.md` correspondiente y sigue el esquema de salida declarado por el especialista + autoverificaciones; el despacho se marca en la respuesta.
+- **SIN sub-agent**: el executor tiene prohibido leer cualquier `agents/*.md` o mencionar la delegación; debe manejar el paso inline como orchestrator usando sólo `SKILL.md` + `commands/` + `references/`.
+
+| Evaluación | Con Sub-agent | Sin Sub-agent | Delta |
+|-----------|:--------:|:------------:|:-----:|
+| Discovery (Persona + JTBD) | 100% (7/7) | 85.7% (6/7) | +14.3% |
+| Strategy Critic | 100% (6/6) | 83.3% (5/6) | +16.7% |
+| **Pre-mortem (evaluación de riesgo en Build Mode)** | **100% (9/9)** | **22.2% (2/9)** | **+77.8% ✅** |
+| **TOTAL** | **100% (22/22)** | **59.1% (13/22)** | **+40.9%** |
+
+El consumo de tokens es prácticamente idéntico en ambos brazos (151K vs 154K) — mantener un especialista no cuesta más que manejar el paso inline.
+
+**Hallazgos Clave**
+
+- **Pre-mortem-runner es load-bearing** (+77.8%): sin él, el orchestrator produce una lista de riesgos delgada y en tiempo futuro, perdiendo el conteo de escenarios (≥15), cobertura de 5 categorías, disciplina de leading indicator, experimentos pre-launch de bajo costo, y el marco narrativo de "lanzó y falló" en pasado. El esquema estructurado del especialista hace trabajo real que `references/` por sí solo no reproduce.
+- **Discovery-specialist y strategy-critic son contribuidores moderados** (+14–17%): el orchestrator puede producir análisis razonables de Persona+JTBD y críticas de estrategia inline. El único assertion divergente entre brazos es el contrato de despacho mismo, no la calidad estructural.
+- **Implicación**: de los 3 especialistas, pre-mortem-runner ofrece el mayor lift de calidad solo y es el más justificado por estos resultados. Los otros dos podrían en principio plegarse de vuelta al orchestrator con páginas de referencia más fuertes, aunque no hay incentivo de costo para hacerlo (los tokens son iguales).
+
+**Advertencia del harness**: el executor `general-purpose` usado en este harness de eval no expone despacho `Task` anidado, por lo que el brazo CON aproxima el despacho real leyendo el `agents/*.md` del especialista y siguiendo su esquema inline (con un marcador de despacho explícito). El contraste estructural vs SIN es real, pero se necesitaría una corrida top-session para verificar de extremo a extremo la calidad del despacho via Task tool.
+
+> Artefactos crudos y divergencia por assertion en [`~/product-playbook-workspace/iteration-3/benchmark.md`](./evals/).
+
 ---
 
 ## 💬 Comandos Disponibles

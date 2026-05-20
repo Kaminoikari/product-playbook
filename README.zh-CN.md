@@ -423,6 +423,32 @@ Claude Code 会自动：
 
 > 详细评测方法与数据见 [`evals/`](./evals/) 目录。
 
+### Iteration 5：Sub-agent A/B 对照（3 个专家相关评测 × 22 个期望值）
+
+针对 v1.2.0+ 推出的 3 个专家 sub-agent（`discovery-specialist`、`strategy-critic`、`pre-mortem-runner`）所做的聚焦 A/B 测试，量化它们在品质上的边际贡献。相同 skill 版本（v1.2.3）、相同 prompt、两个 arm：
+
+- **有 Sub-agent**：executor 可读取对应的 `agents/*.md`，并遵循该专家声明的输出 schema 与自检；回应中标记 dispatch。
+- **无 Sub-agent**：executor 不得读取任何 `agents/*.md`，不得提及 delegation；只能用 `SKILL.md` + `commands/` + `references/` 由 orchestrator 自行 inline 处理。
+
+| 评测项目 | 有 Sub-agent | 无 Sub-agent | 差异 |
+|-----------|:--------:|:------------:|:-----:|
+| Discovery（Persona + JTBD） | 100%（7/7） | 85.7%（6/7） | +14.3% |
+| Strategy Critic | 100%（6/6） | 83.3%（5/6） | +16.7% |
+| **Pre-mortem（Build Mode 风险评估）** | **100%（9/9）** | **22.2%（2/9）** | **+77.8% ✅** |
+| **总计** | **100%（22/22）** | **59.1%（13/22）** | **+40.9%** |
+
+两个 arm 的 token 消耗几乎相同（151K vs 154K）——保留专家不会比 inline 处理更贵。
+
+**关键发现**
+
+- **Pre-mortem-runner 是 load-bearing**（+77.8%）：少了它，orchestrator 只能产出单薄、未来式的风险清单，缺失 scenario 数量（≥15）、五类别覆盖、leading-indicator 纪律、低成本上线前实验、以及过去式「已上线且失败」叙事框架。结构化的专家 schema 在做真正的工作，光看 `references/` 无法重建。
+- **Discovery-specialist 与 strategy-critic 属于中度贡献**（+14–17%）：orchestrator 自己处理 Persona+JTBD 与策略批判已可达合理水准。两个 arm 唯一分歧的 assertion 是 dispatch 契约本身，而非结构性品质。
+- **意涵**：3 个专家中，pre-mortem-runner 对品质提升的贡献最大、最值得保留；另外两个原则上可以靠加强 reference 文件 fold 回 orchestrator，但因为 token 成本相同，没有减量诱因。
+
+**Harness 警语**：此评测环境的 `general-purpose` executor 并未暴露 nested `Task`，因此「有 Sub-agent」arm 是以「读取专家 `agents/*.md` + 标记 dispatch + 遵循 schema inline」近似真实 dispatch。结构性对比是真的，但要完全验证端到端 Task 工具 dispatch 还需要 top-session 测试。
+
+> 原始 artifacts 与每项 assertion 分歧详见 [`~/product-playbook-workspace/iteration-3/benchmark.md`](./evals/)。
+
 ---
 
 ## 💬 可用指令一览

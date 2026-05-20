@@ -423,6 +423,32 @@ By comparing response quality between "with Skill guidance" and "without Skill g
 
 > See [`evals/`](./evals/) for detailed methodology and data.
 
+### Iteration 5: Sub-agent A/B Comparison (3 dispatch-relevant evals × 22 expectations)
+
+A focused A/B run measuring the marginal quality contribution of the 3 specialist sub-agents (`discovery-specialist`, `strategy-critic`, `pre-mortem-runner`) shipped in v1.2.0+. Same skill version (v1.2.3), same prompts, two arms:
+
+- **WITH sub-agent**: executor reads the specialist's `agents/*.md` file and follows its declared output schema + self-checks; dispatch is marked in the response.
+- **WITHOUT sub-agent**: executor is forbidden from reading any `agents/*.md` or mentioning delegation; must handle the step inline as the orchestrator using only `SKILL.md` + `commands/` + `references/`.
+
+| Eval | With Sub-agent | Without Sub-agent | Delta |
+|-----------|:--------:|:------------:|:-----:|
+| Discovery (Persona + JTBD) | 100% (7/7) | 85.7% (6/7) | +14.3% |
+| Strategy Critic | 100% (6/6) | 83.3% (5/6) | +16.7% |
+| **Pre-mortem (Build Mode risk)** | **100% (9/9)** | **22.2% (2/9)** | **+77.8% ✅** |
+| **TOTAL** | **100% (22/22)** | **59.1% (13/22)** | **+40.9%** |
+
+Token cost is essentially identical across arms (151K vs 154K) — keeping a specialist costs no more than handling the step inline.
+
+**Key Findings**
+
+- **Pre-mortem-runner is load-bearing** (+77.8%): without it the orchestrator produces a thin, future-tense risk list and misses scenario count (≥15), 5-category coverage, leading-indicator discipline, cheap pre-launch experiments, and past-tense "shipped-and-failed" framing. The structured specialist schema is doing real work that `references/` alone does not reproduce.
+- **Discovery-specialist and strategy-critic are modest contributors** (+14–17%): the orchestrator can produce reasonable Persona+JTBD analyses and strategy critiques inline. The diverging assertion in each case is the dispatch contract itself, not the structural quality.
+- **Implication**: of the 3 specialists, the pre-mortem-runner gives the largest standalone quality lift and is the most justified by these results. The other two could in principle be folded back into the orchestrator with stronger reference pages, though there is no cost incentive to do so (tokens are a wash).
+
+**Harness caveat**: the `general-purpose` executor used in this eval harness does not expose nested `Task` dispatch, so the WITH arm approximates real dispatch by reading the specialist's `agents/*.md` and following its schema inline (with an explicit dispatch marker). The structural contrast vs WITHOUT is real, but a true top-session run would be needed to verify end-to-end Task-tool dispatch quality.
+
+> Raw artifacts and per-assertion divergence in [`~/product-playbook-workspace/iteration-3/benchmark.md`](./evals/).
+
 ---
 
 ## 💬 Available Commands
