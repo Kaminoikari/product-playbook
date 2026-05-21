@@ -449,6 +449,31 @@ Token cost is essentially identical across arms (151K vs 154K) — keeping a spe
 
 > Raw artifacts and per-assertion divergence in [`~/product-playbook-workspace/iteration-3/benchmark.md`](./evals/).
 
+### Iteration 6: Token Optimization Pass (v1.2.5)
+
+A token-reduction iteration. Same skill content semantics, smaller footprint per session. Goal: ≥25% token reduction while holding quality at 100%.
+
+**Changes shipped:**
+- **SKILL.md slim** — extracted Sub-Agent Delegation Rules to lazy `rules-subagent-dispatch.md`; tightened Hard Gate descriptions; consolidated Mode Overview duplication. **6,188 → 2,877 tokens (-54%)** for the eager entry point.
+- **rules-context.md split** — kept decision logic eager (1,594 tokens); moved verbose YAML templates + Bootstrap procedure + Conflict UX scripts to lazy `rules-context-template.md` (1,849 tokens, loaded only on trigger).
+- **rules-quality-review.md slim** — distilled from 1,040 → 817 tokens with compact 3-step protocol + 1-line per-framework checklists.
+- **Specialist agents slim** — removed embedded framework knowledge that duplicated `references/*.md`, replaced with on-demand pointers. **discovery-specialist −25%, strategy-critic −18%, pre-mortem-runner −20%** per dispatch.
+
+**Estimated savings per 9-step Full Mode session:**
+
+| Source | Before | After | Saved |
+|--------|:------:|:-----:|:-----:|
+| Eager (SKILL + context + progress) | ~8,800 | ~5,500 | **−3,300** |
+| Quality review (×9 step loads) | ~9,360 | ~7,353 | **−2,007** |
+| Sub-agent dispatches (3 specialists) | ~9,005 | ~7,106 | **−1,899** |
+| **Total per session** | **~27,200** | **~18,900** | **−8,300 (−30%)** |
+
+**Quality validation:** pre-mortem-runner (the most quality-sensitive specialist per Iteration 5) re-ran eval-12 on v1.2.5 slimmed content. Result: **9/9 assertions PASS** — 16 scenarios across all 5 categories, 5 architecture-grounded scenarios citing real stack components, 5 cheap pre-launch experiments with binary decision rules, past-tense framing maintained. Static cross-check confirmed eval-10/11 assertions (13 total) all have explicit support in the slim agent prompts.
+
+**Token cost trade-off:** the split adds 2 new lazy files (`rules-subagent-dispatch.md` 978 tokens, `rules-context-template.md` 1,849 tokens) that load only when triggered. In the most common session paths, they never load. In Bootstrap-or-Conflict paths, the eager savings still net positive.
+
+**Mirrored to 5 i18n locales** (zh-TW, zh-CN, ja, es, ko) preserving existing translations — structural slim applied identically per language.
+
 ---
 
 ## 💬 Available Commands

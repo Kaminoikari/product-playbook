@@ -1,168 +1,48 @@
-# 🔍 品質審查規則
+# Quality Review Rules
 
-> 每個步驟完成時載入。本檔案將「審查流程」與「檢查標準」分開維護，確保品質自檢機制真正運作。
+> Loaded after each step.
 
-## ⚙️ 審查流程（所有模式通用）
+## Protocol
 
-每個步驟產出後，Claude 必須執行以下審查流程：
+After each step output:
+1. Mark each checklist item ✅ or ❌. Each ❌ states: gap, downstream impact, fix direction.
+2. **≥1 ❌ required** (Hard Gate). ⚠️ does NOT substitute. No "weakest aspect" appendix bypass. ❌ must be substantive content gap, not formatting/wording. If everything feels ✅ → lower bar, re-review. Every artifact has a weakest dimension.
+3. Format: `📝 Quality Self-Check:` then `- ✅/❌ item → Gap / Impact / Fix`.
 
-### 步驟一：逐項自檢
-
-1. 查找該步驟對應的品質自檢清單（見下方「檢查標準」段落）
-2. 逐項標記 ✅ 或 ❌
-3. ❌ 項目必須附上「如何改善」的具體說明，並指明該缺口會如何阻塞下游步驟或產出（例如：「會阻塞 PR-FAQ 寫作，因為缺少情境就無法寫具體場景的 Lead 段」）
-
-### 步驟二：強制批判（Hard Gate）
-
-- **必須至少標記 1 個 ❌**：自檢清單不允許全部 ✅。Claude 必須誠實找出至少一個未達標的項目並標記 ❌
-- ⚠️ **不可用警告符號（⚠️）替代 ❌**：⚠️ 僅作為輔助標記（例如「最弱環節」備註），不能取代清單內的 ❌
-- **不可外掛**：將「最弱環節」寫在清單外當作旁註而清單仍維持全 ✅，視同未通過自檢
-- ❌ 必須指向**實質內容缺口**，不接受「排版可更好」「字數可精簡」這類表面標記
-- 若反覆審視後真的覺得每項都過了，請降低標準重審——任何規劃產出必然有某個面向是最弱的、有改進空間的，把那一項標 ❌ 並指明該如何補強
-- 設計精神：參考 Amazon PR-FAQ 強制批判文化——品質是靠主動找到問題，不是被動確認沒問題
-
-### 步驟三：呈現格式
-
-```
-📝 品質自檢：
-- ✅ [檢查項目]
-- ✅ [檢查項目]
-- ❌ [檢查項目] → 內容缺口：[具體說明] → 下游影響：[會阻塞哪個步驟/產出] → 改善方向：[具體行動]
-⚠️ 補充說明（選填）：[其他需提醒的脈絡，不取代上方 ❌]
-```
-
-**檢核**：如果你產出的清單沒有任何 ❌，回到步驟二重做。
+Self-check on self-check: no ❌ → redo step 2.
 
 ---
 
-## 📋 檢查標準（依步驟分類）
+## Checklists per framework
 
-> 以下為各框架產出的獨立檢查清單。審查流程不變，只需替換對應的檢查清單即可。
+**Persona**: 1) by purpose/motivation not demographics, 2) MECE, 3) core vs secondary TA clear, 4) pain points from real obs/inference, 5) "current approach + rationale" specific enough to identify workarounds.
 
-### Persona（人物誌）
+**JTBD**: 1) specific context (not "anytime"), 2) single core job, 3) functional + emotional + social all present, 4) usable to evaluate solutions, 5) "current approach + gap" stated, 6) five-why Q5 touches emotion/identity/fear.
 
-| # | 檢查項目 |
-|---|---------|
-| 1 | 切分是否基於「用途/任務/動機」而非人口統計？ |
-| 2 | 各 Persona 之間是否 MECE（互斥且完整覆蓋目標市場）？ |
-| 3 | 是否明確指出核心 TA vs 次要 TA？ |
-| 4 | 每個 Persona 的「問題/挑戰」是否來自真實觀察或合理推論？ |
-| 5 | 「現在做法與理由」是否具體到可以識別 Workaround？ |
+**Positioning (April Dunford)**: 1) competitive alternative from user perspective, 2) unique attribute competitors can't match, 3) value in user language not product language, 4) target market specific enough to find them, 5) 5 elements logically consistent.
 
-常見問題：按年齡性別分群、Persona 之間差異不明顯、痛點太籠統
+**HMW**: 1) clear constraints, 2) solution space wide, 3) maps to JTBD/pain, 4) team can start ideating.
 
-### JTBD（Jobs to Be Done）
+**PR-FAQ**: 1) headline user-perspective ("Users can now X"), 2) first paragraph delivers "why this matters" in 10s, 3) pain from real scenario, 4) solution opens with user feeling, 5) quote sounds human, 6) FAQ has sharp questions vs existing tools.
 
-| # | 檢查項目 |
-|---|---------|
-| 1 | 是否包含具體情境？（不是「隨時隨地」，而是「在深夜不方便聯絡銀行時」） |
-| 2 | 是否聚焦在一個核心工作？（不是三個 Job 合併成一句） |
-| 3 | 功能性/情感性/社交性工作是否都有識別？ |
-| 4 | 是否能用來判斷「這個解法有沒有解決這個 Job」？ |
-| 5 | 是否包含「現行做法」和「差距」？（差距 = 機會） |
-| 6 | 深挖五問的 Q5 是否觸及情感動機/職業認同/心理恐懼？（非功能性描述） |
+**North Star**: 1) reflects user value (not revenue/DAU), 2) can grow continuously, 3) team knows what to do on seeing it, 4) guardrails if gameable, 5) B2B: organisation-level value.
 
-### Positioning（定位）
+**Aha Moment**: 1) specific trackable behaviour, 2) tied to JTBD functional job, 3) target time reasonable (B2C: first use; B2B: trial period), 4) onboarding designable to accelerate.
 
-| # | 檢查項目 |
-|---|---------|
-| 1 | 「競爭替代品」是否來自用戶視角？（用戶真的會用什麼替代，不是你認為的競對） |
-| 2 | 「獨特屬性」是否是競爭替代品做不到或做不好的？ |
-| 3 | 「對用戶的價值」是用戶語言還是產品語言？（「節省 2 小時」vs「AI 驅動自動化」） |
-| 4 | 「目標市場」是否夠具體到能找到這些人？ |
-| 5 | 五個定位要素之間是否邏輯一致？ |
+**Security** (full: `08-security-checklist.md`): 1) auth explicitly chosen, 2) ≥3 security headers planned, 3) rate limit tailored not template, 4) `.gitignore` covers all sensitive files.
 
-常見問題：獨特屬性和價值之間斷裂、市場類別選錯導致被錯誤標準評判
-
-### HMW（How Might We）
-
-| # | 檢查項目 |
-|---|---------|
-| 1 | 是否有明確的約束條件？（不是完全開放式） |
-| 2 | 是否保留了足夠的解法空間？（不是指向唯一解） |
-| 3 | 是否能直接對應到一個 JTBD 或痛點？ |
-| 4 | 團隊看到這個 HMW 是否能開始發想解法？ |
-
-常見問題：太大（等於重述願景）、太小（等於指定解法）、多個問題混在一起
-
-### PR-FAQ（新聞稿 + 常見問題）
-
-| # | 檢查項目 |
-|---|---------|
-| 1 | 標題是否從用戶角度出發？（「用戶能做到 X」vs「我們推出了 Y 功能」） |
-| 2 | 第一段是否能讓讀者在 10 秒內理解「這為什麼重要」？ |
-| 3 | 痛點描述是否來自真實用戶場景？ |
-| 4 | 解法段第一句是否以用戶感受/場景開頭（非功能動詞）？ |
-| 5 | 用戶引言是否像真人會說的話？ |
-| 6 | FAQ 是否包含了對比現有工具的尖銳質疑？ |
-
-常見問題：標題像產品公告不像新聞、解法段變成功能列表、FAQ 都是容易回答的問題
-
-### North Star Metric（北極星指標）
-
-| # | 檢查項目 |
-|---|---------|
-| 1 | 是否反映用戶獲得的價值？（不是營收、不是 DAU） |
-| 2 | 是否能持續增長？（不會天然到達上限） |
-| 3 | 團隊每個人看到這個指標是否都知道自己該做什麼？ |
-| 4 | 是否可以被操弄？（如果可以，需要護欄指標） |
-| 5 | B2B 產品：是否反映客戶組織層級的價值，而非只有個人使用者？ |
-
-常見問題：用營收當 North Star（營收是結果不是驅動因素）、指標太複合無法行動
-
-### Aha Moment（頓悟時刻）
-
-| # | 檢查項目 |
-|---|---------|
-| 1 | 是否是一個具體的、可追蹤的行為？（不是「感覺產品好用」） |
-| 2 | 是否與 JTBD 的功能性工作直接相關？ |
-| 3 | 到達時間目標是否合理？（B2C 應在首次使用內；B2B 可能在試用期內） |
-| 4 | 是否可以設計 Onboarding 來引導用戶更快到達？ |
-
-### 安全性檢查
-
-> 詳細標準見 `references/08-security-checklist.md`，以下為品質自檢摘要：
-
-| # | 檢查項目 |
-|---|---------|
-| 1 | 認證方式已明確選定，不是留空的「待確認」 |
-| 2 | 至少 3 個安全性 Headers 已規劃 |
-| 3 | Rate Limiting 策略已針對產品特性調整（不是直接複製模板） |
-| 4 | .gitignore 已包含所有敏感檔案 |
-
-### 文件匯出
-
-> 詳細標準見 `references/rules-export-document.md`。
-
-| # | 檢查項目 |
-|---|---------|
-| 1 | 無殘留 Markdown 語法在 HTML 中（`**`、`##`、`|---|`） |
-| 2 | 所有表格列數和欄數與原始內容一致 |
+**Document Export** (full: `rules-export-document.md`): 1) no residual Markdown syntax in HTML, 2) table rows/columns match original.
 
 ---
 
-## 🔄 跨步驟一致性審查
+## Cross-Step Consistency (at flow end only)
 
-> 流程結束時載入。詳細的模式別檢查項目見 `references/rules-end-of-flow.md`。
+Detailed: `rules-end-of-flow.md`.
 
-跨步驟一致性審查是獨立於單步驟品質自檢的第二層審查，在所有步驟完成後執行。其目的是捕捉迭代過程中上游修改導致的下游不一致。
-
-### 快速檢查項目（所有模式通用）
-
-| # | 檢查維度 | 驗證問題 |
-|---|---------|---------|
-| 1 | 目標用戶一致性 | JTBD、定位、PR-FAQ 是否指向同一群人？ |
-| 2 | 核心問題一致性 | PR-FAQ 是否針對 JTBD 陳述的問題？MVP 是否解決？ |
-| 3 | 解法 ↔ 範圍 | 選出的解法是否與 MVP 範圍一致？ |
-| 4 | 指標 ↔ 價值 | North Star 是否衡量 JTBD 成果？ |
-| 5 | 風險時效性 | Pre-mortem 風險對最終解法是否仍然相關？ |
-
----
-
-## 📐 設計原則
-
-本檔案遵循 Reviewer 設計模式：**檢查標準與檢查流程分開維護**。
-
-- **流程不變**：步驟一（逐項自檢）→ 步驟二（強制批判）→ 步驟三（格式呈現）
-- **標準可換**：新增框架時，只需在「檢查標準」段落新增對應清單
-- **獨立載入**：各 reference 檔案中仍保留嵌入式清單作為內聯提醒，本檔案作為統一審查入口
+| # | Dimension | Question |
+|---|-----------|----------|
+| 1 | Target user | JTBD, Positioning, PR-FAQ point to same people? |
+| 2 | Core problem | PR-FAQ addresses JTBD problem? MVP solves it? |
+| 3 | Solution ↔ Scope | Selected solution consistent with MVP scope? |
+| 4 | Metric ↔ Value | North Star measures JTBD outcomes? |
+| 5 | Risk timeliness | Pre-mortem risks still relevant to final solution? |
