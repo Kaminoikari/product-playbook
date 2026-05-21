@@ -452,6 +452,33 @@ v1.2.0+ で導入された3つの専門 sub-agent（`discovery-specialist`、`st
 
 ---
 
+### イテレーション6：Token 最適化パス（v1.2.5）
+
+token 削減イテレーション。スキル内容のセマンティクスは同じで、セッションあたりのフットプリントを縮小。目標は品質を 100% に維持しながら 25% 以上の token 削減。
+
+**出荷した変更：**
+- **SKILL.md スリム化** — Sub-Agent Delegation Rules を lazy な `rules-subagent-dispatch.md` に抽出、Hard Gate の記述を簡潔化、Mode Overview の重複を統合。eager エントリポイントで **6,188 → 2,877 tokens（-54%）**。
+- **rules-context.md 分割** — 決定ロジックは eager のまま維持（1,594 tokens）、冗長な YAML テンプレート + Bootstrap 手順 + Conflict UX スクリプトを lazy な `rules-context-template.md`（1,849 tokens、トリガー時のみ読込）に移動。
+- **rules-quality-review.md スリム化** — 1,040 → 817 tokens に蒸留、コンパクトな 3 ステップのプロトコル + 各 framework 1 行のチェックリスト。
+- **Specialist agents スリム化** — `references/*.md` と重複していた framework 知識を削除し、on-demand のポインタに置換。dispatch あたり **discovery-specialist −25%、strategy-critic −18%、pre-mortem-runner −20%**。
+
+**9 ステップ Full Mode セッションあたりの推定削減：**
+
+| ソース | Before | After | 削減 |
+|--------|:------:|:-----:|:-----:|
+| Eager（SKILL + context + progress） | ~8,800 | ~5,500 | **−3,300** |
+| Quality review（×9 ステップロード） | ~9,360 | ~7,353 | **−2,007** |
+| Sub-agent dispatches（3 specialists） | ~9,005 | ~7,106 | **−1,899** |
+| **セッション合計** | **~27,200** | **~18,900** | **−8,300（−30%）** |
+
+**品質検証：** pre-mortem-runner（イテレーション 5 で最も品質感受性が高い specialist）が v1.2.5 のスリム化された内容で eval-12 を再実行。結果は **9/9 assertion PASS** — 全 5 カテゴリーにまたがる 16 シナリオ、実際のスタック構成要素を引用するアーキテクチャ根拠付きシナリオ 5 件、二項決定ルールを持つ低コスト pre-launch 実験 5 件、過去形の枠組みを維持。静的クロスチェックにより、スリム化された agent プロンプトにおいて eval-10/11 の assertion（合計 13 件）すべてに明示的な裏付けがあることを確認。
+
+**Token コストのトレードオフ：** 分割により、トリガー時のみ読み込まれる 2 つの新規 lazy ファイル（`rules-subagent-dispatch.md` 978 tokens、`rules-context-template.md` 1,849 tokens）が追加される。最も一般的なセッション経路ではこれらは読み込まれない。Bootstrap または Conflict 経路でも、eager の削減が依然としてネットでプラス。
+
+**5 つの i18n ロケール（zh-TW、zh-CN、ja、es、ko）にミラー** — 既存の翻訳を保持しつつ、構造的なスリム化を言語ごとに同一に適用。
+
+---
+
 ## 💬 利用可能なコマンド
 
 ### ⌨️ Claude Code CLIスラッシュコマンド

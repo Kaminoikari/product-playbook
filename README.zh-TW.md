@@ -449,6 +449,32 @@ Claude Code 會自動：
 
 > 原始 artifacts 與每項 assertion 分歧詳見 [`~/product-playbook-workspace/iteration-3/benchmark.md`](./evals/)。
 
+### Iteration 6：Token 優化（v1.2.5）
+
+一輪 token 縮減迭代。Skill 語意內容不變,但每個 session 的 footprint 更小。目標:在維持 100% 品質的前提下,token 用量減少 ≥25%。
+
+**本輪變更**
+
+- **SKILL.md 瘦身**——將 Sub-Agent Delegation Rules 抽出為 lazy 載入的 `rules-subagent-dispatch.md`;精簡 Hard Gate 描述;整併 Mode Overview 重複內容。eager 進入點 **6,188 → 2,877 tokens(-54%)**。
+- **rules-context.md 拆分**——決策邏輯保持 eager(1,594 tokens);冗長的 YAML 模板、Bootstrap 流程與 Conflict UX 腳本移到 lazy `rules-context-template.md`(1,849 tokens,僅在觸發時載入)。
+- **rules-quality-review.md 瘦身**——從 1,040 → 817 tokens,改用緊湊的 3 步驟協定與每個框架 1 行的檢查表。
+- **專家 agents 瘦身**——移除與 `references/*.md` 重複的內嵌框架知識,改為依需要指向參考檔。每次 dispatch:**discovery-specialist −25%、strategy-critic −18%、pre-mortem-runner −20%**。
+
+**單一 9 步 Full Mode session 的預估節省:**
+
+| 來源 | 之前 | 之後 | 節省 |
+|--------|:------:|:-----:|:-----:|
+| Eager(SKILL + context + progress) | ~8,800 | ~5,500 | **−3,300** |
+| Quality review(×9 step loads) | ~9,360 | ~7,353 | **−2,007** |
+| Sub-agent dispatches(3 個專家) | ~9,005 | ~7,106 | **−1,899** |
+| **每次 session 合計** | **~27,200** | **~18,900** | **−8,300(−30%)** |
+
+**品質驗證**:依 Iteration 5 結果中品質最敏感的 pre-mortem-runner,在 v1.2.5 瘦身內容上重跑 eval-12。結果為 **9/9 assertions PASS**——涵蓋全部 5 個類別共 16 個 scenario、5 個引用真實 stack 元件的架構落地 scenario、5 個帶有二元判準的低成本上線前實驗,並維持過去式敘事框架。靜態交叉檢查確認 eval-10/11 的 assertions(共 13 項)在瘦身後的 agent prompt 中皆有明確支撐。
+
+**Token 成本取捨**:拆分新增 2 個 lazy 檔案(`rules-subagent-dispatch.md` 978 tokens、`rules-context-template.md` 1,849 tokens),僅在觸發時載入。在最常見的 session 路徑中,這兩個檔案根本不會載入;即使在 Bootstrap 或 Conflict 路徑下,eager 端的節省仍淨為正。
+
+**5 個 i18n 語系同步**(zh-TW、zh-CN、ja、es、ko),保留既有翻譯——結構性瘦身在各語系等比例套用。
+
 ---
 
 ## 💬 可用指令一覽

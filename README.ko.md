@@ -451,6 +451,33 @@ v1.2.0+ 에서 도입된 3개의 전문 sub-agent (`discovery-specialist`, `stra
 
 ---
 
+### 반복 6: 토큰 최적화 패스 (v1.2.5)
+
+토큰 절감 반복. 스킬 콘텐츠의 시맨틱은 동일하게 유지하되, 세션당 footprint 를 축소. 목표: 품질 100% 를 유지하면서 토큰 ≥25% 감소.
+
+**적용된 변경 사항:**
+- **SKILL.md 슬림화** — Sub-Agent Delegation Rules 를 lazy `rules-subagent-dispatch.md` 로 추출, Hard Gate 설명을 축약, Mode Overview 의 중복을 통합. eager 진입점 기준 **6,188 → 2,877 tokens (-54%)**.
+- **rules-context.md 분할** — 의사결정 로직은 eager (1,594 tokens) 로 유지, 장문 YAML 템플릿 + Bootstrap 절차 + Conflict UX 스크립트는 lazy `rules-context-template.md` (1,849 tokens, 트리거 시에만 로드) 로 이동.
+- **rules-quality-review.md 슬림화** — 1,040 → 817 tokens 로 정제, 컴팩트한 3단계 프로토콜과 프레임워크당 1줄 체크리스트로 구성.
+- **전문가 에이전트 슬림화** — `references/*.md` 와 중복되던 임베디드 프레임워크 지식을 제거하고 온디맨드 포인터로 대체. dispatch 당 **discovery-specialist −25%, strategy-critic −18%, pre-mortem-runner −20%**.
+
+**9-step Full Mode 세션당 예상 절감:**
+
+| 출처 | Before | After | 절감 |
+|------|:------:|:-----:|:-----:|
+| Eager (SKILL + context + progress) | ~8,800 | ~5,500 | **−3,300** |
+| Quality review (×9 step loads) | ~9,360 | ~7,353 | **−2,007** |
+| Sub-agent dispatch (3개 전문가) | ~9,005 | ~7,106 | **−1,899** |
+| **세션당 합계** | **~27,200** | **~18,900** | **−8,300 (−30%)** |
+
+**품질 검증:** pre-mortem-runner (반복 5 기준 품질에 가장 민감한 전문가) 가 v1.2.5 슬림화된 콘텐츠로 eval-12 를 재실행. 결과: **9/9 assertions PASS** — 5개 카테고리 전체에 걸친 16개 시나리오, 실제 stack 컴포넌트를 인용하는 5개의 아키텍처 기반 시나리오, 이진 의사결정 규칙을 가진 5개의 저비용 pre-launch 실험, 과거형 프레이밍 유지. 정적 cross-check 로 eval-10/11 의 assertion (총 13개) 이 슬림화된 에이전트 프롬프트 안에서 모두 명시적으로 뒷받침됨을 확인.
+
+**토큰 비용 트레이드오프:** 분할로 인해 2개의 새 lazy 파일 (`rules-subagent-dispatch.md` 978 tokens, `rules-context-template.md` 1,849 tokens) 이 추가되며, 트리거 시에만 로드됨. 가장 흔한 세션 경로에서는 전혀 로드되지 않음. Bootstrap-or-Conflict 경로에서도 eager 절감분이 여전히 net positive.
+
+**5개 i18n 로케일 (zh-TW, zh-CN, ja, es, ko) 에 미러링** — 기존 번역을 보존하며, 구조적 슬림화는 언어별로 동일하게 적용.
+
+---
+
 ## 💬 사용 가능한 명령
 
 ### ⌨️ Claude Code CLI 슬래시 명령

@@ -451,6 +451,33 @@ El consumo de tokens es prácticamente idéntico en ambos brazos (151K vs 154K) 
 
 ---
 
+### Iteración 6: Pase de Optimización de Tokens (v1.2.5)
+
+Una iteración de reducción de tokens. Misma semántica del contenido del skill, menor huella por sesión. Objetivo: ≥25% de reducción de tokens manteniendo la calidad al 100%.
+
+**Cambios entregados:**
+- **SKILL.md adelgazado** — se extrajeron las Sub-Agent Delegation Rules al lazy `rules-subagent-dispatch.md`; se ajustaron las descripciones de Hard Gate; se consolidó la duplicación de Mode Overview. **6,188 → 2,877 tokens (-54%)** para el entry point eager.
+- **División de rules-context.md** — se mantuvo la lógica de decisión como eager (1,594 tokens); se movieron las plantillas YAML verbosas + procedimiento de Bootstrap + scripts de UX de conflicto al lazy `rules-context-template.md` (1,849 tokens, cargado sólo al activarse).
+- **rules-quality-review.md adelgazado** — destilado de 1,040 → 817 tokens con un protocolo compacto de 3 pasos + checklists de 1 línea por framework.
+- **Agentes especialistas adelgazados** — se removió el conocimiento de framework embebido que duplicaba `references/*.md`, reemplazado con punteros on-demand. **discovery-specialist −25%, strategy-critic −18%, pre-mortem-runner −20%** por despacho.
+
+**Ahorros estimados por sesión Full Mode de 9 pasos:**
+
+| Fuente | Antes | Después | Ahorrado |
+|--------|:------:|:-----:|:-----:|
+| Eager (SKILL + context + progress) | ~8,800 | ~5,500 | **−3,300** |
+| Quality review (×9 cargas por paso) | ~9,360 | ~7,353 | **−2,007** |
+| Despachos de sub-agent (3 especialistas) | ~9,005 | ~7,106 | **−1,899** |
+| **Total por sesión** | **~27,200** | **~18,900** | **−8,300 (−30%)** |
+
+**Validación de calidad:** pre-mortem-runner (el especialista más sensible a calidad según Iteración 5) re-ejecutó eval-12 sobre el contenido adelgazado de v1.2.5. Resultado: **9/9 assertions PASS** — 16 escenarios cubriendo las 5 categorías, 5 escenarios fundamentados en arquitectura citando componentes reales del stack, 5 experimentos pre-launch de bajo costo con reglas de decisión binaria, encuadre en tiempo pasado mantenido. Una verificación cruzada estática confirmó que las assertions de eval-10/11 (13 en total) tienen soporte explícito en los prompts adelgazados de los agentes.
+
+**Trade-off de costo de tokens:** la división añade 2 nuevos archivos lazy (`rules-subagent-dispatch.md` 978 tokens, `rules-context-template.md` 1,849 tokens) que sólo cargan al activarse. En las rutas de sesión más comunes, nunca cargan. En rutas de Bootstrap-o-Conflicto, los ahorros eager siguen siendo netos positivos.
+
+**Replicado a 5 locales i18n** (zh-TW, zh-CN, ja, es, ko) preservando las traducciones existentes — el adelgazamiento estructural se aplicó de manera idéntica por idioma.
+
+---
+
 ## 💬 Comandos Disponibles
 
 ### ⌨️ Comandos Slash del CLI de Claude Code

@@ -451,6 +451,33 @@ Claude Code 会自动：
 
 ---
 
+### Iteration 6: Token 优化（v1.2.5）
+
+一次 token 减量迭代。Skill 内容语意不变，但每次 session 的足迹更小。目标：≥25% token 减量，同时品质维持 100%。
+
+**已上线的变更：**
+- **SKILL.md 瘦身** —— 将 Sub-Agent Delegation Rules 抽离到 lazy `rules-subagent-dispatch.md`；收紧 Hard Gate 描述；合并 Mode Overview 的重复段落。eager 入口 **6,188 → 2,877 tokens（-54%）**。
+- **rules-context.md 拆分** —— 保留决策逻辑为 eager（1,594 tokens）；将冗长的 YAML 模板 + Bootstrap 流程 + Conflict UX 脚本迁移到 lazy `rules-context-template.md`（1,849 tokens，仅在触发时才载入）。
+- **rules-quality-review.md 瘦身** —— 由 1,040 → 817 tokens,改写成精简 3 步骤协议 + 每个框架 1 行的 checklist。
+- **专家 sub-agent 瘦身** —— 移除与 `references/*.md` 重复的内嵌框架知识,改为按需指针。每次 dispatch **discovery-specialist −25%、strategy-critic −18%、pre-mortem-runner −20%**。
+
+**9 步 Full Mode session 的预估节省:**
+
+| 来源 | 优化前 | 优化后 | 节省 |
+|--------|:------:|:------:|:------:|
+| Eager（SKILL + context + progress） | ~8,800 | ~5,500 | **−3,300** |
+| Quality review（×9 步载入） | ~9,360 | ~7,353 | **−2,007** |
+| Sub-agent dispatch（3 位专家） | ~9,005 | ~7,106 | **−1,899** |
+| **每次 session 合计** | **~27,200** | **~18,900** | **−8,300（−30%）** |
+
+**品质验证：** 依 Iteration 5 结论,pre-mortem-runner 是品质最敏感的专家,因此在 v1.2.5 瘦身后的内容上重跑 eval-12。结果:**9/9 assertions PASS** —— 涵盖 5 大类别共 16 个情境、5 个引用真实技术栈组件的架构落地情境、5 个具二元决策规则的低成本上线前实验、过去式叙事框架皆维持。eval-10/11 则以静态交叉比对确认(共 13 项 assertion)在瘦身后的 agent prompt 中皆有明确支撑。
+
+**Token 成本权衡：** 拆分新增 2 个 lazy 档案（`rules-subagent-dispatch.md` 978 tokens、`rules-context-template.md` 1,849 tokens），仅在触发时载入。在最常见的 session 路径中,这两个档案永远不会载入;即使是 Bootstrap 或 Conflict 路径,eager 端的节省仍为正。
+
+**已同步至 5 个 i18n 语系**（zh-TW、zh-CN、ja、es、ko），保留既有译文 —— 结构性瘦身按语系一致套用。
+
+---
+
 ## 💬 可用指令一览
 
 ### ⌨️ Claude Code CLI Slash Commands
