@@ -487,23 +487,23 @@ The `evals/` directory ships two complementary test suites and a deterministic s
 ### Running locally
 
 ```bash
-# Trigger eval — does the skill auto-trigger for natural-language prompts?
-python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
-  --json evals/eval-results.trigger.json
+# Recommended: one command runs both suites
+npm run eval
 
-# Behavioral eval — does the skill produce the right output for each scenario?
-# Uses claude as the assistant AND as a judge (--runs 3 takes majority vote).
-python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
-  --json evals/eval-results.behavioral.json
+# Or run pieces individually
+npm run eval:trigger      # ~5–15 min — checks if the skill auto-triggers
+npm run eval:behavioral   # ~10–40 min — uses claude as assistant AND judge
+npm run eval:zh-TW        # behavioral eval against the zh-TW eval set
+npm run eval:quick        # 1 run only, no majority vote (fast iteration)
+npm run eval:test         # unit tests for the scoring module
 
-# Localized variant
-python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
-
-# Scoring unit tests
-python3 -m unittest evals/test_compute_eval_score.py
+# Drop into the underlying Python scripts when you need finer control:
+python3 evals/run_behavioral_eval.py --only 11        # debug a single eval id
+python3 evals/run_behavioral_eval.py --fail-on none   # report without exit 1
+python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-Both runners need the `claude` CLI on `PATH` and an `ANTHROPIC_API_KEY` env var. Local runs default to `--runs 3` (majority vote handles LLM variance); CI uses `--runs 1` for cost.
+Local runs default to `--runs 3` (majority vote handles LLM variance); the `claude` CLI uses your Claude Pro/Max OAuth session (`claude login`), so there's no per-token cost. CI uses `--runs 1` and requires the `ANTHROPIC_API_KEY` secret.
 
 ### Severity & scoring
 
@@ -532,6 +532,15 @@ Score starts at 100, deducts per failure, clamps to 0–100.
 | `none` | never; informational mode for local exploration |
 
 A single source of truth — `evals/compute_eval_score.py` — implements all scoring so the two runners cannot drift apart.
+
+### Release checklist
+
+Before bumping the version in `package.json` (a push to `main` with a changed `package.json` triggers `npm publish`):
+
+1. `npm run eval` — get current trigger + behavioral scores
+2. If any **critical** expectation fails, investigate and fix before publishing
+3. If only warnings or info regressed, it's a judgment call — note your reasoning in the commit if you accept the regression
+4. Commit any fixes, bump the version, then `git push`
 
 ---
 

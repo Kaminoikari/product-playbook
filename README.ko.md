@@ -489,23 +489,23 @@ v1.2.0+ 에서 도입된 3개의 전문 sub-agent (`discovery-specialist`, `stra
 ### 로컬 실행
 
 ```bash
-# Trigger eval — 자연어 prompt에서 skill이 자동 트리거되는가?
-python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
-  --json evals/eval-results.trigger.json
+# 권장: 한 명령으로 두 가지 모두 실행
+npm run eval
 
-# Behavioral eval — 각 시나리오에서 skill이 올바른 출력을 생성하는가?
-# claude를 assistant 겸 judge로 사용 (--runs 3으로 다수결)
-python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
-  --json evals/eval-results.behavioral.json
+# 개별 실행
+npm run eval:trigger      # ~5–15분 — skill이 자동 트리거되는가
+npm run eval:behavioral   # ~10–40분 — claude를 assistant 겸 judge로 사용
+npm run eval:zh-TW        # zh-TW 평가 세트로 behavioral eval
+npm run eval:quick        # 1회만 실행, 다수결 없음 (빠른 이터레이션)
+npm run eval:test         # 스코어러 단위 테스트
 
-# 현지화 버전
-python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
-
-# 스코어러 단위 테스트
-python3 -m unittest evals/test_compute_eval_score.py
+# 더 세밀한 제어가 필요할 때 Python 스크립트를 직접 호출:
+python3 evals/run_behavioral_eval.py --only 11        # 단일 eval id 디버그
+python3 evals/run_behavioral_eval.py --fail-on none   # 보고만, exit 1 없음
+python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-두 runner 모두 `claude` CLI가 `PATH`에 있어야 하며 `ANTHROPIC_API_KEY` 환경 변수가 설정되어 있어야 합니다. 로컬은 `--runs 3`이 기본값(다수결로 LLM 변동성 흡수), CI는 비용 절감을 위해 `--runs 1`을 사용합니다.
+로컬은 `--runs 3`이 기본값(다수결로 LLM 변동성 흡수). `claude` CLI는 Claude Pro/Max OAuth 세션(`claude login`)을 사용하므로 토큰당 비용이 없습니다. CI는 `--runs 1`을 사용하며 `ANTHROPIC_API_KEY` secret이 필요합니다.
 
 ### Severity 및 스코어링
 
@@ -534,6 +534,15 @@ python3 -m unittest evals/test_compute_eval_score.py
 | `none` | 절대 실패하지 않음; 로컬 탐색용 informational mode |
 
 모든 스코어링 로직은 `evals/compute_eval_score.py`라는 단일 소스에 집중되어 있어 두 runner가 독립적으로 구현하여 drift하는 것을 방지합니다.
+
+### 릴리스 체크리스트
+
+`package.json` 버전 bump 전 (`main`으로의 push가 `package.json` 변경 시 `npm publish`를 트리거):
+
+1. `npm run eval` — 현재 trigger와 behavioral 점수 확인
+2. **critical** expectation이 하나라도 실패하면 → 게시 전 조사 후 수정
+3. warning이나 info만 회귀 → 판단 사항. 회귀를 수용하면 commit에 이유 기록
+4. 수정 commit, 버전 bump, `git push`
 
 ---
 

@@ -489,23 +489,23 @@ Claude Code 会自动：
 ### 本地执行
 
 ```bash
-# Trigger eval — 自然语言 prompt 是否会自动触发 skill?
-python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
-  --json evals/eval-results.trigger.json
+# 推荐：一个命令跑完两套
+npm run eval
 
-# Behavioral eval — 每个场景下 skill 是否产出正确的内容?
-# 用 claude 同时当 assistant 和 judge（--runs 3 取多数决）
-python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
-  --json evals/eval-results.behavioral.json
+# 或分开跑
+npm run eval:trigger      # ~5–15 分钟 — skill 是否自动触发
+npm run eval:behavioral   # ~10–40 分钟 — claude 同时当 assistant 和 judge
+npm run eval:zh-TW        # 用 zh-TW 评测集跑 behavioral eval
+npm run eval:quick        # 只跑 1 次，不取多数决（快速 iterate 用）
+npm run eval:test         # 计分模块单元测试
 
-# 本地化版本
-python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
-
-# 计分模块单元测试
-python3 -m unittest evals/test_compute_eval_score.py
+# 需要更细的 flag 控制时，直接调用底层 Python 脚本：
+python3 evals/run_behavioral_eval.py --only 11        # debug 单一 eval id
+python3 evals/run_behavioral_eval.py --fail-on none   # 只报告，不 exit 1
+python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-两个 runner 都需要 `claude` CLI 在 `PATH` 上，并设好 `ANTHROPIC_API_KEY` 环境变量。本地默认 `--runs 3`（多数决可吸收 LLM 变异性）；CI 为了成本用 `--runs 1`。
+本地默认 `--runs 3`（多数决可吸收 LLM 变异性）；`claude` CLI 走你的 Claude Pro/Max OAuth session（`claude login`），没有按 token 计费的成本。CI 用 `--runs 1` 并需要 `ANTHROPIC_API_KEY` secret。
 
 ### Severity 与计分
 
@@ -534,6 +534,15 @@ python3 -m unittest evals/test_compute_eval_score.py
 | `none` | 永不失败；本地探索 informational mode |
 
 所有计分逻辑集中在 `evals/compute_eval_score.py` 这个单一来源，避免两个 runner 各自实作造成 drift。
+
+### 发版 checklist
+
+bump `package.json` version 之前（push 到 `main` 且 `package.json` 变动会触发 `npm publish`）：
+
+1. `npm run eval` — 取得当前 trigger + behavioral 分数
+2. 任一 **critical** expectation 失败 → 发版前先查清楚并修掉
+3. 只是 warning 或 info 退步 → 自行判断；若接受退步，在 commit message 写清楚理由
+4. 修完 commit，bump version，然后 `git push`
 
 ---
 

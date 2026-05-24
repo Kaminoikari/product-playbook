@@ -490,23 +490,23 @@ token 削減イテレーション。スキル内容のセマンティクスは�
 ### ローカル実行
 
 ```bash
-# Trigger eval — 自然言語の prompt で skill が自動トリガーされるか?
-python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
-  --json evals/eval-results.trigger.json
+# 推奨：1 コマンドで両方を実行
+npm run eval
 
-# Behavioral eval — 各シナリオで skill が正しい出力を生成するか?
-# claude を assistant 兼 judge として使用（--runs 3 で多数決）
-python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
-  --json evals/eval-results.behavioral.json
+# 個別に実行
+npm run eval:trigger      # ~5–15 分 — skill が自動トリガーされるか
+npm run eval:behavioral   # ~10–40 分 — claude を assistant 兼 judge として使用
+npm run eval:zh-TW        # zh-TW 評価セットで behavioral eval
+npm run eval:quick        # 1 回のみ実行、多数決なし（高速イテレーション）
+npm run eval:test         # スコアラーのユニットテスト
 
-# ローカライズ版
-python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
-
-# スコアラーのユニットテスト
-python3 -m unittest evals/test_compute_eval_score.py
+# より細かい制御が必要な場合は、Python スクリプトを直接呼び出します：
+python3 evals/run_behavioral_eval.py --only 11        # 単一の eval id を debug
+python3 evals/run_behavioral_eval.py --fail-on none   # レポートのみ、exit 1 なし
+python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-両方の runner は `claude` CLI が `PATH` 上にあり、`ANTHROPIC_API_KEY` 環境変数が設定されている必要があります。ローカルは `--runs 3` がデフォルト（多数決で LLM のばらつきを吸収）、CI ではコスト削減のため `--runs 1` を使用します。
+ローカルは `--runs 3` がデフォルト（多数決で LLM のばらつきを吸収）。`claude` CLI は Claude Pro/Max の OAuth セッション（`claude login`）を使うため、トークン課金はありません。CI は `--runs 1` で、`ANTHROPIC_API_KEY` secret が必要です。
 
 ### Severity とスコアリング
 
@@ -535,6 +535,15 @@ python3 -m unittest evals/test_compute_eval_score.py
 | `none` | 失敗しない；ローカル探索用 informational mode |
 
 すべてのスコアリングロジックは `evals/compute_eval_score.py` という単一のソースに集約され、2 つの runner が独自実装で drift することを防ぎます。
+
+### リリース前チェックリスト
+
+`package.json` のバージョン bump 前（`main` への push で `package.json` が変わると `npm publish` が走ります）：
+
+1. `npm run eval` — 現在の trigger と behavioral スコアを取得
+2. **critical** な expectation が失敗 → 公開前に調査して修正
+3. warning や info のみが退化 → 判断次第。退化を受け入れる場合は commit にその理由を残す
+4. 修正があれば commit、バージョン bump、`git push`
 
 ---
 
