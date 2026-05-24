@@ -478,6 +478,61 @@ Una iteración de reducción de tokens. Misma semántica del contenido del skill
 
 ---
 
+## 🧪 Desarrollo y Evals
+
+El directorio `evals/` incluye dos suites de pruebas complementarias y un scorer determinista. El CI (`.github/workflows/eval-gate.yml`) ejecuta ambos en cada PR y en cada push a `main` que cambie `package.json`, y reporta el puntaje en el Job Summary del workflow. **No bloquea merge ni publish** — el maintainer decide si actuar ante regresiones.
+
+### Ejecución local
+
+```bash
+# Trigger eval — ¿el skill se activa automáticamente para prompts de lenguaje natural?
+python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
+  --json evals/eval-results.trigger.json
+
+# Behavioral eval — ¿el skill produce la salida correcta para cada escenario?
+# Usa claude como assistant Y como judge (--runs 3 toma mayoría)
+python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
+  --json evals/eval-results.behavioral.json
+
+# Variante localizada
+python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
+
+# Tests unitarios del scorer
+python3 -m unittest evals/test_compute_eval_score.py
+```
+
+Ambos runners necesitan el CLI `claude` en el `PATH` y la variable de entorno `ANTHROPIC_API_KEY`. Los runs locales usan `--runs 3` por defecto (mayoría absorbe la variabilidad del LLM); CI usa `--runs 1` por costo.
+
+### Severity y scoring
+
+Cada expectation en `evals.json` está etiquetada con una severity:
+
+| Severity | Deducción por fallo | Usado para |
+|---|---|---|
+| `critical` | −15 | Violaciones de Hard Gate, errores de mode-dispatch, separación buyer/user en B2B, defaults de seguridad, integridad de framework (3 capas de JTBD, diagnosis de Rumelt, 15+ escenarios de pre-mortem) |
+| `warning`  | −5  | Profundidad y estructura de calidad (la mayoría de expectations) |
+| `info`     | −1  | Detección de idioma, formato del indicador de progreso |
+
+El score empieza en 100, deduce por fallo, y se clampa a 0–100.
+
+| Banda | Rango | Significado |
+|---|---|---|
+| 🟢 `healthy` | ≥ 90 | Como máximo un fallo crítico |
+| 🟡 `needs-attention` | ≥ 70 | Hasta dos críticos o varios warnings |
+| 🔴 `at-risk` | < 70 | Tres o más críticos; el gate debería fallar |
+
+### Semántica de `--fail-on`
+
+| Valor del flag | El runner sale con código no-cero cuando… |
+|---|---|
+| `critical` | falla cualquier expectation critical (default en CI) |
+| `any` | falla cualquier expectation en cualquier severity |
+| `none` | nunca; modo informativo para exploración local |
+
+Toda la lógica de scoring vive en una sola fuente — `evals/compute_eval_score.py` — para que los dos runners no puedan divergir.
+
+---
+
 ## 💬 Comandos Disponibles
 
 ### ⌨️ Comandos Slash del CLI de Claude Code

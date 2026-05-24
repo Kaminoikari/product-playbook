@@ -1,0 +1,152 @@
+# Eval Report — report trigger + behavioral eval results on every PR and on
+# every push to main that changes package.json (i.e. before publish).
+#
+# IMPORTANT: this workflow is REPORTING, not gating. It runs with
+# --fail-on none so a failing eval never blocks merge or the publish workflow.
+# Severity bands and per-expectation results are surfaced in the Job Summary
+# and uploaded as artifacts. The maintainer decides whether to act on a
+# regression before merging / publishing.
+#
+# Severity bands and scoring logic live in evals/compute_eval_score.py.
+#
+# REQUIRED SECRET:
+#   ANTHROPIC_API_KEY — used by `claude -p` for both the assistant response
+#   and the judge call. Without it both runners exit with an error.
+#
+# Runtime expectation: trigger eval is ~5–15 min and behavioral eval is
+# ~10–40 min (depending on response latency). CI uses --runs 1 to keep
+# cost low; local runs default to --runs 3 for majority voting.
+
+name: Eval Report
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths: [package.json]
+
+permissions:
+  contents: read
+
+jobs:
+  trigger-eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install claude CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install this branch's skill at user level
+        run: |
+          mkdir -p "$HOME/.claude/skills/product-playbook"
+          cp -r ./. "$HOME/.claude/skills/product-playbook/"
+          ls "$HOME/.claude/skills/product-playbook" | head -20
+
+      - name: Fail fast if ANTHROPIC_API_KEY is missing
+        run: |
+          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "::error::ANTHROPIC_API_KEY secret is not set on this repo."
+            echo "Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Run trigger eval (reporting only, never blocks)
+        working-directory: evals
+        run: |
+          python3 run_trigger_test.py \
+            --runs 1 \
+            --workers 2 \
+            --fail-on none \
+            --json eval-results.trigger.json \
+            --markdown eval-results.trigger.md
+
+      - name: Write trigger summary to job summary
+        if: always()
+        working-directory: evals
+        run: |
+          if [ -f eval-results.trigger.md ]; then
+            cat eval-results.trigger.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload trigger results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trigger-eval-results
+          path: |
+            evals/eval-results.trigger.json
+            evals/eval-results.trigger.md
+
+  behavioral-eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install claude CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install this branch's skill at user level
+        run: |
+          mkdir -p "$HOME/.claude/skills/product-playbook"
+          cp -r ./. "$HOME/.claude/skills/product-playbook/"
+
+      - name: Fail fast if ANTHROPIC_API_KEY is missing
+        run: |
+          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "::error::ANTHROPIC_API_KEY secret is not set on this repo."
+            exit 1
+          fi
+
+      - name: Run scoring unit tests
+        working-directory: evals
+        run: python3 -m unittest test_compute_eval_score.py -v
+
+      - name: Run behavioral eval (reporting only, runs=1 in CI)
+        working-directory: evals
+        run: |
+          python3 run_behavioral_eval.py \
+            --runs 1 \
+            --workers 2 \
+            --fail-on none \
+            --json eval-results.behavioral.json \
+            --markdown eval-results.behavioral.md
+
+      - name: Write behavioral summary to job summary
+        if: always()
+        working-directory: evals
+        run: |
+          if [ -f eval-results.behavioral.md ]; then
+            cat eval-results.behavioral.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload behavioral results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: behavioral-eval-results
+          path: |
+            evals/eval-results.behavioral.json
+            evals/eval-results.behavioral.md

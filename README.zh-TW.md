@@ -477,6 +477,61 @@ Claude Code 會自動：
 
 ---
 
+## 🧪 開發與評測
+
+`evals/` 目錄包含兩套互補的測試集和一個確定性計分模組。CI（`.github/workflows/eval-gate.yml`）會在每個 PR 與每次 push 到 `main`（含 `package.json` 變動）時跑這兩套，把分數寫進 workflow 的 Job Summary。**不擋 merge、不擋 publish** — 看到結果後由維護者決定要不要調整。
+
+### 本地執行
+
+```bash
+# Trigger eval — 自然語言 prompt 是否會自動觸發 skill?
+python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
+  --json evals/eval-results.trigger.json
+
+# Behavioral eval — 每個情境下 skill 是否產出正確的內容?
+# 用 claude 同時當 assistant 和 judge（--runs 3 取多數決）
+python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
+  --json evals/eval-results.behavioral.json
+
+# 在地化版本
+python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
+
+# 計分模組單元測試
+python3 -m unittest evals/test_compute_eval_score.py
+```
+
+兩個 runner 都需要 `claude` CLI 在 `PATH` 上，並設好 `ANTHROPIC_API_KEY` 環境變數。本地預設 `--runs 3`（多數決可吸收 LLM 變異性）；CI 為了成本用 `--runs 1`。
+
+### Severity 與計分
+
+`evals.json` 裡每個 expectation 都標一個 severity：
+
+| Severity | 失敗扣分 | 適用情境 |
+|---|---|---|
+| `critical` | −15 | Hard Gate 違反、Mode dispatch 錯誤、B2B buyer/user 分開、Security default-on、框架完整性（JTBD 三層、Rumelt diagnosis、pre-mortem 15+ scenarios）|
+| `warning`  | −5  | 品質深度與結構（多數 expectations）|
+| `info`     | −1  | 語言偵測、Progress indicator 格式 |
+
+起點 100 分，按失敗 deduct，clamp 在 0–100。
+
+| Band | 範圍 | 含意 |
+|---|---|---|
+| 🟢 `healthy` | ≥ 90 | 最多一個 critical 失敗 |
+| 🟡 `needs-attention` | ≥ 70 | 兩個 critical 以下或數個 warning |
+| 🔴 `at-risk` | < 70 | 三個以上 critical；gate 應失敗 |
+
+### `--fail-on` 語意
+
+| Flag 值 | Runner 在以下情況 exit non-zero |
+|---|---|
+| `critical` | 任一 critical expectation 失敗（CI 預設）|
+| `any` | 任一 expectation 失敗（不分 severity）|
+| `none` | 永不失敗；本地探索 informational mode |
+
+所有計分邏輯集中在 `evals/compute_eval_score.py` 這個單一來源，避免兩個 runner 各自實作造成 drift。
+
+---
+
 ## 💬 可用指令一覽
 
 ### ⌨️ Claude Code CLI Slash Commands

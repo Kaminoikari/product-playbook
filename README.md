@@ -476,6 +476,61 @@ A token-reduction iteration. Same skill content semantics, smaller footprint per
 
 ---
 
+## 🧪 Development & Evals
+
+The `evals/` directory ships two complementary test suites and a deterministic scorer. CI (`.github/workflows/eval-gate.yml`) runs both on every PR and on every push to `main` that changes `package.json`, then reports the score to the workflow Job Summary. **It never blocks merge or publish** — the maintainer decides whether to act on regressions.
+
+### Running locally
+
+```bash
+# Trigger eval — does the skill auto-trigger for natural-language prompts?
+python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
+  --json evals/eval-results.trigger.json
+
+# Behavioral eval — does the skill produce the right output for each scenario?
+# Uses claude as the assistant AND as a judge (--runs 3 takes majority vote).
+python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
+  --json evals/eval-results.behavioral.json
+
+# Localized variant
+python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
+
+# Scoring unit tests
+python3 -m unittest evals/test_compute_eval_score.py
+```
+
+Both runners need the `claude` CLI on `PATH` and an `ANTHROPIC_API_KEY` env var. Local runs default to `--runs 3` (majority vote handles LLM variance); CI uses `--runs 1` for cost.
+
+### Severity & scoring
+
+Every expectation in `evals.json` is tagged with one of three severities:
+
+| Severity | Deduction per failure | Used for |
+|---|---|---|
+| `critical` | −15 | Hard Gate violations, mode-dispatch errors, B2B buyer/user separation, security defaults, framework-level integrity (JTBD three layers, Rumelt diagnosis, pre-mortem 15+ scenarios) |
+| `warning`  | −5  | Quality depth and structure (most expectations) |
+| `info`     | −1  | Language detection, progress-indicator formatting |
+
+Score starts at 100, deducts per failure, clamps to 0–100.
+
+| Band | Range | Meaning |
+|---|---|---|
+| 🟢 `healthy` | ≥ 90 | At most one critical failure |
+| 🟡 `needs-attention` | ≥ 70 | Up to two criticals or several warnings |
+| 🔴 `at-risk` | < 70 | Three or more criticals; gate should fail |
+
+### `--fail-on` semantics
+
+| Flag value | Runner exits non-zero when… |
+|---|---|
+| `critical` | any critical expectation failed (CI default) |
+| `any` | any expectation failed at any severity |
+| `none` | never; informational mode for local exploration |
+
+A single source of truth — `evals/compute_eval_score.py` — implements all scoring so the two runners cannot drift apart.
+
+---
+
 ## 💬 Available Commands
 
 ### ⌨️ Claude Code CLI Slash Commands

@@ -4,15 +4,31 @@
 Uses `claude -p` with stream-json output, checks if Skill tool is called
 with 'product-playbook' in the input. Tests the REAL installed skill,
 not a temp command file.
+
+Severity convention (since trigger items have no per-item severity):
+  - false negative (should_trigger=true but skill did NOT fire) -> critical
+  - false positive (should_trigger=false but skill DID fire)    -> warning
+  - true positive / true negative                               -> pass
+
+This matches portaly-sentry's CRITICAL/WARNING/INFO split: a missed trigger
+silently breaks the user-facing skill (critical); a spurious trigger is
+noisy but recoverable (warning).
 """
 
+import argparse
 import json
 import os
 import subprocess
 import sys
-import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from compute_eval_score import (  # noqa: E402
+    compute_score,
+    format_summary_markdown,
+    should_fail,
+)
 
 
 def test_single_query(query: str, timeout: int = 60) -> bool:
@@ -30,13 +46,12 @@ def test_single_query(query: str, timeout: int = 60) -> bool:
         result = subprocess.run(
             cmd, capture_output=True, text=True,
             timeout=timeout, env=env,
-            cwd=str(Path.home())  # Run from home to avoid project-level SKILL.md
+            cwd=str(Path.home())
         )
         output = result.stdout
     except subprocess.TimeoutExpired:
         return False
 
-    # Check stream events for Skill tool invocation with product-playbook
     for line in output.split("\n"):
         line = line.strip()
         if not line:
@@ -46,7 +61,6 @@ def test_single_query(query: str, timeout: int = 60) -> bool:
         except json.JSONDecodeError:
             continue
 
-        # Check tool_use in assistant message
         if event.get("type") == "assistant":
             message = event.get("message", {})
             for block in message.get("content", []):
@@ -58,35 +72,38 @@ def test_single_query(query: str, timeout: int = 60) -> bool:
                     if name == "Skill" and "product-" in inp:
                         return True
 
-        # Check stream events for early detection
         if event.get("type") == "stream_event":
             se = event.get("event", {})
             se_type = se.get("type", "")
-
             if se_type == "content_block_start":
                 cb = se.get("content_block", {})
                 if cb.get("type") == "tool_use" and cb.get("name") == "Skill":
-                    return True  # Skill tool called = triggered
+                    return True
 
     return False
 
 
 def main():
-    default_eval = "trigger-eval.json"
-    if len(sys.argv) > 3:
-        default_eval = sys.argv[3]
-    eval_path = Path(__file__).parent / default_eval
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--eval-file", default=str(Path(__file__).parent / "trigger-eval.json"))
+    ap.add_argument("--runs", type=int, default=1, help="Runs per query (default 1)")
+    ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--timeout", type=int, default=60)
+    ap.add_argument("--fail-on", choices=["critical", "any", "none"], default="none")
+    ap.add_argument("--json", dest="json_out", default=None,
+                    help="Path to write machine-readable results")
+    ap.add_argument("--markdown", dest="markdown_out", default=None,
+                    help="Path to write GitHub-flavored Markdown summary")
+    args = ap.parse_args()
+
+    eval_path = Path(args.eval_file)
     eval_set = json.loads(eval_path.read_text())
 
-    runs_per_query = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-    max_workers = int(sys.argv[2]) if len(sys.argv) > 2 else 4
+    print(f"Testing {len(eval_set)} queries × {args.runs} runs (workers={args.workers}) from {eval_path.name}")
+    print("=" * 72)
 
-    print(f"Testing {len(eval_set)} queries x {runs_per_query} runs (workers={max_workers})")
-    print("=" * 70)
-
-    results = []
-    total_pass = 0
-    total_fail = 0
+    expectation_results = []
+    per_query = []
     tp = fp = tn = fn = 0
 
     for i, item in enumerate(eval_set):
@@ -94,71 +111,91 @@ def main():
         expected = item["should_trigger"]
         triggers = 0
 
-        # Run multiple times
-        with ProcessPoolExecutor(max_workers=max_workers) as pool:
-            futures = [pool.submit(test_single_query, query) for _ in range(runs_per_query)]
+        with ProcessPoolExecutor(max_workers=args.workers) as pool:
+            futures = [
+                pool.submit(test_single_query, query, args.timeout)
+                for _ in range(args.runs)
+            ]
             for f in as_completed(futures):
                 if f.result():
                     triggers += 1
 
-        trigger_rate = triggers / runs_per_query
-        passed = (expected and trigger_rate >= 0.5) or (not expected and trigger_rate < 0.5)
+        trigger_rate = triggers / args.runs
+        fired = trigger_rate >= 0.5
+        passed = (expected == fired)
 
         if passed:
-            total_pass += 1
+            if expected:
+                tp += 1
+            else:
+                tn += 1
+            severity = "info"
         else:
-            total_fail += 1
-
-        if expected and trigger_rate >= 0.5:
-            tp += 1
-        elif expected:
-            fn += 1
-        elif trigger_rate >= 0.5:
-            fp += 1
-        else:
-            tn += 1
+            if expected and not fired:
+                fn += 1
+                severity = "critical"
+            else:
+                fp += 1
+                severity = "warning"
 
         status = "PASS" if passed else "FAIL"
         label = "should_trigger" if expected else "should_NOT_trigger"
-        print(f"  [{status}] rate={triggers}/{runs_per_query} ({label}): {query[:80]}")
+        print(f"  [{status}] rate={triggers}/{args.runs} ({label}): {query[:80]}")
 
-        results.append({
+        per_query.append({
             "query": query,
             "should_trigger": expected,
+            "fired": fired,
             "triggers": triggers,
-            "runs": runs_per_query,
+            "runs": args.runs,
             "trigger_rate": trigger_rate,
             "pass": passed,
+            "severity_on_fail": severity,
         })
 
-    print("=" * 70)
+        expectation_results.append({
+            "eval_id": i + 1,
+            "eval_name": f"trigger-query-{i + 1}",
+            "expectation_text": f"{'Should' if expected else 'Should NOT'} trigger product-playbook: {query[:120]}",
+            "severity": severity,
+            "passed": passed,
+        })
+
+    summary = compute_score(expectation_results)
+    print("=" * 72)
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
     accuracy = (tp + tn) / len(eval_set) if eval_set else 0
     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
 
-    print(f"Results: {total_pass}/{len(eval_set)} passed")
-    print(f"  TP={tp} FP={fp} TN={tn} FN={fn}")
+    print(f"Confusion: TP={tp} FP={fp} TN={tn} FN={fn}")
     print(f"  Precision={precision:.0%} Recall={recall:.0%} Accuracy={accuracy:.0%} F1={f1:.0%}")
+    print(f"Score: {summary['score']}/100  band={summary['band']}")
+    print(f"  critical_failures={summary['critical_failures']} (false negatives)  "
+          f"warning_failures={summary['warning_failures']} (false positives)")
 
-    # Save results
-    output = {
-        "results": results,
-        "summary": {
-            "passed": total_pass,
-            "failed": total_fail,
-            "total": len(eval_set),
-            "tp": tp, "fp": fp, "tn": tn, "fn": fn,
-            "precision": precision,
-            "recall": recall,
-            "accuracy": accuracy,
-            "f1": f1,
-        }
-    }
-    out_path = Path(__file__).parent / "trigger-results.json"
-    out_path.write_text(json.dumps(output, indent=2, ensure_ascii=False))
-    print(f"\nResults saved to {out_path}")
+    if args.json_out:
+        Path(args.json_out).write_text(json.dumps({
+            "kind": "trigger",
+            "eval_file": eval_path.name,
+            "runs_per_query": args.runs,
+            "per_query": per_query,
+            "confusion": {"tp": tp, "fp": fp, "tn": tn, "fn": fn,
+                          "precision": precision, "recall": recall,
+                          "accuracy": accuracy, "f1": f1},
+            "summary": {k: v for k, v in summary.items() if k != "breakdown"},
+            "breakdown": summary["breakdown"],
+        }, indent=2, ensure_ascii=False))
+        print(f"  → wrote {args.json_out}")
+
+    if args.markdown_out:
+        Path(args.markdown_out).write_text(
+            format_summary_markdown(summary, title="Trigger Eval Results")
+        )
+        print(f"  → wrote {args.markdown_out}")
+
+    return 1 if should_fail(summary, args.fail_on) else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

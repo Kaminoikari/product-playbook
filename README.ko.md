@@ -478,6 +478,61 @@ v1.2.0+ 에서 도입된 3개의 전문 sub-agent (`discovery-specialist`, `stra
 
 ---
 
+## 🧪 개발 및 평가
+
+`evals/` 디렉터리는 두 가지 보완적 테스트 세트와 결정론적 스코어러를 포함합니다. CI(`.github/workflows/eval-gate.yml`)는 모든 PR과 `package.json`을 변경하는 `main`으로의 push에서 두 가지 모두 실행하고, 점수를 workflow Job Summary에 기록합니다. **merge도 publish도 차단하지 않습니다** — 회귀에 대응할지는 유지보수자가 판단합니다.
+
+### 로컬 실행
+
+```bash
+# Trigger eval — 자연어 prompt에서 skill이 자동 트리거되는가?
+python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
+  --json evals/eval-results.trigger.json
+
+# Behavioral eval — 각 시나리오에서 skill이 올바른 출력을 생성하는가?
+# claude를 assistant 겸 judge로 사용 (--runs 3으로 다수결)
+python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
+  --json evals/eval-results.behavioral.json
+
+# 현지화 버전
+python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
+
+# 스코어러 단위 테스트
+python3 -m unittest evals/test_compute_eval_score.py
+```
+
+두 runner 모두 `claude` CLI가 `PATH`에 있어야 하며 `ANTHROPIC_API_KEY` 환경 변수가 설정되어 있어야 합니다. 로컬은 `--runs 3`이 기본값(다수결로 LLM 변동성 흡수), CI는 비용 절감을 위해 `--runs 1`을 사용합니다.
+
+### Severity 및 스코어링
+
+`evals.json`의 각 expectation에는 severity가 태그됩니다:
+
+| Severity | 실패 시 감점 | 적용 범위 |
+|---|---|---|
+| `critical` | −15 | Hard Gate 위반, Mode dispatch 오류, B2B buyer/user 분리, Security default-on, 프레임워크 완전성(JTBD 3계층, Rumelt diagnosis, pre-mortem 15+ 시나리오) |
+| `warning`  | −5  | 품질 깊이와 구조(대부분의 expectations) |
+| `info`     | −1  | 언어 감지, Progress indicator 형식 |
+
+100점에서 시작하여 실패당 차감, 0–100으로 클램프.
+
+| Band | 범위 | 의미 |
+|---|---|---|
+| 🟢 `healthy` | ≥ 90 | critical 실패 최대 1개 |
+| 🟡 `needs-attention` | ≥ 70 | critical 2개 이하 또는 다수의 warning |
+| 🔴 `at-risk` | < 70 | critical 3개 이상; gate 실패 대상 |
+
+### `--fail-on` 의미론
+
+| Flag 값 | Runner가 exit non-zero가 되는 조건 |
+|---|---|
+| `critical` | critical expectation이 하나라도 실패 (CI 기본값) |
+| `any` | severity와 관계없이 임의 expectation 실패 |
+| `none` | 절대 실패하지 않음; 로컬 탐색용 informational mode |
+
+모든 스코어링 로직은 `evals/compute_eval_score.py`라는 단일 소스에 집중되어 있어 두 runner가 독립적으로 구현하여 drift하는 것을 방지합니다.
+
+---
+
 ## 💬 사용 가능한 명령
 
 ### ⌨️ Claude Code CLI 슬래시 명령

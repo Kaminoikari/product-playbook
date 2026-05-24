@@ -16,3 +16,11 @@ Thumbs.db
 .product-dev-active
 .product-playbook-progress.md
 .product-context.md
+
+# Python
+__pycache__/
+*.pyc
+
+# Eval run outputs
+evals/eval-results.*.json
+evals/eval-results.*.md

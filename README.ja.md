@@ -479,6 +479,61 @@ token 削減イテレーション。スキル内容のセマンティクスは�
 
 ---
 
+## 🧪 開発と評価
+
+`evals/` ディレクトリには 2 つの補完的なテストセットと決定論的なスコアラーが含まれます。CI（`.github/workflows/eval-gate.yml`）はすべての PR と `package.json` を変更する `main` への push で両方を実行し、スコアを workflow の Job Summary に書き込みます。**merge も publish もブロックしません** — リグレッションに対応するかどうかはメンテナが判断します。
+
+### ローカル実行
+
+```bash
+# Trigger eval — 自然言語の prompt で skill が自動トリガーされるか?
+python3 evals/run_trigger_test.py --runs 3 --workers 4 --fail-on critical \
+  --json evals/eval-results.trigger.json
+
+# Behavioral eval — 各シナリオで skill が正しい出力を生成するか?
+# claude を assistant 兼 judge として使用（--runs 3 で多数決）
+python3 evals/run_behavioral_eval.py --runs 3 --workers 2 --fail-on critical \
+  --json evals/eval-results.behavioral.json
+
+# ローカライズ版
+python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3
+
+# スコアラーのユニットテスト
+python3 -m unittest evals/test_compute_eval_score.py
+```
+
+両方の runner は `claude` CLI が `PATH` 上にあり、`ANTHROPIC_API_KEY` 環境変数が設定されている必要があります。ローカルは `--runs 3` がデフォルト（多数決で LLM のばらつきを吸収）、CI ではコスト削減のため `--runs 1` を使用します。
+
+### Severity とスコアリング
+
+`evals.json` の各 expectation には severity がタグ付けされています：
+
+| Severity | 失敗時の減点 | 適用範囲 |
+|---|---|---|
+| `critical` | −15 | Hard Gate 違反、Mode dispatch エラー、B2B buyer/user 分離、Security default-on、フレームワークの完全性（JTBD 3 層、Rumelt diagnosis、pre-mortem 15+ シナリオ）|
+| `warning`  | −5  | 品質の深さと構造（多くの expectations）|
+| `info`     | −1  | 言語検出、Progress indicator フォーマット |
+
+100 点からスタート、失敗ごとに減点、0–100 にクランプ。
+
+| Band | 範囲 | 意味 |
+|---|---|---|
+| 🟢 `healthy` | ≥ 90 | critical 失敗は最大 1 つ |
+| 🟡 `needs-attention` | ≥ 70 | critical 2 つまで、または数個の warning |
+| 🔴 `at-risk` | < 70 | critical が 3 つ以上；gate 失敗の対象 |
+
+### `--fail-on` のセマンティクス
+
+| Flag 値 | Runner が exit non-zero になる条件 |
+|---|---|
+| `critical` | critical な expectation が 1 つでも失敗（CI デフォルト）|
+| `any` | severity 問わず任意の expectation が失敗 |
+| `none` | 失敗しない；ローカル探索用 informational mode |
+
+すべてのスコアリングロジックは `evals/compute_eval_score.py` という単一のソースに集約され、2 つの runner が独自実装で drift することを防ぎます。
+
+---
+
 ## 💬 利用可能なコマンド
 
 ### ⌨️ Claude Code CLIスラッシュコマンド
