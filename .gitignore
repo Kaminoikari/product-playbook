@@ -21,6 +21,8 @@ Thumbs.db
 __pycache__/
 *.pyc
 
-# Eval run outputs
-evals/eval-results.*.json
-evals/eval-results.*.md
+# Eval run outputs (any *-results.* or smoke-test.* under evals/)
+evals/*-results.json
+evals/*-results.md
+evals/smoke-test.json
+evals/smoke-test.md
