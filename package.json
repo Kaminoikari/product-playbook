@@ -39,6 +39,7 @@
     "install.sh",
     "SKILL.md",
     "commands/",
+    "agents/",
     "hooks/",
     "references/",
     "i18n/",

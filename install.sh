@@ -309,6 +309,10 @@ do_install() {
     [ -d "$src_dir/commands" ] && cp -r "$src_dir/commands" "$SKILL_DIR/"
   fi
 
+  # Sub-agents (language-agnostic — each agent's system prompt instructs it
+  # to reply in the orchestrator's language, so there is no per-language copy)
+  [ -d "$src_dir/agents" ] && cp -r "$src_dir/agents" "$SKILL_DIR/"
+
   # Write version marker (semver from package.json for npm comparison)
   local pkg_version=""
   if [ -f "$src_dir/package.json" ]; then
