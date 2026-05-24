@@ -50,10 +50,13 @@ The Product Playbook 是一個 **Claude AI Skill**，能夠系統性地引導你
 
 ### 方法一：Claude.ai 自訂 Skill
 
-1. 下載本 repo 的 zip 檔
-2. 前往 [Claude.ai](https://claude.ai) → 設定 → 自訂 Skill
-3. 上傳整個 `product-playbook/` 資料夾
-4. 在對話中說「我想做一個產品」即可觸發
+> ⚠️ 不要用 GitHub 的「Download ZIP」— 整個 repo 約 70MB（demo GIF 佔大宗），Claude.ai 自訂 Skill 上傳上限是 30MB。
+
+1. 從 [latest release](https://github.com/kaminoikari/product-playbook/releases/latest) 下載 `product-playbook-claude-ai-v<最新版>.zip`（約 900KB）
+2. 本機解壓縮
+3. 前往 [Claude.ai](https://claude.ai) → 設定 → 自訂 Skill
+4. 上傳解壓後的 `product-playbook/` 資料夾
+5. 在對話中說「我想做一個產品」即可觸發
 
 ### 方法二：Claude Code Plugin
 

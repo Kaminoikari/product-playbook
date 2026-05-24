@@ -47,3 +47,25 @@ jobs:
             --title "${{ steps.version.outputs.tag }}" \
             --generate-notes \
             --latest
+
+      # Claude.ai Custom Skills cap uploads at 30MB. The plain GitHub
+      # "Download ZIP" of this repo is ~70MB because of demo GIFs in
+      # assets/. Ship a trimmed bundle (~900KB) so the README's
+      # "Upload to Claude.ai" path actually works.
+      - uses: actions/setup-node@v4
+        if: steps.version.outputs.exists == 'false'
+        with:
+          node-version: 20
+
+      - name: Build Claude.ai upload bundle
+        if: steps.version.outputs.exists == 'false'
+        run: bash scripts/build-claude-ai-bundle.sh
+
+      - name: Attach Claude.ai bundle to release
+        if: steps.version.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ steps.version.outputs.tag }}" \
+            "product-playbook-claude-ai-${{ steps.version.outputs.tag }}.zip" \
+            --clobber

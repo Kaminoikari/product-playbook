@@ -50,9 +50,12 @@ The Product Playbook은 제로부터 원까지 제품 기획 전 과정을 체�
 
 ### 옵션 1: Claude.ai 커스텀 스킬
 
-1. 이 레포를 zip 파일로 다운로드
-2. [Claude.ai](https://claude.ai) → 설정 → 커스텀 스킬로 이동
-3. `product-playbook/` 전체 폴더 업로드
+> ⚠️ GitHub의 "Download ZIP"을 사용하지 마세요 — 레포는 약 70MB(demo GIF가 대부분)이고 Claude.ai 커스텀 스킬 업로드 상한은 30MB입니다.
+
+1. [최신 릴리스](https://github.com/kaminoikari/product-playbook/releases/latest)에서 `product-playbook-claude-ai-v<최신>.zip`(약 900KB) 다운로드
+2. 로컬에서 압축 해제
+3. [Claude.ai](https://claude.ai) → 설정 → 커스텀 스킬로 이동
+4. 압축 해제된 `product-playbook/` 폴더 업로드
 4. 대화에서 "제품을 만들고 싶어요"라고 말하면 스킬이 트리거됩니다
 
 ### 옵션 2: Claude Code Plugin

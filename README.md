@@ -50,9 +50,12 @@ I want to build a product
 
 ### Option 1: Claude.ai Custom Skill
 
-1. Download this repo as a zip file
-2. Go to [Claude.ai](https://claude.ai) → Settings → Custom Skills
-3. Upload the entire `product-playbook/` folder
+> ⚠️ Don't use GitHub's "Download ZIP" — the repo is ~70MB (demo GIFs) and Claude.ai's Custom Skills uploader caps at 30MB.
+
+1. Download `product-playbook-claude-ai-v<latest>.zip` (~900KB) from the [latest release](https://github.com/kaminoikari/product-playbook/releases/latest)
+2. Unzip it locally
+3. Go to [Claude.ai](https://claude.ai) → Settings → Custom Skills
+4. Upload the `product-playbook/` folder from the unzipped contents
 4. Say "I want to build a product" in a conversation to trigger the skill
 
 ### Option 2: Claude Code Plugin

@@ -50,10 +50,13 @@ The Product Playbookは、ゼロから一まで体系的にプロダクト企画
 
 ### オプション1：Claude.ai カスタムスキル
 
-1. このリポジトリをzipファイルとしてダウンロード
-2. [Claude.ai](https://claude.ai) → 設定 → カスタムスキルに移動
-3. `product-playbook/`フォルダ全体をアップロード
-4. 会話で「プロダクトを作りたい」と言ってスキルをトリガー
+> ⚠️ GitHubの「Download ZIP」は使わないでください — レポは約70MB（demo GIFが大半）あり、Claude.aiカスタムスキルのアップロード上限は30MBです。
+
+1. [最新リリース](https://github.com/kaminoikari/product-playbook/releases/latest)から `product-playbook-claude-ai-v<最新>.zip`（約900KB）をダウンロード
+2. ローカルで解凍
+3. [Claude.ai](https://claude.ai) → 設定 → カスタムスキルに移動
+4. 解凍後の `product-playbook/` フォルダをアップロード
+5. 会話で「プロダクトを作りたい」と言ってスキルをトリガー
 
 ### 方法2：Claude Code Plugin
 
