@@ -479,7 +479,11 @@ Claude Code 會自動：
 
 ## 🧪 開發與評測
 
-`evals/` 目錄包含兩套互補的測試集和一個確定性計分模組。CI（`.github/workflows/eval-gate.yml`）會在每個 PR 與每次 push 到 `main`（含 `package.json` 變動）時跑這兩套，把分數寫進 workflow 的 Job Summary。**不擋 merge、不擋 publish** — 看到結果後由維護者決定要不要調整。
+`evals/` 目錄包含兩套互補的測試集和一個確定性計分模組。
+
+**本地（免費，推薦）**：用 `claude` CLI 搭配你的 Claude Pro/Max 訂閱（先 `claude login` 一次）跑這些 script。不需要 API key、沒有額外成本。整套 eval 系統就是設計來在每次發版前本地跑一遍。
+
+**CI（選用，付費）**：`.github/workflows/eval-gate.yml` 會在每個 PR 與每次 push 到 `main`（含 `package.json` 變動）時跑這兩套，把分數寫進 workflow 的 Job Summary。**不擋 merge、不擋 publish** — 看到結果後由維護者決定要不要調整。CI 需要 `ANTHROPIC_API_KEY` secret（GitHub Actions 在 headless 容器無法走 OAuth）；沒設 secret 時 eval job **會乾淨地 skip**（灰色 ⏭️），不會出現誤導的紅叉。
 
 ### 本地執行
 

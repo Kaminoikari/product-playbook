@@ -9,13 +9,20 @@
 #
 # Severity bands and scoring logic live in evals/compute_eval_score.py.
 #
-# REQUIRED SECRET:
-#   ANTHROPIC_API_KEY — used by `claude -p` for both the assistant response
-#   and the judge call. Without it both runners exit with an error.
+# AUTH MODEL:
+#   - Local: developers run the same scripts with `claude` CLI authenticated
+#     via Claude Pro/Max OAuth (`claude login`). No API key required and no
+#     marginal cost beyond the subscription.
+#   - CI: GitHub Actions cannot use OAuth in a headless container, so the
+#     `ANTHROPIC_API_KEY` secret is required to run eval here. If the secret
+#     is NOT set, the preflight job skips trigger-eval and behavioral-eval
+#     cleanly (gray ⏭️) instead of producing a misleading red ❌. Repo can
+#     therefore live happily in free local-only mode; add the secret later
+#     to flip on CI reporting.
 #
-# Runtime expectation: trigger eval is ~5–15 min and behavioral eval is
-# ~10–40 min (depending on response latency). CI uses --runs 1 to keep
-# cost low; local runs default to --runs 3 for majority voting.
+# Runtime expectation when enabled: trigger eval is ~5–15 min and behavioral
+# eval is ~10–40 min. CI uses --runs 1 to keep cost low; local runs default
+# to --runs 3 for majority voting.
 
 name: Eval Report
 
@@ -29,7 +36,43 @@ permissions:
   contents: read
 
 jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    outputs:
+      have_key: ${{ steps.check.outputs.have_key }}
+    steps:
+      - name: Check for ANTHROPIC_API_KEY
+        id: check
+        env:
+          KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$KEY" ]; then
+            echo "have_key=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::ANTHROPIC_API_KEY found — eval jobs will run"
+          else
+            echo "have_key=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Eval Report — skipped"
+              echo ""
+              echo "\`ANTHROPIC_API_KEY\` secret is not set on this repo, so CI eval is in **free local-only mode**."
+              echo ""
+              echo "To enable automated reporting:"
+              echo "1. Get a key at <https://console.anthropic.com/>"
+              echo "2. Add it under **Settings → Secrets and variables → Actions** as \`ANTHROPIC_API_KEY\`"
+              echo ""
+              echo "Until then, run evals locally with your Claude Pro/Max subscription:"
+              echo "\`\`\`bash"
+              echo "claude login   # one-time OAuth"
+              echo "python3 evals/run_trigger_test.py --runs 3 --fail-on critical"
+              echo "python3 evals/run_behavioral_eval.py --runs 3 --fail-on critical"
+              echo "\`\`\`"
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::notice::ANTHROPIC_API_KEY not set — skipping eval jobs (free local-only mode). See job summary for how to enable."
+          fi
+
   trigger-eval:
+    needs: preflight
+    if: needs.preflight.outputs.have_key == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -53,14 +96,6 @@ jobs:
           mkdir -p "$HOME/.claude/skills/product-playbook"
           cp -r ./. "$HOME/.claude/skills/product-playbook/"
           ls "$HOME/.claude/skills/product-playbook" | head -20
-
-      - name: Fail fast if ANTHROPIC_API_KEY is missing
-        run: |
-          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
-            echo "::error::ANTHROPIC_API_KEY secret is not set on this repo."
-            echo "Add it under Settings → Secrets and variables → Actions."
-            exit 1
-          fi
 
       - name: Run trigger eval (reporting only, never blocks)
         working-directory: evals
@@ -90,6 +125,8 @@ jobs:
             evals/eval-results.trigger.md
 
   behavioral-eval:
+    needs: preflight
+    if: needs.preflight.outputs.have_key == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -112,13 +149,6 @@ jobs:
         run: |
           mkdir -p "$HOME/.claude/skills/product-playbook"
           cp -r ./. "$HOME/.claude/skills/product-playbook/"
-
-      - name: Fail fast if ANTHROPIC_API_KEY is missing
-        run: |
-          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
-            echo "::error::ANTHROPIC_API_KEY secret is not set on this repo."
-            exit 1
-          fi
 
       - name: Run scoring unit tests
         working-directory: evals

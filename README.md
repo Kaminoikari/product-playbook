@@ -478,7 +478,11 @@ A token-reduction iteration. Same skill content semantics, smaller footprint per
 
 ## 🧪 Development & Evals
 
-The `evals/` directory ships two complementary test suites and a deterministic scorer. CI (`.github/workflows/eval-gate.yml`) runs both on every PR and on every push to `main` that changes `package.json`, then reports the score to the workflow Job Summary. **It never blocks merge or publish** — the maintainer decides whether to act on regressions.
+The `evals/` directory ships two complementary test suites and a deterministic scorer.
+
+**Local (free, recommended):** run the same scripts with the `claude` CLI authenticated via your Claude Pro/Max subscription (`claude login` once). No API key, no marginal cost. The eval system is designed to be run locally before each release.
+
+**CI (optional, paid):** `.github/workflows/eval-gate.yml` will run both suites on every PR and on every push to `main` that changes `package.json`, then report the score to the workflow Job Summary. It **never blocks merge or publish** — the maintainer decides whether to act on regressions. CI requires an `ANTHROPIC_API_KEY` secret because GitHub Actions cannot use OAuth in a headless container; without the secret, eval jobs **skip cleanly** (gray ⏭️) instead of failing red.
 
 ### Running locally
 

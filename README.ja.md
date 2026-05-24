@@ -481,7 +481,11 @@ token 削減イテレーション。スキル内容のセマンティクスは�
 
 ## 🧪 開発と評価
 
-`evals/` ディレクトリには 2 つの補完的なテストセットと決定論的なスコアラーが含まれます。CI（`.github/workflows/eval-gate.yml`）はすべての PR と `package.json` を変更する `main` への push で両方を実行し、スコアを workflow の Job Summary に書き込みます。**merge も publish もブロックしません** — リグレッションに対応するかどうかはメンテナが判断します。
+`evals/` ディレクトリには 2 つの補完的なテストセットと決定論的なスコアラーが含まれます。
+
+**ローカル（無料、推奨）**：`claude` CLI を Claude Pro/Max サブスクリプションで認証して（一度だけ `claude login`）同じスクリプトを実行できます。API key 不要、追加コストなし。eval システムは各リリース前にローカルで実行する設計です。
+
+**CI（オプション、有料）**：`.github/workflows/eval-gate.yml` はすべての PR と `package.json` を変更する `main` への push で両方を実行し、スコアを workflow の Job Summary に書き込みます。**merge も publish もブロックしません** — リグレッションに対応するかどうかはメンテナが判断します。CI には `ANTHROPIC_API_KEY` secret が必要です（GitHub Actions は headless コンテナで OAuth が使えません）。secret 未設定時は eval job が**クリーンに skip**（グレー ⏭️）され、誤解を招く赤バツは出ません。
 
 ### ローカル実行
 
