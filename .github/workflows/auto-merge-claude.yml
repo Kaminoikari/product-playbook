@@ -20,26 +20,35 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -e
           BRANCH="${GITHUB_REF#refs/heads/}"
           echo "Branch: $BRANCH"
 
-          # 取得最新 commit message 作為 PR 標題
+          # No-op when branch is already on main (e.g. local FF-merge then push)
+          if [ -z "$(git rev-list origin/main..HEAD)" ]; then
+            echo "Branch has no commits ahead of main — already merged. Nothing to do."
+            exit 0
+          fi
+
           TITLE=$(git log -1 --format='%s')
 
-          # 建立 PR
-          PR_URL=$(gh pr create \
+          PR_OUTPUT=$(gh pr create \
             --base main \
             --head "$BRANCH" \
             --title "$TITLE" \
             --body "Auto-created from Claude Code mobile branch \`$BRANCH\`" \
-            2>&1) || true
+            2>&1) || PR_EXIT=$?
 
-          # 如果 PR 已存在，取得現有 PR
-          if echo "$PR_URL" | grep -q "already exists"; then
+          if echo "$PR_OUTPUT" | grep -q "already exists"; then
             PR_URL=$(gh pr view "$BRANCH" --json url -q '.url')
+          elif [ -n "${PR_EXIT:-}" ]; then
+            echo "PR creation failed:"
+            echo "$PR_OUTPUT"
+            exit 1
+          else
+            PR_URL="$PR_OUTPUT"
           fi
 
           echo "PR: $PR_URL"
 
-          # 直接 merge
           gh pr merge "$BRANCH" --merge --auto
