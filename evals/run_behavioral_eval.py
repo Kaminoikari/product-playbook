@@ -62,6 +62,28 @@ def get_response(prompt: str, timeout: int = 180) -> str:
     return _run_claude(prompt, timeout=timeout).strip()
 
 
+def _parse_judge_output(raw: str) -> dict | None:
+    """Best-effort JSON extraction from judge stdout. Returns None on failure."""
+    raw = raw.strip()
+    if raw.startswith("```"):
+        raw = raw.strip("`")
+        if raw.startswith("json"):
+            raw = raw[4:]
+        raw = raw.strip()
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+    start = raw.find("{")
+    end = raw.rfind("}")
+    if start == -1 or end == -1:
+        return None
+    try:
+        return json.loads(raw[start : end + 1])
+    except json.JSONDecodeError:
+        return None
+
+
 def judge(response_text: str, expectations: list[dict], timeout: int = 120) -> list[dict]:
     """Ask claude to judge the response against every expectation in one shot."""
     numbered = "\n".join(
@@ -75,22 +97,23 @@ def judge(response_text: str, expectations: list[dict], timeout: int = 120) -> l
         "Return the JSON object now."
     )
     raw = _run_claude(judge_prompt, timeout=timeout, system=JUDGE_SYSTEM_PROMPT)
-    raw = raw.strip()
-    # Strip ```json fences just in case
-    if raw.startswith("```"):
-        raw = raw.strip("`")
-        if raw.startswith("json"):
-            raw = raw[4:]
-        raw = raw.strip()
-    try:
-        parsed = json.loads(raw)
-    except json.JSONDecodeError:
-        # Try to locate the JSON object in the output
-        start = raw.find("{")
-        end = raw.rfind("}")
-        if start == -1 or end == -1:
-            raise RuntimeError(f"judge returned non-JSON: {raw[:200]}")
-        parsed = json.loads(raw[start : end + 1])
+    parsed = _parse_judge_output(raw)
+    if parsed is None:
+        # First parse failed — ask claude to repair its own output. Common
+        # failure modes: judge wrapped JSON in narrative prose, emitted two
+        # JSON objects, or used unescaped quotes inside reason strings.
+        # Single retry only; worst-case judge cost is 2× timeout.
+        repair_prompt = (
+            "Your previous output was not valid JSON. The raw output was:\n"
+            f"<previous_output>\n{raw}\n</previous_output>\n\n"
+            "Re-emit ONLY the JSON object described in the system prompt — "
+            "no prose, no fences, no second object. Start with `{` and end "
+            "with `}`. Use escaped quotes inside reason strings."
+        )
+        raw = _run_claude(repair_prompt, timeout=timeout, system=JUDGE_SYSTEM_PROMPT)
+        parsed = _parse_judge_output(raw)
+        if parsed is None:
+            raise RuntimeError(f"judge returned non-JSON after retry: {raw[:200]}")
 
     by_index = {item["index"]: item for item in parsed.get("expectations", [])}
     out = []
