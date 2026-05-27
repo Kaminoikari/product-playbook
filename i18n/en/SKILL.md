@@ -42,7 +42,7 @@ Use **progressive confirmation** — avoid dumping all options. If the user alre
 
 **Step 1 — Confirm mode** (always ask unless already specified):
 
-> Select a mode (number or name), or just describe your product and I'll recommend:
+> Select a mode (number or name) — pick the one that matches your situation. If you're unsure, briefly describe your product and I'll narrow to **two candidates** for you to choose between (never one).
 > 1. 🚀 **Quick Mode** — 3 steps, ~30 min (JTBD → PR-FAQ → North Star)
 > 2. 📦 **Full Mode** — 9–11 steps, comprehensive planning document
 > 3. 🔄 **Revision Mode** — 6–8 steps, optimize existing product
@@ -50,7 +50,9 @@ Use **progressive confirmation** — avoid dumping all options. If the user alre
 > 5. ⚡ **Build Mode** — 7 steps, skip Discovery, go straight to solution
 > 6. 🔧 **Feature Extension Mode** — 4 steps, add a feature to existing product
 
-Quick triggers (auto-apply matching mode):
+**Neutrality rule (Hard Gate for this step):** present the full 6-mode menu in this turn. You may add a short note like *"based on what you described, options 1 and 2 might fit best"* — but you must **NOT** close the menu by recommending exactly one mode ("I'd recommend Quick Mode"). Mode choice is the user's, not yours. Only the user's explicit selection (number/name) or one of the Quick triggers below skips this turn.
+
+Quick triggers (auto-apply matching mode without asking):
 - "validate idea quickly" / "30 min direction" → Quick
 - "full product plan" → Full
 - "I already know what to build" → Build
@@ -95,7 +97,7 @@ After confirming the mode, read the corresponding mode rules file for step seque
 | Product type confirmed | `rules-product-type.md` (B2B/B2C adjustments) |
 | Mode has Optional steps | `rules-optional-trigger.md` (triggers + Persona-Journey bundle + Phase Decision Point) |
 | Product context read/write | `rules-context.md` |
-| About to dispatch to a specialist sub-agent (discovery / strategy-critic / pre-mortem-runner) — load on first dispatch consideration in any mode | `rules-subagent-dispatch.md` |
+| About to dispatch to a specialist sub-agent (discovery / strategy-critic / pre-mortem-runner) — load on first dispatch consideration in any mode, OR immediately when the user pastes a strategy / persona / JTBD-shaped artifact and asks for critique/review (even outside the canonical step) | `rules-subagent-dispatch.md` |
 | User asks for framework list / supplementary commands | `rules-commands.md` |
 | User uploads file | `rules-file-integration.md` |
 | User says pause/save/continue | `rules-progress.md` |
@@ -154,7 +156,32 @@ Other rules:
 3. **No skipping steps** — follow the mode's step sequence; do not skip because "the user probably just wants the final result."
 4. **Dev handoff only after full completion** — "start development" / "generate dev handoff package" requires all steps marked ✅. Mid-process requests get: *"We're at S[X]/S[Y]. Recommend completing remaining steps. Continue, or proceed at current progress?"*
 5. **Progress indicator is single source of truth** — completion = all steps ✅ in the indicator; don't infer.
-6. **Quality self-checks must surface issues** — after each step, run the inline checklist (in your mode rules file) or load `rules-quality-review.md`. The checklist must NOT have every item ✅; if all pass, proactively identify "the weakest aspect of this output" and explain how to strengthen.
+6. **Quality self-checks must surface issues** — after each step, you MUST load `references/rules-quality-review.md` and follow its protocol exactly. The "Format" block in that file is authoritative (✅/❌ markers only, no ⚠️/partial/blank substitutes, each ❌ includes downstream impact). Mode rule files do NOT contain a substitute inline checklist — `rules-quality-review.md` is the single source of truth. The checklist must NOT have every item ✅; if all pass, lower the bar and re-review until at least one ❌ surfaces on a substantive content gap.
+7. **Specialist sub-agents must be dispatched, not inline-simulated** — when the trigger conditions in the table below fire, you MUST invoke the specialist via the Task tool with the matching `subagent_type`. Inline-running the critique/discovery yourself fails the contract (specialists exist precisely because separated context = higher-quality output). See `## 🤝 Specialist Dispatch Protocol` below.
+
+---
+
+## 🤝 Specialist Dispatch Protocol (always check before responding)
+
+Three specialist sub-agents live in isolated contexts: `strategy-critic`, `discovery-specialist`, `pre-mortem-runner`. Their value comes from focused context — running their job inline in the main agent dilutes it.
+
+**Dispatch trigger table** (any row matches → dispatch immediately, even mid-mode, even outside the canonical step):
+
+| Trigger | Specialist | Example user message |
+|---|---|---|
+| User pastes a strategy artifact ("our mission is…", "our strategy is…", Strategy Blocks, Rumelt kernel, DHM, Empowered Teams charter) AND asks for review/critique/feedback | `strategy-critic` | "Review this strategy: 'Our mission is to delight customers…'" |
+| Persona / JTBD / OST / Journey Map / Continuous Discovery work | `discovery-specialist` | Full Mode S2-S6, Build Mode S2, any Custom step selecting discovery |
+| User asks "what could go wrong" / pre-mortem / risk analysis | `pre-mortem-runner` | "Pre-mortem this MVP", or Full Mode S10 / Build Mode S4 |
+
+**Required dispatch marker** — surface one short line in chat output so the user (and our evals) can verify delegation happened:
+
+> Dispatching to `strategy-critic` subagent via Task tool with `subagent_type=strategy-critic`.
+
+**Do NOT inline-critique / inline-discover / inline-premortem.** When in doubt, dispatch — the specialist's `status: out_of_scope` response is a clean way to bounce non-matching requests back to you.
+
+After the specialist returns YAML, integrate `three_questions_to_ask_the_writer` (strategy-critic) / `open_questions` (discovery) / `priority_three` + `pre_launch_experiments` (pre-mortem) **verbatim** into your reply. Do not soften, do not paraphrase, do not skip.
+
+Full per-trigger invocation templates: `references/rules-subagent-dispatch.md`.
 
 ---
 
