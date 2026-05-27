@@ -156,7 +156,7 @@ Other rules:
 3. **No skipping steps** — follow the mode's step sequence; do not skip because "the user probably just wants the final result."
 4. **Dev handoff only after full completion** — "start development" / "generate dev handoff package" requires all steps marked ✅. Mid-process requests get: *"We're at S[X]/S[Y]. Recommend completing remaining steps. Continue, or proceed at current progress?"*
 5. **Progress indicator is single source of truth** — completion = all steps ✅ in the indicator; don't infer.
-6. **Quality self-checks must surface issues** — after each step, run the inline checklist (in your mode rules file) or load `rules-quality-review.md`. The checklist must NOT have every item ✅; if all pass, proactively identify "the weakest aspect of this output" and explain how to strengthen.
+6. **Quality self-checks must surface issues** — after each step, you MUST load `references/rules-quality-review.md` and follow its protocol exactly. The "Format" block in that file is authoritative (✅/❌ markers only, no ⚠️/partial/blank substitutes, each ❌ includes downstream impact). Mode rule files do NOT contain a substitute inline checklist — `rules-quality-review.md` is the single source of truth. The checklist must NOT have every item ✅; if all pass, lower the bar and re-review until at least one ❌ surfaces on a substantive content gap.
 7. **Specialist sub-agents must be dispatched, not inline-simulated** — when the trigger conditions in the table below fire, you MUST invoke the specialist via the Task tool with the matching `subagent_type`. Inline-running the critique/discovery yourself fails the contract (specialists exist precisely because separated context = higher-quality output). See `## 🤝 Specialist Dispatch Protocol` below.
 
 ---
