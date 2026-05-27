@@ -95,7 +95,7 @@ After confirming the mode, read the corresponding mode rules file for step seque
 | Product type confirmed | `rules-product-type.md` (B2B/B2C adjustments) |
 | Mode has Optional steps | `rules-optional-trigger.md` (triggers + Persona-Journey bundle + Phase Decision Point) |
 | Product context read/write | `rules-context.md` |
-| About to dispatch to a specialist sub-agent (discovery / strategy-critic / pre-mortem-runner) — load on first dispatch consideration in any mode | `rules-subagent-dispatch.md` |
+| About to dispatch to a specialist sub-agent (discovery / strategy-critic / pre-mortem-runner) — load on first dispatch consideration in any mode, OR immediately when the user pastes a strategy / persona / JTBD-shaped artifact and asks for critique/review (even outside the canonical step) | `rules-subagent-dispatch.md` |
 | User asks for framework list / supplementary commands | `rules-commands.md` |
 | User uploads file | `rules-file-integration.md` |
 | User says pause/save/continue | `rules-progress.md` |

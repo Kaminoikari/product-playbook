@@ -25,11 +25,16 @@ Trigger **immediately after** the user finalises any strategy artifact:
 - After Rumelt Good Strategy Kernel (Full Mode S8)
 - After DHM Model (Full Mode S9)
 - After Empowered Teams charter (any mode)
-- Any time the user writes "this is our strategy" in plain prose without a named framework
+- Any time the user writes "this is our strategy" / "our strategy is" / "our mission is" in plain prose without a named framework
+- **Any time the user pastes strategy-shaped prose AND asks for review** (e.g. "review this strategy", "tell me how strong this is", "critique my strategy") — dispatch even if the mode is not currently at S7-S9; do **NOT** inline-critique
 
 How to invoke:
 
 > Use the `strategy-critic` subagent to critique the following strategy artifact: [paste verbatim]. The artifact is [framework name or "generic strategy doc"]. Reply in [language].
+
+**Dispatch marker (required):** when you delegate, surface the dispatch in chat output with one short line so both the user and our evals can verify delegation actually happened:
+
+> Dispatching to `strategy-critic` subagent via Task tool with `subagent_type=strategy-critic`.
 
 The critic returns critiques, not rewrites. Present `three_questions_to_ask_the_writer` to the user verbatim — do not soften them. If the user revises, re-invoke the critic on the revised version.
 
