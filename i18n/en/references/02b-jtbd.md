@@ -23,7 +23,18 @@ Example: **When** comparing mortgage options late at night and can't reach a ban
 
 **JTBD Four-Type Analysis Table:**
 
-Every cell (Persona 1 / Persona 2) MUST contain a complete three-clause JTBD sentence. Descriptive phrases without "When / I want to / so" structure are not acceptable.
+Every cell (Persona 1 / Persona 2) MUST contain a complete three-clause JTBD sentence. **Short phrases like "Feel like I'm still showing up for myself", "log workouts daily", "track progress easily" all FAIL the Hard Gate.** Use the worked example below as the literal shape — every cell must read like a sentence with `When …, I want to …, so …`.
+
+Worked example (B2C fitness habit tracker, single Persona — replicate this shape for every cell):
+
+| JTBD Type | Definition | Persona: Busy Professional |
+|-----------|------------|-----------|
+| Functional Job | Completing a specific task or achieving a functional goal | **When** I get home after a long workday and have 20 minutes before my next commitment, **I want to** log the workout I just did and see what's recommended next, **so** I can keep the streak going without spending mental energy planning. |
+| Emotional Job | How they feel or want to feel | **When** I miss a planned workout two days in a row, **I want to** feel that I'm still on track rather than starting over, **so** I don't fall into the all-or-nothing spiral that kills my consistency. |
+| Social Job | How they want to be perceived by others | **When** a friend asks how my training is going, **I want to** show a clean record of recent activity, **so** I'm seen as someone who follows through on commitments to themselves. |
+| Job Context | Under what circumstances they need to get this job done | **When** my schedule is volatile across the week (early meetings, evening calls), **I want to** fit workouts into 15–45 minute windows wherever they land, **so** training adapts to my life instead of competing with it. |
+
+Empty table (fill each cell with full `When …, I want to …, so …` sentences — do NOT shorten to phrases):
 
 ```
 | JTBD Type | Definition | Persona 1 (must use "When … I want to … so …" full form) | Persona 2 (same) |
