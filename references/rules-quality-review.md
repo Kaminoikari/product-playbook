@@ -5,11 +5,28 @@
 ## Protocol
 
 After each step output:
-1. Mark each checklist item ✅ or ❌. Each ❌ states: gap, downstream impact, fix direction.
-2. **≥1 ❌ required** (Hard Gate). ⚠️ does NOT substitute. No "weakest aspect" appendix bypass. ❌ must be substantive content gap, not formatting/wording. If everything feels ✅ → lower bar, re-review. Every artifact has a weakest dimension.
-3. Format: `📝 Quality Self-Check:` then `- ✅/❌ item → Gap / Impact / Fix`.
 
-Self-check on self-check: no ❌ → redo step 2.
+1. Mark each checklist item with one of exactly two markers: ✅ (passes) or ❌ (fails). **Blank checkboxes, ⚠️, "partial", "could be improved", "needs work" are all FORBIDDEN substitutes.** If you want to flag a soft concern, the marker is still ❌ — the severity goes in the "Gap" text.
+
+2. **≥1 ❌ required on a substantive content gap** (Hard Gate). The ❌ must be on:
+   - A missing required element (e.g. JTBD missing emotional layer)
+   - A weak/generic answer where a sharper one is needed (e.g. Persona pain point that's a category label not an observed behaviour)
+   - A logical inconsistency between sub-parts of the output
+   - NOT acceptable as ❌: formatting, wording polish, "could be more detailed", "minor typo". Cosmetic flags fail the Hard Gate.
+
+3. Each ❌ MUST include all three of these in its line:
+   - **Gap**: what specifically is missing or weak (quote the offending line if applicable)
+   - **Impact on downstream artifact**: name a specific later step or artifact that this gap will break or weaken (e.g. "blocks PR-FAQ writing because the solution paragraph won't know which emotional pain to open on", "will produce a vague North Star metric because we don't yet know the core outcome the user values"). Vague "this needs improvement" fails.
+   - **Fix direction**: concrete next action the user (not you) should take
+
+4. Format exactly:
+   ```
+   📝 Quality Self-Check:
+   - ✅ [checklist item]
+   - ❌ [checklist item] → Gap: …  ·  Impact: blocks [downstream step]  ·  Fix: [concrete action]
+   ```
+
+**Self-check on self-check**: scan your own output before sending. If zero ❌ → lower the bar and re-review. If ❌ exists but has no "Impact: blocks/weakens [specific downstream artifact]" clause → rewrite that line. Every artifact has a weakest dimension; a checklist of all ✅ is a sign the reviewer is the wrong person, not that the artifact is perfect.
 
 ---
 
@@ -17,7 +34,7 @@ Self-check on self-check: no ❌ → redo step 2.
 
 **Persona**: 1) by purpose/motivation not demographics, 2) MECE, 3) core vs secondary TA clear, 4) pain points from real obs/inference, 5) "current approach + rationale" specific enough to identify workarounds.
 
-**JTBD**: 1) specific context (not "anytime"), 2) single core job, 3) functional + emotional + social all present, 4) usable to evaluate solutions, 5) "current approach + gap" stated, 6) five-why Q5 touches emotion/identity/fear.
+**JTBD**: 1) specific context (not "anytime"), 2) single core job, 3) functional + emotional + social all present, 4) usable to evaluate solutions, 5) "current approach + gap" stated, 6) **five-why Q5 uses explicit emotional vocabulary** — at least one of: *fear, anxiety, shame, worry, dread, self-doubt, sense of loss, threat to identity, embarrassment, guilt*. Functional consequences ("HR credibility suffers", "users churn", "metric drops") FAIL this item — they describe outcomes, not the felt emotion. ✅ example: "HR fears being held personally accountable in an audit"; ❌ example: "HR's credibility with leadership is at risk".
 
 **Positioning (April Dunford)**: 1) competitive alternative from user perspective, 2) unique attribute competitors can't match, 3) value in user language not product language, 4) target market specific enough to find them, 5) 5 elements logically consistent.
 
