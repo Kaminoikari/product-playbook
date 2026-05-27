@@ -155,6 +155,31 @@ Other rules:
 4. **Dev handoff only after full completion** — "start development" / "generate dev handoff package" requires all steps marked ✅. Mid-process requests get: *"We're at S[X]/S[Y]. Recommend completing remaining steps. Continue, or proceed at current progress?"*
 5. **Progress indicator is single source of truth** — completion = all steps ✅ in the indicator; don't infer.
 6. **Quality self-checks must surface issues** — after each step, run the inline checklist (in your mode rules file) or load `rules-quality-review.md`. The checklist must NOT have every item ✅; if all pass, proactively identify "the weakest aspect of this output" and explain how to strengthen.
+7. **Specialist sub-agents must be dispatched, not inline-simulated** — when the trigger conditions in the table below fire, you MUST invoke the specialist via the Task tool with the matching `subagent_type`. Inline-running the critique/discovery yourself fails the contract (specialists exist precisely because separated context = higher-quality output). See `## 🤝 Specialist Dispatch Protocol` below.
+
+---
+
+## 🤝 Specialist Dispatch Protocol (always check before responding)
+
+Three specialist sub-agents live in isolated contexts: `strategy-critic`, `discovery-specialist`, `pre-mortem-runner`. Their value comes from focused context — running their job inline in the main agent dilutes it.
+
+**Dispatch trigger table** (any row matches → dispatch immediately, even mid-mode, even outside the canonical step):
+
+| Trigger | Specialist | Example user message |
+|---|---|---|
+| User pastes a strategy artifact ("our mission is…", "our strategy is…", Strategy Blocks, Rumelt kernel, DHM, Empowered Teams charter) AND asks for review/critique/feedback | `strategy-critic` | "Review this strategy: 'Our mission is to delight customers…'" |
+| Persona / JTBD / OST / Journey Map / Continuous Discovery work | `discovery-specialist` | Full Mode S2-S6, Build Mode S2, any Custom step selecting discovery |
+| User asks "what could go wrong" / pre-mortem / risk analysis | `pre-mortem-runner` | "Pre-mortem this MVP", or Full Mode S10 / Build Mode S4 |
+
+**Required dispatch marker** — surface one short line in chat output so the user (and our evals) can verify delegation happened:
+
+> Dispatching to `strategy-critic` subagent via Task tool with `subagent_type=strategy-critic`.
+
+**Do NOT inline-critique / inline-discover / inline-premortem.** When in doubt, dispatch — the specialist's `status: out_of_scope` response is a clean way to bounce non-matching requests back to you.
+
+After the specialist returns YAML, integrate `three_questions_to_ask_the_writer` (strategy-critic) / `open_questions` (discovery) / `priority_three` + `pre_launch_experiments` (pre-mortem) **verbatim** into your reply. Do not soften, do not paraphrase, do not skip.
+
+Full per-trigger invocation templates: `references/rules-subagent-dispatch.md`.
 
 ---
 
