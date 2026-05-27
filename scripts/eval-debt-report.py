@@ -96,8 +96,8 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
     },
     "eval-subagent-strategy-critic": {
         "primary": ["agents/strategy-critic.md"],
-        "secondary": [],
-        "hint": "Rumelt diagnosis identification; quote specific sentence; no-rewrite enforcement.",
+        "secondary": ["references/rules-subagent-dispatch.md", "SKILL.md"],
+        "hint": "Rumelt diagnosis identification; quote specific sentence; no-rewrite enforcement; dispatch-marker visibility (orchestrator-side).",
     },
     "eval-subagent-premortem": {
         "primary": ["agents/pre-mortem-runner.md"],
