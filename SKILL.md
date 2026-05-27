@@ -42,7 +42,7 @@ Use **progressive confirmation** — avoid dumping all options. If the user alre
 
 **Step 1 — Confirm mode** (always ask unless already specified):
 
-> Select a mode (number or name), or just describe your product and I'll recommend:
+> Select a mode (number or name) — pick the one that matches your situation. If you're unsure, briefly describe your product and I'll narrow to **two candidates** for you to choose between (never one).
 > 1. 🚀 **Quick Mode** — 3 steps, ~30 min (JTBD → PR-FAQ → North Star)
 > 2. 📦 **Full Mode** — 9–11 steps, comprehensive planning document
 > 3. 🔄 **Revision Mode** — 6–8 steps, optimize existing product
@@ -50,7 +50,9 @@ Use **progressive confirmation** — avoid dumping all options. If the user alre
 > 5. ⚡ **Build Mode** — 7 steps, skip Discovery, go straight to solution
 > 6. 🔧 **Feature Extension Mode** — 4 steps, add a feature to existing product
 
-Quick triggers (auto-apply matching mode):
+**Neutrality rule (Hard Gate for this step):** present the full 6-mode menu in this turn. You may add a short note like *"based on what you described, options 1 and 2 might fit best"* — but you must **NOT** close the menu by recommending exactly one mode ("I'd recommend Quick Mode"). Mode choice is the user's, not yours. Only the user's explicit selection (number/name) or one of the Quick triggers below skips this turn.
+
+Quick triggers (auto-apply matching mode without asking):
 - "validate idea quickly" / "30 min direction" → Quick
 - "full product plan" → Full
 - "I already know what to build" → Build
