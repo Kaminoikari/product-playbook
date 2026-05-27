@@ -64,7 +64,42 @@ for English production users. After promoting `i18n/en/` to root:
 > measured against the structurally-cleaned-up install (root as
 > English, agents registered at `~/.claude/agents/`).
 
-<!-- TO BE FILLED IN once /tmp/full-eval-stage1-r3.json completes -->
+| # | Eval | Pass | % | Band | Notes |
+|---|---|---|---|---|---|
+| 1 | eval-mode-selection | 5/5 | 100% | 🟢 healthy | Stage 1 fix landed; 3-run majority validated |
+| 2 | eval-quick-mode-jtbd | 7/9 | 78% | 🟡 needs-attention | New expectations added since baseline |
+| 5 | eval-revision-mode | 5/8 | 62% | 🔴 at-risk | Up from 1/8 baseline; remaining gaps need rules-build.md fixes |
+| 6 | eval-quality-hardgate | 4/5 | 80% | 🟡 needs-attention | Stage 1 ✅/❌ enforcement landed |
+| 7 | eval-feature-extension | 2/7 → **5/7 (post-regression-fix)** | 29% → **71%** | 🔴 → 🟡 | Round 2 mode-selection fix introduced a regression here; round 3 restructured Step 1 into 1a (Quick triggers checked first) + 1b (fallback menu). Critical fail resolved 3/3 majority. |
+| 8 | eval-security-awareness | 3/6 | 50% | 🔴 at-risk | Untouched cluster — still in backlog |
+| 9 | eval-context-bootstrap | 5/6 | 83% | 🟡 needs-attention | Stage 1 Bootstrap kick-off Hard Gate landed |
+| 11 | eval-subagent-strategy-critic | 4/6 | 67% | 🔴 at-risk | Dispatch marker still failing in `claude -p` mode (hook helps plugin-installed users only) |
+| 3 | eval-jtbd-depth | INFRA | — | ⚪ unmeasurable | `claude -p` subprocess timed out at 360s; long B2B JTBD response exceeds harness limit |
+| 4 | eval-prfaq-output | INFRA | — | ⚪ unmeasurable | Judge subprocess timed out — different from skill regression |
+| 10 | eval-subagent-discovery | INFRA | — | ⚪ unmeasurable | `claude -p` subprocess timed out (Persona+JTBD response too long for harness) |
+| 12 | eval-subagent-premortem | INFRA | — | ⚪ unmeasurable | `claude -p` subprocess timed out (pre-mortem requires long response) |
+
+**Measurable band distribution** (8 evals after filtering 4 infra-timeouts):
+- 🟢 Healthy (≥90%): **1** (eval 1)
+- 🟡 Needs-attention (70–89%): **4** (evals 2, 6, 7-post-fix, 9)
+- 🔴 At-risk (<70%): **3** (evals 5, 8, 11)
+
+**Net Stage 1 movement** (baseline → post-round-3, where measurable):
+- eval-mode-selection: 3/4 (75%) → 5/5 (100%) — +25
+- eval-quick-mode-jtbd: 7/7 (100%) → 7/9 (78%) — −22 from new expectations added during loop
+- eval-revision-mode: ~17% → 62% — +45
+- eval-quality-hardgate: 25% → 80% — +55
+- eval-feature-extension: 100% → 71% (post-regression-fix) — −29 (was 100% on simpler baseline; regression introduced by round-2 fix, partially recovered in round-3)
+- eval-context-bootstrap: 60% → 83% — +23
+- eval-subagent-strategy-critic: 40% → 67% — +27
+
+Roughly: **5 clusters improved net-positive, 1 cluster regressed-then-partially-recovered, 4 clusters unmeasurable due to harness timeouts**. Round-3 NOT a uniform win — the feature-extension regression cost real ground until the round-3 restructure recovered most of it.
+
+## Critical learning: change-amplification needs an eval gate
+
+The feature-extension regression was avoidable. The round-2 mode-selection fix's "Neutrality rule (Hard Gate)" was prose-strong enough to override the Quick triggers below it, and we didn't notice because we only ran eval 1 to validate. A regression-discipline gate — "before declaring a cluster fix done, re-run the 3 evals most likely to share surface area" — would have caught it in round 2 instead of round 3.
+
+This is Stage 2's missing piece. When Stage 2 lands as a `/playbook-self-improve` slash command, it MUST run a regression-relevant eval bundle, not just the targeted eval, before opening a PR.
 
 ## Open follow-ups
 
