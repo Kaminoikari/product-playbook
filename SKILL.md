@@ -40,7 +40,24 @@ Also switch if the user explicitly requests a language (e.g., "用中文進行")
 
 Use **progressive confirmation** — avoid dumping all options. If the user already specified, apply directly.
 
-**Step 1 — Confirm mode** (always ask unless already specified):
+**Step 1 — Confirm mode**
+
+**Step 1a — Quick triggers (check FIRST; auto-apply matching mode without showing the menu):**
+
+Scan the user's first message for these phrases or close paraphrases. If ANY match, skip the menu entirely and enter the matched mode at S1 immediately.
+
+| Trigger phrase (or close paraphrase) | Auto-apply mode |
+|---|---|
+| "validate idea quickly", "30 min direction", "quick check" | 🚀 Quick |
+| "full product plan", "comprehensive planning", "do the full thing" | 📦 Full |
+| "I already know what to build", "skip discovery", "straight to MVP" | ⚡ Build |
+| "revamp my product", "optimize existing", "redesign our app" | 🔄 Revision |
+| **"add a feature", "feature for existing product", "plan this feature", "build [X] feature for our app"** | 🔧 Feature Extension |
+| "pre-mortem", "what could go wrong", "find failure modes" | route to `pre-mortem-runner` per Specialist Dispatch Protocol |
+
+When a Quick trigger fires, your reply opens with: *"Detected '[trigger phrase]' — entering [Mode] at S1."* Do NOT present the 6-mode menu. Proceed to Step 2 product-type confirmation (or directly to the mode's S1 if product type is already implied).
+
+**Step 1b — Menu (only if NO quick trigger matched):**
 
 > Select a mode (number or name) — pick the one that matches your situation. If you're unsure, briefly describe your product and I'll narrow to **two candidates** for you to choose between (never one).
 > 1. 🚀 **Quick Mode** — 3 steps, ~30 min (JTBD → PR-FAQ → North Star)
@@ -50,14 +67,7 @@ Use **progressive confirmation** — avoid dumping all options. If the user alre
 > 5. ⚡ **Build Mode** — 7 steps, skip Discovery, go straight to solution
 > 6. 🔧 **Feature Extension Mode** — 4 steps, add a feature to existing product
 
-**Neutrality rule (Hard Gate for this step):** present the full 6-mode menu in this turn. You may add a short note like *"based on what you described, options 1 and 2 might fit best"* — but you must **NOT** close the menu by recommending exactly one mode ("I'd recommend Quick Mode"). Mode choice is the user's, not yours. Only the user's explicit selection (number/name) or one of the Quick triggers below skips this turn.
-
-Quick triggers (auto-apply matching mode without asking):
-- "validate idea quickly" / "30 min direction" → Quick
-- "full product plan" → Full
-- "I already know what to build" → Build
-- "revamp my product" / "optimize" → Revision
-- "add a feature" / "feature for existing product" → Feature Extension
+**Neutrality rule (applies to Step 1b only):** when no Quick trigger matched and you DO show the menu, present all 6 modes. You may add a short note like *"based on what you described, options 1 and 2 might fit best"* — but you must **NOT** close the menu by recommending exactly one mode ("I'd recommend Quick Mode"). Mode choice is the user's, not yours.
 
 **Step 2 — Confirm product type and audience** (after mode confirmed):
 
