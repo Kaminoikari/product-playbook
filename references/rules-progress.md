@@ -1,60 +1,60 @@
-# 🔁 進度持久化與中斷恢復
+# 🔁 Progress Persistence & Interruption Recovery
 
-> 使用者說「暫停」「存檔」或 skill 啟動時檢查進度時載入。
+> Loaded when the user says "pause," "save," or when the skill checks for progress at startup.
 
-## 進度檔案格式
+## Progress File Format
 
-每完成一個步驟，在專案目錄下建立或更新 `.product-playbook-progress.md`：
+After each step is completed, create or update `.product-playbook-progress.md` in the project directory:
 
 ```
-# Product Playbook 進度存檔
+# Product Playbook Progress Save
 
-- 模式：[快速模式 / 完整模式 / ...]
-- 產品類型：[B2C / B2B / ...]
-- 產品描述：[使用者的產品描述]
-- 當前進度：S[X] / S[Y]
-- 最後更新：[時間戳]
+- Mode: [Quick Mode / Full Mode / ...]
+- Product type: [B2C / B2B / ...]
+- Product description: [User's product description]
+- Current progress: S[X] / S[Y]
+- Last updated: [timestamp]
 
-## 已完成步驟
+## Completed Steps
 
-### S1：[步驟名稱] ✅
-[該步驟的核心產出，保留足夠細節以便恢復時不需要重做]
+### S1: [Step name] ✅
+[Core output of this step — retain enough detail so it does not need to be redone upon recovery]
 
-### S2：[步驟名稱] ✅
-[同上]
+### S2: [Step name] ✅
+[Same as above]
 
-## 待執行步驟
-- S3：[步驟名稱]
-- S4：[步驟名稱]
+## Pending Steps
+- S3: [Step name]
+- S4: [Step name]
 - ...
 ```
 
-### 功能擴充模式範例
+### Feature Extension Mode Example
 ```markdown
-模式：功能擴充
-步驟：S2/S4
-S1：問題 + 現有系統情境 ✅
-S2：三個平行解法 + AI 推薦 ▶️
-S3：風險評估 ⬜
-S4：執行範圍 ⬜
+Mode: Feature Extension
+Step: S2/S4
+S1: Problem + existing system context ✅
+S2: Three parallel solutions + AI recommendation ▶️
+S3: Risk assessment ⬜
+S4: Execution scope ⬜
 ```
 
-## 觸發規則
+## Trigger Rules
 
-1. **自動儲存**：每個步驟完成並獲得使用者確認後，立即更新進度檔案
-2. **啟動時檢查**：skill 觸發時，先檢查是否存在 `.product-playbook-progress.md`。若存在，顯示：
+1. **Auto-save**: After each step is completed and confirmed by the user, immediately update the progress file
+2. **Check on startup**: When the skill is triggered, first check whether `.product-playbook-progress.md` exists. If it does, display:
 ```
-偵測到未完成的產品規劃進度（[模式名稱]，S[X]/S[Y]）：
-  1️⃣ 繼續 — 從 S[X] 接續
-  2️⃣ 重新開始 — 清除舊進度，重頭來過
-（輸入 1 或 2）
+Detected unfinished product planning progress ([mode name], S[X]/S[Y]):
+  1️⃣ Continue — Resume from S[X]
+  2️⃣ Start over — Clear old progress and begin from scratch
+(Enter 1 or 2)
 ```
-3. **暫停指令**：使用者說「暫停」「先做別的」「存檔」時，確認進度檔案已更新，回覆：「進度已存檔至 .product-playbook-progress.md（S[X]/S[Y]）。下次在此專案啟動 skill 時會自動偵測。」
-4. **完成時清理**：流程全部完成並產出最終文件後，詢問使用者是否刪除進度檔案
-6. **版控提醒**：首次建立 `.product-playbook-progress.md` 時，提醒使用者：「⚠️ 建議將 `.product-playbook-progress.md` 加入 `.gitignore`，此檔案可能包含敏感的產品策略資訊。」
-5. **中斷存檔**：當流程進行中偵測到無關 prompt 時（見 SKILL.md 流程中斷處理規則），即使當前步驟尚未完成，也必須存檔。存檔格式在當前步驟標記為 `🔶`（進行中）而非 `✅`，並保存已產出的部分內容：
+3. **Pause command**: When the user says "pause," "do something else first," or "save," confirm the progress file has been updated and reply: "Progress saved to .product-playbook-progress.md (S[X]/S[Y]). It will be automatically detected next time you start the skill in this project."
+4. **Cleanup on completion**: After the entire flow is completed and final documents are produced, ask the user whether to delete the progress file
+6. **Version control reminder**: When `.product-playbook-progress.md` is created for the first time, remind the user: "⚠️ We recommend adding `.product-playbook-progress.md` to `.gitignore` — this file may contain sensitive product strategy information."
+5. **Interruption save**: When an unrelated prompt is detected during the flow (see SKILL.md flow interruption handling rules), save progress even if the current step is not yet complete. Use 🔶 (in progress) instead of ✅ for the current step in the save format, and preserve the partially produced content:
 ```
-### S[X]：[步驟名稱] 🔶（進行中，部分完成）
-[已產出的部分內容]
-⚠️ 此步驟尚未完成，恢復時需從此處繼續
+### S[X]: [Step name] 🔶 (in progress, partially completed)
+[Partially produced content]
+⚠️ This step is not yet complete — resume from here upon recovery
 ```

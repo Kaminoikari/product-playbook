@@ -1,21 +1,21 @@
-# 階段三：Develop — MVP 範圍定義
+# Stage 3: Develop — MVP Scope Definition
 
-## 3.7 MVP 範圍定義
+## 3.7 MVP Scope Definition
 
-MVP 判斷標準：**能否驗證核心假設？能否讓目標用戶完整體驗 Primary JTBD？**
+MVP decision criteria: **Can it validate the core hypothesis? Can it let target users fully experience the Primary JTBD?**
 
 ```
-| 類別 | MVP 必須有 | V2 再加入 | 未來考慮 |
+| Category | MVP Must-Have | Add in V2 | Future Consideration |
 |---|---|---|---|
-| 核心功能 | | | |
-| 用戶體驗 | | | |
-| 技術需求 | | | |
+| Core Features | | | |
+| User Experience | | | |
+| Technical Requirements | | | |
 ```
 
-**Not Doing List（同等重要）：**
+**Not Doing List (Equally important):**
 
 ```
-| 不做的事 | 不做的理由 |
-|---------|-----------|
+| Not Doing | Reason |
+|-----------|--------|
 | | |
 ```

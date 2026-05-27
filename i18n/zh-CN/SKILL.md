@@ -27,7 +27,7 @@ description: |
 
 - 繁體中文 → `i18n/zh-TW/SKILL.md`
 - 日本語 → `i18n/ja/SKILL.md`
-- English → `i18n/en/SKILL.md`
+- English → `SKILL.md` (root)
 - Español → `i18n/es/SKILL.md`
 - 한국어 → `i18n/ko/SKILL.md`
 - 简体中文 → 继续使用本文件

@@ -1,118 +1,118 @@
-# 階段二：Define（定義）— 收斂問題
+# Stage 2: Define — Converging on the Problem
 
-> **注意：各模式應執行哪些步驟，以 SKILL.md 中「各模式步驟序列」為權威定義。以下僅供參考。**
+> **Note: Which steps to execute per mode is authoritatively defined by the "Mode Step Sequences" in SKILL.md. The following is for reference only.**
 
-**完整模式 / 高完整性 → 全做（2.1 ~ 2.4）**
-**中完整性 → 2.1 + 2.3 + 2.4**
-**快速模式 / 低完整性 → 只做 2.3（一個核心 HMW）**
+**Full mode / high completeness → Do all (2.1 ~ 2.4)**
+**Medium completeness → 2.1 + 2.3 + 2.4**
+**Quick mode / low completeness → Only 2.3 (one core HMW)**
 
-在進入此階段前，確認產品核心三問：Who is it for? / Why build it? / What is it?
+Before entering this stage, confirm the three core product questions: Who is it for? / Why build it? / What is it?
 
-## 2.1 痛點彙整表
+## 2.1 Pain Point Summary Table
 
-從所有 Persona 和 User Journey Map 中提取痛點：
+Extract pain points from all Personas and User Journey Maps:
 
 ```
-| 編號 | 痛點描述 | 來源 Persona | 出現在哪個階段 | 影響程度（高/中/低） | 出現頻率（高/中/低） |
+| # | Pain Point Description | Source Persona | Appears in Stage | Impact Level (High/Med/Low) | Frequency (High/Med/Low) |
 |---|---|---|---|---|---|
 | P1 | | | | | |
 | P2 | | | | | |
 ```
 
-## 2.2 April Dunford 的產品定位框架（Positioning）
+## 2.2 April Dunford's Positioning Framework
 
-**適用於：中/高完整性 / 產出對象為老闆/業務/行銷**
+**Applicable: Medium/high completeness / audience is executives/sales/marketing**
 
-定位不是口號，而是決定你在哪裡競爭、為誰競爭：
-
-```
-| 定位要素 | 問題 | 你的答案 |
-|---------|------|---------|
-| 競爭替代品 | 如果你的產品不存在，用戶會用什麼？（真實答案，不是你認為的競爭對手） | |
-| 獨特屬性 | 你有哪些是競爭替代品沒有的功能或特性？ | |
-| 對用戶的價值 | 這些獨特屬性對用戶帶來什麼實際價值？ | |
-| 目標市場特徵 | 哪些用戶最在意這些價值？（越具體越好） | |
-| 市場類別 | 你的產品最好被放在哪個市場框架下看待？（框架決定競爭標準） | |
-```
-
-最常見的定位錯誤：
-- 把功能當成定位（「我們有 AI！」不是定位）
-- 定位太模糊，覆蓋所有人等於不覆蓋任何人
-- 以自己認為的競爭對手為參照，而不是用戶實際的替代方案
-
-### 📝 Positioning 品質自檢清單
-- ✅ 「競爭替代品」是否來自用戶視角？（用戶真的會用什麼替代，不是你認為的競對）
-- ✅ 「獨特屬性」是否是競爭替代品做不到或做不好的？（不是你有別人也有的東西）
-- ✅ 「對用戶的價值」是用戶語言還是產品語言？（「節省 2 小時」vs「AI 驅動自動化」）
-- ✅ 「目標市場」是否夠具體到能找到這些人？
-- ✅ 五個定位要素之間是否邏輯一致？
-- ❌ 常見問題：獨特屬性和價值之間斷裂、市場類別選錯導致被錯誤標準評判
-
-## 2.3 HMW（How Might We）問題轉化
-
-將痛點轉化為 HMW 問題，同時結合 JTBD 視角確認每個 HMW 背後對應的工作類型：
+Positioning is not a tagline — it's deciding where you compete and for whom:
 
 ```
-| 痛點編號 | 痛點 | 對應 JTBD 類型 | HMW 問題 |
+| Positioning Element | Question | Your Answer |
+|---------------------|----------|-------------|
+| Competitive Alternatives | If your product didn't exist, what would users use? (The real answer, not who you think your competitors are) | |
+| Unique Attributes | What do you have that competitive alternatives don't? | |
+| Value for Users | What tangible value do these unique attributes deliver to users? | |
+| Target Market Characteristics | Which users care most about this value? (The more specific, the better) | |
+| Market Category | What market frame best positions your product? (The frame determines the competitive criteria) | |
+```
+
+Most common positioning mistakes:
+- Treating features as positioning ("We have AI!" is not positioning)
+- Positioning too broadly — covering everyone means covering no one
+- Using your perceived competitors as the reference rather than the user's actual alternatives
+
+### 📝 Positioning Quality Checklist
+- ✅ Are "competitive alternatives" from the user's perspective? (What users actually use instead, not who you think your competitors are)
+- ✅ Are "unique attributes" things competitive alternatives can't do or can't do well? (Not things you both have)
+- ✅ Is "value for users" stated in user language or product language? ("Saves 2 hours" vs. "AI-powered automation")
+- ✅ Is the "target market" specific enough to actually find these people?
+- ✅ Are all five positioning elements logically consistent?
+- ❌ Common issues: Disconnect between unique attributes and value, wrong market category leading to being judged by wrong criteria
+
+## 2.3 HMW (How Might We) Problem Reframing
+
+Transform pain points into HMW questions, combining the JTBD lens to confirm the job type behind each HMW:
+
+```
+| Pain Point # | Pain Point | Corresponding JTBD Type | HMW Question |
 |---|---|---|---|
-| P1 | [痛點描述] | 功能性 / 情感性 / 社交性 | 我們可以如何... |
-| P2 | [痛點描述] | | 我們可以如何... |
+| P1 | [Pain point description] | Functional / Emotional / Social | How might we... |
+| P2 | [Pain point description] | | How might we... |
 ```
 
-HMW 粒度原則：
-- 太大（「如何讓用戶更開心」）→ 沒有方向感
-- 剛好（「如何讓用戶在 60 秒內完成第一次設定」）→ 有約束又有空間
-- 太小（「如何改按鈕顏色」）→ 限制了可能性
+HMW granularity principle:
+- Too broad ("How to make users happier") → No direction
+- Just right ("How to let users complete first-time setup in 60 seconds") → Constrained yet open
+- Too narrow ("How to change the button color") → Limits possibilities
 
-### 📝 HMW 品質自檢清單
-- ✅ 是否有明確的約束條件？（不是完全開放式）
-- ✅ 是否保留了足夠的解法空間？（不是指向唯一解）
-- ✅ 是否能直接對應到一個 JTBD 或痛點？
-- ✅ 團隊看到這個 HMW 是否能開始發想解法？
-- ❌ 常見問題：太大（等於重述願景）、太小（等於指定解法）、多個問題混在一起
+### 📝 HMW Quality Checklist
+- ✅ Does it have clear constraints? (Not completely open-ended)
+- ✅ Does it leave enough room for multiple solutions? (Not pointing to a single answer)
+- ✅ Can it be directly mapped to a JTBD or pain point?
+- ✅ Can the team start brainstorming solutions upon seeing this HMW?
+- ❌ Common issues: Too broad (restates the vision), too narrow (specifies the solution), multiple problems mixed together
 
-**範例：**
-- ❌ 太大：「我們可以如何讓用戶更滿意？」
-- ✅ 剛好：「我們可以如何讓首購族在 3 分鐘內算出自己負擔得起的房貸金額？」
-- ❌ 太小：「我們可以如何在首頁加一個房貸計算機？」
+**Examples:**
+- ❌ Too broad: "How might we make users more satisfied?"
+- ✅ Just right: "How might we help first-time homebuyers calculate their affordable mortgage amount in 3 minutes?"
+- ❌ Too narrow: "How might we add a mortgage calculator to the homepage?"
 
-## 2.4 機會評估表
+## 2.4 Opportunity Assessment Table
 
-對 HMW 問題進行優先排序：
+Prioritize HMW questions:
 
 ```
-| HMW 問題 | 影響 Persona | Persona 規模 | 用戶影響（1-5） | 商業價值（1-5） | 可行性（1-5） | 總分 | 優先級 |
+| HMW Question | Affected Persona | Persona Size | User Impact (1-5) | Business Value (1-5) | Feasibility (1-5) | Total | Priority |
 |---|---|---|---|---|---|---|---|
-| | [列出受影響的 Persona] | [大/中/小] | | | | | |
+| | [List affected Personas] | [Large/Med/Small] | | | | | |
 ```
 
-**評分量尺定義：**
+**Scoring Scale Definitions:**
 
-| 分數 | 用戶影響 | 商業價值 | 可行性 |
-|------|---------|---------|--------|
-| 1 | 少數人偶爾不便 | 間接且長期才可能有回報 | 需要全新技術或大量未知研究 |
-| 2 | 部分用戶偶爾遇到 | 可能間接帶動部分指標 | 需要顯著的新能力建設（3+ 個月） |
-| 3 | 核心 TA 定期遇到 | 對關鍵指標有正面影響 | 需要一些新開發但技術上可行（1-3 個月） |
-| 4 | 大量用戶頻繁遇到 | 直接推動用戶增長或留存 | 現有團隊能力範圍，需 2-4 週 |
-| 5 | 大量用戶每天無法完成核心任務 | 直接驅動營收或大幅影響北極星指標 | 現有團隊兩週內可完成 |
+| Score | User Impact | Business Value | Feasibility |
+|-------|-----------|---------------|-------------|
+| 1 | Minor inconvenience for few users | Indirect, long-term payoff at best | Requires entirely new technology or extensive R&D |
+| 2 | Some users encounter occasionally | May indirectly move some metrics | Requires significant new capability building (3+ months) |
+| 3 | Core TA encounters regularly | Positive impact on key metrics | Requires some new development but technically feasible (1-3 months) |
+| 4 | Many users encounter frequently | Directly drives user growth or retention | Within current team capabilities, 2-4 weeks |
+| 5 | Many users can't complete core tasks daily | Directly drives revenue or significantly impacts North Star Metric | Current team can complete within two weeks |
 
-**Shreyas Doshi 的機會成本思維：**
+**Shreyas Doshi's Opportunity Cost Thinking:**
 
-不要問「這個功能的 ROI 是多少？」，而是問：
+Don't ask "What's the ROI of this feature?" Instead, ask:
 
-> 「如果我把資源投入 A，我放棄了投入 B 的機會。我確定 A 比 B 更值得嗎？」
+> "If I invest resources in A, I'm giving up the opportunity to invest in B. Am I sure A is more worthwhile than B?"
 
-ROI 思維讓你評估單個機會是否值得；機會成本思維讓你在所有機會之間做出更好的選擇。
+ROI thinking evaluates whether a single opportunity is worth pursuing; opportunity cost thinking helps you make better choices across all opportunities.
 
-**0-to-1 聚焦提醒：** 完成機會評估後，建議只選**一個最高優先級的 HMW 問題**作為 MVP 核心。（Facebook：大學生→高中生→所有人；個人主頁→相片→動態牆）
+**0-to-1 Focus Reminder:** After completing the opportunity assessment, it's recommended to pick **only one top-priority HMW question** as the MVP core. (Facebook: college students → high schoolers → everyone; profile page → photos → news feed)
 
 ---
 
-## 📎 本階段的檔案整合提示
+## 📎 File Integration Tips for This Stage
 
-| 上傳內容 | 整合到 | 整合動作 |
-|---------|-------|---------|
-| 競品截圖 / 競品分析報告 | 2.2 Positioning | 填入「競爭替代品」和「獨特屬性」欄位；比對差異化 |
-| 市場報告（PDF） | 2.4 機會評估 | 用市場數據佐證 Persona 規模和商業價值評分 |
-| NPS / 滿意度調查數據 | 2.1 痛點彙整 | 用真實分數替代假設性影響程度和頻率 |
-| 客服 / Support ticket 彙整 | 2.1 痛點彙整 + 2.3 HMW | 統計痛點頻率；從高頻 ticket 直接轉化為 HMW |
+| Uploaded Content | Integrate Into | Integration Action |
+|-----------------|----------------|-------------------|
+| Competitor screenshots / competitive analysis reports | 2.2 Positioning | Fill in "competitive alternatives" and "unique attributes" fields; compare differentiation |
+| Market reports (PDF) | 2.4 Opportunity Assessment | Use market data to validate Persona size and business value scores |
+| NPS / satisfaction survey data | 2.1 Pain Point Summary | Replace assumed impact levels and frequencies with actual scores |
+| Customer support / ticket summaries | 2.1 Pain Point Summary + 2.3 HMW | Count pain point frequency; convert high-frequency tickets directly into HMW questions |

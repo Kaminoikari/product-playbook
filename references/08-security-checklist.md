@@ -1,179 +1,179 @@
-# 安全性檢查清單
+# Security Checklist
 
-> 在產出開發交接包前載入。確保產品規劃階段已考慮關鍵安全性需求，避免安全性成為事後補救。
+> Loaded before producing the development handoff package. Ensures that critical security requirements are considered during the product planning phase, preventing security from becoming an afterthought.
 
-## 🔐 安全架構快速檢查
+## 🔐 Security Architecture Quick Check
 
-在產出開發交接包前，必須逐項確認以下安全性面向。每個面向標記 ✅（已在規劃中涵蓋）或 ❌（需要補充）。
+Before producing the development handoff package, verify each of the following security aspects. Mark each as ✅ (covered in planning) or ❌ (needs to be added).
 
-### 1. 認證與授權（Authentication & Authorization）
-
-```
-| 檢查項目 | 狀態 | 備註 |
-|---------|------|------|
-| 認證方式已確定（JWT / Session / OAuth / Passkey） | | |
-| Token 儲存方式安全（HttpOnly Cookie，非 localStorage） | | |
-| Token 過期與刷新機制已設計 | | |
-| 密碼儲存使用 bcrypt / argon2（不用 MD5/SHA） | | |
-| 權限模型已定義（RBAC / ABAC / 簡單角色） | | |
-| API 端點都有對應的授權檢查 | | |
-| 登入失敗有暴力破解防護（鎖定 / 漸進延遲） | | |
-```
-
-**JWT 最佳實踐（如果選用 JWT）：**
-- 使用短效 Access Token（15-30 分鐘）+ 長效 Refresh Token
-- Refresh Token 存放在 HttpOnly Secure Cookie
-- 實作 Token Revocation（登出時使 Refresh Token 失效）
-- 不在 JWT payload 中存放敏感資訊
-
-### 2. CORS 政策（Cross-Origin Resource Sharing）
+### 1. Authentication & Authorization
 
 ```
-| 檢查項目 | 狀態 | 備註 |
-|---------|------|------|
-| 已定義允許的 Origin 清單（不使用 *） | | |
-| 僅允許必要的 HTTP Methods | | |
-| 已設定 Access-Control-Allow-Credentials | | |
-| Preflight 快取時間合理（Access-Control-Max-Age） | | |
+| Check Item | Status | Notes |
+|-----------|--------|-------|
+| Authentication method determined (JWT / Session / OAuth / Passkey) | | |
+| Token storage is secure (HttpOnly Cookie, not localStorage) | | |
+| Token expiration and refresh mechanism designed | | |
+| Password storage uses bcrypt / argon2 (not MD5/SHA) | | |
+| Permission model defined (RBAC / ABAC / simple roles) | | |
+| All API endpoints have corresponding authorization checks | | |
+| Login failures have brute-force protection (lockout / progressive delay) | | |
 ```
 
-**CORS 配置模板：**
-```
-允許的 Origins：
-  - 生產環境：https://[your-domain.com]
-  - 開發環境：http://localhost:[port]
+**JWT Best Practices (if using JWT):**
+- Use short-lived Access Tokens (15-30 minutes) + long-lived Refresh Tokens
+- Store Refresh Tokens in HttpOnly Secure Cookies
+- Implement Token Revocation (invalidate Refresh Token on logout)
+- Do not store sensitive information in the JWT payload
 
-允許的 Methods：GET, POST, PUT, DELETE, PATCH
-允許的 Headers：Content-Type, Authorization
-Credentials：true（如果使用 Cookie 認證）
-Max-Age：86400（24 小時）
-```
-
-### 3. 輸入驗證與消毒（Input Validation & Sanitization）
+### 2. CORS Policy (Cross-Origin Resource Sharing)
 
 ```
-| 檢查項目 | 狀態 | 備註 |
-|---------|------|------|
-| 所有 API 輸入都有 Server-side 驗證 | | |
-| 使用參數化查詢（Parameterized Query）防 SQL Injection | | |
-| 使用者輸入經過 Output Encoding 後才渲染到 HTML（防 XSS） | | |
-| 檔案上傳有類型 / 大小限制 | | |
-| URL / Redirect 目標有白名單驗證（防 Open Redirect） | | |
+| Check Item | Status | Notes |
+|-----------|--------|-------|
+| Allowed Origin list defined (no wildcard *) | | |
+| Only necessary HTTP methods are allowed | | |
+| Access-Control-Allow-Credentials configured | | |
+| Preflight cache duration is reasonable (Access-Control-Max-Age) | | |
 ```
 
-**驗證原則：**
-- 前端驗證是 UX，後端驗證是安全性 — 兩者都需要，但後端驗證不可省略
-- 使用 Schema Validation Library（如 Zod、Joi、Pydantic）統一驗證邏輯
-- 拒絕不符合預期格式的輸入，不要試圖「修復」用戶輸入
-
-### 4. CSRF 防護（Cross-Site Request Forgery）
-
+**CORS Configuration Template:**
 ```
-| 檢查項目 | 狀態 | 備註 |
-|---------|------|------|
-| 變更操作使用 POST/PUT/DELETE（非 GET） | | |
-| 實作 CSRF Token 或使用 SameSite Cookie | | |
-| 關鍵操作有二次確認機制 | | |
+Allowed Origins:
+  - Production: https://[your-domain.com]
+  - Development: http://localhost:[port]
+
+Allowed Methods: GET, POST, PUT, DELETE, PATCH
+Allowed Headers: Content-Type, Authorization
+Credentials: true (if using cookie-based auth)
+Max-Age: 86400 (24 hours)
 ```
 
-### 5. 安全性 Headers
+### 3. Input Validation & Sanitization
 
 ```
-| Header | 用途 | 建議值 |
-|--------|------|--------|
-| Content-Security-Policy (CSP) | 防 XSS、資料注入 | default-src 'self'; script-src 'self' |
-| X-Content-Type-Options | 防 MIME Sniffing | nosniff |
-| X-Frame-Options | 防 Clickjacking | DENY 或 SAMEORIGIN |
-| Strict-Transport-Security (HSTS) | 強制 HTTPS | max-age=31536000; includeSubDomains |
-| X-XSS-Protection | 瀏覽器 XSS 過濾 | 0（依賴 CSP 更可靠） |
-| Referrer-Policy | 控制 Referrer 資訊 | strict-origin-when-cross-origin |
-| Permissions-Policy | 限制瀏覽器功能 | camera=(), microphone=(), geolocation=() |
+| Check Item | Status | Notes |
+|-----------|--------|-------|
+| All API inputs have server-side validation | | |
+| Parameterized queries used to prevent SQL Injection | | |
+| User input is output-encoded before rendering to HTML (XSS prevention) | | |
+| File uploads have type / size restrictions | | |
+| URL / redirect targets have whitelist validation (Open Redirect prevention) | | |
 ```
 
-### 6. API 安全與 Rate Limiting
+**Validation Principles:**
+- Frontend validation is UX; backend validation is security — both are needed, but backend validation is non-negotiable
+- Use a Schema Validation Library (e.g., Zod, Joi, Pydantic) for unified validation logic
+- Reject inputs that don't match expected formats — don't try to "fix" user input
+
+### 4. CSRF Protection (Cross-Site Request Forgery)
 
 ```
-| 檢查項目 | 狀態 | 備註 |
-|---------|------|------|
-| API 有全域 Rate Limiting（如 100 req/min/IP） | | |
-| 敏感端點有更嚴格的限制（登入 5 req/min、註冊 3 req/min） | | |
-| API 錯誤回應不洩漏內部資訊（堆疊追蹤、SQL 語句） | | |
-| API Versioning 策略已確定（/api/v1/） | | |
-| 大量資料端點有分頁（Pagination）限制 | | |
+| Check Item | Status | Notes |
+|-----------|--------|-------|
+| State-changing operations use POST/PUT/DELETE (not GET) | | |
+| CSRF Token implemented or SameSite Cookie used | | |
+| Critical operations have secondary confirmation | | |
 ```
 
-**Rate Limiting 設計建議：**
-```
-| 端點類型 | 建議限制 | 識別方式 |
-|---------|---------|---------|
-| 一般 API | 100 req/min | IP + User ID |
-| 登入/註冊 | 5 req/min | IP |
-| 密碼重設 | 3 req/hour | IP + Email |
-| 檔案上傳 | 10 req/min | User ID |
-| 搜尋/查詢 | 30 req/min | IP + User ID |
-```
-
-### 7. 防爬蟲與 Bot 防護
+### 5. Security Headers
 
 ```
-| 檢查項目 | 狀態 | 備註 |
-|---------|------|------|
-| robots.txt 已配置（限制敏感路徑） | | |
-| 關鍵表單有 Bot 防護（reCAPTCHA / hCaptcha / Honeypot） | | |
-| API 有 User-Agent 檢查（可選） | | |
-| 敏感操作有行為分析（可選，進階） | | |
+| Header | Purpose | Recommended Value |
+|--------|---------|-------------------|
+| Content-Security-Policy (CSP) | Prevent XSS, data injection | default-src 'self'; script-src 'self' |
+| X-Content-Type-Options | Prevent MIME sniffing | nosniff |
+| X-Frame-Options | Prevent clickjacking | DENY or SAMEORIGIN |
+| Strict-Transport-Security (HSTS) | Enforce HTTPS | max-age=31536000; includeSubDomains |
+| X-XSS-Protection | Browser XSS filter | 0 (relying on CSP is more reliable) |
+| Referrer-Policy | Control referrer information | strict-origin-when-cross-origin |
+| Permissions-Policy | Restrict browser features | camera=(), microphone=(), geolocation=() |
 ```
 
-**分層防護策略：**
-1. **基礎層**：Rate Limiting + robots.txt — 所有產品都應該有
-2. **標準層**：+ CAPTCHA（註冊/登入）+ Honeypot 欄位 — B2C 產品建議
-3. **進階層**：+ 行為分析 + IP 信譽 + Device Fingerprint — 高風險產品
-
-### 8. 敏感資料保護
+### 6. API Security & Rate Limiting
 
 ```
-| 檢查項目 | 狀態 | 備註 |
-|---------|------|------|
-| 敏感資料在傳輸中加密（HTTPS/TLS） | | |
-| 敏感資料在儲存時加密（如需要） | | |
-| 密鑰和 Secrets 不存在程式碼中 | | |
-| .env 和敏感檔案已加入 .gitignore | | |
-| 日誌不記錄密碼、Token、信用卡號等 | | |
-| 有明確的資料保留與刪除政策（GDPR 如適用） | | |
+| Check Item | Status | Notes |
+|-----------|--------|-------|
+| API has global rate limiting (e.g., 100 req/min/IP) | | |
+| Sensitive endpoints have stricter limits (login 5 req/min, register 3 req/min) | | |
+| API error responses don't leak internal details (stack traces, SQL statements) | | |
+| API versioning strategy determined (/api/v1/) | | |
+| Bulk data endpoints have pagination limits | | |
 ```
 
-**Secrets 管理建議：**
-- 開發環境：`.env` 檔案（不進版控）+ `.env.example`（只有 key 名稱，沒有值）
-- 生產環境：使用平台提供的環境變數管理（Vercel Environment Variables / Railway Variables / AWS Secrets Manager）
-- 不要在 commit message、PR description、issue 中提及 secrets
+**Rate Limiting Design Recommendations:**
+```
+| Endpoint Type | Recommended Limit | Identification Method |
+|--------------|-------------------|----------------------|
+| General API | 100 req/min | IP + User ID |
+| Login/Register | 5 req/min | IP |
+| Password Reset | 3 req/hour | IP + Email |
+| File Upload | 10 req/min | User ID |
+| Search/Query | 30 req/min | IP + User ID |
+```
 
-### 9. .gitignore 安全模板
+### 7. Anti-Scraping & Bot Protection
+
+```
+| Check Item | Status | Notes |
+|-----------|--------|-------|
+| robots.txt configured (restrict sensitive paths) | | |
+| Critical forms have bot protection (reCAPTCHA / hCaptcha / Honeypot) | | |
+| API has User-Agent checks (optional) | | |
+| Sensitive operations have behavioral analysis (optional, advanced) | | |
+```
+
+**Layered Protection Strategy:**
+1. **Basic layer**: Rate Limiting + robots.txt — Every product should have this
+2. **Standard layer**: + CAPTCHA (registration/login) + Honeypot fields — Recommended for B2C products
+3. **Advanced layer**: + Behavioral analysis + IP reputation + Device Fingerprint — High-risk products
+
+### 8. Sensitive Data Protection
+
+```
+| Check Item | Status | Notes |
+|-----------|--------|-------|
+| Sensitive data encrypted in transit (HTTPS/TLS) | | |
+| Sensitive data encrypted at rest (if required) | | |
+| Secrets and keys not stored in code | | |
+| .env and sensitive files added to .gitignore | | |
+| Logs don't record passwords, tokens, credit card numbers, etc. | | |
+| Clear data retention and deletion policy (GDPR if applicable) | | |
+```
+
+**Secrets Management Recommendations:**
+- Development: `.env` file (not in version control) + `.env.example` (key names only, no values)
+- Production: Use platform-provided env var management (Vercel Environment Variables / Railway Variables / AWS Secrets Manager)
+- Never mention secrets in commit messages, PR descriptions, or issues
+
+### 9. .gitignore Security Template
 
 ```gitignore
-# 環境變數與密鑰
+# Environment variables and secrets
 .env
 .env.local
 .env.*.local
 *.pem
 *.key
 
-# 產品規劃進度（可能包含敏感商業資訊）
+# Product planning progress (may contain sensitive business information)
 .product-playbook-progress.md
 
-# IDE 與作業系統
+# IDE and OS
 .idea/
 .vscode/
 *.swp
 .DS_Store
 Thumbs.db
 
-# 依賴
+# Dependencies
 node_modules/
 __pycache__/
 *.pyc
 venv/
 
-# 建置產出
+# Build output
 dist/
 build/
 .next/
@@ -181,41 +181,41 @@ build/
 
 ---
 
-## 🏷️ OWASP Top 10 快速對照
+## 🏷️ OWASP Top 10 Quick Reference
 
-| # | 風險 | 本產品是否相關 | 對應檢查項 |
-|---|------|-------------|-----------|
-| A01 | Broken Access Control | [是/否] | §1 認證與授權 |
-| A02 | Cryptographic Failures | [是/否] | §8 敏感資料保護 |
-| A03 | Injection（SQL / XSS / Command） | [是/否] | §3 輸入驗證 |
-| A04 | Insecure Design | [是/否] | 整體架構設計 |
-| A05 | Security Misconfiguration | [是/否] | §5 Headers + §2 CORS |
-| A06 | Vulnerable Components | [是/否] | 依賴管理（npm audit / pip audit） |
-| A07 | Authentication Failures | [是/否] | §1 認證與授權 |
-| A08 | Data Integrity Failures | [是/否] | §3 輸入驗證 + §8 資料保護 |
-| A09 | Logging & Monitoring Failures | [是/否] | §8 日誌規範 |
-| A10 | SSRF (Server-Side Request Forgery) | [是/否] | §3 URL 白名單驗證 |
+| # | Risk | Relevant to This Product? | Corresponding Check |
+|---|------|--------------------------|-------------------|
+| A01 | Broken Access Control | [Yes/No] | §1 Authentication & Authorization |
+| A02 | Cryptographic Failures | [Yes/No] | §8 Sensitive Data Protection |
+| A03 | Injection (SQL / XSS / Command) | [Yes/No] | §3 Input Validation |
+| A04 | Insecure Design | [Yes/No] | Overall architecture design |
+| A05 | Security Misconfiguration | [Yes/No] | §5 Headers + §2 CORS |
+| A06 | Vulnerable Components | [Yes/No] | Dependency management (npm audit / pip audit) |
+| A07 | Authentication Failures | [Yes/No] | §1 Authentication & Authorization |
+| A08 | Data Integrity Failures | [Yes/No] | §3 Input Validation + §8 Data Protection |
+| A09 | Logging & Monitoring Failures | [Yes/No] | §8 Logging rules |
+| A10 | SSRF (Server-Side Request Forgery) | [Yes/No] | §3 URL whitelist validation |
 
 ---
 
-## 📎 本檔案的整合時機
+## 📎 Integration Timing
 
-| 觸發情境 | 整合動作 |
-|---------|---------|
-| 產出開發交接包前 | 執行安全性快速檢查，將結果整合進 CLAUDE.md 的「風險警示」和 ARCHITECTURE.md 的「安全架構」段落 |
-| 產出 PRD 時 | 將安全性相關檢查結果整合進 PRD §6「技術考量 → 安全性要求」 |
-| Pre-mortem 步驟 | 提示使用者考慮安全性失敗情境 |
-| 改版模式 S1 | 提示使用者提供既有產品的安全現況 |
+| Trigger | Integration Action |
+|---------|-------------------|
+| Before producing the dev handoff package | Run the security quick check, integrate results into CLAUDE.md "Risk Alerts" and ARCHITECTURE.md "Security Architecture" sections |
+| When producing the PRD | Integrate security check results into PRD §6 "Technical Considerations → Security Requirements" |
+| Pre-mortem step | Prompt the user to consider security failure scenarios |
+| Revision mode S1 | Prompt the user to provide the existing product's current security posture |
 
-## 品質自檢
+## Quality Self-Check
 
 ```
-| 檢查項目 | ✅/❌ |
-|---------|------|
-| 認證方式已明確選定，不是留空的「待確認」 | |
-| 至少 3 個安全性 Headers 已規劃 | |
-| Rate Limiting 策略已針對產品特性調整（不是直接複製模板） | |
-| .gitignore 已包含所有敏感檔案 | |
-| OWASP Top 10 中標記為「相關」的項目都有對應措施 | |
-| 安全性措施的複雜度與產品階段匹配（MVP 不需要完美安全性，但基礎不可少） | |
+| Check Item | ✅/❌ |
+|-----------|------|
+| Authentication method explicitly chosen, not left as "TBD" | |
+| At least 3 security headers planned | |
+| Rate limiting strategy tailored to product characteristics (not just copied from template) | |
+| .gitignore includes all sensitive files | |
+| All OWASP Top 10 items marked "relevant" have corresponding measures | |
+| Security measure complexity matches the product stage (MVP doesn't need perfect security, but the basics are non-negotiable) | |
 ```

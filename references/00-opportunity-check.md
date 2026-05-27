@@ -1,44 +1,44 @@
-# 前置：機會評估（Opportunity Check）
+# Pre-Step: Opportunity Check
 
-> **注意：各模式應執行哪些步驟，以 SKILL.md 中「各模式步驟序列」為權威定義。以下僅供參考。**
+> **Note: Which steps to execute per mode is authoritatively defined by the "Mode Step Sequences" in SKILL.md. The following is for reference only.**
 
-**適用於：完整模式、高完整性、產出對象為老闆/高層**
-**可跳過：快速模式、直接實作模式、產出對象為工程師/設計師**
+**Applicable: Full mode, high completeness, audience is executives/leadership**
+**Skippable: Quick mode, direct build mode, audience is engineers/designers**
 
-如果使用者是從頭開始做 0-to-1 產品，先通過這五個問題。任何一題答案是「否」都是需要重新思考的訊號：
+If the user is building a 0-to-1 product from scratch, run through these five questions first. A "no" on any question is a signal to rethink:
 
 ```
-| # | 評估問題 | 使用者答案 | 評估 |
-|---|----------|-----------|------|
-| 1 | 這是否在解決一個真實且急迫的用戶痛點？第一批受益的客戶是誰？你如何找到他們？ | | ✅/⚠️ |
-| 2 | 你是否有解決這個問題的獨特優勢？目標客戶是否至少每週會用到？市場夠大嗎？ | | ✅/⚠️ |
-| 3 | 以現有資源，能否在 2-3 年內做出可用的產品？ | | ✅/⚠️ |
-| 4 | 競爭格局如何？你能贏嗎？差異化優勢是什麼？ | | ✅/⚠️ |
-| 5 | 是否有可持續的用戶增長和商業化路徑？ | | ✅/⚠️ |
+| # | Assessment Question | User's Answer | Assessment |
+|---|---------------------|---------------|------------|
+| 1 | Does this solve a real, urgent user pain point? Who are the first customers to benefit? How will you find them? | | ✅/⚠️ |
+| 2 | Do you have a unique advantage in solving this problem? Will target customers use it at least weekly? Is the market large enough? | | ✅/⚠️ |
+| 3 | With current resources, can you build a usable product within 2-3 years? | | ✅/⚠️ |
+| 4 | What does the competitive landscape look like? Can you win? What's your differentiation? | | ✅/⚠️ |
+| 5 | Is there a sustainable path for user growth and monetization? | | ✅/⚠️ |
 ```
 
-## DHM 初步檢驗（Gibson Biddle / Netflix）
+## DHM Quick Check (Gibson Biddle / Netflix)
 
-這個機會是否能做到：
-- **D（Delight）**：讓用戶感到驚喜、超出預期？
-- **H（Hard to copy）**：競爭對手難以輕易複製？
-- **M（Margin-enhancing）**：隨著規模增長，邊際利潤能提升？
+Can this opportunity achieve:
+- **D (Delight)**: Surprise and exceed user expectations?
+- **H (Hard to copy)**: Be difficult for competitors to replicate?
+- **M (Margin-enhancing)**: Improve margins as scale grows?
 
-如果某些市場訊號尚不明確，尋找方向性訊號：
-- 宏觀趨勢（例：AI 普及帶來的工作流程替代機會）
-- 行為轉移（用戶已在用 workaround，代表需求真實存在）
-- 類比市場（找已驗證的相似場景）
+If some market signals are unclear, look for directional signals:
+- Macro trends (e.g., AI adoption creating workflow replacement opportunities)
+- Behavioral shifts (users already using workarounds, indicating real demand)
+- Analogous markets (find validated comparable scenarios)
 
-## 團隊熱情確認
+## Team Passion Check
 
-確認團隊對這個問題空間真的有熱情。缺乏內在驅動力的團隊在尋找 PMF 的路上必然倒下。
+Confirm the team has genuine passion for this problem space. Teams lacking intrinsic motivation will inevitably falter on the path to PMF.
 
 ---
 
-## 📎 本階段的檔案整合提示
+## 📎 File Integration Tips for This Stage
 
-| 上傳內容 | 整合到 | 整合動作 |
-|---------|-------|---------|
-| 市場報告（PDF） | 五個評估問題（#2 市場規模、#4 競爭格局） | 用報告數據替代假設性回答 |
-| 行業分析 / 趨勢報告 | DHM + 方向性訊號 | 提取宏觀趨勢和行為轉移作為 DHM 佐證 |
-| 競品融資/營收資訊 | 五個評估問題（#4、#5） | 評估競爭強度和市場驗證信號 |
+| Uploaded Content | Integrate Into | Integration Action |
+|-----------------|----------------|-------------------|
+| Market reports (PDF) | Five assessment questions (#2 market size, #4 competitive landscape) | Replace assumptions with report data |
+| Industry analysis / trend reports | DHM + directional signals | Extract macro trends and behavioral shifts as DHM evidence |
+| Competitor funding/revenue info | Five assessment questions (#4, #5) | Assess competitive intensity and market validation signals |

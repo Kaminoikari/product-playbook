@@ -1,90 +1,90 @@
-# 產品策略層
+# Product Strategy Layer
 
-> **注意：各模式應執行哪些步驟，以 SKILL.md 中「各模式步驟序列」為權威定義。以下僅供參考。**
+> **Note: Which steps to execute per mode is authoritatively defined by the "Mode Step Sequences" in SKILL.md. The following is for reference only.**
 
-**適用於：完整模式、高完整性、產出對象為老闆/跨部門對齊**
-**可跳過：快速模式、直接實作模式、低完整性**
+**Applicable: Full mode, high completeness, audience is executives/cross-functional alignment**
+**Skippable: Quick mode, direct build mode, low completeness**
 
-## Strategy Blocks（Chandra Janakiraman / Headspace / Meta）
+## Strategy Blocks (Chandra Janakiraman / Headspace / Meta)
 
-好策略的層級結構，從上到下每一層都是下一層的基礎：
-
-```
-Mission（使命）
-  └→ Vision（願景）— 5-10 年後你希望世界變成什麼樣？
-       └→ Strategy（策略）— 你如何達到那個願景？（關鍵選擇和取捨）
-            └→ Goals / OKRs（目標）— 接下來 6-12 個月的優先事項
-                 └→ Roadmap（路線圖）— 具體要做什麼？
-                      └→ Tasks（任務）— 誰做什麼、何時完成？
-```
-
-## Richard Rumelt 的「好策略內核（Kernel of Good Strategy）」
-
-- **診斷（Diagnosis）**：清楚定義你面臨的挑戰（不是所有問題，而是最關鍵的那個）
-- **指導方針（Guiding Policy）**：你的整體應對方向（不是目標，而是方法）
-- **連貫行動（Coherent Actions）**：相互強化的具體行動，而不是各自獨立的計畫
-
-> 壞策略的特徵：只有宏大目標、沒有診斷；用漂亮的措辭掩蓋思維的空洞；把所有計畫都稱為「策略」。
-
-## Shreyas Doshi 的三層次產品工作
-
-在處理任何產品問題時，先確認你在哪個層次工作：
+The hierarchy of good strategy — each layer is the foundation for the next:
 
 ```
-Level 3：Product Excellence（卓越執行）— 把正確的事情做得非常好
-Level 2：Product Strategy（產品策略）— 做正確的事情
-Level 1：Product Foundation（產品根基）— 有能力做事情的基礎（文化、流程、人才）
+Mission
+  └→ Vision — What do you want the world to look like in 5-10 years?
+       └→ Strategy — How will you reach that vision? (Key choices and trade-offs)
+            └→ Goals / OKRs — Priorities for the next 6-12 months
+                 └→ Roadmap — What specifically will you build?
+                      └→ Tasks — Who does what, and when?
 ```
 
-> 大多數 PM 花太多時間在 Level 3，卻忽略了 Level 2 的問題。大多數所謂的「執行問題」，追根究底都是「策略問題」。
+## Richard Rumelt's Kernel of Good Strategy
 
-## Shreyas Doshi 的 LNO 時間分配框架
+- **Diagnosis**: Clearly define the challenge you face (not all problems — the most critical one)
+- **Guiding Policy**: Your overall approach (not a goal, but a method)
+- **Coherent Actions**: Specific actions that reinforce each other, not a collection of independent plans
 
-每週的工作項目，先問：這件事對產品的影響屬於哪一類？
+> Signs of bad strategy: Grand goals without diagnosis; fancy language masking hollow thinking; calling every plan a "strategy."
+
+## Shreyas Doshi's Three Levels of Product Work
+
+Before tackling any product problem, identify which level you're working at:
 
 ```
-L（Leverage，高槓桿）：策略、願景、文化 → 投入充足時間，精益求精
-N（Neutral，中性）：一般協作、普通溝通 → 做好即可，不必追求完美
-O（Overhead，負擔）：行政、會議、文書 → 盡快完成，不要過度投入
+Level 3: Product Excellence — Doing the right things exceptionally well
+Level 2: Product Strategy — Doing the right things
+Level 1: Product Foundation — Having the foundation to do things (culture, processes, talent)
 ```
 
-> 把節省下來的 O 時間，投入到被忽視的 L 工作中。
+> Most PMs spend too much time on Level 3 while neglecting Level 2 problems. Most so-called "execution problems" are actually strategy problems at their root.
 
-## OKR 撰寫指引
+## Shreyas Doshi's LNO Time Allocation Framework
 
-Strategy Blocks 中 Goals/OKRs 是策略往下展開的關鍵層。寫好 OKR 的最小規則：
+For each week's work items, first ask: What type of impact does this have on the product?
 
-**Objective（目標）**：定性、有激勵性、可理解。描述一個你想達到的狀態，不是一個待辦事項。
-- ✅ 好的 O：「讓新用戶在第一天就感受到產品核心價值」
-- ❌ 壞的 O：「完成 Onboarding 改版」（這是任務不是目標）
-
-**Key Results（關鍵結果）**：定量、可衡量、有時限。描述你如何知道自己達到了目標。
-- ✅ 好的 KR：「新用戶 D1 核心動作完成率從 20% 提升到 40%」
-- ❌ 壞的 KR：「上線新版 Onboarding 流程」（這是 Output 不是 Outcome）
-
-**常見陷阱：**
-- 把任務清單偽裝成 OKR（「完成 X 功能」不是 KR）
-- OKR 太多（每季 2-3 個 Objective，每個 O 下 3-5 個 KR）
-- KR 之間相互矛盾或不相關
-- 只有滯後指標（Lagging），沒有領先指標（Leading）
-
-**範例：**
 ```
-O：讓目標用戶愛上我們的產品（PMF Level 2 → Level 3）
-  KR1：D28 留存率從 12% → 20%
-  KR2：Sean Ellis Score 從 28% → 40%
-  KR3：每月自然推薦新增用戶佔比從 10% → 25%
+L (Leverage): Strategy, vision, culture → Invest ample time, pursue excellence
+N (Neutral): General collaboration, routine communication → Do it well, don't pursue perfection
+O (Overhead): Admin, meetings, paperwork → Finish quickly, don't over-invest
 ```
 
-## 產品核心三問（貫穿整個流程）
+> Redirect saved O-time into neglected L-work.
 
-這三個問題必須依序釐清，**順序不可對調**：
+## OKR Writing Guidelines
 
-> **Q1：如何吸引顧客進來？（How to get people in the front door?）**
-> **Q2：如何最快讓他們感受到「哇啊！」？（How to reach the Aha Moment?）**
-> **Q3：如何高頻率地傳遞出產品的核心價值？（How to deliver core value repeatedly?）**
+Goals/OKRs in Strategy Blocks are the critical layer for cascading strategy downward. Minimum rules for writing good OKRs:
 
-在 Define 階段，具體轉化為：
-- **Who is it for?** — 為誰做的？
-- **Why build it?** — 為什麼要做？
-- **What is it?** — 做什麼？
+**Objective**: Qualitative, inspiring, understandable. Describe a state you want to achieve, not a to-do item.
+- ✅ Good O: "Make new users feel the product's core value on day one"
+- ❌ Bad O: "Complete onboarding redesign" (that's a task, not an objective)
+
+**Key Results**: Quantitative, measurable, time-bound. Describe how you'll know you've achieved the objective.
+- ✅ Good KR: "Increase new user D1 core action completion rate from 20% to 40%"
+- ❌ Bad KR: "Launch new onboarding flow" (that's an output, not an outcome)
+
+**Common pitfalls:**
+- Disguising a task list as OKRs ("Complete feature X" is not a KR)
+- Too many OKRs (aim for 2-3 Objectives per quarter, 3-5 KRs per Objective)
+- KRs that contradict or are unrelated to each other
+- Only lagging indicators, no leading indicators
+
+**Example:**
+```
+O: Make target users love our product (PMF Level 2 → Level 3)
+  KR1: D28 retention from 12% → 20%
+  KR2: Sean Ellis Score from 28% → 40%
+  KR3: Monthly organic referral share from 10% → 25%
+```
+
+## Three Core Product Questions (Throughout the Entire Process)
+
+These three questions must be answered in order — **the sequence cannot be swapped**:
+
+> **Q1: How to get people in the front door?**
+> **Q2: How to reach the Aha Moment as fast as possible?**
+> **Q3: How to deliver core value repeatedly?**
+
+In the Define stage, these translate to:
+- **Who is it for?**
+- **Why build it?**
+- **What is it?**

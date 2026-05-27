@@ -279,39 +279,35 @@ do_install() {
   # SKILL.md default language is always English; runtime language detection
   # in SKILL.md handles switching to the user's language dynamically.
   # INSTALL_LANG is only used for CLI installer messages (msg() function).
-  local en_lang_dir="$src_dir/i18n/en"
-  local has_i18n=false
-
-  if [ -d "$src_dir/i18n" ]; then
-    has_i18n=true
-  fi
 
   # Copy Skill files
   info "$(msg installing_skill)"
   cp "$src_dir/LICENSE" "$SKILL_DIR/"
 
-  if [ "$has_i18n" = true ]; then
-    # Install ALL languages
-    cp -r "$src_dir/i18n" "$SKILL_DIR/"
-    ok "Installed all 6 languages to $SKILL_DIR/i18n/"
+  # Root is the canonical English source — copy unconditionally.
+  cp "$src_dir/SKILL.md" "$SKILL_DIR/"
+  [ -d "$src_dir/references" ] && cp -r "$src_dir/references" "$SKILL_DIR/"
+  [ -d "$src_dir/commands" ] && cp -r "$src_dir/commands" "$SKILL_DIR/"
 
-    # Set default language: always use English as the entry point
-    # Runtime language detection in SKILL.md will switch to i18n/{lang}/ as needed
-    if [ -d "$en_lang_dir" ]; then
-      cp "$en_lang_dir/SKILL.md" "$SKILL_DIR/"
-      cp -r "$en_lang_dir/references" "$SKILL_DIR/"
-      cp -r "$en_lang_dir/commands" "$SKILL_DIR/"
-    fi
-  else
-    # Legacy fallback: no i18n directory
-    cp "$src_dir/SKILL.md" "$SKILL_DIR/"
-    [ -d "$src_dir/references" ] && cp -r "$src_dir/references" "$SKILL_DIR/"
-    [ -d "$src_dir/commands" ] && cp -r "$src_dir/commands" "$SKILL_DIR/"
+  # Other-language overrides live under i18n/<lang>/. Runtime SKILL.md
+  # language detection switches to i18n/<lang>/SKILL.md when needed.
+  if [ -d "$src_dir/i18n" ]; then
+    cp -r "$src_dir/i18n" "$SKILL_DIR/"
+    ok "Installed $(ls "$src_dir/i18n" | wc -l | tr -d ' ') additional language(s) under $SKILL_DIR/i18n/"
   fi
 
   # Sub-agents (language-agnostic — each agent's system prompt instructs it
-  # to reply in the orchestrator's language, so there is no per-language copy)
-  [ -d "$src_dir/agents" ] && cp -r "$src_dir/agents" "$SKILL_DIR/"
+  # to reply in the orchestrator's language, so there is no per-language copy).
+  # Install in two locations:
+  #   1. Inside the skill dir for bundling/inspection.
+  #   2. At ~/.claude/agents/ so Claude Code's Task tool can discover them
+  #      as `subagent_type` values. Without (2), `claude -p` and many
+  #      non-plugin install paths can't actually dispatch to specialists.
+  if [ -d "$src_dir/agents" ]; then
+    cp -r "$src_dir/agents" "$SKILL_DIR/"
+    mkdir -p "$HOME/.claude/agents"
+    cp "$src_dir/agents"/*.md "$HOME/.claude/agents/" 2>/dev/null || true
+  fi
 
   # Write version marker (semver from package.json for npm comparison)
   local pkg_version=""

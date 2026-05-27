@@ -1,65 +1,65 @@
-# 階段一：Discovery — OST + Journey Map
+# Stage 1: Discovery — OST + Journey Map
 
-## 1.4 機會解法樹（Opportunity Solution Tree / OST）
+## 1.4 Opportunity Solution Tree (OST)
 
-**適用於：完整模式 / 高完整性**
+**Applicable: Full mode / high completeness**
 
-OST 從產品目標出發，系統化連結機會和解法：
+The OST starts from the product goal and systematically connects opportunities to solutions:
 
 ```
-[產品目標 / Desired Outcome]
+[Product Goal / Desired Outcome]
     │
-    ├── [機會 1：用戶痛點或需求]
-    │       ├── [解法 1a]
-    │       └── [解法 1b]
-    ├── [機會 2：用戶痛點或需求]
-    │       └── [解法 2a]
-    └── [機會 3：用戶痛點或需求]
-            └── [解法 3a]
+    ├── [Opportunity 1: User pain point or need]
+    │       ├── [Solution 1a]
+    │       └── [Solution 1b]
+    ├── [Opportunity 2: User pain point or need]
+    │       └── [Solution 2a]
+    └── [Opportunity 3: User pain point or need]
+            └── [Solution 3a]
 ```
 
-核心原則：
-- 目標（Outcome）是可衡量的結果，不是功能或產出
-- 機會（Opportunity）來自用戶研究，而不是內部腦力激盪
-- 解法（Solution）對應機會，不要跳過機會直接討論解法
-- 先廣後深：先列出所有機會，再逐一探索解法
+Core principles:
+- The goal (Outcome) is a measurable result, not a feature or output
+- Opportunities come from user research, not internal brainstorming
+- Solutions map to opportunities — don't skip opportunities and jump straight to solutions
+- Go broad, then deep: list all opportunities first, then explore solutions one by one
 
 ## 1.5 User Journey Map
 
-**適用於：完整模式 / 高完整性 / 產出對象為設計師**
+**Applicable: Full mode / high completeness / audience is designers**
 
-**Step 1：概覽表**
+**Step 1: Overview Table**
 
 ```
-**[Persona名] — 任務：[任務描述]**
+**[Persona Name] — Task: [Task description]**
 
-| 階段 | 核心行為 | 情緒 | 關鍵痛點 |
+| Stage | Core Behavior | Emotion | Key Pain Point |
 |---|---|---|---|
-| [階段1] | [一句話描述主要行為] | [情緒 + emoji] | [最重要的那個痛點] |
+| [Stage 1] | [One-line description of primary behavior] | [Emotion + emoji] | [The most important pain point] |
 ```
 
-**Step 2：逐段展開細節**
+**Step 2: Expand Each Stage in Detail**
 
 ```
-> **階段：[階段名稱]**
-> - **Doing（行為）**：[這個階段用戶實際做了什麼]
-> - **Thinking（想法）**：[用戶腦中在想什麼，盡量用第一人稱口語]
-> - **Feeling（感受）**：[情緒狀態及原因]
-> - **Stakeholder（關係人）**：[這個階段涉及哪些人]
-> - **Problem（痛點）**：[具體的困難或不滿]
+> **Stage: [Stage Name]**
+> - **Doing**: [What the user actually does at this stage]
+> - **Thinking**: [What's going through the user's mind, ideally in first-person voice]
+> - **Feeling**: [Emotional state and why]
+> - **Stakeholder**: [Who is involved at this stage]
+> - **Problem**: [Specific difficulties or frustrations]
 ```
 
-**Step 3：Grouping**
-- 如果階段太細碎，合併成更大的階段群組
-- 統整每個階段的痛點，標記哪些是核心痛點
+**Step 3: Grouping**
+- If stages are too granular, merge them into larger stage groups
+- Consolidate pain points across stages, flag which are core pain points
 
 ---
 
-## 📎 本階段的檔案整合提示
+## 📎 File Integration Tips for This Stage
 
-如果使用者在此階段上傳了檔案，Claude 依據以下規則整合：
+If the user uploads files during this stage, Claude integrates according to these rules:
 
-| 上傳內容 | 整合到 | 整合動作 |
-|---------|-------|---------|
-| 白板 / 手繪流程圖 | 1.5 Journey Map | 辨識流程後轉化為結構化表格；保留原始情緒標記 |
-| 用戶行為數據（CSV） | 1.4 OST + 1.5 Journey Map | 用數據佐證哪些行為路徑最常見、哪些階段流失最多 |
+| Uploaded Content | Integrate Into | Integration Action |
+|-----------------|----------------|-------------------|
+| Whiteboard / hand-drawn flow diagrams | 1.5 Journey Map | Recognize the flow and convert to structured table; preserve original emotion markers |
+| User behavior data (CSV) | 1.4 OST + 1.5 Journey Map | Use data to validate which behavior paths are most common and which stages have the highest drop-off |

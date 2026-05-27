@@ -25,7 +25,7 @@ Eres un coach senior de product management que integra metodologías fundamental
 
 Detecta el idioma del primer mensaje del usuario y cambia silenciosamente:
 
-- English → `i18n/en/SKILL.md`
+- English → `SKILL.md` (root)
 - 繁體中文 → `i18n/zh-TW/SKILL.md`
 - 日本語 → `i18n/ja/SKILL.md`
 - 简体中文 → `i18n/zh-CN/SKILL.md`

@@ -1,152 +1,152 @@
-# ⚡ 直接實作模式步驟序列（共 7 步 + 最終產出）
+# ⚡ Build Mode Step Sequence (7 Steps + Final Output)
 
-> 此檔案為直接實作模式的權威步驟定義。由 SKILL.md 核心派發載入。
+> This file is the authoritative step definition for Build Mode. Loaded by the SKILL.md core dispatcher.
 
-> ⚠️ 必須提醒：「跳過用戶研究階段，代表解法建立在假設上。建議執行後盡快進行 Continuous Discovery 驗證。」
+> ⚠️ Required reminder: "Skipping the user research phase means your solution is built on assumptions. We recommend conducting Continuous Discovery as soon as possible after execution to validate."
 
-## 步驟序列
+## Step Sequence
 
 ```
-S1. 確認問題陳述（一句話）
-S2. PR-FAQ → 讀取 references/04a-prfaq.md
-S3. 平行解法 → 讀取 references/04b-solutions.md → 3.2
-S4. Pre-mortem → 讀取 references/04b-solutions.md → 3.3
-S5. GEM + RICE 優先排序 → 讀取 references/04b-solutions.md → 3.4 + 3.5
-S6. MVP + Not Doing List → 讀取 references/04c-mvp.md
-S7. North Star + Aha Moment → 讀取 references/05a-northstar-aha.md
+S1. Confirm problem statement (one sentence)
+S2. PR-FAQ → Read references/04a-prfaq.md
+S3. Parallel solutions → Read references/04b-solutions.md → 3.2
+S4. Pre-mortem → Read references/04b-solutions.md → 3.3
+S5. GEM + RICE Prioritization → Read references/04b-solutions.md → 3.4 + 3.5
+S6. MVP + Not Doing List → Read references/04c-mvp.md
+S7. North Star + Aha Moment → Read references/05a-northstar-aha.md
 ────
-最終產出 → 工程師導向執行摘要
+Final Output → Engineer-oriented execution summary
 ```
 
-## Reference 載入指示
+## Reference Loading Instructions
 
-| 步驟 | Reference 檔案 |
+| Step | Reference File |
 |------|---------------|
-| S1 | 無需外部 reference（直接引導使用者陳述問題） |
+| S1 | No external reference needed (directly guide the user to state the problem) |
 | S2 | `references/04a-prfaq.md` |
 | S3-S5 | `references/04b-solutions.md` |
 | S6 | `references/04c-mvp.md` |
 | S7 | `references/05a-northstar-aha.md` |
 
-## 最終產出格式
+## Final Output Format
 
-**工程師導向的執行摘要**：解法決策 → MVP 邊界 → 成功指標 → 主要風險
+**Engineer-oriented execution summary**: Solution decisions → MVP boundary → Success metrics → Key risks
 
-完成後，依 `references/rules-end-of-flow.md` 執行流程結束規則。
+After completion, follow `references/rules-end-of-flow.md` to execute the end-of-flow rules.
 
 ---
 
-## 🔧 功能擴充快速路徑（4 步）
+## 🔧 Feature Extension Quick Path (4 Steps)
 
-> 當偵測到使用者是在**既有產品上新增單一功能**時，自動切換到此路徑。
-> 觸發條件：使用者描述中包含「加一個功能」「新增功能」「加入 XX 功能」「在現有系統上」「既有產品要加」等語句。
+> Automatically switches to this path when the user is **adding a single feature to an existing product**.
+> Trigger conditions: User description includes phrases like "add a feature," "new feature," "add XX functionality," "on the existing system," "existing product needs," etc.
 
-**與完整直接實作模式（7 步）的差異**：既有產品已有 North Star、Aha Moment、產品定位，不需要重新定義。單一功能不需要 PR-FAQ 新聞稿、GEM+RICE 全面重新排序。聚焦在「加什麼、怎麼加、會不會搞壞現有的東西」。
+**Differences from the full Build Mode (7 steps)**: An existing product already has a North Star, Aha Moment, and product positioning — no need to redefine them. A single feature does not require a PR-FAQ press release or full GEM+RICE re-prioritization. The focus is on "what to add, how to add it, and whether it will break existing functionality."
 
-### 功能擴充步驟序列
+### Feature Extension Step Sequence
 
 ```
-S1. 問題 + 既有系統上下文
-S2. 三平行解法 + 優缺點 + AI 推薦 → 讀取 references/04b-solutions.md → 3.2
-S3. 風險評估（回歸 + 相容性）→ 讀取 references/04b-solutions.md → 3.3
-S4. 執行範圍（做什麼 / 不動什麼 / 驗收標準）→ 讀取 references/04c-mvp.md
+S1. Problem + existing system context
+S2. Three parallel solutions + pros/cons + AI recommendation → Read references/04b-solutions.md → 3.2
+S3. Risk assessment (regression + compatibility) → Read references/04b-solutions.md → 3.3
+S4. Execution scope (what to do / what not to touch / acceptance criteria) → Read references/04c-mvp.md
 ────
-最終產出 → 功能開發規格
+Final Output → Feature development spec
 ```
 
-### S1 前置：產品上下文載入
+### S1 Pre-step: Product Context Loading
 
-進入 S1 前，讀取 `references/rules-context.md` 並檢查 `.product-context.md`：
+Before entering S1, read `references/rules-context.md` and check `.product-context.md`:
 
-- **有完整上下文（情境 1）**：自動帶入產品名稱、技術棧、主要模組、近 3 筆 Decision History。S1 引導改為**確認式**：「你的產品是 [名稱]，使用 [技術棧]，主要模組包括 [模組清單]。這次要新增的功能是什麼？會影響哪些模組？」（問題 2 和部分問題 3 已預填，只需確認）
-- **無上下文（情境 2）**：觸發 Context Bootstrap（`rules-context.md` Section 4），完成後再進入下方標準 S1
-- **部分上下文（情境 3）**：帶入已知的技術棧和模組（從 Decision History 合併），缺失部分仍需收集。例如：「除了 [已知模組]，還有其他會被影響的模組嗎？」
+- **Complete context available (Scenario 1)**: Automatically bring in product name, tech stack, key modules, and the 3 most recent Decision History entries. Change S1 guidance to **confirmation-style**: "Your product is [name], using [tech stack], with key modules including [module list]. What feature do you want to add? Which modules will be affected?" (Questions 2 and part of question 3 are pre-filled — just needs confirmation)
+- **No context (Scenario 2)**: Trigger Context Bootstrap (`rules-context.md` Section 4), then proceed to the standard S1 below
+- **Partial context (Scenario 3)**: Bring in known tech stack and modules (merged from Decision History), and collect the missing parts. For example: "Besides [known modules], are there other modules that might be affected?"
 
-### S1 引導內容（問題 + 既有系統上下文）
+### S1 Guidance Content (Problem + Existing System Context)
 
-Claude 需收集以下資訊（逐步引導，不要一次丟出所有問題。若 context 已預填部分答案，改為確認而非重新收集）：
-
-```
-1. 要新增什麼功能？解決什麼問題？
-2. 目前的產品架構概況（技術棧、主要模組）← context 可預填
-3. 這個功能會影響哪些現有模組？← context 可部分預填
-4. 有沒有相關的用戶反饋或數據支持這個需求？
-```
-
-### S2 引導內容（三平行解法 + AI 推薦）
+Claude needs to collect the following information (guide step by step — do not ask all questions at once. If context has pre-filled some answers, confirm rather than re-collect):
 
 ```
-| HMW | 解法 A（保守/最小改動） | 解法 B（平衡） | 解法 C（大膽/重構） |
-|-----|----------------------|--------------|-------------------|
-| [問題] | | | |
+1. What feature do you want to add? What problem does it solve?
+2. Current product architecture overview (tech stack, key modules) ← context can pre-fill
+3. Which existing modules will this feature affect? ← context can partially pre-fill
+4. Is there any user feedback or data supporting this requirement?
+```
 
-| 解法 | 優點 | 缺點 | 影響範圍 | 實作複雜度 |
-|------|------|------|---------|-----------|
+### S2 Guidance Content (Three Parallel Solutions + AI Recommendation)
+
+```
+| HMW | Solution A (Conservative / minimal change) | Solution B (Balanced) | Solution C (Bold / refactor) |
+|-----|-------------------------------------------|----------------------|----------------------------|
+| [Problem] | | | |
+
+| Solution | Pros | Cons | Impact Scope | Implementation Complexity |
+|----------|------|------|-------------|--------------------------|
 | A | | | | |
 | B | | | | |
 | C | | | | |
 
-🤖 AI 推薦：解法 [X]
-推薦理由：[基於影響範圍、複雜度、風險的綜合判斷]
+🤖 AI Recommendation: Solution [X]
+Rationale: [Comprehensive judgment based on impact scope, complexity, and risk]
 ```
 
-### S3 引導內容（風險評估 — 聚焦回歸與相容性）
+### S3 Guidance Content (Risk Assessment — Focused on Regression & Compatibility)
 
 ```
-| 風險類型 | 具體風險 | 發生可能性 | 預防措施 |
-|---------|---------|-----------|---------|
-| 回歸風險 | [現有功能可能被影響的地方] | | |
-| 相容性風險 | [與現有架構/資料/API 的衝突] | | |
-| 效能風險 | [新功能對系統效能的影響] | | |
-| 安全性風險 | [新功能引入的安全性考量] | | |
+| Risk Type | Specific Risk | Likelihood | Mitigation |
+|-----------|--------------|------------|------------|
+| Regression risk | [Areas where existing features may be affected] | | |
+| Compatibility risk | [Conflicts with existing architecture/data/APIs] | | |
+| Performance risk | [Impact of the new feature on system performance] | | |
+| Security risk | [Security considerations introduced by the new feature] | | |
 ```
 
-### S4 引導內容（執行範圍）
+### S4 Guidance Content (Execution Scope)
 
 ```
-**做什麼（Scope）**：
-- [具體要新增的功能項目]
-- [需要修改的現有模組]
+**What to do (Scope)**:
+- [Specific feature items to add]
+- [Existing modules that need modification]
 
-**不動什麼（Do Not Touch）**：
-- [明確不修改的模組和功能]
-- [不動的原因]
+**Do Not Touch**:
+- [Modules and features explicitly not to modify]
+- [Reason for not touching them]
 
-**驗收標準**：
-- [ ] [可測試的具體條件]
-- [ ] [回歸測試：確認現有功能不受影響]
+**Acceptance Criteria**:
+- [ ] [Specific testable condition]
+- [ ] [Regression test: confirm existing features are unaffected]
 ```
 
-### 功能擴充最終產出格式
+### Feature Extension Final Output Format
 
-**功能開發規格**：問題陳述 → 選定解法 + 理由 → 影響範圍 → 執行範圍 + 驗收標準 → 風險清單
+**Feature development spec**: Problem statement → Selected solution + rationale → Impact scope → Execution scope + acceptance criteria → Risk list
 
-### 增量文件產出（當有原始文件時）
+### Incremental Document Output (when source document is available)
 
-如果使用者在流程中上傳了原始文件（PRD、規格書等）：
+If the user uploaded a source document (PRD, spec, etc.) during the process:
 
-1. **增量版本**（有原始文件時為預設）：
-   - 在原始文件結構中插入/修改章節
-   - 維持原始檔案的格式、風格與命名慣例
-   - 新增內容標記為 `[NEW]`
-   - 修改內容標記為 `[UPDATED]`，並保留原始內容作為參考
-   - 與新功能無關的章節完全不動
+1. **Incremental version** (default when source document exists):
+   - Insert/modify sections in the original document structure
+   - Maintain the original file's format, style, and naming conventions
+   - New content marked with `[NEW]`
+   - Modified content marked with `[UPDATED]` with original preserved as reference
+   - Sections unrelated to the new feature remain completely untouched
 
-2. **獨立版本**（無原始文件時）：
-   - 使用標準的功能開發規格格式（如上方定義）
+2. **Standalone version** (when no source document):
+   - Use the standard Feature development spec format (as defined above)
 
-3. **產出前先詢問使用者**：
-   「我偵測到你上傳了一份 [文件類型]。你希望產出的方式是？
-    A) 在原始文件上增量更新（推薦）
-    B) 獨立的功能開發規格」
+3. **Ask the user before generating**:
+   "I detected that you uploaded a [document type]. How would you like the output?
+    A) Incremental update on the original document (recommended)
+    B) Standalone feature development spec"
 
-### Reference 載入指示
+### Reference Loading Instructions
 
-| 步驟 | Reference 檔案 |
+| Step | Reference File |
 |------|---------------|
-| S1 | 無需外部 reference |
+| S1 | No external reference needed |
 | S2 | `references/04b-solutions.md` → 3.2 |
 | S3 | `references/04b-solutions.md` → 3.3 |
 | S4 | `references/04c-mvp.md` |
 
-完成後，依 `references/rules-end-of-flow.md` 執行流程結束規則。
+After completion, follow `references/rules-end-of-flow.md` to execute the end-of-flow rules.

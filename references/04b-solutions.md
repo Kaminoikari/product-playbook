@@ -1,234 +1,234 @@
-# 階段三：Develop — 解法設計與優先排序
+# Stage 3: Develop — Solution Design & Prioritization
 
-## 3.2 平行原型原則（Parallel Prototyping）
+## 3.2 Parallel Prototyping Principle
 
-同時發展多個平行方案，不要只設計一個解法就急著執行：
+Develop multiple parallel approaches simultaneously — don't design a single solution and rush to execute:
 
 ```
-| HMW 問題 | 解法 A（保守/漸進） | 解法 B（平衡） | 解法 C（大膽/顛覆） |
+| HMW Question | Solution A (Conservative/Incremental) | Solution B (Balanced) | Solution C (Bold/Disruptive) |
 |---|---|---|---|
 | [HMW1] | | | |
 ```
 
-三個解法品質門檻：
-- 解法 A 是否比現有做法明顯更好？
-- 解法 C 是否真的能解決核心 JTBD？
-- 三個解法是否真的不同，還是只是同一個想法的微調？
+Three solution quality gates:
+- Is Solution A clearly better than the current approach?
+- Does Solution C actually solve the core JTBD?
+- Are the three solutions genuinely different, or just variations of the same idea?
 
-## 3.3 Shreyas Doshi 的 Pre-mortem（事前驗屍）
+## 3.3 Shreyas Doshi's Pre-mortem
 
-**適用於：中/高完整性 / 產出對象為工程師/自己內部規劃**
+**Applicable: Medium/high completeness / audience is engineers/internal planning**
 
-選定解法之前，假設它已經失敗：
+Before committing to a solution, assume it has already failed:
 
 ```
-假設：我們選擇了解法 X，並在 [時間] 後宣告失敗。為什麼它失敗了？
+Assume: We chose Solution X and declared failure after [time period]. Why did it fail?
 
-| 失敗原因 | 發生可能性（高/中/低） | 可預防性（高/中/低） | 預防措施 |
-|---------|----------------------|---------------------|---------|
+| Failure Reason | Likelihood (High/Med/Low) | Preventability (High/Med/Low) | Preventive Measure |
+|----------------|--------------------------|-------------------------------|-------------------|
 | | | | |
 ```
 
-**安全性失敗情境**（必須至少考慮一項，特別是涉及用戶資料的產品）：
+**Security failure scenarios** (must consider at least one, especially for products handling user data):
 
 ```
-| 安全性風險 | 發生可能性 | 可預防性 | 預防措施 |
-|-----------|-----------|---------|---------|
-| 用戶資料洩漏（資料庫入侵、API 未授權存取） | | | |
-| 帳號被大量盜用（暴力破解、credential stuffing） | | | |
-| API 被濫用（無 rate limiting、爬蟲大量存取） | | | |
-| XSS / CSRF 攻擊導致用戶受害 | | | |
-| 敏感資料意外暴露（secrets 進版控、日誌記錄密碼） | | | |
+| Security Risk | Likelihood | Preventability | Preventive Measure |
+|---------------|-----------|----------------|-------------------|
+| User data breach (database intrusion, unauthorized API access) | | | |
+| Mass account takeover (brute force, credential stuffing) | | | |
+| API abuse (no rate limiting, mass scraping) | | | |
+| XSS / CSRF attacks harming users | | | |
+| Accidental exposure of sensitive data (secrets in version control, passwords in logs) | | | |
 ```
 
-> 如果產品不涉及用戶認證或敏感資料，可標記「不適用」並說明原因。
+> If the product doesn't involve user authentication or sensitive data, mark as "Not applicable" and explain why.
 
-## 3.4 Gibson Biddle 的 GEM 優先排序模型（Netflix）
+## 3.4 Gibson Biddle's GEM Prioritization Model (Netflix)
 
 ```
-| 功能 | G（Growth 用戶增長） | E（Engagement 用戶黏著） | M（Monetization 商業獲利） | 整體優先級 |
-|------|---------------------|------------------------|--------------------------|-----------|
+| Feature | G (Growth) | E (Engagement) | M (Monetization) | Overall Priority |
+|---------|-----------|----------------|------------------|-----------------|
 | | | | | |
 ```
 
-**Impact / Effort Matrix：**
+**Impact / Effort Matrix:**
 
 ```
-| 功能 / 解法 | 影響力（高/中/低） | 所需投入（高/中/低） | 象限 |
+| Feature / Solution | Impact (High/Med/Low) | Effort Required (High/Med/Low) | Quadrant |
 |---|---|---|---|
 | | | | Quick Win / Strategic / Fill-in / Avoid |
 ```
 
-## 3.5 RICE 量化優先排序
+## 3.5 RICE Quantitative Prioritization
 
-**適用於：高完整性 / 產出對象為資料科學家/老闆**
+**Applicable: High completeness / audience is data scientists/executives**
 
 ```
-RICE 分數 = (Reach × Impact × Confidence) / Effort
+RICE Score = (Reach × Impact × Confidence) / Effort
 
-| 功能 | Reach（影響用戶數/月） | Impact（0.25/0.5/1/2/3） | Confidence（%） | Effort（人月） | RICE 分數 |
-|------|----------------------|------------------------|----------------|--------------|----------|
+| Feature | Reach (users impacted/mo) | Impact (0.25/0.5/1/2/3) | Confidence (%) | Effort (person-months) | RICE Score |
+|---------|--------------------------|------------------------|----------------|----------------------|------------|
 | | | | | | |
 ```
 
-**Impact 量尺定義：**
-| 分數 | 等級 | 判斷依據 |
-|------|------|---------|
-| 3 | 極高（Massive） | 根本性改變用戶體驗；直接解決核心 JTBD |
-| 2 | 高（High） | 顯著改善用戶體驗；對北極星指標有明確正面影響 |
-| 1 | 中（Medium） | 有感的改善；對部分用戶或部分場景有幫助 |
-| 0.5 | 低（Low） | 微小改善；nice-to-have |
-| 0.25 | 極低（Minimal） | 幾乎感覺不到差異；只是維護性質 |
+**Impact Scale Definitions:**
+| Score | Level | Criteria |
+|-------|-------|----------|
+| 3 | Massive | Fundamentally changes the user experience; directly solves the core JTBD |
+| 2 | High | Significantly improves user experience; clear positive impact on the North Star Metric |
+| 1 | Medium | Noticeable improvement; helpful for some users or some scenarios |
+| 0.5 | Low | Minor improvement; nice-to-have |
+| 0.25 | Minimal | Barely noticeable difference; maintenance-level work |
 
-**Confidence 判斷參考：**
-- 100%：有量化數據支持（A/B 測試、用戶數據）
-- 80%：有質化數據支持（用戶訪談、競品驗證）
-- 50%：有合理假設但未驗證
-- 20%：純粹直覺或猜測
+**Confidence Judgment Reference:**
+- 100%: Supported by quantitative data (A/B tests, user data)
+- 80%: Supported by qualitative data (user interviews, competitive validation)
+- 50%: Reasonable hypothesis but unvalidated
+- 20%: Pure intuition or guesswork
 
-> 「不要優先排序功能（features），要優先排序問題（problems）。功能是解法，在你確認了問題的優先級之後才有意義。」— Shreyas Doshi
+> "Don't prioritize features — prioritize problems. Features are solutions, and they only matter after you've confirmed the priority of the problems." — Shreyas Doshi
 
-## 3.6 User Story 表
+## 3.6 User Story Table
 
-**適用於：產出對象為工程師**
+**Applicable: Audience is engineers**
 
 ```
-| 編號 | User Story | 驗收標準 | 優先級 |
+| # | User Story | Acceptance Criteria | Priority |
 |---|---|---|---|
-| US1 | 身為[Persona]，我想要[功能]，以便[價值] | | |
+| US1 | As a [Persona], I want to [action], so that [value] | | |
 ```
 
 ---
 
-## 📄 PRD 產出格式（產出對象為工程師時使用）
+## 📄 PRD Output Format (Used when the audience is engineers)
 
-當使用者說「產出 PRD」或「產出給工程師的文件」時，整合前面所有相關步驟，產出以下完整格式：
+When the user says "produce a PRD" or "produce a document for engineers," consolidate all relevant preceding steps and produce the following complete format:
 
 ```
-# [產品名稱] Product Requirements Document
+# [Product Name] Product Requirements Document
 
-**版本**：v[X.X]　**日期**：[日期]　**作者**：[PM 名稱]
-**狀態**：草稿 / 審閱中 / 已核准
-
----
-
-## 1. 背景與目標
-
-**問題陳述**：[從 HMW 問題轉化，一段話說明為誰解決什麼問題]
-**目標 Persona**：[哪個 Persona]
-**核心 JTBD**：[Target Customer] + 想要在 [Job Context] + 完成 [Job]
-**成功指標**：[North Star Metric + Hero Metric]
+**Version**: v[X.X]　**Date**: [Date]　**Author**: [PM Name]
+**Status**: Draft / Under Review / Approved
 
 ---
 
-## 2. 解決方案概述（來自 PR-FAQ）
+## 1. Background & Objectives
 
-**產品一句話描述**：[PR-FAQ 標題]
-**Aha Moment**：當用戶完成 [行為]，他們體驗到核心價值
-**產品定位**：[April Dunford 定位摘要，若有執行]
+**Problem Statement**: [Transformed from HMW question — one paragraph explaining what problem is solved for whom]
+**Target Persona**: [Which Persona]
+**Core JTBD**: [Target Customer] + wants to [Job] + in the context of [Job Context]
+**Success Metrics**: [North Star Metric + Hero Metric]
 
 ---
 
-## 3. 功能範圍
+## 2. Solution Overview (from PR-FAQ)
 
-### MVP 必須有
-| 功能 | 說明 | 優先級 | 備註 |
-|------|------|--------|------|
+**Product One-liner**: [PR-FAQ headline]
+**Aha Moment**: When the user completes [action], they experience the core value
+**Product Positioning**: [April Dunford positioning summary, if completed]
+
+---
+
+## 3. Feature Scope
+
+### MVP Must-Haves
+| Feature | Description | Priority | Notes |
+|---------|------------|----------|-------|
 | | | P0 | |
 
-### V2 加入
-| 功能 | 說明 | 優先級 | 備註 |
-|------|------|--------|------|
+### V2 Additions
+| Feature | Description | Priority | Notes |
+|---------|------------|----------|-------|
 | | | P1 | |
 
-### 明確不做（Not Doing List）
-| 不做的事 | 不做的理由 |
-|---------|-----------|
+### Explicitly Not Doing (Not Doing List)
+| Not Doing | Reason |
+|-----------|--------|
 | | |
 
 ---
 
-## 4. 使用者故事（User Stories）
+## 4. User Stories
 
-| 編號 | As a... | I want to... | So that... | 驗收標準 | 優先級 |
-|------|---------|-------------|------------|---------|--------|
-| US-001 | [Persona] | [行為] | [價值] | - [ ] 條件1 | P0 |
-
----
-
-## 5. 功能規格
-
-> 對每個 P0 功能，說明以下內容：
-
-### [功能名稱]
-- **描述**：[這個功能做什麼]
-- **觸發條件**：[什麼情況下觸發]
-- **正常流程**：[步驟 1 → 2 → 3]
-- **例外流程**：[錯誤情境、邊界條件]
-- **驗收標準**：
-  - [ ] [可測試的具體條件]
-  - [ ] [可測試的具體條件]
+| # | As a... | I want to... | So that... | Acceptance Criteria | Priority |
+|---|---------|-------------|------------|---------------------|----------|
+| US-001 | [Persona] | [Action] | [Value] | - [ ] Condition 1 | P0 |
 
 ---
 
-## 6. 技術考量
+## 5. Feature Specifications
 
-**已知技術限制**：[列出工程師需要知道的約束]
-**依賴項目**：[第三方服務、API、其他功能的前置條件]
-**效能要求**：[載入時間、併發量等，若有]
-**安全性要求**：[資料保護、權限等，若有]
+> For each P0 feature, document the following:
 
----
-
-## 7. 風險與假設（來自 Pre-mortem）
-
-| 風險 | 可能性 | 影響 | 預防措施 |
-|------|--------|------|---------|
-| | 高/中/低 | 高/中/低 | |
-
-**核心假設**：[需要驗證的假設，若不成立則需重新評估方向]
+### [Feature Name]
+- **Description**: [What this feature does]
+- **Trigger Condition**: [When it's triggered]
+- **Happy Path**: [Step 1 → 2 → 3]
+- **Edge Cases**: [Error scenarios, boundary conditions]
+- **Acceptance Criteria**:
+  - [ ] [Specific testable condition]
+  - [ ] [Specific testable condition]
 
 ---
 
-## 8. 里程碑與時程
+## 6. Technical Considerations
 
-| 里程碑 | 目標日期 | 包含內容 |
-|--------|---------|---------|
-| Alpha | | [最小可測試版本] |
-| Beta | | [有限用戶測試] |
-| Launch | | [正式上線] |
+**Known Technical Constraints**: [Constraints engineers need to know]
+**Dependencies**: [Third-party services, APIs, prerequisites from other features]
+**Performance Requirements**: [Load times, concurrency, etc., if applicable]
+**Security Requirements**: [Data protection, permissions, etc., if applicable]
 
 ---
 
-## 9. 開放問題（Open Questions）
+## 7. Risks & Assumptions (from Pre-mortem)
 
-| 問題 | 負責人 | 預計解答日期 |
-|------|--------|------------|
+| Risk | Likelihood | Impact | Preventive Measure |
+|------|-----------|--------|-------------------|
+| | High/Med/Low | High/Med/Low | |
+
+**Core Assumptions**: [Assumptions that need validation — if proven wrong, the direction needs reassessment]
+
+---
+
+## 8. Milestones & Timeline
+
+| Milestone | Target Date | Includes |
+|-----------|------------|----------|
+| Alpha | | [Minimum testable version] |
+| Beta | | [Limited user testing] |
+| Launch | | [Official release] |
+
+---
+
+## 9. Open Questions
+
+| Question | Owner | Expected Resolution Date |
+|----------|-------|------------------------|
 | | | |
 ```
 
 ---
 
-## 🗂️ 開發文件產出（按需觸發）
+## 🗂️ Development Artifacts (Triggered on demand)
 
-### 流程圖（Mermaid 語法）
+### Flowchart (Mermaid syntax)
 
-當使用者說「產出流程圖」時，根據 User Story 和功能規格，產出 Mermaid flowchart：
+When the user says "produce a flowchart," generate a Mermaid flowchart based on User Stories and feature specs:
 
 ```mermaid
 flowchart TD
-    A[使用者進入] --> B{已登入？}
-    B -- 是 --> C[顯示主畫面]
-    B -- 否 --> D[跳轉登入頁]
-    C --> E[完成核心動作]
-    E --> F[到達 Aha Moment]
+    A[User enters] --> B{Logged in?}
+    B -- Yes --> C[Show main screen]
+    B -- No --> D[Redirect to login]
+    C --> E[Complete core action]
+    E --> F[Reach Aha Moment]
 ```
 
-產出時涵蓋：主要使用流程 / 關鍵分支判斷 / 錯誤情境
+Include: Main user flow / Key decision branches / Error scenarios
 
-### DB Schema（Mermaid ERD 語法）
+### DB Schema (Mermaid ERD syntax)
 
-當使用者說「產出 DB schema」時，根據 MVP 功能範圍，產出 Mermaid erDiagram：
+When the user says "produce a DB schema," generate a Mermaid erDiagram based on the MVP feature scope:
 
 ```mermaid
 erDiagram
@@ -246,24 +246,24 @@ erDiagram
     USER ||--o{ PRODUCT : "owns"
 ```
 
-產出時說明：主要實體 / 關聯關係 / 關鍵欄位（FK、索引建議）
+Include: Main entities / Relationships / Key fields (FKs, index recommendations)
 
-### UI Wireframe（HTML 線框圖）
+### UI Wireframe (HTML wireframe)
 
-當使用者說「產出 UI wireframe」時，以 HTML + 內聯 CSS 產出低保真線框圖，涵蓋：
-- 核心頁面（根據 User Story 判斷需要幾個頁面）
-- 使用灰階配色，不用品牌色
-- 標注每個元素的功能說明
-- 標注 Aha Moment 發生的位置
+When the user says "produce a UI wireframe," output a low-fidelity wireframe in HTML + inline CSS, including:
+- Core pages (determine page count based on User Stories)
+- Grayscale color scheme, no brand colors
+- Annotate each element's functional purpose
+- Annotate where the Aha Moment occurs
 
 ---
 
-## 📎 本階段的檔案整合提示
+## 📎 File Integration Tips for This Stage
 
-| 上傳內容 | 整合到 | 整合動作 |
-|---------|-------|---------|
-| 既有 PRD / 需求文件 | 3.7 MVP | 提取既有功能清單，作為 MVP 邊界判斷的參考 |
-| 技術架構文件 | 3.5 RICE（Effort） | 用真實技術複雜度評估 Effort 分數 |
-| 設計稿截圖 / Wireframe | 3.2 平行原型 + UI Wireframe | 作為解法的視覺參考；識別已有設計和需新設計的部分 |
-| 工程師估時文件 | 3.5 RICE + 3.7 MVP | 用真實估時替代假設性 Effort；調整 MVP 範圍 |
-| 過去版本的 Postmortem | 3.3 Pre-mortem | 從歷史失敗經驗中補充風險清單 |
+| Uploaded Content | Integrate Into | Integration Action |
+|-----------------|----------------|-------------------|
+| Existing PRD / requirements doc | 3.7 MVP | Extract existing feature list as reference for MVP boundary decisions |
+| Technical architecture doc | 3.5 RICE (Effort) | Use real technical complexity to assess Effort scores |
+| Design mockups / wireframes | 3.2 Parallel Prototyping + UI Wireframe | Use as visual reference for solutions; identify existing vs. new design needs |
+| Engineering estimation doc | 3.5 RICE + 3.7 MVP | Replace assumed Effort with real estimates; adjust MVP scope |
+| Past version postmortems | 3.3 Pre-mortem | Supplement risk list with historical failure lessons |
