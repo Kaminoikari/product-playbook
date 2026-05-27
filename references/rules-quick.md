@@ -1,29 +1,29 @@
-# 🚀 快速模式步驟序列（共 3 步 + 最終產出）
+# 🚀 Quick Mode Step Sequence (3 Steps + Final Output)
 
-> 此檔案為快速模式的權威步驟定義。由 SKILL.md 核心派發載入。
+> This file is the authoritative step definition for Quick Mode. Loaded by the SKILL.md core dispatcher.
 
-## 步驟序列
+## Step Sequence
 
 ```
-S1. JTBD 陳述 → 讀取 references/02b-jtbd.md
-S2. PR-FAQ → 讀取 references/04a-prfaq.md
-S3. North Star Metric + Aha Moment → 讀取 references/05a-northstar-aha.md
+S1. JTBD Statement → Read references/02b-jtbd.md
+S2. PR-FAQ → Read references/04a-prfaq.md
+S3. North Star Metric + Aha Moment → Read references/05a-northstar-aha.md
 ────
-最終產出 → 一頁式方向摘要
+Final Output → One-page direction summary
 ```
 
-## Reference 載入指示
+## Reference Loading Instructions
 
-進入各步驟時，讀取對應的 reference 檔案：
+When entering each step, read the corresponding reference file:
 
-| 步驟 | Reference 檔案 |
+| Step | Reference File |
 |------|---------------|
 | S1 | `references/02b-jtbd.md` |
 | S2 | `references/04a-prfaq.md` |
 | S3 | `references/05a-northstar-aha.md` |
 
-## 最終產出格式
+## Final Output Format
 
-**一頁式方向摘要**：問題 → 解法 → 成功定義，三段式結構，適合快速簡報或同步用。
+**One-page direction summary**: Problem → Solution → Success Definition, a three-part structure suitable for quick briefings or team syncs.
 
-完成後，依 `references/rules-end-of-flow.md` 執行流程結束規則。快速模式只問是否需要簡報，不問 PRD 和開發交接包（內容不夠完整）。
+After completion, follow `references/rules-end-of-flow.md` to execute the end-of-flow rules. Quick Mode only asks whether a presentation is needed — it does not offer PRD or dev handoff packages (the content is not comprehensive enough).

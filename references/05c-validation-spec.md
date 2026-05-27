@@ -1,117 +1,117 @@
-# 階段四：Deliver — 假設驗證 + 產品規格摘要
+# Stage 4: Deliver — Hypothesis Validation + Product Spec Summary
 
-## 4.5 假設驗證計畫
+## 4.5 Hypothesis Validation Plan
 
-**適用於：中/高完整性 / 產出對象為資料科學家/自己**
-
-```
-| 核心假設 | 驗證方法 | 驗證時間點 | 成功標準 | 如果假設錯誤，我們將... |
-|---------|---------|-----------|---------|----------------------|
-| | Alpha 用戶訪談 / 數據 | | | |
-```
-
-原則：質化驗證（用戶訪談、日記研究）+ 量化驗證（數據）並重；對自己的確認偏誤保持警惕。
-
-## 4.6 產品規格摘要
-
-產品規格摘要是所有模式的最終產出（快速模式產出一頁式方向摘要，結構不同但精神一致）。
-產品規格摘要分為三個區塊，對應不同閱讀深度：
-
-### 區塊一：決策摘要（30 秒能看完）
+**Applicable: Medium/high completeness / audience is data scientists/self**
 
 ```
-**產品一句話**：[PR-FAQ 標題]
-**為誰**：[目標 Persona 一句話描述]
-**核心價值**：[JTBD 功能性工作 + 情感性工作，一句話]
-**北極星指標**：[指標名稱 + 定義]
-**PMF 目前等級**：[Level 1-4 + 一句話說明]
+| Core Hypothesis | Validation Method | Validation Timing | Success Criteria | If hypothesis is wrong, we will... |
+|----------------|-------------------|-------------------|-----------------|----------------------------------|
+| | Alpha user interviews / data | | | |
 ```
 
-### 區塊二：執行邊界（2 分鐘能看完）
+Principles: Qualitative validation (user interviews, diary studies) + quantitative validation (data) carry equal weight; stay alert to your own confirmation bias.
+
+## 4.6 Product Spec Summary
+
+The Product Spec Summary is the final deliverable across all modes (Quick mode produces a one-page directional summary — different structure but same spirit).
+The Product Spec Summary has three sections, corresponding to different reading depths:
+
+### Section 1: Decision Summary (Readable in 30 seconds)
 
 ```
-**核心 JTBD 陳述**：[Target Customer] + 想要在 [Job Context] + 完成 [Job]
-**Aha Moment**：當用戶完成 [行為]，他們體驗到核心價值。目標在 [X] 內到達。
-**MVP 必須有**：[3-5 個最關鍵的功能/能力]
-**Not Doing（此版本刻意不做）**：[明確排除項 + 理由]
-**關鍵假設**：[需要驗證的 2-3 個核心假設]
-**Pre-mortem 主要風險**：[最可能導致失敗的 2-3 個原因]
-**Hero Metric**：[1-2 個最重要的成功指標 + 目標值]
+**Product One-liner**: [PR-FAQ headline]
+**For Whom**: [Target Persona in one sentence]
+**Core Value**: [JTBD functional job + emotional job, in one sentence]
+**North Star Metric**: [Metric name + definition]
+**Current PMF Level**: [Level 1-4 + one-sentence explanation]
 ```
 
-### 區塊三：深度參考（需要時查閱）
+### Section 2: Execution Boundaries (Readable in 2 minutes)
 
 ```
-**JTBD 細分**：
-  - 功能性 Job：
-  - 情感性 Job：
-  - 社交性 Job：
-**April Dunford 定位**：
-  - 真實競爭替代品：
-  - 我們的獨特屬性：
-  - 對目標用戶的核心價值：
-  - 目標市場特徵：
-  - 市場類別：
-**核心 HMW 問題**：[從 Define 階段得出]
-**解決方案描述**：[從 PR-FAQ 摘要]
-**商業模式**：[收費模式 + 價格策略，若已執行]
-**GTM 策略**：[初始獲客渠道 + Launch 策略，若已執行]
+**Core JTBD Statement**: [Target Customer] + wants to [Job] + in the context of [Job Context]
+**Aha Moment**: When the user completes [action], they experience the core value. Target: reach it within [X].
+**MVP Must-Haves**: [3-5 most critical features/capabilities]
+**Not Doing (Deliberately excluded from this version)**: [Explicit exclusions + reasons]
+**Key Hypotheses**: [2-3 core hypotheses that need validation]
+**Pre-mortem Top Risks**: [2-3 most likely causes of failure]
+**Hero Metric**: [1-2 most important success metrics + target values]
 ```
 
-完成三個區塊後，Claude **必須主動補充以下三個區塊**，不等使用者要求：
+### Section 3: Deep Reference (Consult when needed)
+
+```
+**JTBD Breakdown**:
+  - Functional Job:
+  - Emotional Job:
+  - Social Job:
+**April Dunford Positioning**:
+  - Real competitive alternatives:
+  - Our unique attributes:
+  - Core value for target users:
+  - Target market characteristics:
+  - Market category:
+**Core HMW Question**: [From the Define stage]
+**Solution Description**: [From PR-FAQ summary]
+**Business Model**: [Revenue model + pricing strategy, if completed]
+**GTM Strategy**: [Initial acquisition channel + launch strategy, if completed]
+```
+
+After completing the three sections, Claude **must proactively add the following three sections** without waiting for the user to ask:
 
 ---
 
-### ⚠️ 風險清單
+### ⚠️ Risk Register
 
-根據整個企劃流程中識別到的所有風險，整合列出（來源：Pre-mortem + 機會評估 + 假設驗證）：
-
-```
-| 風險類型 | 風險描述 | 嚴重程度（高/中/低）| 目前有無對策 |
-|---------|---------|-------------------|------------|
-| 市場風險 | | | |
-| 用戶假設風險 | | | |
-| 技術風險 | | | |
-| 競爭風險 | | | |
-| 執行風險 | | | |
-```
-
----
-
-### 🔍 不完整之處 & 待釐清盲點
-
-Claude 根據整個對話流程，主動識別出以下類型的缺口：
+Consolidate all risks identified throughout the planning process (sources: Pre-mortem + Opportunity Assessment + Hypothesis Validation):
 
 ```
-| 類型 | 說明 | 建議的下一步行動 |
-|------|------|----------------|
-| 未執行的步驟 | [哪些框架沒有跑，可能造成什麼盲點] | |
-| 資料不足 | [哪些判斷是基於假設而非真實用戶資料] | |
-| 邏輯跳躍 | [哪個地方的推導缺少中間論證] | |
-| 尚未驗證的假設 | [列出所有還沒有驗證方法的核心假設] | |
-| 定義不清楚 | [哪些概念還需要更精確的定義才能執行] | |
+| Risk Type | Risk Description | Severity (High/Med/Low) | Mitigation in Place? |
+|-----------|-----------------|------------------------|---------------------|
+| Market risk | | | |
+| User assumption risk | | | |
+| Technical risk | | | |
+| Competitive risk | | | |
+| Execution risk | | | |
 ```
 
 ---
 
-### 💡 補充建議
+### 🔍 Gaps & Blind Spots
 
-Claude 根據產品的特性、階段和已知風險，提供 3-5 條具體可執行的建議：
+Claude proactively identifies the following types of gaps based on the entire conversation flow:
 
 ```
-1. [最優先建議]：[具體行動] — 建議原因：[為什麼這件事最重要]
-2. [次優先建議]：[具體行動] — 建議原因：
-3. [第三建議]：[具體行動] — 建議原因：
+| Type | Description | Recommended Next Step |
+|------|------------|----------------------|
+| Unexecuted steps | [Which frameworks were skipped and what blind spots this may cause] | |
+| Insufficient data | [Which decisions are based on assumptions rather than real user data] | |
+| Logical leaps | [Where the reasoning lacks intermediate evidence] | |
+| Unvalidated hypotheses | [List all core hypotheses without a validation method yet] | |
+| Unclear definitions | [Which concepts need more precise definition before execution] | |
+```
+
+---
+
+### 💡 Additional Recommendations
+
+Claude provides 3-5 specific, actionable recommendations based on the product's characteristics, stage, and known risks:
+
+```
+1. [Top priority]: [Specific action] — Rationale: [Why this matters most]
+2. [Second priority]: [Specific action] — Rationale:
+3. [Third priority]: [Specific action] — Rationale:
 ...
 ```
 
-建議範圍可涵蓋：用戶驗證方法、MVP 邊界調整、競爭策略、指標設計、團隊分工、下一個里程碑的重點。
+Recommendations may cover: user validation methods, MVP boundary adjustments, competitive strategy, metric design, team allocation, next milestone priorities.
 
 ---
 
-## 📎 本階段的檔案整合提示
+## 📎 File Integration Tips for This Stage
 
-| 上傳內容 | 整合到 | 整合動作 |
-|---------|-------|---------|
-| 用戶行為數據（CSV / Excel） | 4.2 North Star + 4.3 PMF | 用真實留存率、活躍度數據判斷 PMF 等級；校準 North Star 基準值 |
-| Sean Ellis 問卷結果 | 4.3 PMF + 4.2 三層訊號 | 直接計算 Score，填入層級三 |
+| Uploaded Content | Integrate Into | Integration Action |
+|-----------------|----------------|-------------------|
+| User behavior data (CSV / Excel) | 4.2 North Star + 4.3 PMF | Use real retention and engagement data to assess PMF level; calibrate North Star baseline |
+| Sean Ellis survey results | 4.3 PMF + 4.2 Three-Layer Signals | Calculate Score directly, fill into Layer 3 |

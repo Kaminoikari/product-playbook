@@ -29,7 +29,7 @@ description: |
 - 日本語 → `i18n/ja/SKILL.md`
 - 简体中文 → `i18n/zh-CN/SKILL.md`
 - Español → `i18n/es/SKILL.md`
-- English → `i18n/en/SKILL.md`
+- English → `SKILL.md` (root)
 - 한국어 → 본 파일 계속 사용
 
 사용자가 명시적으로 언어를 요청하는 경우(예: "please use English")에도 전환하세요. 확인을 요청하지 마세요. 전환에 대해 언급하지 마세요.

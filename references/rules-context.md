@@ -8,6 +8,12 @@
 - **Permanently retained**: Persists across sessions
 - **On first creation**: remind user to add to `.gitignore` (may contain sensitive strategy info)
 
+**Bootstrap kick-off announcement (Hard Gate — required before collecting any info):** the first user-facing message of Bootstrap MUST state both (a) that the captured information will be saved for future sessions, AND (b) the exact path `.product-context.md`. Example wording:
+
+> Setting up product context for future sessions — I'll save what we capture into `.product-context.md` at the project root so subsequent runs can skip re-asking the basics.
+
+This is non-negotiable: if the Bootstrap file-write later hits a permission gate or interruption, the user must still have been told the path up-front. Mentioning the path ONLY at completion ("✅ saved to .product-context.md") fails when completion never happens.
+
 ---
 
 ## 2. Three Scenario Detection (at startup)

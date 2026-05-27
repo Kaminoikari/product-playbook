@@ -1,74 +1,74 @@
-# 🔄 變更傳播規則（Change Propagation）
+# 🔄 Change Propagation Rules
 
-> 當使用者修改已完成步驟時載入。
+> Loaded when the user modifies a previously completed step.
 
-## 📍 進度指示器（每個步驟都必須顯示）
+## 📍 Progress Indicator (must be displayed at every step)
 
-在執行任何步驟時，Claude 必須在回應的最開頭顯示進度列，格式：
+When executing any step, Claude must display a progress bar at the very beginning of the response, in this format:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📍 [執行模式] ｜ 進度 S[目前步驟編號] / S[總步驟數]
-✅ S1：[步驟名稱]（已完成）
-✅ S2：[步驟名稱]（已完成）
-▶️ S3：[步驟名稱]（進行中）
-⬜ S4：[步驟名稱]（待執行）
+📍 [Execution Mode] ｜ Progress S[current step number] / S[total steps]
+✅ S1: [Step name] (completed)
+✅ S2: [Step name] (completed)
+▶️ S3: [Step name] (in progress)
+⬜ S4: [Step name] (pending)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-此進度指示器在以下情況都必須出現：
-- 每進入一個新步驟
-- 使用者回到某個步驟進行修改時
-- 完成某個步驟、詢問使用者確認後進入下一步時
+This progress indicator must appear in the following situations:
+- When entering a new step
+- When the user goes back to a step to make modifications
+- When completing a step and prompting the user for confirmation before moving to the next step
 
-## 觸發方式
-- 「回到 Persona」「回到 JTBD」「回到 HMW」「回到 PR-FAQ」等任意步驟名稱
-- 「我想修改一下 [步驟名]」「[步驟名] 的部分我想改」
-- 直接對某個已產出的表格或內容說「這裡改成...」
+## Trigger Methods
+- "Go back to Persona," "Go back to JTBD," "Go back to HMW," "Go back to PR-FAQ," or any other step name
+- "I want to modify [step name]," "[step name] — I want to change something"
+- Directly referencing an already-produced table or content with "change this to..."
 
-## 修改後的必要動作
+## Required Actions After Modification
 
-當任何步驟被修改，Claude **必須主動執行以下檢查**：
+When any step is modified, Claude **must proactively perform the following checks**:
 
 ```
-修改層級               受影響的下游（必須重新確認或更新）
+Modified Layer               Affected Downstream (must re-confirm or update)
 ─────────────────────────────────────────────────────
-Persona / JTBD        → HMW、機會評估表、Positioning、PR-FAQ、North Star、產品規格摘要
-HMW / 機會評估        → PR-FAQ、平行解法、MVP、North Star、產品規格摘要
-Positioning           → PR-FAQ、產品規格摘要
-PR-FAQ / 解法         → Pre-mortem、GEM/RICE、MVP、Aha Moment、產品規格摘要
-MVP / Not Doing List  → User Story、DB schema（若已產出）、產品規格摘要
-North Star / 指標     → 假設驗證計畫、產品規格摘要
-產品規格摘要           → HTML 報告、PRD（若已產出）
+Persona / JTBD            → HMW, Opportunity Assessment Table, Positioning, PR-FAQ, North Star, Product Spec Summary
+HMW / Opportunity Assessment → PR-FAQ, Parallel Solutions, MVP, North Star, Product Spec Summary
+Positioning               → PR-FAQ, Product Spec Summary
+PR-FAQ / Solutions        → Pre-mortem, GEM/RICE, MVP, Aha Moment, Product Spec Summary
+MVP / Not Doing List      → User Story, DB schema (if already generated), Product Spec Summary
+North Star / Metrics      → Hypothesis Validation Plan, Product Spec Summary
+Product Spec Summary      → HTML Report, PRD (if already generated)
 ```
 
-### 功能擴充依賴關係：
+### Feature Extension dependency:
 ```
-功能擴充依賴關係：
+Feature Extension dependency:
 ─────────────────────────────────────────────────────
-S1（問題 + 情境）     → S2（解法）、S3（風險）、S4（執行範圍）
-S2（選定解法）        → S3（風險）、S4（執行範圍）
-S3（風險評估）        → S4（執行範圍）
+S1 (Problem + Context)  → S2 (Solutions), S3 (Risks), S4 (Execution Scope)
+S2 (Selected Solution)  → S3 (Risks), S4 (Execution Scope)
+S3 (Risk Assessment)    → S4 (Execution Scope)
 ```
 
-## 執行方式
+## Execution Process
 
-1. **告知使用者影響範圍**：「你修改了 [步驟]，這會影響到 [下游步驟清單]，我會逐一更新。」
-2. **逐一確認或自動更新下游**：
-   - 若下游改動小（措辭調整）→ 直接更新，說明改了什麼
-   - 若下游改動大（方向轉變）→ 提示使用者確認新方向再更新
-3. **最終重新整合產品規格摘要**
-4. **若已產出 HTML 報告或 PRD**：直接重新產出，並輸出版本快照：
+1. **Inform the user of the impact scope**: "You modified [step]. This affects [list of downstream steps]. I will update each one."
+2. **Confirm or auto-update downstream items**:
+   - If the downstream change is minor (wording adjustments) → Update directly and explain what changed
+   - If the downstream change is significant (directional shift) → Prompt the user to confirm the new direction before updating
+3. **Re-integrate the Product Spec Summary**
+4. **If an HTML report or PRD has already been generated**: Re-generate it directly and output a version snapshot:
 
 ```
-📋 版本快照 v[舊版號] → v[新版號]
-修改的步驟：[步驟名稱]
-修改前的關鍵內容：[1-3 句話]
-修改後的關鍵內容：[1-3 句話]
-連帶更新的下游：[哪些步驟被一併調整]
+📋 Version Snapshot v[old version] → v[new version]
+Modified step: [Step name]
+Key content before modification: [1-3 sentences]
+Key content after modification: [1-3 sentences]
+Downstream updates triggered: [Which steps were also adjusted]
 ```
 
-## 原則
-- 任何修改都不會靜默發生——必須明確告知影響範圍
-- 使用者有權選擇「只改這一步，下游暫時不動」，Claude 需標記哪些部分已過時（加上 ⚠️ 待更新 標記）
-- 修改歷史在對話中保持可追溯
+## Principles
+- No modification happens silently — the impact scope must always be explicitly communicated
+- The user has the right to choose "only modify this step, leave downstream as-is for now." Claude must mark which parts are outdated (add a ⚠️ Needs Update label)
+- Modification history remains traceable within the conversation

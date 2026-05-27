@@ -26,7 +26,7 @@ description: |
 ユーザーの最初のメッセージの言語を検出し、サイレントに切り替え：
 
 - 繁體中文 → `i18n/zh-TW/SKILL.md`
-- English → `i18n/en/SKILL.md`
+- English → `SKILL.md` (root)
 - 简体中文 → `i18n/zh-CN/SKILL.md`
 - Español → `i18n/es/SKILL.md`
 - 한국어 → `i18n/ko/SKILL.md`

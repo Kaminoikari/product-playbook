@@ -1,106 +1,148 @@
-# 階段三：Develop — PR-FAQ（Working Backwards）
+# Phase 3: Develop — PR-FAQ (Working Backwards)
 
-## 3.1 Amazon 的逆向工作法（Working Backwards / PR-FAQ）
+## 3.1 Amazon's Working Backwards Method (PR-FAQ)
 
-先寫產品新聞稿，強迫你從用戶結果出發：
+Start by writing the product press release — it forces you to work backwards from the customer outcome:
 
 ```
-## [產品名稱] 發布新聞稿
+## [Product Name] Press Release
 
-**標題**：[用戶能得到什麼？一句話]
-**副標題**：[解決了什麼問題、為誰解決]
+**Headline**: [What can the user achieve? One sentence.]
+**Subheadline**: [What problem does it solve, and for whom?]
 
-**正文第一段（Aha Moment）**：
-[描述用戶體驗這個產品的那個「哇啊！」時刻]
+**Opening Paragraph (Aha Moment)**:
+[Describe the moment the user experiences the product's core value — the "Wow!" moment]
 
-**痛點描述**：
-[用戶現在面臨什麼問題？現行解法為什麼不夠好？]
+**Pain Point Description**:
+[What problem are users facing today? Why aren't current solutions good enough?]
 
-**解法描述**：
-[我們的產品如何解決這個問題？（描述體驗，不要列功能清單）]
+**Solution Description**:
+[How does our product solve this problem? (Describe the experience — don't list features)]
 
-**用戶引言**：
-"[一位目標用戶說的話，代表真實的情感反應]"
+**Customer Quote**:
+"[A quote from a target user that represents a genuine emotional reaction]"
 
-**FAQ（最難回答的問題）**：
-Q：[最難回答的問題]
-A：[誠實的回答]
+**FAQ (The Hardest Questions)**:
+Q: [The hardest question to answer]
+A: [An honest answer]
 ```
 
-> 如果你無法把新聞稿寫得讓人興奮，代表這個產品方向可能有問題，需要回頭重新定義問題。
+> If you can't write a press release that excites people, the product direction may be flawed — go back and redefine the problem.
 
-### 📝 PR-FAQ 品質自檢清單
+### 📝 PR-FAQ Quality Checklist
 
-Claude 產出 PR-FAQ 後必須逐項標記 ✅ 或 ❌，❌ 項目必須說明如何改善：
-- [ ] 標題是否從用戶角度出發？（「用戶能做到 X」vs「我們推出了 Y 功能」）
-- [ ] 第一段是否能讓讀者在 10 秒內理解「這為什麼重要」？
-- [ ] 痛點描述是否來自真實用戶場景？
-- [ ] 解法段第一句是否以用戶感受/場景開頭（非功能動詞）？
-- [ ] 用戶引言是否像真人會說的話？
-- [ ] FAQ 是否包含了對比現有工具的尖銳質疑？
+Claude must mark each item ✅ or ❌ after producing the PR-FAQ; ❌ items must include how to improve:
+- [ ] Is the headline written from the user's perspective? ("Users can now do X" vs. "We launched feature Y")
+- [ ] Can a reader understand "why this matters" within 10 seconds of reading the first paragraph?
+- [ ] Does the pain point description come from a real user scenario?
+- [ ] Does the first sentence of the solution section lead with the user's experience/scenario (not a feature verb)?
+- [ ] Does the customer quote sound like something a real person would say?
+- [ ] Does the FAQ include a pointed comparison against existing tools?
 
-**執行規則（Hard Gate）**：
-- 必須至少找出 1 個「內部張力」或「值得迭代的地方」，不得全部 ✅ 宣告完成
-- 若所有項目都通過，額外說明「這份 PR-FAQ 最脆弱的假設是什麼」
-- Amazon PR-FAQ 的品質是靠找到問題，不是確認沒問題
-- ❌ 常見問題：標題像產品公告不像新聞、解法段變成功能列表、FAQ 都是容易回答的問題
+**Execution Rules (Hard Gate):**
+- Must identify at least 1 "internal tension" or "area worth iterating on" — cannot mark all ✅ and call it done
+- If all items pass, additionally state "What is the most fragile assumption in this PR-FAQ?"
+- The quality bar for Amazon's PR-FAQ comes from finding problems, not confirming there are none
+- ❌ Common issues: headline reads like a product announcement instead of news, solution section turns into a feature list, FAQs are all softball questions
 
 ---
 
-### ✍️ 解法段落（Body）寫作規則
+### ✍️ Solution Section (Body) Writing Rules
 
-**解法段第一句禁止以功能描述起頭。**
+**The first sentence of the solution section must NOT start with a feature description.**
 
-❌ 禁止範例：
-- 「備料通讓你一鍵輸入菜單自動計算食材」
-- 「系統會自動根據菜單生成採購清單」
-- 「點擊『生成清單』按鈕即可完成備料規劃」
+❌ Prohibited examples:
+- "MealPrep lets you input a menu with one click and auto-calculates ingredients"
+- "The system automatically generates a procurement list based on the menu"
+- "Click the 'Generate List' button to complete your prep planning"
 
-✅ 正確範例：
-- 「現在，陳師傅週五下午只需 10 分鐘，就能確認週末備料的每一個細節」
-- 「張主任不再需要在週五下午翻三份 Excel 才能確定食材夠不夠」
+✅ Correct examples:
+- "Now, Chef Chen only needs 10 minutes on Friday afternoon to confirm every detail for the weekend's prep"
+- "Manager Zhang no longer has to flip through three Excel sheets to figure out whether there's enough inventory"
 
-**公式**：先寫用戶感受/具體情境 → 然後才說「這是因為 [產品機制]」帶出功能。
+**Formula**: Lead with the user's experience / specific scenario → then say "This is possible because [product mechanism]" to introduce the feature.
+
+**Self-verify (mandatory before sending)**: read your own Solution paragraph's first sentence aloud. If the subject is the product name or "the system" / "the app" / "users can", **rewrite it**. The subject must be a specific actor (named person, role, or pronoun referring to a user) doing something or experiencing a moment.
 
 ---
 
-### ❓ FAQ 尖銳質疑標準
+### 📍 Lead / Opening Paragraph Requirements
 
-**至少 1 個 FAQ 必須是：「為什麼不繼續用 [現有工具]？」**
+The opening paragraph (Aha Moment) must contain ALL THREE:
 
-回答格式要求：
-1. **先正面承認現有工具的優點**（不能否定它）
-2. **然後說明 gap**（不是功能不足，而是根本的場景缺口）
+1. A **named or role-specific actor** ("Alex", "Chef Chen", "the kitchen manager at a 30-seat bistro") — never "users" generically.
+2. A **concrete time / place / trigger** ("Friday afternoon", "after the lunch rush", "before the weekend").
+3. **At least 2 specific numbers** — quantities, durations, dollar amounts, percentages. "Within 30 seconds", "across 3 lender scenarios", "$2,400/month", "20-minute prep window". Vague numbers ("a few minutes", "several options") FAIL this requirement.
 
-❌ 禁止回答模式：「現有工具功能不足，我們更強大」
-✅ 正確回答模式：
-> 「Excel 確實能記錄數字，廚師也早就會用。問題是每次週末前的計算需要重新填表、重新換算，花 1 小時不是因為笨，是因為這個問題就是這麼複雜。備料通省的不是 Excel 技能，是每次都要重頭算的心理負擔。」
+A lead that has the actor + scenario but no concrete numbers reads like marketing copy — the press release is supposed to make a specific outcome visible, not aspirational.
 
-**範例（虛構產品 — 房貸計算 App）：**
+---
+
+### ❓ FAQ Sharp-Question Standard
+
+**At least 1 FAQ must be: "Why not just keep using [existing tool]?"**
+
+Answer format requirements:
+1. **First, acknowledge the strengths of the existing tool** (don't dismiss it)
+2. **Then explain the gap** (not a feature gap, but a fundamental scenario gap)
+
+❌ Prohibited answer pattern: "Existing tools lack features — ours is more powerful"
+✅ Correct answer pattern:
+> "Excel can absolutely track numbers, and chefs already know how to use it. The issue is that every weekend the calculations need to be rebuilt — re-entered, re-converted — and the hour it takes isn't because anyone's bad at spreadsheets, it's because the problem really is that complex. MealPrep doesn't save you Excel skills — it saves you the mental burden of starting from scratch every single time."
+
+---
+
+### 🧪 Internal FAQ Requirements
+
+Separately from the External FAQ (customer-facing), produce an **Internal FAQ** section with at least:
+
+**Q: What is the riskiest assumption in this PR-FAQ? If false, what kills the product?**
+A: Name ONE specific assumption (not a list). Examples of well-formed answers:
+- "We assume kitchen managers will trust auto-generated purchase orders without manual verification. If they won't (because past inventory errors cost them money), they'll double-check every line and our 'saves 1 hour' value prop collapses to 'saves 5 minutes'."
+- "We assume listing photos contain enough resolution to extract square footage reliably. If image-based OCR fails on more than 20% of listings, the core 'snap and go' experience breaks."
+
+**Q: What is the smallest experiment that would invalidate this assumption?**
+A: Concrete pre-launch test — interview N users, smoke-test a landing page with conversion target X, run a 2-week internal pilot, etc. **Generic "we'll track engagement" or "we'll watch retention" FAILS this requirement** — those measure success after launch, not invalidation before commitment.
+
+The Internal FAQ is not for customers. It exists so the team forces itself to name what could kill the product BEFORE building it.
+
+---
+
+**Example (fictional product — Mortgage Calculator App):**
 
 ```
-## MortgageSnap 讓首購族 3 分鐘搞懂自己買得起什麼房
+## MortgageSnap Helps First-Time Buyers Understand What They Can Afford in 3 Minutes
 
-**副標題**：不用跑銀行、不用等試算表回覆，深夜也能和伴侶一起看清楚每月還款數字
+**Subheadline**: No bank visits, no waiting for rate quotes — figure out your monthly payments with your partner, even at midnight
 
-**正文第一段（Aha Moment）**：
-小陳在深夜滑完一輪 591，看到心動的房子但不知道自己到底負擔得起。他打開 MortgageSnap，
-拍了房屋頁面截圖，App 自動抓出總價、坪數，30 秒內顯示三種貸款方案的每月還款金額。
-他把結果分享給太太，兩人終於有了同一份數字基礎來討論。
+**Opening Paragraph (Aha Moment)**:
+After scrolling through Zillow late at night, Alex spots a house he loves but has no idea if he can
+actually afford it. He opens MortgageSnap, screenshots the listing page, and the app automatically
+extracts the price and square footage. Within 30 seconds, it shows monthly payments across three
+loan scenarios. He shares the results with his wife, and for the first time, they're looking at the
+same numbers together.
 
-**痛點描述**：
-首購族在比較房貸時，需要在多家銀行之間手動輸入條件、等待回覆，
-深夜想算個數字卻找不到方便的工具，結果常常是用 Excel 亂算或直接放棄。
+**Pain Point Description**:
+First-time homebuyers comparing mortgage options have to manually enter terms across multiple bank
+websites and wait for responses. When you want to run the numbers late at night, there's no
+convenient tool — so people end up hacking together an Excel sheet or just giving up.
 
-**解法描述**：
-MortgageSnap 讓你拍下任何房屋資訊，自動提取關鍵數據，即時比較各銀行方案，
-並生成一份可分享的報告讓家人一起討論。
+**Solution Description**:
+Now, Alex spends 3 minutes instead of 3 evenings to know what's actually affordable. He snaps a
+listing on his phone, sees monthly payments across three lender scenarios appear within 30 seconds,
+and shares a single screen with his wife — so the conversation moves from "I think we can afford it"
+to "here are the three numbers we should talk about." This works because MortgageSnap automatically
+extracts price and square footage from the listing image, then pulls live rate offers from partnered
+lenders.
 
-**用戶引言**：
-「終於不用在半夜等銀行回電話了。三分鐘就能跟老婆說清楚每個月要還多少錢。」
+**Customer Quote**:
+"I finally don't have to wait for the bank to call back at midnight. Three minutes and I can tell
+my wife exactly how much we'd pay each month."
 
-**FAQ**：
-Q：市面上已經有很多房貸計算機了，這有什麼不同？
-A：現有計算機需要你自己輸入利率、年限等參數，但大多數首購族根本不知道這些數字。
-MortgageSnap 的差異在於自動帶入各銀行真實方案，用戶只需要提供房價和自備款。
+**FAQ**:
+Q: There are already tons of mortgage calculators out there — what's different?
+A: Existing calculators require you to input interest rates, loan terms, and other parameters, but
+most first-time buyers don't even know those numbers. MortgageSnap's difference is that it
+automatically pulls in real offers from various lenders — all you need to provide is the price and
+your down payment.
 ```

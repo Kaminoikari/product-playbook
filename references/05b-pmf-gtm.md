@@ -1,102 +1,102 @@
-# 階段四：Deliver — PMF + GTM + 商業模式
+# Stage 4: Deliver — PMF + GTM + Business Model
 
-## 4.3 Todd Jackson（First Round Capital）的四級 PMF 框架
-
-```
-| 等級 | 名稱 | 特徵 | 你的任務 | 典型公司階段 |
-|-----|------|------|---------|------------|
-| Level 1 | Nascent PMF（初萌的 PMF） | 找到 3-5 個願意為解法付費的客戶 | 深度服務這些早期用戶，找到可重複的模式 | Pre-seed / Seed |
-| Level 2 | Developing PMF（發展中的 PMF） | 開始有口碑傳播，但增長還不穩定 | 找到可規模化的獲客渠道，提升留存 | Seed / Series A |
-| Level 3 | Strong PMF（強 PMF）| 「魚兒自己跳進船裡」，轉介紹成為主要增長來源 | 建立規模化需求渠道，提升效率指標 | Series A / B |
-| Level 4 | Extreme PMF（極端 PMF）| 指標穩健，公司超過 100 人，考慮擴展 TAM | 進入新市場或推出新產品 | Series C+ |
-```
-
-**Four P's（在 Level 1-2 階段找 PMF 的關鍵四問）：**
-1. Problem：你要解決的問題，是否真的足夠急迫、足夠重要？
-2. Promise：你的產品向用戶許下了什麼承諾？用戶相信嗎？
-3. Product：你的產品是否真的兌現了這個承諾？
-4. Pitch：你如何讓目標用戶發現並相信你的產品？
-
-## 4.7 GTM 策略（Go-to-Market）
-
-**適用於：完整模式 / 高完整性 / 產出對象為老闆/業務/行銷**
-
-產品做出來之後，如何讓目標用戶知道並開始使用？
-
-### 獲客渠道選擇
+## 4.3 Todd Jackson's (First Round Capital) Four-Level PMF Framework
 
 ```
-| 渠道類型 | 適合情境 | 典型方法 | 衡量指標 |
-|---------|---------|---------|---------|
-| 產品驅動增長（PLG） | 用戶自助能體驗到價值的產品 | 免費試用、Freemium、病毒式邀請 | 註冊轉換率、啟用率、邀請率 |
-| 內容與社群 | 目標用戶有共同的資訊需求或社群 | 部落格、SEO、社群運營、KOL | 流量、內容轉換率、社群活躍度 |
-| 付費獲客 | 需要快速驗證或有明確 ROI | SEM、社群廣告、再行銷 | CAC、ROAS、LTV/CAC |
-| 銷售驅動 | B2B 高客單價、需要 demo 和談判 | SDR、AE、Demo、企業合約 | Pipeline、Close rate、ACV |
-| 合作夥伴 | 目標用戶集中在某些平台或生態系 | API 整合、分潤、共同行銷 | 合作渠道轉換率、合作夥伴數 |
+| Level | Name | Characteristics | Your Task | Typical Company Stage |
+|-------|------|----------------|-----------|----------------------|
+| Level 1 | Nascent PMF | Found 3-5 customers willing to pay for the solution | Deeply serve these early users, find a repeatable pattern | Pre-seed / Seed |
+| Level 2 | Developing PMF | Word-of-mouth starting, but growth is still unstable | Find a scalable acquisition channel, improve retention | Seed / Series A |
+| Level 3 | Strong PMF | "Fish are jumping into the boat" — referrals become the main growth driver | Build scalable demand channels, improve efficiency metrics | Series A / B |
+| Level 4 | Extreme PMF | Metrics are robust, company exceeds 100 people, considering TAM expansion | Enter new markets or launch new products | Series C+ |
 ```
 
-### 初始 100 位用戶獲取計畫
+**Four P's (Key questions for finding PMF at Level 1-2):**
+1. Problem: Is the problem you're solving truly urgent and important enough?
+2. Promise: What promise does your product make to users? Do they believe it?
+3. Product: Does your product actually deliver on that promise?
+4. Pitch: How do you get target users to discover and believe in your product?
+
+## 4.7 GTM Strategy (Go-to-Market)
+
+**Applicable: Full mode / high completeness / audience is executives/sales/marketing**
+
+Once the product is built, how do you get target users to know about it and start using it?
+
+### Acquisition Channel Selection
 
 ```
-目標用戶畫像：[從 Persona 來]
-在哪裡找到他們：[他們聚集的線上/線下場所]
-用什麼 Hook 吸引他們：[從 PR-FAQ 的 Aha Moment 來]
-怎麼讓他們試用：[降低門檻的方法]
-初始目標：[X 天內獲得 Y 個試用用戶]
+| Channel Type | Best For | Typical Methods | Key Metrics |
+|-------------|----------|----------------|-------------|
+| Product-Led Growth (PLG) | Products where users can self-serve to experience value | Free trial, Freemium, viral invite | Signup conversion, activation rate, invite rate |
+| Content & Community | Target users share common information needs or community | Blog, SEO, community building, KOL | Traffic, content conversion rate, community engagement |
+| Paid Acquisition | Need fast validation or clear ROI | SEM, social ads, retargeting | CAC, ROAS, LTV/CAC |
+| Sales-Led | B2B high ACV, requires demo and negotiation | SDR, AE, Demo, enterprise contracts | Pipeline, close rate, ACV |
+| Partnerships | Target users concentrated on specific platforms or ecosystems | API integration, revenue sharing, co-marketing | Partner channel conversion rate, partner count |
 ```
 
-### Launch 策略
-
-| 策略 | 說明 | 適合情境 |
-|------|------|---------|
-| Closed Beta | 手動邀請 10-50 人，深度收集反饋 | PMF Level 1，產品還在調整 |
-| Open Beta | 公開但標明 Beta，降低期待管理 | PMF Level 1-2，需要更多數據 |
-| Soft Launch | 在特定市場或渠道低調上線 | 需要真實環境測試但不想全面曝光 |
-| Full Launch | 全渠道正式推出 | PMF Level 2-3，產品穩定 |
-
-## 4.8 商業模式與定價
-
-**適用於：完整模式 / 高完整性 / 產出對象為老闆/業務**
-
-### 收費模式選擇
+### First 100 Users Acquisition Plan
 
 ```
-| 模式 | 運作方式 | 適合產品類型 | 關鍵指標 |
-|------|---------|------------|---------|
-| Freemium | 基礎免費 + 進階收費 | 用戶量大、免費版能展示價值 | 免費→付費轉換率（目標 2-5%） |
-| Subscription | 按月/年訂閱 | 持續提供價值的工具或服務 | MRR/ARR、Churn rate |
-| 按用量（Usage-based） | 用多少付多少 | API、雲端服務、交易平台 | 每用戶平均消費、用量增長率 |
-| 一次性付費 | 買斷 | 工具型軟體、課程 | 客單價、回購率 |
-| 交易抽成 | 每筆交易收取比例 | 平台、市場 | GMV、Take rate |
-| 按座位（Per-seat） | 依使用人數收費 | B2B 協作工具 | 每帳戶平均座位數、擴展率 |
+Target user profile: [From Persona]
+Where to find them: [Online/offline places where they gather]
+What hook to attract them: [From PR-FAQ's Aha Moment]
+How to get them to try: [Methods to lower the barrier]
+Initial target: [X users trying the product within Y days]
 ```
 
-### 價值定價對齊
+### Launch Strategy
+
+| Strategy | Description | Best For |
+|----------|------------|----------|
+| Closed Beta | Manually invite 10-50 people, collect deep feedback | PMF Level 1, product still being refined |
+| Open Beta | Public but labeled Beta, managing expectations | PMF Level 1-2, need more data |
+| Soft Launch | Low-key launch in a specific market or channel | Need real-world testing without full exposure |
+| Full Launch | Full-channel official release | PMF Level 2-3, product is stable |
+
+## 4.8 Business Model & Pricing
+
+**Applicable: Full mode / high completeness / audience is executives/sales**
+
+### Revenue Model Selection
 
 ```
-定價核心問題：
-1. 你的產品幫用戶省了/賺了多少？（價值錨定）
-2. 用戶現在為替代方案付多少錢？（競爭參照）
-3. 你的定價是否與用戶獲得的價值成正比？（公平感）
+| Model | How It Works | Best For | Key Metrics |
+|-------|-------------|----------|-------------|
+| Freemium | Free basic tier + paid premium | Products with large user base, free tier demonstrates value | Free-to-paid conversion rate (target 2-5%) |
+| Subscription | Monthly/annual subscription | Tools or services that provide ongoing value | MRR/ARR, churn rate |
+| Usage-based | Pay for what you use | APIs, cloud services, transaction platforms | Average spend per user, usage growth rate |
+| One-time purchase | Buy outright | Tool software, courses | Average order value, repurchase rate |
+| Transaction fee | Percentage per transaction | Platforms, marketplaces | GMV, take rate |
+| Per-seat | Charge per user | B2B collaboration tools | Average seats per account, expansion rate |
+```
 
-定價策略：
-  - 模式選擇：[Freemium / Subscription / 按用量 / ...]
-  - 價格區間：[依據價值錨定和競爭參照]
-  - 免費層包含什麼：[足以到達 Aha Moment，但不足以滿足進階需求]
-  - 付費觸發點：[什麼使用行為或使用量觸發升級？]
+### Value-Based Pricing Alignment
 
-⚠️ 常見定價錯誤：
-  - 定價太低（傳遞「不值錢」的訊號）
-  - 免費版太強（沒有升級動機）
-  - 價格和價值不對齊（功能定價 vs 價值定價）
-  - B2B 沒有年度合約折扣（錯失現金流穩定性）
+```
+Core pricing questions:
+1. How much does your product save or earn for users? (Value anchor)
+2. How much do users currently pay for alternatives? (Competitive reference)
+3. Is your pricing proportional to the value users receive? (Fairness perception)
+
+Pricing strategy:
+  - Model choice: [Freemium / Subscription / Usage-based / ...]
+  - Price range: [Based on value anchor and competitive reference]
+  - What the free tier includes: [Enough to reach the Aha Moment, but not enough for advanced needs]
+  - Paid trigger point: [What usage behavior or volume triggers an upgrade?]
+
+⚠️ Common pricing mistakes:
+  - Pricing too low (signals "not worth much")
+  - Free tier too generous (no upgrade motivation)
+  - Price-value misalignment (feature-based pricing vs. value-based pricing)
+  - B2B without annual contract discounts (missing out on cash flow stability)
 ```
 
 ---
 
-## 📎 本階段的檔案整合提示
+## 📎 File Integration Tips for This Stage
 
-| 上傳內容 | 整合到 | 整合動作 |
-|---------|-------|---------|
-| 財務數據 / 營收報表 | 4.8 商業模式 | 用真實營收結構替代假設，評估定價合理性 |
-| 行銷渠道數據 | 4.7 GTM | 用 CAC、轉換率等真實數據評估渠道選擇 |
+| Uploaded Content | Integrate Into | Integration Action |
+|-----------------|----------------|-------------------|
+| Financial data / revenue reports | 4.8 Business Model | Replace assumptions with real revenue structure, evaluate pricing reasonability |
+| Marketing channel data | 4.7 GTM | Use real CAC, conversion rates, and other data to evaluate channel selection |

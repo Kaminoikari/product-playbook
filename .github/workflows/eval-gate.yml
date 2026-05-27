@@ -95,7 +95,15 @@ jobs:
         run: |
           mkdir -p "$HOME/.claude/skills/product-playbook"
           cp -r ./. "$HOME/.claude/skills/product-playbook/"
+          # Also register sub-agents at the user level so `claude -p`
+          # subprocesses can dispatch to them via Task tool. Without this
+          # step, dispatch-related eval expectations cannot pass —
+          # subagents bundled inside the skill dir are not discovered by
+          # headless claude sessions.
+          mkdir -p "$HOME/.claude/agents"
+          cp ./agents/*.md "$HOME/.claude/agents/" 2>/dev/null || true
           ls "$HOME/.claude/skills/product-playbook" | head -20
+          echo "Registered agents:" && ls "$HOME/.claude/agents"
 
       - name: Run trigger eval (reporting only, never blocks)
         working-directory: evals
@@ -149,6 +157,11 @@ jobs:
         run: |
           mkdir -p "$HOME/.claude/skills/product-playbook"
           cp -r ./. "$HOME/.claude/skills/product-playbook/"
+          # Register sub-agents at the user level so `claude -p` headless
+          # subprocesses can dispatch to them via the Task tool. See the
+          # trigger-eval install step for full rationale.
+          mkdir -p "$HOME/.claude/agents"
+          cp ./agents/*.md "$HOME/.claude/agents/" 2>/dev/null || true
 
       - name: Run scoring unit tests
         working-directory: evals

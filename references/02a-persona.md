@@ -1,57 +1,57 @@
-# 階段一：Discovery — Persona 建立
+# Stage 1: Discovery — Building Personas
 
-## Continuous Discovery 習慣（Teresa Torres）
+## Continuous Discovery Habits (Teresa Torres)
 
-建立一個關鍵習慣：**每週至少接觸一位目標用戶**。Discovery 不是一次性儀式，而是持續系統。
+Build one key habit: **Talk to at least one target user every week.** Discovery is not a one-time ritual — it's an ongoing system.
 
-> 「Product discovery 應該是持續的習慣，而不是專案開始前的一次性儀式。」— Teresa Torres
+> "Product discovery should be a continuous habit, not a one-time ceremony before a project starts." — Teresa Torres
 
-## 1.1 建立 Persona Table
+## 1.1 Build the Persona Table
 
-Persona 不是用年齡性別來分群，而是用「用途 / 任務 / 動機」來區分不同類型的用戶。
+Personas are not segmented by age and gender, but by **purpose / task / motivation** to distinguish different types of users.
 
 ```
-| 欄位 | Persona 1: [暱稱] | Persona 2: [暱稱] | Persona 3: [暱稱] |
+| Field | Persona 1: [Nickname] | Persona 2: [Nickname] | Persona 3: [Nickname] |
 |---|---|---|---|
-| 用途 / 任務 / 動機 | | | |
-| 規模（SIZE） | | | |
-| 問題 / 挑戰 / 驅動力 | | | |
-| 現在做法與理由 | | | |
-| 頻率 | | | |
-| 相關資訊來源 | | | |
-| 採用/執行過程的問題 | | | |
+| Purpose / Task / Motivation | | | |
+| Size (SCALE) | | | |
+| Problems / Challenges / Drivers | | | |
+| Current Approach & Rationale | | | |
+| Frequency | | | |
+| Information Sources | | | |
+| Adoption / Execution Barriers | | | |
 ```
 
-說明切分邏輯；檢查是否 MECE（互斥且完整覆蓋）；指出核心 TA 和次要 TA。
+Explain the segmentation logic; check for MECE (mutually exclusive, collectively exhaustive); identify the primary TA and secondary TA.
 
-### 📝 Persona 品質自檢清單
-- ✅ 切分是否基於「用途/任務/動機」而非人口統計？
-- ✅ 各 Persona 之間是否 MECE（互斥且完整覆蓋目標市場）？
-- ✅ 是否明確指出核心 TA vs 次要 TA？
-- ✅ 每個 Persona 的「問題/挑戰」是否來自真實觀察或合理推論？
-- ✅ 「現在做法與理由」是否具體到可以識別 Workaround？
-- ❌ 常見問題：按年齡性別分群、Persona 之間差異不明顯、痛點太籠統
+### 📝 Persona Quality Checklist
+- ✅ Is the segmentation based on "purpose/task/motivation" rather than demographics?
+- ✅ Are Personas MECE (mutually exclusive and collectively exhaustive of the target market)?
+- ✅ Is the primary TA vs. secondary TA clearly identified?
+- ✅ Are each Persona's "problems/challenges" based on real observations or reasonable inferences?
+- ✅ Is "current approach & rationale" specific enough to identify workarounds?
+- ❌ Common issues: Segmenting by age/gender, minimal differences between Personas, pain points too vague
 
-## 1.2 建立 Persona 卡片
+## 1.2 Build Persona Cards
 
 ```
-## [Persona 暱稱]：[一句話描述]
+## [Persona Nickname]: [One-line description]
 
-**基本資訊**：年齡 / 性別 / 職業 / 所在地 / 個性特質
-**背景**：[與產品相關的背景描述]
-**目標 / 任務**：[目標1]、[目標2]
-**現行做法與理由**：[目前怎麼做、為什麼這樣做]
-**資訊來源**：[從哪裡獲取相關資訊]
-**阻礙 / 問題 / 挑戰 / 不滿意**：[痛點1]、[痛點2]、[痛點3]
+**Basic Info**: Age / Gender / Occupation / Location / Personality traits
+**Background**: [Product-relevant background description]
+**Goals / Tasks**: [Goal 1], [Goal 2]
+**Current Approach & Rationale**: [What they currently do and why]
+**Information Sources**: [Where they get relevant information]
+**Barriers / Problems / Challenges / Frustrations**: [Pain point 1], [Pain point 2], [Pain point 3]
 ```
 
 ---
 
-## 📎 本階段的檔案整合提示
+## 📎 File Integration Tips for This Stage
 
-如果使用者在此階段上傳了檔案，Claude 依據以下規則整合：
+If the user uploads files during this stage, Claude integrates according to these rules:
 
-| 上傳內容 | 整合到 | 整合動作 |
-|---------|-------|---------|
-| 用戶訪談逐字稿 / 錄音文字 | 1.1 Persona + 1.3 JTBD | 提取：用戶背景 → Persona 欄位；痛點 + 現行做法 → JTBD 深挖五問；情緒反應 → 情感性/社交性 Job |
-| 用戶調研報告（PDF） | 1.1 + 1.2 + 1.3 | 提取量化數據（用戶分群比例）填入 Persona 規模；提取質化洞見填入 JTBD |
+| Uploaded Content | Integrate Into | Integration Action |
+|-----------------|----------------|-------------------|
+| User interview transcripts / audio transcriptions | 1.1 Persona + 1.3 JTBD | Extract: user background → Persona fields; pain points + current approach → JTBD deep-dive questions; emotional reactions → emotional/social Jobs |
+| User research report (PDF) | 1.1 + 1.2 + 1.3 | Extract quantitative data (user segment proportions) into Persona size; extract qualitative insights into JTBD |

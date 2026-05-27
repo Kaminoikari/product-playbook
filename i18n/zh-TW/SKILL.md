@@ -25,7 +25,7 @@ description: |
 
 偵測使用者第一則訊息的語言，自動靜默切換：
 
-- **English** → `i18n/en/SKILL.md`
+- **English** → `SKILL.md` (root)
 - **日本語** → `i18n/ja/SKILL.md`
 - **简体中文** → `i18n/zh-CN/SKILL.md`
 - **Español** → `i18n/es/SKILL.md`

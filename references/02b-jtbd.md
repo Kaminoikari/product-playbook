@@ -1,142 +1,148 @@
-# 階段一：Discovery — JTBD 分析
+# Phase 1: Discovery — JTBD Analysis
 
-## 1.3 JTBD（Jobs to Be Done）分析
+## 1.3 JTBD (Jobs to Be Done) Analysis
 
-> 「分析的單位不是消費者，而是消費者試圖完成的那件工作。」— Clayton Christensen
+> "The unit of analysis is not the consumer, but the job the consumer is trying to get done." — Clayton Christensen
 
-**JTBD 標準句型（Hard Gate — 強制三段式）：**
+**JTBD Canonical Form (Hard Gate — three-clause structure required):**
 
-每一筆 JTBD（不論是 Primary、Functional、Emotional、Social 任何一層）都必須寫成完整的「**當 ... 我想要 ... 以便 ...**」三段式語句，三個子句缺一不可：
+Every JTBD statement (Primary, Functional, Emotional, Social — every layer) MUST be written as a complete three-clause sentence in the canonical form. All three clauses are required:
 
-```
-當 [情境]，我想要 [動機/工作]，以便 [成果/感受]。
-```
-
-英文輸出時使用對應的標準句型：
 ```
 When [situation], I want to [motivation], so [outcome].
 ```
 
-**不合格範例**（在表格欄位中只寫片段描述，缺少子句結構）：
-- ❌ 「快速記下重點，避免遺忘」（缺 When；缺 so）
-- ❌ 「在通勤時順手記錄」（缺 I want to；缺 so outcome）
+**Failing examples** (fragments inside a table cell, missing clauses):
+- ❌ "Quickly capture key takeaways" (missing When; missing so)
+- ❌ "Jot down ideas during commute" (missing I want to; missing so outcome)
 
-**合格範例**（三段子句齊全）：
-- ✅ 「**當**我剛讀完一篇文章還記得重點時，**我想要**用 5 秒鐘記下一條我覺得最值得的洞察，**以便**幾週後仍能找回並串連這個想法。」
+**Passing example** (all three clauses present):
+- ✅ "**When** I've just finished reading an article and the key insight is still fresh, **I want to** capture one takeaway in 5 seconds, **so** weeks later I can still find it and connect it to a new idea."
 
-範例：正在比較房貸方案的首購族，**當**深夜不方便聯絡銀行時，**想要**快速估算每月還款金額，**以便**向伴侶說明財務規劃。
+Example: **When** comparing mortgage options late at night and can't reach a bank, a first-time homebuyer **wants to** quickly estimate monthly payments, **so** they can walk their partner through their financial plan.
 
-**JTBD 四種類型分析表：**
+**JTBD Four-Type Analysis Table:**
 
-每一欄位（Persona 1 / Persona 2）必須填入完整的三段式 JTBD，不允許省略子句或只寫描述性短語。
+Every cell (Persona 1 / Persona 2) MUST contain a complete three-clause JTBD sentence. **Short phrases like "Feel like I'm still showing up for myself", "log workouts daily", "track progress easily" all FAIL the Hard Gate.** Use the worked example below as the literal shape — every cell must read like a sentence with `When …, I want to …, so …`.
+
+Worked example (B2C fitness habit tracker, single Persona — replicate this shape for every cell):
+
+| JTBD Type | Definition | Persona: Busy Professional |
+|-----------|------------|-----------|
+| Functional Job | Completing a specific task or achieving a functional goal | **When** I get home after a long workday and have 20 minutes before my next commitment, **I want to** log the workout I just did and see what's recommended next, **so** I can keep the streak going without spending mental energy planning. |
+| Emotional Job | How they feel or want to feel | **When** I miss a planned workout two days in a row, **I want to** feel that I'm still on track rather than starting over, **so** I don't fall into the all-or-nothing spiral that kills my consistency. |
+| Social Job | How they want to be perceived by others | **When** a friend asks how my training is going, **I want to** show a clean record of recent activity, **so** I'm seen as someone who follows through on commitments to themselves. |
+| Job Context | Under what circumstances they need to get this job done | **When** my schedule is volatile across the week (early meetings, evening calls), **I want to** fit workouts into 15–45 minute windows wherever they land, **so** training adapts to my life instead of competing with it. |
+
+Empty table (fill each cell with full `When …, I want to …, so …` sentences — do NOT shorten to phrases):
 
 ```
-| JTBD 類型 | 定義 | Persona 1（必須為「當 ... 我想要 ... 以便 ...」完整句） | Persona 2（同左） |
-|-----------|------|-----------|-----------|
-| 功能性工作（Functional Job） | 完成特定任務或達成功能性目標 | | |
-| 情感性工作（Emotional Job） | 感受或希望有什麼感受 | | |
-| 社交性工作（Social Job） | 希望在他人眼中呈現什麼形象 | | |
-| 工作情境（Job Context） | 在什麼情況下需要完成這份工作 | | |
+| JTBD Type | Definition | Persona 1 (must use "When … I want to … so …" full form) | Persona 2 (same) |
+|-----------|------------|-----------|-----------|
+| Functional Job | Completing a specific task or achieving a functional goal | | |
+| Emotional Job | How they feel or want to feel | | |
+| Social Job | How they want to be perceived by others | | |
+| Job Context | Under what circumstances they need to get this job done | | |
 ```
 
-**JTBD 深挖五問：**
-1. **根本問題**：用戶表達的需求背後，真正想解決的是什麼？
-2. **現行限制**：哪些解法因為某些條件限制被排除在外？
-3. **現行做法**：用戶現在用什麼方法應對？做了哪些 workaround？
-4. **差距**：現行做法哪裡無法令他們滿意？（這個差距就是你的機會）
-5. **理想解法**：如果限制消除，他們理想中的解法是什麼樣子？
+**JTBD Deep-Dive Five Questions:**
+1. **Root Problem**: Behind what users express as their need, what are they really trying to solve?
+2. **Current Constraints**: What solutions have been ruled out due to certain limitations?
+3. **Current Workarounds**: How are users coping today? What workarounds have they built?
+4. **Gap**: Where do current workarounds fall short? (This gap is your opportunity)
+5. **Ideal Solution**: If constraints were removed, what would their ideal solution look like?
 
-**Teresa Torres 用戶訪談最佳實踐：**
-- 聚焦在用戶過去的**實際行為**，而不是假設性的未來行為
-- 問「上一次你遇到這個問題時，你怎麼做的？」而不是「你希望有什麼功能？」
-- 最常見錯誤：問假設性問題、帶入解法偏見、沒有追問細節
+**Teresa Torres User Interview Best Practices:**
+- Focus on users' **actual past behavior**, not hypothetical future behavior
+- Ask "Last time you ran into this problem, what did you do?" instead of "What features would you like?"
+- Most common mistakes: asking hypothetical questions, introducing solution bias, not probing for details
 
-### 📝 JTBD 品質自檢清單
+### 📝 JTBD Quality Checklist
 
-Claude 產出 JTBD 後必須自我檢查（每項必須標記 ✅ 或 ❌，❌ 項目必須說明如何改善）：
-- [ ] 功能性 / 情感性 / 社交性三層**每一層**都寫成「**當 ... 我想要 ... 以便 ...**」三段式完整句？（英文則為 "When ... I want to ... so ..."；任一層缺子句即標 ❌）
-- [ ] 是否包含具體情境？（不是「隨時隨地」，而是「在深夜不方便聯絡銀行時」）
-- [ ] 是否聚焦在一個核心工作？（不是三個 Job 合併成一句）
-- [ ] 是否能用來判斷「這個解法有沒有解決這個 Job」？
-- [ ] 是否包含「現行做法」和「差距」？（差距 = 機會）
-- [ ] 深挖五問的 Q5 是否觸及情感動機/職業認同/心理恐懼？（非功能性描述）
+Claude must self-check after producing JTBD output (each item must be marked ✅ or ❌; ❌ items must include how to improve):
+- [ ] Are **all three layers** (Functional / Emotional / Social) written in the full "When … I want to … so …" canonical form? (Any layer missing a clause → mark ❌)
+- [ ] Does it include a specific context? (Not "anytime, anywhere" — but "late at night when they can't reach a bank")
+- [ ] Does it focus on a single core job? (Not three jobs crammed into one sentence)
+- [ ] Can it be used to evaluate "Does this solution actually address this job?"
+- [ ] Does it include "current workarounds" and "gap"? (Gap = opportunity)
+- [ ] Does Q5 of the Deep-Dive reach emotional motivation / professional identity / psychological fear? (Not just functional descriptions)
 
-**執行規則（Hard Gate）**：
-- 必須逐項標記 ✅ 或 ❌，不允許保留空白 [ ] 或不說明的 ✅ 列表
-- **清單必須至少出現 1 個 ❌**（見 `references/rules-quality-review.md`「強制批判」規則）。⚠️ 警告符號不能取代 ❌；外掛在清單之外的「最弱環節」備註也不能取代。若反覆審視仍覺得每項皆過，請降低標準重審，找出最該被標 ❌ 的一項並指明該如何補強
-- ❌ 常見問題：三段式不完整（缺 When / I want to / so）、太抽象、太多 Job 合併、缺少情境、用產品功能替代 Job 描述、Q5 停在功能層面
+**Execution Rules (Hard Gate):**
+- Must mark each item ✅ or ❌ — blank [ ] or unexplained ✅ lists are not allowed
+- **The checklist MUST contain at least one ❌** (see `references/rules-quality-review.md` "Mandatory Critique" rule). A ⚠️ warning marker cannot replace ❌; a "weakest aspect" note appended outside the checklist cannot replace a ❌ inside it. If after honest review every item still feels like a pass, lower the bar and find the item most worth marking ❌, then specify how to strengthen it.
+- ❌ Common issues: incomplete three-clause form (missing When / I want to / so), too abstract, too many jobs merged, missing context, substituting product features for job descriptions, Q5 staying at the functional level
 
 ---
 
-### 🏢 B2B 產品專用深度要求
+### 🏢 B2B Product Deep-Dive Requirements
 
-**B2B 產品（含 B2B2C）必須完成以下分析：**
+**B2B products (including B2B2C) must complete the following analysis:**
 
-#### 組織層級 Job 分析（必填，至少覆蓋 2 層）
+#### Organizational-Level Job Analysis (Required — cover at least 2 levels)
 
-| 層級 | 說明 | 範例 |
-|------|------|------|
-| **Strategic Job** | 組織/管理層的跨部門需求 | 合規稽查、成本控制、人力資源優化 |
-| **Operational Job** | 流程/部門主管的協調需求 | 審批流程管理、跨部門資訊同步 |
-| **Task Job** | 個別使用者的日常操作需求 | 填寫表單、查詢狀態、匯出報表 |
+| Level | Description | Examples |
+|-------|-------------|----------|
+| **Strategic Job** | Cross-departmental needs at the org/management level | Compliance audits, cost control, workforce optimization |
+| **Operational Job** | Coordination needs at the process/department manager level | Approval workflow management, cross-team information sync |
+| **Task Job** | Day-to-day operational needs of individual users | Filling out forms, checking status, exporting reports |
 
-#### 買方（Buyer）vs 使用者（User）分析（必填）
+#### Buyer vs. User Analysis (Required)
 
-若買方與使用者不同人，必須分別分析其 JTBD：
-- **買方 Job**：影響採購決策的工作（ROI 說明、風險降低、合規要求）
-- **使用者 Job**：日常操作時需要完成的工作（效率提升、錯誤減少）
-- 若同一人，說明「為何此場景中決策者即使用者」
+If the buyer and user are different people, analyze their JTBD separately:
+- **Buyer Job**: Jobs that influence the purchasing decision (ROI justification, risk reduction, compliance requirements)
+- **User Job**: Jobs that need to get done during daily operations (efficiency gains, error reduction)
+- If they are the same person, explain "why the decision-maker is also the user in this scenario"
 
-#### 深挖五問 B2B 強化版
+#### Deep-Dive Five Questions — B2B Enhanced Version
 
-深挖五問的 **Q5 必須到達以下任一層面**（舉例）：
-- ✅ 職業認同：「她怕在高層面前出糗，因為這份報表代表她部門的專業度」
-- ✅ 情感動機：「他想要在下屬面前展現自己掌握數字的能力」
-- ✅ 心理恐懼：「她最怕的是被稽核單位抓到流程漏洞，因為上次已經被警告過一次」
-- ❌ 不合格範例：「他需要一個更好的工具來提高效率」（停留在功能層面）
+**Q5 must reach at least one of the following levels** (examples):
+- ✅ Professional identity: "She's afraid of looking incompetent in front of leadership, because this report represents her department's credibility"
+- ✅ Emotional motivation: "He wants to demonstrate to his direct reports that he has a firm grasp of the numbers"
+- ✅ Psychological fear: "Her biggest fear is the auditor catching a process gap — she was already warned once before"
+- ❌ Failing example: "He needs a better tool to improve efficiency" (stays at the functional level)
 
-#### 競品替代品分析（必填）
+#### Competitive Alternatives Analysis (Required)
 
-列出目前使用者實際使用的替代方案：
-- 至少 2 個具名現行工具（如 Line/Excel/紙本/Email/口頭溝通）
-- 每個工具必須說明其「根本缺陷」：不是功能差，而是「為什麼這個缺陷被接受卻沒被解決」（組織慣性？切換成本？上級不在意？）
+List the alternatives users are actually using today:
+- At least 2 named existing tools (e.g., Slack / Excel / paper forms / email / verbal communication)
+- For each tool, explain its "fundamental flaw": not that the features are weak, but "why this flaw has been accepted and left unsolved" (organizational inertia? switching costs? leadership doesn't care?)
 
-### 📋 用戶訪談計畫模板
+### 📋 User Interview Plan Template
 
 ```
-## 用戶訪談計畫
+## User Interview Plan
 
-**研究目標**：了解 [目標 Persona] 在 [Job Context] 中的 [具體問題]
-**受訪者篩選條件**：
-  - 必須在過去 [X 天/週] 內有過 [具體行為]
-  - 排除：[哪些人不適合，例如內部員工、已知的忠實用戶]
+**Research Goal**: Understand how [target Persona] deals with [specific problem] in [Job Context]
+**Screening Criteria**:
+  - Must have experienced [specific behavior] within the past [X days/weeks]
+  - Exclude: [who is not a fit — e.g., internal employees, known power users]
 
-**核心問題（5-7 題）**：
-1. 上一次你遇到 [問題] 時，可以帶我走一遍你是怎麼處理的嗎？（行為回溯）
-2. 在那個過程中，最讓你困擾/花最多時間的是哪個環節？（痛點定位）
-3. 你有試過其他方法嗎？為什麼用/不用？（現行替代方案）
-4. 如果那個環節可以變得更好，「好」對你來說是什麼樣子？（理想狀態）
-5. 這件事多久會發生一次？最近一次是什麼時候？（頻率和急迫性）
-6. 除了你以外，還有誰會受到這個問題的影響？（利害關係人）
-7. 如果要用 1-10 分評量這個問題的嚴重程度，你會打幾分？為什麼？（量化痛感）
+**Core Questions (5–7)**:
+1. Last time you ran into [problem], can you walk me through how you handled it? (Behavioral recall)
+2. During that process, what was the most frustrating or time-consuming part? (Pain point identification)
+3. Have you tried other approaches? Why or why not? (Current alternatives)
+4. If that part could be better, what would "better" look like to you? (Ideal state)
+5. How often does this happen? When was the last time? (Frequency and urgency)
+6. Besides you, who else is affected by this problem? (Stakeholder mapping)
+7. On a scale of 1–10, how severe is this problem for you? Why? (Quantifying the pain)
 
-**追問策略**：
-  - 當受訪者說「通常我會...」→ 追問「上一次具體是什麼情況？」
-  - 當受訪者提到情緒 → 追問「那個感覺具體是什麼？」
-  - 當受訪者提到某個工具/方法 → 追問「是什麼讓你選擇這個方式？」
+**Follow-up Strategies**:
+  - When the interviewee says "Usually I..." → Ask "What specifically happened last time?"
+  - When the interviewee mentions an emotion → Ask "Can you describe that feeling more specifically?"
+  - When the interviewee mentions a tool/method → Ask "What made you choose that approach?"
 
-**記錄格式**：
-  - 逐字稿 or 錄音
-  - 訪後 24 小時內標記：關鍵引言 / 痛點 / 驚喜發現 / 與假設不符之處
+**Documentation Format**:
+  - Verbatim transcript or recording
+  - Within 24 hours post-interview, tag: key quotes / pain points / surprising findings / contradictions to assumptions
 ```
 
 ---
 
-## 📎 本階段的檔案整合提示
+## 📎 File Integration Notes for This Phase
 
-如果使用者在此階段上傳了檔案，Claude 依據以下規則整合：
+If the user uploads files during this phase, Claude integrates them as follows:
 
-| 上傳內容 | 整合到 | 整合動作 |
-|---------|-------|---------|
-| 用戶訪談逐字稿 / 錄音文字 | 1.1 Persona + 1.3 JTBD | 提取：用戶背景 → Persona 欄位；痛點 + 現行做法 → JTBD 深挖五問；情緒反應 → 情感性/社交性 Job |
-| 競品 App 截圖 | 1.3 JTBD（現行做法） | 識別為用戶的「現行替代方案」，分析 Workaround 和差距 |
+| Uploaded Content | Integrate Into | Integration Action |
+|-----------------|----------------|-------------------|
+| User interview transcripts / recording text | 1.1 Persona + 1.3 JTBD | Extract: user background → Persona fields; pain points + current workarounds → JTBD Deep-Dive Five Questions; emotional reactions → Emotional / Social Jobs |
+| Competitor app screenshots | 1.3 JTBD (current workarounds) | Identify as user's "current alternative," analyze workarounds and gaps |

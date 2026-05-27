@@ -50,6 +50,32 @@ Before entering S1, read `references/rules-context.md` and check `.product-conte
 > Revision Mode's S1 actively asks the user for existing product data: DAU/MAU, retention, primary user feedback, key decisions from past versions, etc. If context already pre-fills some answers, switch to confirmation rather than re-collection.
 > S1 also collects current security posture: existing auth/authz mechanisms, known security gaps or tech debt, recent security incidents. This data feeds into revision risk assessment and Pre-mortem (if triggered).
 
+### S1 Output Requirements (Hard Gates)
+
+Every Revision Mode S1 response MUST contain ALL FOUR of:
+
+1. **Frame this as revision, not 0-to-1** — open with one or two sentences calling out that this is an *existing-product* analysis: we are re-validating existing JTBD against current data, comparing baseline metrics, and reading `.product-context.md` for prior decisions. This differs from 0-to-1 Discovery (which starts from a blank user model). Without this framing, the user can't tell why the questions are different.
+
+2. **Use the user's actual numbers verbatim** — quote MAU, retention drop %, cohort sizes, dates from the user's prompt back to them in your analysis (e.g. "the drop from 85% to 72% last quarter, against the 2,800 MAU base, means roughly N affected users…"). Generic discussion that ignores the numbers FAILS this gate.
+
+3. **Treat the user's stated cause as H1, not as fact** — when the user names a likely cause ("retention drop is caused by feature complexity"), label it H1 explicitly and surface at least TWO rival hypotheses (H2, H3) drawn from the same data. Example rival hypotheses to consider: cohort mix shift, onboarding regression, pricing change, competitive launch, support-quality drop, feature deprecation, seasonal effect. **Uncritically accepting the user's stated cause FAILS this gate** — Revision Mode's value is hypothesis discipline.
+
+4. **Data gaps list with at least one segmentation-oriented gap** — list specifically what additional data is needed to discriminate between H1/H2/H3. **At least one item MUST be a segmentation gap**: cohort (signup month), tier (free/paid), role (admin/user), feature-usage segment. Generic "more user interviews" alone FAILS — name *which segment* you'd interview and *what specifically* you'd ask.
+
+### S1 Closing Format (Hard Gate)
+
+End the S1 response with a numbered CTA menu, NEVER an open-ended question. Use this exact shape:
+
+```
+What's next? Pick one:
+  1️⃣ Share the requested data so we can move to S2 (pain-point convergence with hypothesis testing)
+  2️⃣ Refine the hypothesis list before collecting data (suggest more H_n candidates)
+  3️⃣ Skip to S3 if you already have enough data to converge on a top hypothesis
+  4️⃣ Pause and resume later (progress will be saved to .product-playbook-progress.md)
+```
+
+Responses ending with "Any thoughts?" / "Let me know what you think" / "Share what you have" without a numbered menu FAIL the contract — the user needs a clear handle for the next move.
+
 ### Fast Path
 
 When the user provides sufficient data in S1 (with feedback, metrics, priorities), S3 may be produced in a single back-and-forth instead of multiple confirmations. Trigger condition: the pain point list collected in S2 already has explicit priorities and data backing. Hard Gate rules remain — each step's output must still be presented in full; only the confirmation cadence accelerates.

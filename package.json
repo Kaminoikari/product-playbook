@@ -12,6 +12,7 @@
     "eval:zh-TW": "python3 evals/run_behavioral_eval.py --eval-file evals/evals-zh-TW.json --runs 3 --workers 2 --fail-on critical",
     "eval:quick": "python3 evals/run_behavioral_eval.py --runs 1 --workers 2 --fail-on critical",
     "eval:test": "python3 -m unittest evals.test_compute_eval_score",
+    "eval:debt": "python3 scripts/eval-debt-report.py",
     "bundle:claude-ai": "bash scripts/build-claude-ai-bundle.sh"
   },
   "keywords": [

@@ -1,93 +1,93 @@
-# 階段四：Deliver — North Star + Aha Moment
+# Phase 4: Deliver — North Star + Aha Moment
 
-## 4.1 Marty Cagan 的賦能型團隊原則（Empowered Teams）
+## 4.1 Marty Cagan's Empowered Teams Principles
 
-**適用於：高完整性 / 產出對象為老闆/跨部門**
+**Applicable when: high completeness / deliverable audience is leadership or cross-functional teams**
 
-> 4.1 Empowered Teams 在產出對象為老闆/跨部門時才展示，否則跳過。
-
-```
-| 面向 | 功能型團隊（避免） | 賦能型團隊（目標） |
-|------|-----------------|-----------------|
-| 被分配到的 | 功能清單（Output） | 需要解決的問題（Outcome） |
-| 成功定義 | 按時交付功能 | 達成用戶和商業指標 |
-| PM 的角色 | 需求收集者和項目管理者 | 問題探索者和解法驗證者 |
-| 工程師的角色 | 執行規格 | 參與問題探索和解法設計 |
-```
-
-> 「真正的產品發現是與工程師和設計師**一起**做的，而不是 PM 一個人做完再交給他們。」— Marty Cagan
-
-**Lenny 的 PM 三職責：**
-- **Shape（塑形）**：整合用戶洞見、數據和市場資訊，決定做什麼
-- **Ship（交付）**：確保高品質產品按時上線，沒有意外
-- **Synchronize（同步）**：讓所有利害關係人對願景、策略、目標和路線圖保持一致
-
-## 4.2 成功指標框架（North Star + 三層訊號）
-
-北極星指標必須滿足：
-- 能反映用戶獲得的真實價值（不是虛榮指標）
-- 可以持續增長（不會天然達到上限）
-- 能讓整個團隊在同一個目標下對齊
+> 4.1 Empowered Teams is only shown when the deliverable audience is leadership or cross-functional teams; otherwise skip.
 
 ```
-| 公司 | 北極星指標 | 為什麼這個指標 |
-|------|----------|---------------|
-| Airbnb | 訂出的住宿晚數 | 代表主客雙方都獲得了價值 |
-| Spotify | 每月聆聽時長 | 代表用戶真正在使用和享受音樂 |
-| Facebook | DAU / MAU 比率 | 代表用戶習慣性回訪 |
-| Slack | 每週發送的訊息數 | 代表團隊真正在協作 |
-| Salesforce | 活躍客戶合約年度價值（ACV） | 代表客戶持續從產品獲得商業價值（B2B） |
+| Dimension | Feature Team (Avoid) | Empowered Team (Goal) |
+|-----------|---------------------|----------------------|
+| Assigned | Feature list (Output) | Problem to solve (Outcome) |
+| Success defined as | Delivering features on time | Achieving user and business metrics |
+| PM's role | Requirements gatherer and project manager | Problem explorer and solution validator |
+| Engineers' role | Execute specs | Participate in problem exploration and solution design |
 ```
 
-**你的北極星指標：**
-```
-北極星指標：[一個數字，代表用戶和產品創造的核心價值]
-定義：[精確的計算方式]
-為什麼這個指標：[說明它為什麼代表真實用戶價值，而不只是商業結果]
-```
+> "True product discovery is done **together** with engineers and designers, not by the PM alone handing off completed work." — Marty Cagan
 
-### 📝 North Star 品質自檢清單
-- ✅ 是否反映用戶獲得的價值？（不是營收、不是 DAU）
-- ✅ 是否能持續增長？（不會天然到達上限）
-- ✅ 團隊每個人看到這個指標是否都知道自己該做什麼？
-- ✅ 是否可以被操弄？（如果可以，需要護欄指標）
-- ✅ B2B 產品：是否反映客戶組織層級的價值，而非只有個人使用者？
-- ❌ 常見問題：用營收當 North Star（營收是結果不是驅動因素）、指標太複合無法行動
+**Lenny's Three PM Responsibilities:**
+- **Shape**: Synthesize user insights, data, and market intelligence to decide what to build
+- **Ship**: Ensure a high-quality product launches on time, with no surprises
+- **Synchronize**: Keep all stakeholders aligned on vision, strategy, goals, and roadmap
 
-**三層訊號體系（必須依序達標）：**
+## 4.2 Success Metrics Framework (North Star + Three-Layer Signals)
+
+A North Star metric must satisfy:
+- Reflects the real value users receive (not a vanity metric)
+- Can grow continuously (doesn't hit a natural ceiling)
+- Aligns the entire team around a single objective
 
 ```
-| 層級 | 指標類型 | 定義 | B2C 目標值 | B2B 目標值 |
+| Company | North Star Metric | Why This Metric |
+|---------|-------------------|-----------------|
+| Airbnb | Nights booked | Represents value delivered to both hosts and guests |
+| Spotify | Monthly listening hours | Represents users genuinely using and enjoying music |
+| Facebook | DAU / MAU ratio | Represents habitual return visits |
+| Slack | Messages sent per week | Represents teams genuinely collaborating |
+| Salesforce | Active customer ACV (Annual Contract Value) | Represents customers continuously deriving business value (B2B) |
+```
+
+**Your North Star Metric:**
+```
+North Star Metric: [A single number representing the core value created for users and the product]
+Definition: [Precise calculation method]
+Why this metric: [Explain why it represents real user value, not just a business outcome]
+```
+
+### 📝 North Star Quality Checklist
+- ✅ Does it reflect the value users receive? (Not revenue, not DAU)
+- ✅ Can it grow continuously? (Doesn't hit a natural ceiling)
+- ✅ Does everyone on the team know what to do when they see this metric?
+- ✅ Can it be gamed? (If yes, guardrail metrics are needed)
+- ✅ B2B products: Does it reflect value at the organizational level, not just individual users?
+- ❌ Common issues: using revenue as the North Star (revenue is an outcome, not a driver), metric is too composite to act on
+
+**Three-Layer Signal System (must be achieved in order):**
+
+```
+| Layer | Metric Type | Definition | B2C Target | B2B Target |
 |---|---|---|---|---|
-| 層級一（前提） | 核心動作成功率 | 用戶是否完成了產品的核心動作？ | 30-40%+ | 60-80%+（因為用戶更有動機） |
-| 層級二（價值代理） | D14 / D28 留存率 | 用戶是否持續回來使用？ | 消費產品 15-20%+ | Logo 留存 90%+；Net Revenue Retention 100%+ |
-| 層級三（熱情訊號） | Sean Ellis Score | 「如果失去這個產品，你會多難過？」 | 40%+ 回答「非常難過」 | 40%+ 回答「非常難過」 |
-| 護欄指標 | 防止過度優化 | 確保不傷害其他重要面向 | 視情況而定 | 視情況而定 |
+| Layer 1 (Prerequisite) | Core Action Success Rate | Did the user complete the product's core action? | 30–40%+ | 60–80%+ (users are more motivated) |
+| Layer 2 (Value Proxy) | D14 / D28 Retention Rate | Do users keep coming back? | Consumer products 15–20%+ | Logo retention 90%+; Net Revenue Retention 100%+ |
+| Layer 3 (Passion Signal) | Sean Ellis Score | "If you could no longer use this product, how disappointed would you be?" | 40%+ answer "very disappointed" | 40%+ answer "very disappointed" |
+| Guardrail Metrics | Prevent over-optimization | Ensure other important dimensions aren't harmed | Depends on context | Depends on context |
 ```
 
-說明：層級一是層級二的前提。如果核心動作成功率很低，留存率數據就沒有意義，因為用戶根本沒有機會體驗到產品價值。
+Note: Layer 1 is the prerequisite for Layer 2. If the core action success rate is very low, retention data is meaningless because users never had the chance to experience the product's value.
 
-## 4.4 Aha Moment 設計
+## 4.4 Aha Moment Design
 
 ```
-Aha Moment 定義：
-當用戶完成 [具體行為]，他們就體驗到了這個產品的核心價值。
-目標：在用戶進入產品的 [X 分鐘 / X 步驟] 內讓他們到達這個時刻。
+Aha Moment Definition:
+When a user completes [specific behavior], they have experienced this product's core value.
+Goal: Get users to this moment within [X minutes / X steps] of entering the product.
 
-Aha Moment 到達率：[目標 %]
-當前障礙：[什麼阻止了用戶更快到達 Aha Moment？]
-改善計畫：[如何移除障礙？]
+Aha Moment Reach Rate: [target %]
+Current Barriers: [What prevents users from reaching the Aha Moment faster?]
+Improvement Plan: [How to remove the barriers?]
 ```
 
-**範例：**
-| 產品 | Aha Moment | 時間目標 |
-|------|-----------|---------|
-| Slack | 團隊發送第 2,000 條訊息 | 前兩週 |
-| Dropbox | 第一個檔案同步到第二台裝置 | 首次使用 10 分鐘內 |
-| Zoom | 第一次一鍵加入會議且畫面流暢 | 第一次使用 |
+**Examples:**
+| Product | Aha Moment | Time Target |
+|---------|-----------|-------------|
+| Slack | Team sends its 2,000th message | First two weeks |
+| Dropbox | First file synced to a second device | Within 10 minutes of first use |
+| Zoom | First one-click join with smooth video | First use |
 
-### 📝 Aha Moment 品質自檢清單
-- ✅ 是否是一個具體的、可追蹤的行為？（不是「感覺產品好用」）
-- ✅ 是否與 JTBD 的功能性工作直接相關？
-- ✅ 到達時間目標是否合理？（B2C 應在首次使用內；B2B 可能在試用期內）
-- ✅ 是否可以設計 Onboarding 來引導用戶更快到達？
+### 📝 Aha Moment Quality Checklist
+- ✅ Is it a specific, trackable behavior? (Not "feels like the product is useful")
+- ✅ Is it directly tied to the JTBD's functional job?
+- ✅ Is the time target reasonable? (B2C should be within first use; B2B may be within the trial period)
+- ✅ Can onboarding be designed to help users reach it faster?

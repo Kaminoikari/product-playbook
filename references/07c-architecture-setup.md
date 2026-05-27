@@ -1,112 +1,112 @@
-# 開發銜接 — ARCHITECTURE.md + setup.sh
+# Development Handoff — ARCHITECTURE.md + setup.sh
 
-## 📄 ARCHITECTURE.md 模板
+## 📄 ARCHITECTURE.md Template
 
 ```markdown
-# [產品名稱] — 技術架構
+# [Product Name] — Technical Architecture
 
-## 目錄結構
+## Directory Structure
 
-[根據技術棧產出對應的目錄結構]
+[Generate the corresponding directory structure based on the tech stack]
 
-## 資料庫設計
+## Database Design
 
-[從 PRD 的 DB Schema 整合，轉為建表 SQL 或 ORM Model 定義]
+[Consolidate from the PRD's DB Schema — convert to CREATE TABLE SQL or ORM model definitions]
 
-### ER 關係圖
+### ER Diagram
 
 [Mermaid erDiagram]
 
-### 關鍵 Table 說明
+### Key Table Descriptions
 
-| Table | 說明 | 關鍵欄位 | 索引建議 |
-|-------|------|---------|---------|
+| Table | Description | Key Fields | Index Recommendations |
+|-------|------------|------------|----------------------|
 | | | | |
 
-## API 設計
+## API Design
 
-[根據 User Story 和功能規格，定義 RESTful API endpoints 或 GraphQL schema]
+[Define RESTful API endpoints or GraphQL schema based on User Stories and feature specs]
 
-### Endpoints 清單
+### Endpoints List
 
-| 方法 | 路徑 | 說明 | 對應 Task |
-|------|------|------|----------|
-| GET | /api/v1/[resource] | [說明] | T1.1 |
-| POST | /api/v1/[resource] | [說明] | T1.2 |
+| Method | Path | Description | Corresponding Task |
+|--------|------|------------|-------------------|
+| GET | /api/v1/[resource] | [Description] | T1.1 |
+| POST | /api/v1/[resource] | [Description] | T1.2 |
 
-### 認證方式
+### Authentication
 
-[JWT / Session / OAuth 等]
+[JWT / Session / OAuth, etc.]
 
-## 第三方服務
+## Third-Party Services
 
-| 服務 | 用途 | 對應功能 |
-|------|------|---------|
+| Service | Purpose | Corresponding Feature |
+|---------|---------|----------------------|
 | | | |
 
-## 安全架構
+## Security Architecture
 
-### CORS 配置
+### CORS Configuration
 
-| 設定項 | 值 | 說明 |
-|--------|---|------|
-| 允許的 Origins | [生產域名, localhost:port] | 不使用 wildcard * |
-| 允許的 Methods | GET, POST, PUT, DELETE | 依 API 實際需求 |
-| 允許的 Headers | Content-Type, Authorization | |
-| Credentials | true/false | 依認證方式決定 |
+| Setting | Value | Notes |
+|---------|-------|-------|
+| Allowed Origins | [Production domain, localhost:port] | Do not use wildcard * |
+| Allowed Methods | GET, POST, PUT, DELETE | Based on actual API needs |
+| Allowed Headers | Content-Type, Authorization | |
+| Credentials | true/false | Depends on authentication method |
 
-### 安全性 Headers
+### Security Headers
 
-[根據產品需求，從 references/08-security-checklist.md §5 選擇適用的 Headers]
+[Select applicable headers from references/08-security-checklist.md §5 based on product requirements]
 
-### Rate Limiting 策略
+### Rate Limiting Strategy
 
-| 端點類型 | 限制 | 識別方式 |
-|---------|------|---------|
-| 一般 API | [X] req/min | IP + User ID |
-| 登入/註冊 | [X] req/min | IP |
-| 檔案上傳 | [X] req/min | User ID |
+| Endpoint Type | Limit | Identification Method |
+|--------------|-------|----------------------|
+| General API | [X] req/min | IP + User ID |
+| Login/Register | [X] req/min | IP |
+| File Upload | [X] req/min | User ID |
 
-### 敏感資料處理
+### Sensitive Data Handling
 
-- 密鑰管理：[.env + 平台環境變數 / Secrets Manager]
-- 日誌規範：不記錄密碼、Token、個人資料
-- 資料加密：[傳輸中 TLS / 儲存時加密需求]
+- Secret management: [.env + platform env vars / Secrets Manager]
+- Logging rules: Never log passwords, tokens, or personal data
+- Data encryption: [TLS in transit / encryption at rest requirements]
 
-> 完整安全性檢查清單見 `references/08-security-checklist.md`
+> Full security checklist at `references/08-security-checklist.md`
 ```
 
 ---
 
-## 📄 .gitignore 模板
+## 📄 .gitignore Template
 
 ```gitignore
-# 環境變數與密鑰
+# Environment variables and secrets
 .env
 .env.local
 .env.*.local
 *.pem
 *.key
 
-# 產品規劃進度（可能包含敏感商業資訊）
+# Product planning progress (may contain sensitive business information)
 .product-playbook-progress.md
-# Product-playbook 開發交接標記（session-local，請勿 commit）
+# Product-playbook dev-handoff marker (session-local; do not commit)
 .product-dev-active
 
-# IDE 與作業系統
+# IDE and OS
 .idea/
 .vscode/
 *.swp
 .DS_Store
 Thumbs.db
 
-# 依賴
+# Dependencies
 node_modules/
 __pycache__/
 *.pyc
 venv/
 
-# 建置產出
+# Build output
 dist/
 build/
 .next/
@@ -114,86 +114,86 @@ build/
 
 ---
 
-## 📄 setup.sh 模板
+## 📄 setup.sh Template
 
 ```bash
 #!/bin/bash
-# [產品名稱] — 專案初始化腳本
-# 使用方式：chmod +x scripts/setup.sh && ./scripts/setup.sh
+# [Product Name] — Project Initialization Script
+# Usage: chmod +x scripts/setup.sh && ./scripts/setup.sh
 
 set -e
 
-echo "🚀 正在初始化 [產品名稱]..."
+echo "🚀 Initializing [Product Name]..."
 
-# ===== 檢查前置條件 =====
-command -v [node/python/etc] >/dev/null 2>&1 || { echo "❌ 需要安裝 [runtime]"; exit 1; }
+# ===== Check prerequisites =====
+command -v [node/python/etc] >/dev/null 2>&1 || { echo "❌ [runtime] is required"; exit 1; }
 
-# ===== 安裝依賴 =====
-echo "📦 安裝依賴..."
+# ===== Install dependencies =====
+echo "📦 Installing dependencies..."
 [npm install / pip install -r requirements.txt / etc]
 
-# ===== 環境設定 =====
+# ===== Environment setup =====
 if [ ! -f .env ]; then
-  echo "📝 建立 .env 檔案..."
+  echo "📝 Creating .env file..."
   cp .env.example .env
-  echo "⚠️  請編輯 .env 填入必要的環境變數"
+  echo "⚠️  Please edit .env and fill in the required environment variables"
 fi
 
-# ===== 資料庫初始化 =====
-echo "🗄️  初始化資料庫..."
+# ===== Database initialization =====
+echo "🗄️  Initializing database..."
 [migration commands]
 
 echo ""
-echo "✅ 初始化完成！"
+echo "✅ Initialization complete!"
 echo ""
-echo "下一步："
-echo "  1. 編輯 .env 填入環境變數"
-echo "  2. 啟動開發伺服器：[start command]"
-echo "  3. 開始開發：claude \"請讀取 CLAUDE.md 和 TASKS.md，開始執行 Phase 1\""
+echo "Next steps:"
+echo "  1. Edit .env to fill in environment variables"
+echo "  2. Start the dev server: [start command]"
+echo "  3. Start developing: claude \"Read CLAUDE.md and TASKS.md, then start executing Phase 1\""
 ```
 
 ---
 
-## 使用者引導文字
+## User Guidance Text
 
-### 在 Claude Chat / Cowork 中
+### In Claude Chat / Cowork
 
-產出開發交接包後，顯示以下引導：
+After producing the handoff package, display the following guidance:
 
 ```
-📦 開發交接包已準備好！包含以下檔案：
+📦 Development handoff package is ready! It includes the following files:
 
-  CLAUDE.md        → Claude Code 的專案記憶（產品上下文 + 技術規範）
-  TASKS.md         → 開發任務清單（4 個 Phase，共 [N] 個 Task）
-  TICKETS.md       → 開票清單（共 [N] 張票，可直接在 Jira/Asana/Linear 開票）
-  docs/PRD.md      → 完整 PRD
-  docs/ARCHITECTURE.md → 技術架構（DB schema + API + 目錄結構）
-  docs/PRODUCT-SPEC.md → 產品規格摘要
-  scripts/setup.sh → 一鍵初始化腳本
+  CLAUDE.md        → Claude Code's project memory (product context + tech specs)
+  TASKS.md         → Development task list (4 Phases, [N] Tasks total)
+  TICKETS.md       → Ticket list ([N] tickets, ready to create in Jira/Asana/Linear)
+  docs/PRD.md      → Full PRD
+  docs/ARCHITECTURE.md → Technical architecture (DB schema + API + directory structure)
+  docs/PRODUCT-SPEC.md → Product Spec Summary
+  scripts/setup.sh → One-click initialization script
 
-🔗 如何開始開發：
+🔗 How to start developing:
 
-  1. 下載並解壓到你的專案資料夾
-  2. 開啟終端機，進入專案資料夾
-  3. 啟動 Claude Code：
+  1. Download and extract to your project folder
+  2. Open a terminal and navigate to the project folder
+  3. Launch Claude Code:
      $ claude
-  4. 告訴 Claude Code 開始：
-     > 請讀取 CLAUDE.md 和 TASKS.md，開始執行 Phase 0
+  4. Tell Claude Code to begin:
+     > Read CLAUDE.md and TASKS.md, then start executing Phase 0
 
-💡 小提示：
-  - Claude Code 會自動讀取 CLAUDE.md，所以它已經知道整個產品上下文
-  - 每個 Phase 完成後，它會詢問你是否要進入下一個 Phase
-  - 如果要調整功能範圍，直接修改 TASKS.md 即可
-  - CLAUDE.md 中的「明確不做」清單會防止 Claude Code 做超出範圍的事
+💡 Tips:
+  - Claude Code automatically reads CLAUDE.md, so it already knows the full product context
+  - After each Phase is complete, it will ask whether to proceed to the next Phase
+  - To adjust feature scope, just edit TASKS.md directly
+  - The "Explicitly Not Doing" list in CLAUDE.md prevents Claude Code from building out of scope
 ```
 
-### 產出前的最終確認
+### Pre-Output Final Confirmation
 
 ```
-在產出開發交接包前，我需要確認幾件事：
+Before producing the development handoff package, I need to confirm a few things:
 
-1. 技術棧：[已確認 / 需要確認]
-2. 產品名稱（用於專案資料夾名稱）：[已確認 / 需要確認]
-3. 是否有其他技術限制或偏好？
-   - 例如：必須用某個 ORM、需要支援特定瀏覽器、有既有的 CI/CD 等
+1. Tech stack: [Confirmed / Needs confirmation]
+2. Product name (for the project folder name): [Confirmed / Needs confirmation]
+3. Any other technical constraints or preferences?
+   - e.g., Must use a specific ORM, need to support specific browsers, existing CI/CD, etc.
 ```

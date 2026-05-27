@@ -1,215 +1,215 @@
-# 開發銜接 — TASKS.md + TICKETS.md
+# Development Handoff — TASKS.md + TICKETS.md
 
-## 📄 TASKS.md 模板
+## 📄 TASKS.md Template
 
-功能拆解的核心原則：
-- 從 MVP 必須有（P0）的功能出發
-- 每個 Task 對應一個 User Story
-- Phase 之間有明確的依賴關係：Phase N+1 依賴 Phase N 的產出
-- 每個 Task 包含驗收標準，Claude Code 可以自我檢查
+Core principles for feature breakdown:
+- Start from the MVP must-haves (P0 features)
+- Each Task maps to a User Story
+- Phases have clear dependencies: Phase N+1 depends on Phase N outputs
+- Each Task includes acceptance criteria that Claude Code can self-verify
 
 ```markdown
-# [產品名稱] — 開發任務清單
+# [Product Name] — Development Task List
 
-## Phase 0：專案初始化
-> 目標：建立可運行的空白專案骨架
+## Phase 0: Project Initialization
+> Goal: Establish a runnable blank project skeleton
 
-- [ ] **T0.1** 初始化專案（`scripts/setup.sh` 或手動）
-  - 驗收：
-    - [ ] `npm run dev` / `python manage.py runserver` 等指令可啟動
-    - [ ] `.gitignore` 已建立，包含 `.env`、`.env.local`、`node_modules/`、`.product-playbook-progress.md`、`.product-dev-active` 等敏感檔案
-    - [ ] `.env.example` 已建立（只有 key 名稱，沒有實際值）
-- [ ] **T0.2** 設定 linter + formatter
-  - 驗收：lint 通過無錯誤
-- [ ] **T0.3** 建立資料庫 + 執行初始 migration
-  - 驗收：資料庫可連接，基礎 table 已建立
-- [ ] **T0.4** 建立基礎路由結構
-  - 驗收：所有主要頁面路由可訪問（回傳空白頁面即可）
+- [ ] **T0.1** Initialize project (`scripts/setup.sh` or manual)
+  - Acceptance:
+    - [ ] `npm run dev` / `python manage.py runserver` or equivalent command starts successfully
+    - [ ] `.gitignore` created, includes `.env`, `.env.local`, `node_modules/`, `.product-playbook-progress.md`, `.product-dev-active`, and other sensitive files
+    - [ ] `.env.example` created (key names only, no actual values)
+- [ ] **T0.2** Set up linter + formatter
+  - Acceptance: lint passes with no errors
+- [ ] **T0.3** Set up database + run initial migration
+  - Acceptance: Database is connectable, base tables are created
+- [ ] **T0.4** Set up base routing structure
+  - Acceptance: All main page routes are accessible (returning blank pages is fine)
 
-## Phase 1：核心流程（Aha Moment 路徑）
-> 目標：讓用戶可以走完從進入到 Aha Moment 的最短路徑
-> 對應 User Story：[US-001, US-002, ...]
+## Phase 1: Core Flow (Aha Moment Path)
+> Goal: Let users complete the shortest path from entry to the Aha Moment
+> Corresponds to User Stories: [US-001, US-002, ...]
 
-- [ ] **T1.1** [功能名稱]
-  - User Story：身為 [Persona]，我想要 [行為]，以便 [價值]
-  - 驗收標準：
-    - [ ] [可測試的具體條件 1]
-    - [ ] [可測試的具體條件 2]
-  - 技術備註：[需要的 API / 第三方服務 / 特殊邏輯]
+- [ ] **T1.1** [Feature name]
+  - User Story: As a [Persona], I want to [action], so that [value]
+  - Acceptance Criteria:
+    - [ ] [Specific testable condition 1]
+    - [ ] [Specific testable condition 2]
+  - Technical Notes: [Required APIs / third-party services / special logic]
 
-- [ ] **T1.2** [功能名稱]
-  - User Story：...
-  - 驗收標準：...
+- [ ] **T1.2** [Feature name]
+  - User Story: ...
+  - Acceptance Criteria: ...
 
-> **Phase 1 完成檢查點**：用戶可以完成 [Aha Moment 行為]。如果不行，不要進入 Phase 2。
+> **Phase 1 Completion Checkpoint**: User can complete [Aha Moment action]. If not, do not proceed to Phase 2.
 
-## Phase 2：完整 MVP
-> 目標：補全 MVP 範圍中所有 P0 功能
-> 對應 User Story：[US-003, US-004, ...]
+## Phase 2: Complete MVP
+> Goal: Fill in all remaining P0 features not covered in Phase 1
+> Corresponds to User Stories: [US-003, US-004, ...]
 
-- [ ] **T2.1** [功能名稱]
+- [ ] **T2.1** [Feature name]
   - ...
 
-> **Phase 2 完成檢查點**：所有 P0 User Story 的驗收標準都通過。
+> **Phase 2 Completion Checkpoint**: All P0 User Story acceptance criteria pass.
 
-## Phase 3：品質與體驗
-> 目標：錯誤處理、邊界情境、載入狀態、基礎安全性
+## Phase 3: Quality & Experience
+> Goal: Error handling, edge cases, loading states, basic security
 
-- [ ] **T3.1** 全域錯誤處理
-- [ ] **T3.2** 表單驗證 + 邊界情境
-- [ ] **T3.3** 載入狀態 + 空狀態
-- [ ] **T3.4** 安全性檢查（依 `references/08-security-checklist.md` 逐項確認）
-  - 驗收：
-    - [ ] OWASP Top 10 相關項目已處理（輸入驗證、認證、XSS 防護、CSRF 防護）
-    - [ ] 安全性 Headers 已設定（CSP、X-Frame-Options、HSTS 等）
-    - [ ] CORS 政策已配置（不使用 wildcard *）
-    - [ ] 敏感 API 端點有 Rate Limiting
-    - [ ] API 錯誤回應不洩漏內部資訊
-- [ ] **T3.5** 響應式設計（如果是 Web）
+- [ ] **T3.1** Global error handling
+- [ ] **T3.2** Form validation + edge cases
+- [ ] **T3.3** Loading states + empty states
+- [ ] **T3.4** Security check (verify each item per `references/08-security-checklist.md`)
+  - Acceptance:
+    - [ ] OWASP Top 10 related items addressed (input validation, authentication, XSS protection, CSRF protection)
+    - [ ] Security headers configured (CSP, X-Frame-Options, HSTS, etc.)
+    - [ ] CORS policy configured (no wildcard *)
+    - [ ] Sensitive API endpoints have rate limiting
+    - [ ] API error responses don't leak internal information
+- [ ] **T3.5** Responsive design (if Web)
 
-## Phase 4：部署
-> 目標：可以讓外部用戶訪問
+## Phase 4: Deployment
+> Goal: Make the app accessible to external users
 
-- [ ] **T4.1** 環境變數管理
-- [ ] **T4.2** 部署配置
-- [ ] **T4.3** 基礎監控 + 日誌
+- [ ] **T4.1** Environment variable management
+- [ ] **T4.2** Deployment configuration
+- [ ] **T4.3** Basic monitoring + logging
 ```
 
 ---
 
-## 📄 TICKETS.md 模板
+## 📄 TICKETS.md Template
 
-TICKETS.md 是根據 TASKS.md 中的功能拆解，產出可直接在專案管理工具中開票的結構化內容。每張票包含 PM 開票所需的完整資訊。
+TICKETS.md takes the feature breakdown from TASKS.md and produces structured content that can be directly used to create tickets in project management tools. Each ticket contains all the information a PM needs.
 
-> **設計目標**：PM 可以直接將每張票的內容複製到 Jira / Asana / Linear 等工具中開票，後續版本將支援透過 API 自動開票。
+> **Design goal**: PMs can copy each ticket's content directly into Jira / Asana / Linear or other tools to create tickets. Future versions will support automatic ticket creation via API.
 
 ```markdown
-# [產品名稱] — 開票清單
+# [Product Name] — Ticket List
 
-> 產出時間：[時間戳]
-> 對應 TASKS.md 版本：[版本/時間]
-> 共 [N] 張票
+> Generated: [timestamp]
+> Corresponds to TASKS.md version: [version/timestamp]
+> Total: [N] tickets
 
 ---
 
-## 票務總覽
+## Ticket Overview
 
-| 票號 | 標題 | Phase | 優先級 | 預估工時 | 依賴 |
-|------|------|-------|--------|---------|------|
-| TKT-001 | [標題] | Phase 0 | P0 | [X]h | — |
-| TKT-002 | [標題] | Phase 1 | P0 | [X]h | TKT-001 |
+| Ticket # | Title | Phase | Priority | Estimated Hours | Dependencies |
+|----------|-------|-------|----------|----------------|-------------|
+| TKT-001 | [Title] | Phase 0 | P0 | [X]h | — |
+| TKT-002 | [Title] | Phase 1 | P0 | [X]h | TKT-001 |
 | ... | | | | | |
 
 ---
 
-## TKT-001：[標題]
+## TKT-001: [Title]
 
-**Phase**：Phase 0 — 專案初始化
-**對應 Task**：T0.1
-**優先級**：P0
-**預估工時**：[X] 小時
-**依賴**：無
-**指派對象**：[角色/團隊，例如：後端工程師]
+**Phase**: Phase 0 — Project Initialization
+**Corresponding Task**: T0.1
+**Priority**: P0
+**Estimated Hours**: [X] hours
+**Dependencies**: None
+**Assignee**: [Role/team, e.g., Backend Engineer]
 
-### 描述
+### Description
 
-[用 1-3 段文字描述這張票要完成什麼，包含業務背景和技術目標]
+[1-3 paragraphs describing what this ticket accomplishes, including business context and technical goals]
 
 ### User Story
 
-身為 [Persona]，我想要 [行為]，以便 [價值]
+As a [Persona], I want to [action], so that [value]
 
-### 驗收標準
+### Acceptance Criteria
 
-- [ ] [可測試的具體條件 1]
-- [ ] [可測試的具體條件 2]
-- [ ] [可測試的具體條件 3]
+- [ ] [Specific testable condition 1]
+- [ ] [Specific testable condition 2]
+- [ ] [Specific testable condition 3]
 
-### 技術備註
+### Technical Notes
 
-- [實作注意事項]
-- [需要的 API / 第三方服務]
-- [相關檔案路徑或模組]
+- [Implementation considerations]
+- [Required APIs / third-party services]
+- [Related file paths or modules]
 
-### 標籤建議
+### Suggested Labels
 
 `[Phase 0]` `[backend]` `[setup]`
 
 ---
 
-## TKT-002：[標題]
+## TKT-002: [Title]
 
-[同上格式，逐張展開]
+[Same format, expanded for each ticket]
 ```
 
-### 開票規則
+### Ticketing Rules
 
-1. **票號對應 Task**：每個 TASKS.md 中的 Task 對應一張票（TKT-001 ↔ T0.1），粒度過大的 Task 可拆為多張票
-2. **優先級繼承**：Phase 0-1 預設 P0，Phase 2 預設 P1，Phase 3-4 預設 P2，可根據 RICE 分數調整
-3. **依賴關係**：明確標記票與票之間的前後依賴，避免工程師跳步開發
-4. **預估工時**：根據 Task 粒度原則（1-4 小時），提供合理預估
-5. **標籤建議**：包含 Phase、技術領域（frontend / backend / database / infra）、功能模組
+1. **Ticket-to-Task mapping**: Each Task in TASKS.md maps to one ticket (TKT-001 ↔ T0.1); overly large Tasks may be split into multiple tickets
+2. **Priority inheritance**: Phase 0-1 default to P0, Phase 2 defaults to P1, Phase 3-4 default to P2 — adjustable based on RICE scores
+3. **Dependencies**: Explicitly mark ticket-to-ticket dependencies to prevent engineers from skipping steps
+4. **Estimated hours**: Based on the Task granularity principle (1-4 hours), provide reasonable estimates
+5. **Suggested labels**: Include Phase, technical domain (frontend / backend / database / infra), feature module
 
-### 專案管理工具串接（預留）
+### Project Management Tool Integration (Reserved)
 
-> 以下為未來自動開票功能的預留接口設計，目前版本僅產出 TICKETS.md 供 PM 手動開票。
+> The following is a reserved interface design for future automatic ticketing. The current version only produces TICKETS.md for manual PM ticket creation.
 
-TICKETS.md 的結構化格式已預留以下欄位，便於後續透過 API 自動匯入：
+TICKETS.md's structured format reserves the following fields for future API import:
 
-| 欄位 | Jira 對應 | Asana 對應 | Linear 對應 |
-|------|----------|-----------|------------|
-| 票號 | Issue Key | Task ID | Issue ID |
-| 標題 | Summary | Task Name | Title |
-| 描述 | Description | Description | Description |
-| 優先級 | Priority | Custom Field | Priority |
-| 預估工時 | Story Points / Time Estimate | Custom Field | Estimate |
-| 依賴 | Linked Issues | Dependencies | Relations |
-| 標籤 | Labels + Components | Tags | Labels |
+| Field | Jira Mapping | Asana Mapping | Linear Mapping |
+|-------|-------------|--------------|----------------|
+| Ticket # | Issue Key | Task ID | Issue ID |
+| Title | Summary | Task Name | Title |
+| Description | Description | Description | Description |
+| Priority | Priority | Custom Field | Priority |
+| Estimated Hours | Story Points / Time Estimate | Custom Field | Estimate |
+| Dependencies | Linked Issues | Dependencies | Relations |
+| Labels | Labels + Components | Tags | Labels |
 | Phase | Epic | Section | Project |
-| 指派對象 | Assignee | Assignee | Assignee |
-| 驗收標準 | Acceptance Criteria (Description) | Subtasks | Sub-issues |
+| Assignee | Assignee | Assignee | Assignee |
+| Acceptance Criteria | Acceptance Criteria (Description) | Subtasks | Sub-issues |
 
 ---
 
-## 功能拆解邏輯
+## Feature Breakdown Logic
 
-將 MVP 功能轉換為 Task 的規則：
+Rules for converting MVP features into Tasks:
 
-### Phase 劃分原則
-
-```
-Phase 0：專案骨架（所有模式都必須有）
-  → 初始化、linter、DB、基礎路由
-
-Phase 1：Aha Moment 最短路徑（最重要）
-  → 從用戶進入到達 Aha Moment 所需的最少功能
-  → 只包含這條路徑上的 P0 功能
-
-Phase 2：完整 MVP
-  → 補全 Phase 1 沒有覆蓋的其他 P0 功能
-  → 支線流程、次要頁面
-
-Phase 3：品質與體驗
-  → 錯誤處理、邊界情境、載入/空狀態
-  → 安全性基礎、響應式設計
-
-Phase 4：部署
-  → 環境變數、部署配置、監控
-```
-
-### Task 粒度原則
-
-- 每個 Task 應該可以在 **1-4 小時** 內完成
-- 太大 → 拆成子 Task（T1.1a, T1.1b）
-- 太小 → 合併到相關 Task
-- 每個 Task 必須有至少一個可測試的驗收標準
-
-### User Story → Task 對應
+### Phase Division Principles
 
 ```
-一個 User Story 可能對應 1-3 個 Task：
-  US-001: 身為新用戶，我想要註冊帳號，以便開始使用
-    → T1.1: 註冊頁面 UI
-    → T1.2: 註冊 API + 資料驗證
-    → T1.3: Email 驗證流程（如果 MVP 需要）
+Phase 0: Project skeleton (required for all modes)
+  → Initialization, linter, DB, base routing
+
+Phase 1: Shortest path to Aha Moment (most important)
+  → Minimum features needed from user entry to Aha Moment
+  → Only includes P0 features on this path
+
+Phase 2: Complete MVP
+  → Fill in remaining P0 features not covered in Phase 1
+  → Secondary flows, supporting pages
+
+Phase 3: Quality & Experience
+  → Error handling, edge cases, loading/empty states
+  → Basic security, responsive design
+
+Phase 4: Deployment
+  → Environment variables, deployment config, monitoring
+```
+
+### Task Granularity Principle
+
+- Each Task should be completable in **1-4 hours**
+- Too large → Split into sub-Tasks (T1.1a, T1.1b)
+- Too small → Merge into a related Task
+- Each Task must have at least one testable acceptance criterion
+
+### User Story → Task Mapping
+
+```
+A single User Story may map to 1-3 Tasks:
+  US-001: As a new user, I want to register an account, so I can start using the product
+    → T1.1: Registration page UI
+    → T1.2: Registration API + data validation
+    → T1.3: Email verification flow (if needed for MVP)
 ```
