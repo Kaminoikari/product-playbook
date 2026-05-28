@@ -1,5 +1,20 @@
 # Stage 1: Discovery — Building Personas
 
+### 🚫 Discovery Output Scope (Hard Gate)
+
+When the orchestrator is asked to perform Discovery work (Persona, JTBD, OST, Journey Map, Continuous Discovery), the output MUST stay **inside the Discovery scope**. Discovery answers _who the users are_ and _what unmet need they are trying to satisfy_ — nothing else. The following downstream artifacts must NOT appear in a Discovery deliverable, even if they feel natural to mention:
+
+- **Define-stage artifacts**: positioning statements, HMW (How Might We) questions, named pain-point matrices that double as solution prompts
+- **Develop-stage artifacts**: PR-FAQ drafts, pre-mortem scenarios, RICE tables, MVP scope definitions, PRD sections, feature lists
+- **Deliver-stage artifacts**: North Star metric definitions, PMF criteria, GTM plans, business-model canvas blocks, product-spec tables
+- **Strategy-stage artifacts**: Strategy Blocks, Rumelt diagnosis/guiding-policy/coherent-action, DHM Model breakdowns, OKR ladders
+
+If the Discovery findings strongly suggest a downstream artifact (e.g., the JTBD analysis surfaces a clear positioning angle), note it as a one-line *open question* or *next-step pointer* at the very end — never produce the artifact itself. The next stage in the planning flow has its own dedicated step for it.
+
+Failing example: ending a JTBD analysis with a populated RICE table, an MVP scope list, or a "Recommended Positioning" paragraph. That output FAILS this Hard Gate even if all the other Discovery sub-sections are correct.
+
+---
+
 ## Continuous Discovery Habits (Teresa Torres)
 
 Build one key habit: **Talk to at least one target user every week.** Discovery is not a one-time ritual — it's an ongoing system.
