@@ -50,6 +50,22 @@ Failing example: producing only one persona ("HR Manager") that conflates approv
 
 Explain the segmentation logic; check for MECE (mutually exclusive, collectively exhaustive); identify the primary TA and secondary TA.
 
+### 🎯 Persona Prioritization Reasoning (Hard Gate)
+
+Identifying "primary TA" without explicit reasoning fails this gate. The prioritization statement MUST name one Persona as primary AND explain why **in terms specific to the product's go-to-market dynamics**, not generic frequency-of-use claims.
+
+For **B2B products with multiple user personas**, the reasoning MUST reference **at least one** of these B2B-specific dynamics by name (using these or clearly equivalent terms):
+
+- **Champion vs Buyer** — who internally advocates for adoption versus who signs the contract; champion-led adoption usually wins B2B prioritization even when buyer is the "more senior" persona
+- **Adoption multiplier** — who, by adopting, unlocks adoption for the rest of the org (e.g., HR Specialist's daily use seeds the system-of-record other personas later depend on)
+- **Switching-trigger ownership** — which persona feels the pain that justifies switching from the incumbent tool; whoever owns the switching trigger is the prioritization candidate even if they aren't the heaviest user
+- **Budget authority** — who controls the line item; relevant when buyer ≠ user and the buyer's evaluation criteria dominate the initial-deal decision
+- **Audit / compliance pressure ownership** — whose role is on the line when audit findings hit; compliance-pressured personas often dominate prioritization in regulated B2B segments
+
+A pure "Persona X uses it more often" or "Persona Y has more users" reasoning FAILS this Hard Gate for B2B products. Frequency is necessary, never sufficient — B2B switching is driven by org-level pressure, not individual usage rates.
+
+For **B2C products**, the reasoning MUST reference at least one of: switching-trigger ownership, JTBD severity differential, network-effect seeding, or willingness-to-pay differential. Pure frequency-of-use reasoning also fails for B2C.
+
 ### 📝 Persona Quality Checklist
 - ✅ Is the segmentation based on "purpose/task/motivation" rather than demographics?
 - ✅ Are Personas MECE (mutually exclusive and collectively exhaustive of the target market)?
