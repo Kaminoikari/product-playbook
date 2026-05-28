@@ -479,6 +479,33 @@ Una iteración de reducción de tokens. Misma semántica del contenido del skill
 
 **Replicado a 5 locales i18n** (zh-TW, zh-CN, ja, es, ko) preservando las traducciones existentes — el adelgazamiento estructural se aplicó de manera idéntica por idioma.
 
+### Iteración 7: Resiliencia del Harness de Evals (Sprint 1 + 2A, v1.2.9)
+
+Una iteración a nivel de harness, no a nivel de skill. La semántica del skill no cambió; lo que cambió es la *superficie que se mide*. Objetivo: hacer visible la línea base real de calidad desbloqueando 4 evals que venían produciendo veredictos 0/0 en silencio.
+
+**Sprint 1 — desbloquear los clusters no medibles (`d2023fb`, `cee67cb`):**
+
+Cuatro evals (`eval-jtbd-depth`, `eval-prfaq-output`, `eval-subagent-discovery`, `eval-subagent-premortem`) venían produciendo 0 pass / 0 fail por corrida — indistinguibles de "sin problemas" en el puntaje agregado. Tres causas:
+
+1. **Sub-agents faltantes en CI headless** — CI instalaba el skill en `~/.claude/skills/` pero nunca copiaba `agents/*.md` a `~/.claude/agents/`. `claude -p` por lo tanto no podía despachar vía `Task`, y el orchestrator corría inline en silencio.
+2. **El hook de specialist-dispatch silencioso bajo `claude -p`** — los `hooks/` a nivel de plugin no se cargan en modo headless; sólo se cargan los UserPromptSubmit hooks de `~/.claude/settings.json` a nivel de usuario. CI ahora registra programáticamente el dispatch hook a nivel de usuario antes de cada corrida behavioral.
+3. **Timeouts de response + judge demasiado agresivos** — 180s response / 120s judge cortaban en medio las salidas largas de Discovery y Pre-mortem; el judge entonces veía un string truncado y emitía 0/0. Subido a 600s / 240s con un reintento ante salidas no-JSON.
+
+También se eliminaron las expectations procedurales tipo "el orchestrator delega vía Task tool" de los evals 10/11/12 — esas son inverificables en `claude -p` (sin superficie de Task anidado) y no son la propiedad que finalmente nos importa. Las expectations restantes apuntan a la *calidad de output* que el specialist habría producido.
+
+**Sprint 2A — robustez del judge + techo de CI (`f973939`):**
+
+Dos correcciones de seguimiento del code review del PR #9:
+
+1. **El reintento de repair del judge preserva el contexto original** — `claude -p` es stateless, así que el repair prompt ahora vuelve a incluir el `judge_prompt` original completo (response + expectations) más la salida malformed anterior. Una nueva verificación `_judge_output_complete()` rechaza payloads que no tengan exactamente N expectations indexadas, evitando que el modelo emita un veredicto plausible-pero-fabricado cuando la salida del primer call es irrecuperable.
+2. **Timeout del job `behavioral-eval` de CI 90 → 120 min** — el peor caso = 12 evals / 2 workers × (600s response + 240s judge + 240s repair) ≈ 108 min, así que el techo previo de 90 min podía cancelar en silencio una corrida válida. 120 min deja ~10 min de margen para setup + artifact upload.
+
+**Línea base recién visible** (corrida local, 2026-05-28): **0 / 100** `at-risk`, **13 / 33** expectations pasando, **6 critical + 14 warning** failures. El puntaje agregado no regresó — lo que regresó es el puntaje *visible*, porque cuatro evals que antes contribuían 0/0 ahora producen señal real. Los 6 critical failures son el backlog explícito de Stage 2: JTBD de 3 capas (funcional / emocional / social), Jobs a nivel organizacional B2B, separación de persona buyer vs user en B2B, guardarraíles de scope de Discovery, y disciplina de leading-indicator en pre-mortem. Ver [`docs/sprint1-local-eval-2026-05-28.md`](./docs/sprint1-local-eval-2026-05-28.md) para el desglose por expectation.
+
+**Las mejoras de harness viven en `evals/` y `.github/workflows/` — no se publican a npm.** No hace falta version bump más allá de v1.2.9 (que ya cargó el hook a nivel de usuario y las ediciones de scope a los evals 10/11/12).
+
+**Replicado a 5 locales i18n** (zh-TW, zh-CN, ja, es, ko).
+
 ---
 
 ## 🧪 Desarrollo y Evals

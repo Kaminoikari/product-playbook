@@ -479,6 +479,33 @@ v1.2.0+ 에서 도입된 3개의 전문 sub-agent (`discovery-specialist`, `stra
 
 **5개 i18n 로케일 (zh-TW, zh-CN, ja, es, ko) 에 미러링** — 기존 번역을 보존하며, 구조적 슬림화는 언어별로 동일하게 적용.
 
+### 반복 7: Eval Harness 회복탄력성 강화 (Sprint 1 + 2A, v1.2.9)
+
+스킬 레벨이 아니라 harness 레벨의 반복. 스킬의 의미는 바뀌지 않았고, 바뀐 것은 **측정되는 표면**. 목표는 0/0 verdict 만 조용히 내고 있던 4개 eval 의 차단을 풀어, 진짜 품질 베이스라인을 드러내는 것.
+
+**Sprint 1 — 측정 불능 클러스터 해제 (`d2023fb`, `cee67cb`):**
+
+4개 eval (`eval-jtbd-depth`, `eval-prfaq-output`, `eval-subagent-discovery`, `eval-subagent-premortem`) 이 매번 0 pass / 0 fail 을 내고 있어, 집계 점수에서 「문제 없음」과 구분이 불가능했음. 세 가지 원인:
+
+1. **headless CI 에서 sub-agent 누락** — CI 가 스킬을 `~/.claude/skills/` 에 설치하면서 `agents/*.md` 를 `~/.claude/agents/` 에 복사하지 않았음. 그래서 `claude -p` 는 `Task` 로 dispatch 할 수 없었고, orchestrator 가 조용히 inline 으로 실행했음.
+2. **`claude -p` 에서 specialist-dispatch hook 이 무음** — 플러그인 레벨 `hooks/` 는 headless 모드에서 로드되지 않으며, user 레벨 `~/.claude/settings.json` 의 UserPromptSubmit hook 만 로드됨. CI 는 이제 각 behavioral run 전에 dispatch hook 을 프로그램적으로 user 레벨에 등록함.
+3. **Response + judge timeout 이 너무 빡빡함** — 180s response / 120s judge 가 장문의 Discovery / Pre-mortem 출력을 중간에 잘랐고, judge 는 잘린 문자열을 보고 0/0 을 뱉었음. 600s / 240s 로 올리고, 비-JSON 출력 시 1회 재시도.
+
+또한 evals 10/11/12 에서 「orchestrator 가 Task tool 로 dispatch」 같은 절차적 expectation 을 제거 — `claude -p` 에 nested Task 표면이 없어 검증 불가하며, 우리가 최종적으로 신경 쓰는 성질도 아님. 남은 expectation 은 specialist 가 산출했어야 할 **출력 품질**을 대상으로 함.
+
+**Sprint 2A — judge 견고성 + CI 상한 (`f973939`):**
+
+PR #9 코드 리뷰의 두 가지 후속 수정:
+
+1. **Judge repair 재시도가 원본 context 보존** — `claude -p` 는 stateless 이므로, repair prompt 는 원본 `judge_prompt` (response + expectations) 전체와 이전 malformed output 을 다시 포함함. 새 `_judge_output_complete()` 체크가 정확히 N 개의 indexed expectation 이 없는 payload 를 거부하여, 첫 호출 출력이 복구 불가능할 때 model 이 「형태만 그럴듯한 위조 verdict」를 내는 것을 방지.
+2. **CI `behavioral-eval` 작업 timeout 90 → 120 분** — 최악 = 12 evals / 2 workers × (600s response + 240s judge + 240s repair) ≈ 108 분이므로, 이전 90분 상한은 유효한 run 을 조용히 cancel 할 수 있었음. 120분은 setup + artifact upload 에 ~10분 여유.
+
+**새로 가시화된 베이스라인** (로컬 run, 2026-05-28): **0 / 100** `at-risk`, **13 / 33** expectation 통과, **6 critical + 14 warning** 실패. 집계 점수가 퇴보한 것이 아니라, **가시적**인 점수가 퇴보한 것 — 이전에 0/0 을 기여하던 4개 eval 이 이제 실제 signal 을 냄. 이 6개 critical 실패가 Stage 2 의 명시적 backlog: 3계층 JTBD (functional / emotional / social), B2B 조직 수준 Jobs, B2B buyer vs user persona 분리, Discovery scope 가드레일, pre-mortem leading-indicator 규율. expectation 단위 내역은 [`docs/sprint1-local-eval-2026-05-28.md`](./docs/sprint1-local-eval-2026-05-28.md) 참조.
+
+**Harness 개선은 `evals/` 와 `.github/workflows/` 에 거주하며, npm 으로 출하되지 않음.** v1.2.9 이상의 버전 bump 불필요 (v1.2.9 가 이미 user-level hook 과 evals 10/11/12 의 scope 조정을 포함).
+
+**5개 i18n 로케일 (zh-TW, zh-CN, ja, es, ko) 에 미러링**.
+
 ---
 
 ## 🧪 개발 및 평가
