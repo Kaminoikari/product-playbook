@@ -4,6 +4,10 @@
 
 > "The unit of analysis is not the consumer, but the job the consumer is trying to get done." — Clayton Christensen
 
+**JTBD Three-Layer Coverage (Hard Gate — all three layers required):**
+
+Every JTBD analysis MUST surface **all three layers explicitly**: **Functional** (the task being completed), **Emotional** (how the user wants to feel during/after), and **Social** (how the user wants to be perceived). Producing only the Functional layer is the most common JTBD failure — Emotional and Social Jobs are routinely the real switching triggers, especially in B2B. If a single Persona genuinely has no meaningful Emotional or Social Job for the product, state that explicitly with one sentence of reasoning rather than silently omitting the row.
+
 **JTBD Canonical Form (Hard Gate — three-clause structure required):**
 
 Every JTBD statement (Primary, Functional, Emotional, Social — every layer) MUST be written as a complete three-clause sentence in the canonical form. All three clauses are required:
@@ -74,11 +78,13 @@ Claude must self-check after producing JTBD output (each item must be marked ✅
 
 ---
 
-### 🏢 B2B Product Deep-Dive Requirements
+### 🏢 B2B Product Deep-Dive Requirements (Hard Gate)
 
-**B2B products (including B2B2C) must complete the following analysis:**
+**Hard Gate — for any B2B (or B2B2C) product, the following three sub-analyses are all REQUIRED. Skipping any of them is a contract failure regardless of whether the user explicitly asked.** If the product type is ambiguous, ask one clarification question; do not silently default to B2C.
 
-#### Organizational-Level Job Analysis (Required — cover at least 2 levels)
+#### Organizational-Level Job Analysis (Hard Gate — cover at least 2 levels)
+
+A B2B JTBD analysis that stays purely at the individual-user level FAILS this gate. Organizational-level Jobs (compliance auditing, cross-department approval workflows, cost control, headcount-policy alignment, audit-trail integrity) are needs that exist beyond any single user's daily task and routinely dominate B2B switching decisions. The table below MUST be produced and at least 2 of the 3 levels MUST contain non-empty B2B-specific Jobs (not generic productivity statements).
 
 | Level | Description | Examples |
 |-------|-------------|----------|
@@ -86,12 +92,13 @@ Claude must self-check after producing JTBD output (each item must be marked ✅
 | **Operational Job** | Coordination needs at the process/department manager level | Approval workflow management, cross-team information sync |
 | **Task Job** | Day-to-day operational needs of individual users | Filling out forms, checking status, exporting reports |
 
-#### Buyer vs. User Analysis (Required)
+#### Buyer vs. User Analysis (Hard Gate)
 
-If the buyer and user are different people, analyze their JTBD separately:
-- **Buyer Job**: Jobs that influence the purchasing decision (ROI justification, risk reduction, compliance requirements)
-- **User Job**: Jobs that need to get done during daily operations (efficiency gains, error reduction)
-- If they are the same person, explain "why the decision-maker is also the user in this scenario"
+For B2B products, the buyer (signs the contract, controls budget) and the daily user (touches the product every day) are almost always different roles with **different Jobs**. Treating them as one persona is the single most common B2B Discovery failure. Hard Gate rule:
+
+- If buyer ≠ user (default assumption for B2B), produce **two separate Persona+JTBD blocks**: one for the Buyer (ROI justification, risk reduction, compliance, vendor-consolidation, audit-readiness) and one for the User (efficiency, error reduction, day-in-the-life context). Cross-link them: note where the buyer's Job depends on the user's Job (e.g., "buyer's compliance Job depends on user actually filing the report each cycle").
+- If buyer = user (exceptional, e.g., founder-led tools), state explicitly in one sentence WHY the decision-maker is also the daily user in this specific scenario — do not assume.
+- Failing example: producing only one persona ("HR Manager") that conflates both budgeting authority and daily form-filling. That collapses two distinct Jobs into one fuzzy persona and the analysis cannot drive product decisions.
 
 #### Deep-Dive Five Questions — B2B Enhanced Version
 

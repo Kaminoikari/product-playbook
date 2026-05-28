@@ -212,6 +212,18 @@ Task(
 
 **Genuine false-positive exception**: if the prompt has no real connection to a specialist's scope (e.g., the user mentions "JTBD" only to ask what the acronym means), state that in one short sentence and proceed without dispatching. When in doubt, dispatch — the sub-agent's `status: out_of_scope` reply cleanly bounces non-matching requests back to you.
 
+### Reference fallback when Task dispatch is unavailable
+
+Some environments cannot dispatch sub-agents (notably `claude -p` headless runs, some MCP harnesses, and certain CI eval contexts). In those environments the `Task` tool is absent or inert, so the dispatch above will silently inline-collapse. To prevent content collapse, **before producing inline output for any matched trigger row, you MUST read the corresponding reference files and treat their Hard Gates as your own**:
+
+| Specialist (if dispatch fails / unavailable) | Reference files to read FIRST, then satisfy Hard Gates inline |
+|---|---|
+| `discovery-specialist` | `references/02a-persona.md` (Persona structure + B2B Buyer/User Hard Gate) AND `references/02b-jtbd.md` (3-layer JTBD + B2B Org-Level Jobs Hard Gates) — load both for Persona+JTBD requests. Add `references/02c-ost-journey.md` if the request includes OST or Journey Map. |
+| `strategy-critic` | `references/01-strategy.md` (Rumelt diagnosis + three-questions critique format) |
+| `pre-mortem-runner` | `references/04-develop.md` (Pre-mortem section — 15+ scenarios across 5 categories + leading-indicator format) |
+
+This is **not** a license to skip dispatch when it IS available. The order is: (1) attempt dispatch; (2) if the Task tool is unavailable or the call cannot complete, read the listed references and produce specialist-grade output inline; (3) cite that you used the inline fallback in one short note at the end ("Inline fallback used — Task dispatch unavailable in this environment."). The references above embed the same Hard Gates the specialist would have enforced, so following them faithfully closes the quality gap.
+
 Full per-trigger invocation templates: `references/rules-subagent-dispatch.md`. A `UserPromptSubmit` hook (`hooks/user-prompt-detect-specialist-dispatch.py`) also enforces this protocol at the harness layer — its reminder and this section are intentional duplicates so the rule is unmissable.
 
 ---

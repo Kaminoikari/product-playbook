@@ -10,6 +10,17 @@ Build one key habit: **Talk to at least one target user every week.** Discovery 
 
 Personas are not segmented by age and gender, but by **purpose / task / motivation** to distinguish different types of users.
 
+### 🏢 B2B Hard Gate — Buyer Persona ≠ User Persona
+
+For any B2B (or B2B2C) product, the **buyer** (signs the contract, controls budget, owns vendor risk) and the **daily user** (touches the product every day) are almost always different roles with **different goals, pain points, and decision criteria**. Treating them as one persona conflates two distinct Jobs and produces analysis that cannot drive product decisions.
+
+Hard Gate rule:
+- Produce **two separate Persona blocks** labeled `Buyer` and `User` whenever the product is B2B and the two roles are distinct (the default assumption).
+- If they are the same person (rare — usually founder-led tools or sole-proprietor B2B), state explicitly in one sentence WHY the buyer is also the daily user in this specific scenario.
+- Cross-link the two personas: note where the Buyer's evaluation criteria depend on what the User actually does daily (e.g., "Buyer's audit-readiness criterion depends on User completing the leave-request form on the same day rather than batching them").
+
+Failing example: producing only one persona ("HR Manager") that conflates approving budget AND filing daily leave forms — two different Jobs forced into one fuzzy archetype. That output FAILS this Hard Gate.
+
 ```
 | Field | Persona 1: [Nickname] | Persona 2: [Nickname] | Persona 3: [Nickname] |
 |---|---|---|---|
