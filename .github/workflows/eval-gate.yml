@@ -9,16 +9,20 @@
 #
 # Severity bands and scoring logic live in evals/compute_eval_score.py.
 #
-# AUTH MODEL:
+# AUTH MODEL — subscription token only (no API key, no marginal cost):
 #   - Local: developers run the same scripts with `claude` CLI authenticated
-#     via Claude Pro/Max OAuth (`claude login`). No API key required and no
-#     marginal cost beyond the subscription.
-#   - CI: GitHub Actions cannot use OAuth in a headless container, so the
-#     `ANTHROPIC_API_KEY` secret is required to run eval here. If the secret
-#     is NOT set, the preflight job skips trigger-eval and behavioral-eval
-#     cleanly (gray ⏭️) instead of producing a misleading red ❌. Repo can
-#     therefore live happily in free local-only mode; add the secret later
-#     to flip on CI reporting.
+#     via Claude Pro/Max OAuth (`claude login`).
+#   - CI: requires a long-lived subscription token. One-time setup:
+#       1. Local: `claude setup-token` (requires an active Claude subscription)
+#       2. Copy the printed token into repo Settings → Secrets and variables →
+#          Actions → New secret named `CLAUDE_CODE_OAUTH_TOKEN`
+#     If the secret is NOT set, the preflight job skips trigger-eval and
+#     behavioral-eval cleanly (gray ⏭️) instead of producing a misleading
+#     red ❌. Repo can therefore live happily in local-only mode; add the
+#     secret later to flip on CI reporting.
+#   - ANTHROPIC_API_KEY is intentionally not consulted — the project's policy
+#     is to use only subscription credentials so eval runs incur no marginal
+#     billing.
 #
 # Runtime expectation when enabled: trigger eval is ~5–15 min and behavioral
 # eval is ~10–40 min. CI uses --runs 1 to keep cost low; local runs default
@@ -39,26 +43,26 @@ jobs:
   preflight:
     runs-on: ubuntu-latest
     outputs:
-      have_key: ${{ steps.check.outputs.have_key }}
+      have_token: ${{ steps.check.outputs.have_token }}
     steps:
-      - name: Check for ANTHROPIC_API_KEY
+      - name: Check for CLAUDE_CODE_OAUTH_TOKEN
         id: check
         env:
-          KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
-          if [ -n "$KEY" ]; then
-            echo "have_key=true" >> "$GITHUB_OUTPUT"
-            echo "::notice::ANTHROPIC_API_KEY found — eval jobs will run"
+          if [ -n "$TOKEN" ]; then
+            echo "have_token=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::CLAUDE_CODE_OAUTH_TOKEN found — eval jobs will run on subscription"
           else
-            echo "have_key=false" >> "$GITHUB_OUTPUT"
+            echo "have_token=false" >> "$GITHUB_OUTPUT"
             {
               echo "## Eval Report — skipped"
               echo ""
-              echo "\`ANTHROPIC_API_KEY\` secret is not set on this repo, so CI eval is in **free local-only mode**."
+              echo "\`CLAUDE_CODE_OAUTH_TOKEN\` secret is not set on this repo, so CI eval is in **local-only mode**."
               echo ""
-              echo "To enable automated reporting:"
-              echo "1. Get a key at <https://console.anthropic.com/>"
-              echo "2. Add it under **Settings → Secrets and variables → Actions** as \`ANTHROPIC_API_KEY\`"
+              echo "To enable automated reporting (no API key, no marginal billing — uses your Claude subscription):"
+              echo "1. Locally: \`claude setup-token\` (requires an active Claude Pro/Max subscription)"
+              echo "2. Copy the printed token into **Settings → Secrets and variables → Actions** as \`CLAUDE_CODE_OAUTH_TOKEN\`"
               echo ""
               echo "Until then, run evals locally with your Claude Pro/Max subscription:"
               echo "\`\`\`bash"
@@ -67,16 +71,16 @@ jobs:
               echo "python3 evals/run_behavioral_eval.py --runs 3 --fail-on critical"
               echo "\`\`\`"
             } >> "$GITHUB_STEP_SUMMARY"
-            echo "::notice::ANTHROPIC_API_KEY not set — skipping eval jobs (free local-only mode). See job summary for how to enable."
+            echo "::notice::CLAUDE_CODE_OAUTH_TOKEN not set — skipping eval jobs (local-only mode). See job summary for how to enable."
           fi
 
   trigger-eval:
     needs: preflight
-    if: needs.preflight.outputs.have_key == 'true'
+    if: needs.preflight.outputs.have_token == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -134,7 +138,7 @@ jobs:
 
   behavioral-eval:
     needs: preflight
-    if: needs.preflight.outputs.have_key == 'true'
+    if: needs.preflight.outputs.have_token == 'true'
     runs-on: ubuntu-latest
     # Absolute worst case = 12 evals / --workers 2 × (600s response + 240s
     # judge + 240s judge repair) ≈ 108 min. 120 gives ~10 min headroom for
@@ -143,7 +147,7 @@ jobs:
     # rare case where many evals stack into the timeout path simultaneously.
     timeout-minutes: 120
     env:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
