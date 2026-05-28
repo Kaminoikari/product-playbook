@@ -136,7 +136,12 @@ jobs:
     needs: preflight
     if: needs.preflight.outputs.have_key == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    # Absolute worst case = 12 evals / --workers 2 × (600s response + 240s
+    # judge + 240s judge repair) ≈ 108 min. 120 gives ~10 min headroom for
+    # setup, unit tests, and artifact upload. Realistic runs finish in
+    # 30–40 min; this ceiling exists to avoid silent cancellation in the
+    # rare case where many evals stack into the timeout path simultaneously.
+    timeout-minutes: 120
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:

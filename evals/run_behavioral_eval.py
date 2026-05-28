@@ -84,6 +84,21 @@ def _parse_judge_output(raw: str) -> dict | None:
         return None
 
 
+def _judge_output_complete(parsed: object, expected_count: int) -> bool:
+    """Verify parsed payload has exactly N expectations with indexes 0..N-1.
+
+    Guards against the model emitting a structurally valid but fabricated
+    JSON when the repair retry has no other anchor to reason from.
+    """
+    if not isinstance(parsed, dict):
+        return False
+    exps = parsed.get("expectations")
+    if not isinstance(exps, list) or len(exps) != expected_count:
+        return False
+    indexes = {e.get("index") for e in exps if isinstance(e, dict)}
+    return indexes == set(range(expected_count))
+
+
 def judge(response_text: str, expectations: list[dict], timeout: int = 120) -> list[dict]:
     """Ask claude to judge the response against every expectation in one shot."""
     numbered = "\n".join(
@@ -96,24 +111,32 @@ def judge(response_text: str, expectations: list[dict], timeout: int = 120) -> l
         f"{numbered}\n\n"
         "Return the JSON object now."
     )
+    expected_count = len(expectations)
     raw = _run_claude(judge_prompt, timeout=timeout, system=JUDGE_SYSTEM_PROMPT)
     parsed = _parse_judge_output(raw)
-    if parsed is None:
-        # First parse failed — ask claude to repair its own output. Common
-        # failure modes: judge wrapped JSON in narrative prose, emitted two
-        # JSON objects, or used unescaped quotes inside reason strings.
-        # Single retry only; worst-case judge cost is 2× timeout.
+    if parsed is None or not _judge_output_complete(parsed, expected_count):
+        # First attempt unusable — retry with the FULL original judge prompt
+        # plus the malformed previous output. `claude -p` is stateless, so
+        # without re-feeding response + expectations the repair model has
+        # no anchor and may fabricate verdicts (Codex PR #9 P2-1).
         repair_prompt = (
-            "Your previous output was not valid JSON. The raw output was:\n"
+            f"{judge_prompt}\n\n"
+            "Your previous attempt did not produce a valid, complete JSON "
+            "object. The raw previous output was:\n"
             f"<previous_output>\n{raw}\n</previous_output>\n\n"
-            "Re-emit ONLY the JSON object described in the system prompt — "
+            "Re-evaluate the response above against every expectation and "
+            "re-emit ONLY the JSON object described in the system prompt — "
             "no prose, no fences, no second object. Start with `{` and end "
-            "with `}`. Use escaped quotes inside reason strings."
+            "with `}`. Use escaped quotes inside reason strings. Output "
+            f"exactly {expected_count} entries with indexes 0..{expected_count - 1}."
         )
         raw = _run_claude(repair_prompt, timeout=timeout, system=JUDGE_SYSTEM_PROMPT)
         parsed = _parse_judge_output(raw)
-        if parsed is None:
-            raise RuntimeError(f"judge returned non-JSON after retry: {raw[:200]}")
+        if parsed is None or not _judge_output_complete(parsed, expected_count):
+            raise RuntimeError(
+                f"judge returned incomplete/non-JSON after retry "
+                f"(expected {expected_count} indexed expectations): {raw[:200]}"
+            )
 
     by_index = {item["index"]: item for item in parsed.get("expectations", [])}
     out = []
