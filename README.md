@@ -485,7 +485,7 @@ The `evals/` directory ships two complementary test suites and a deterministic s
 
 **Local (free, recommended):** run the same scripts with the `claude` CLI authenticated via your Claude Pro/Max subscription (`claude login` once). No API key, no marginal cost. The eval system is designed to be run locally before each release.
 
-**CI (optional, paid):** `.github/workflows/eval-gate.yml` will run both suites on every PR and on every push to `main` that changes `package.json`, then report the score to the workflow Job Summary. It **never blocks merge or publish** — the maintainer decides whether to act on regressions. CI requires an `ANTHROPIC_API_KEY` secret because GitHub Actions cannot use OAuth in a headless container; without the secret, eval jobs **skip cleanly** (gray ⏭️) instead of failing red.
+**CI (optional, no extra billing):** `.github/workflows/eval-gate.yml` will run both suites on every PR and on every push to `main` that changes `package.json`, then report the score to the workflow Job Summary. It **never blocks merge or publish** — the maintainer decides whether to act on regressions. CI runs on your Claude Pro/Max subscription (no API key, no per-token cost): one-time setup is `claude setup-token` locally, then add the printed token as repo secret `CLAUDE_CODE_OAUTH_TOKEN`. Without the secret, eval jobs **skip cleanly** (gray ⏭️) instead of failing red.
 
 ### Running locally
 
@@ -506,7 +506,7 @@ python3 evals/run_behavioral_eval.py --fail-on none   # report without exit 1
 python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-Local runs default to `--runs 3` (majority vote handles LLM variance); the `claude` CLI uses your Claude Pro/Max OAuth session (`claude login`), so there's no per-token cost. CI uses `--runs 1` and requires the `ANTHROPIC_API_KEY` secret.
+Local runs default to `--runs 3` (majority vote handles LLM variance); the `claude` CLI uses your Claude Pro/Max OAuth session (`claude login`), so there's no per-token cost. CI uses `--runs 1` and the same subscription via a `CLAUDE_CODE_OAUTH_TOKEN` secret (generated once with `claude setup-token`).
 
 ### Severity & scoring
 

@@ -487,7 +487,7 @@ El directorio `evals/` incluye dos suites de pruebas complementarias y un scorer
 
 **Local (gratis, recomendado)**: ejecuta los mismos scripts con el CLI `claude` autenticado con tu suscripción Claude Pro/Max (un solo `claude login`). Sin API key, sin costo marginal. El sistema de eval está diseñado para correr localmente antes de cada release.
 
-**CI (opcional, pago)**: `.github/workflows/eval-gate.yml` ejecuta ambas suites en cada PR y en cada push a `main` que cambie `package.json`, y reporta el puntaje en el Job Summary del workflow. **No bloquea merge ni publish** — el maintainer decide si actuar ante regresiones. CI requiere el secret `ANTHROPIC_API_KEY` (GitHub Actions no puede usar OAuth en un contenedor headless); sin el secret, los jobs de eval **se omiten limpiamente** (gris ⏭️) en lugar de fallar en rojo.
+**CI (opcional, sin costo adicional)**: `.github/workflows/eval-gate.yml` ejecuta ambas suites en cada PR y en cada push a `main` que cambie `package.json`, y reporta el puntaje en el Job Summary del workflow. **No bloquea merge ni publish** — el maintainer decide si actuar ante regresiones. CI también usa tu suscripción Claude Pro/Max (sin API key, sin costo por token): configuración única, ejecuta `claude setup-token` localmente y agregá el token impreso como secret `CLAUDE_CODE_OAUTH_TOKEN` del repo. Sin el secret, los jobs de eval **se omiten limpiamente** (gris ⏭️) en lugar de fallar en rojo.
 
 ### Ejecución local
 
@@ -508,7 +508,7 @@ python3 evals/run_behavioral_eval.py --fail-on none   # solo reporta, sin exit 1
 python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-Los runs locales usan `--runs 3` por defecto (mayoría absorbe la variabilidad del LLM). El CLI `claude` usa tu sesión OAuth de Claude Pro/Max (`claude login`), sin costo por token. CI usa `--runs 1` y requiere el secret `ANTHROPIC_API_KEY`.
+Los runs locales usan `--runs 3` por defecto (mayoría absorbe la variabilidad del LLM). El CLI `claude` usa tu sesión OAuth de Claude Pro/Max (`claude login`), sin costo por token. CI usa `--runs 1` y la misma suscripción vía un secret `CLAUDE_CODE_OAUTH_TOKEN` (generado una sola vez con `claude setup-token`).
 
 ### Severity y scoring
 
