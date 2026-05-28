@@ -1,0 +1,51 @@
+name: Auto-create PR for Claude Code branches
+
+# History: this workflow used to call `gh pr merge --auto` immediately after
+# creating the PR, which raced ahead of bot reviewers (Codex, etc.) and merged
+# PRs before their review comments could land. Auto-merge was removed
+# 2026-05-28 — the workflow now only opens the PR; merging is always a
+# manual action so bot reviews can complete first.
+
+on:
+  push:
+    branches: ['claude/**']
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Open PR (manual merge required)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          echo "Branch: $BRANCH"
+
+          # No-op when branch is already on main (e.g. local FF-merge then push)
+          if [ -z "$(git rev-list origin/main..HEAD)" ]; then
+            echo "Branch has no commits ahead of main — nothing to PR."
+            exit 0
+          fi
+
+          # No-op when a PR for this branch already exists (the author
+          # likely opened it manually with a richer body — don't trample it).
+          if EXISTING=$(gh pr view "$BRANCH" --json url -q '.url' 2>/dev/null); then
+            echo "PR already exists for $BRANCH: $EXISTING"
+            exit 0
+          fi
+
+          TITLE=$(git log -1 --format='%s')
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "$TITLE" \
+            --body "Auto-created from Claude Code mobile branch \`$BRANCH\`. **Manual merge required** — auto-merge intentionally disabled so bot reviews (e.g. Codex) can complete before merge."
