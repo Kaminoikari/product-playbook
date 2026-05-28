@@ -136,7 +136,7 @@ jobs:
     needs: preflight
     if: needs.preflight.outputs.have_key == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
@@ -163,6 +163,36 @@ jobs:
           mkdir -p "$HOME/.claude/agents"
           cp ./agents/*.md "$HOME/.claude/agents/" 2>/dev/null || true
 
+      - name: Register specialist-dispatch hook at user level
+        # `claude -p` headless mode loads UserPromptSubmit hooks from
+        # ~/.claude/settings.json but does NOT load plugin hooks. Without
+        # this step, eval 10 (discovery) and 11 (strategy-critic) cannot
+        # trigger the dispatch reminder, so the orchestrator inline-runs
+        # the analysis and the dispatch marker is missing from the response.
+        # Smoke-tested locally 2026-05-27: hook fires correctly in -p mode.
+        run: |
+          python3 - <<'PY'
+          import json, pathlib
+          settings_path = pathlib.Path.home() / ".claude" / "settings.json"
+          hook_path = pathlib.Path.cwd() / "hooks" / "user-prompt-detect-specialist-dispatch.py"
+          assert hook_path.exists(), f"Hook script missing: {hook_path}"
+
+          data = json.loads(settings_path.read_text()) if settings_path.exists() else {}
+          hooks = data.setdefault("hooks", {})
+          ups = hooks.setdefault("UserPromptSubmit", [])
+          ups.append({
+              "matcher": "",
+              "hooks": [{
+                  "type": "command",
+                  "command": f"python3 {hook_path}",
+                  "timeout": 5,
+              }],
+          })
+          settings_path.parent.mkdir(parents=True, exist_ok=True)
+          settings_path.write_text(json.dumps(data, indent=2))
+          print(f"Registered specialist-dispatch hook → {hook_path}")
+          PY
+
       - name: Run scoring unit tests
         working-directory: evals
         run: python3 -m unittest test_compute_eval_score.py -v
@@ -173,6 +203,8 @@ jobs:
           python3 run_behavioral_eval.py \
             --runs 1 \
             --workers 2 \
+            --response-timeout 600 \
+            --judge-timeout 240 \
             --fail-on none \
             --json eval-results.behavioral.json \
             --markdown eval-results.behavioral.md

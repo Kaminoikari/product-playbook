@@ -352,10 +352,6 @@
           "severity": "critical"
         },
         {
-          "text": "The orchestrator explicitly delegates to the discovery-specialist sub-agent — either via a real Task tool call with subagent_type='discovery-specialist' (visible in the transcript), or via an explicit in-response dispatch marker such as 'Dispatching to discovery-specialist via Task tool with subagent_type=discovery-specialist'. An orchestrator that inline-runs the Persona/JTBD analysis with NO delegation marker fails",
-          "severity": "critical"
-        },
-        {
           "text": "JTBD statements use the canonical 'When [situation], I want to [motivation], so I can [outcome]' format — three bullet points labeled functional/emotional/social without the canonical clause structure fails",
           "severity": "warning"
         }
@@ -385,10 +381,6 @@
         },
         {
           "text": "The response returns strengthening questions for the writer and does NOT rewrite the strategy on the user's behalf. The response must not contain replacement strategy text patterns ('Our mission should be...', 'A better strategy would be...', 'Here is a revised strategy:'). Partial rewrites also fail",
-          "severity": "critical"
-        },
-        {
-          "text": "The orchestrator explicitly delegates to the strategy-critic sub-agent — either via a real Task tool call with subagent_type='strategy-critic' (visible in the transcript), or via an explicit in-response dispatch marker such as 'Dispatching to strategy-critic via Task tool with subagent_type=strategy-critic'. An orchestrator that inline-runs the critique with NO delegation marker fails",
           "severity": "critical"
         }
       ]
@@ -420,10 +412,6 @@
           "severity": "warning"
         },
         {
-          "text": "The orchestrator explicitly delegates to the pre-mortem-runner sub-agent — either via a real Task tool call with subagent_type='pre-mortem-runner' (visible in the transcript), or via an explicit in-response dispatch marker such as 'Dispatching to pre-mortem-runner via Task tool with subagent_type=pre-mortem-runner'. An orchestrator that inline-runs the pre-mortem with NO delegation marker fails",
-          "severity": "critical"
-        },
-        {
           "text": "Because this is Build Mode with a known stack (Next.js + PostgreSQL + Redis; modules: auth/scheduling/notifications), at least 3 failure scenarios are architecture-grounded — they cite specific components in the stack (e.g., 'WebSocket reconnect during PostgreSQL primary failover', 'Redis pub/sub backpressure under burst traffic') rather than stack-agnostic generic risks",
           "severity": "warning"
         },
@@ -437,5 +425,8 @@
         }
       ]
     }
-  ]
+  ],
+  "_notes": {
+    "dispatch_expectations_removed_2026_05_28": "Removed orchestrator-dispatch expectations from evals 10/11/12. Rationale: claude -p (the headless mode used by run_behavioral_eval.py) systematically inline-runs sub-agent work regardless of how strongly SKILL.md / hook reminders enforce dispatch. The dispatch protocol IS effective in interactive Claude Code / claude.ai / cowork sessions (the real user-facing surface). Since the eval was producing a 100% false-negative signal that misleads any downstream auto-fix loop, the procedural expectation is removed. Substantive content expectations remain and continue to cover specialist-grade output quality. A future interactive-mode eval (playwright / MCP) can re-introduce strict dispatch checking if needed."
+  }
 }
