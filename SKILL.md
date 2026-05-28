@@ -183,15 +183,36 @@ Three specialist sub-agents live in isolated contexts: `strategy-critic`, `disco
 | Persona / JTBD / OST / Journey Map / Continuous Discovery work | `discovery-specialist` | Full Mode S2-S6, Build Mode S2, any Custom step selecting discovery |
 | User asks "what could go wrong" / pre-mortem / risk analysis | `pre-mortem-runner` | "Pre-mortem this MVP", or Full Mode S10 / Build Mode S4 |
 
-**Required dispatch marker** — surface one short line in chat output so the user (and our evals) can verify delegation happened:
+### Required response shape when a trigger fires
 
-> Dispatching to `strategy-critic` subagent via Task tool with `subagent_type=strategy-critic`.
+When any row matches, your reply MUST be structured as exactly these three parts, in order. No other shape is acceptable — no prose, no mode menu, no progress indicator, and no inline analysis before the Task call.
 
-**Do NOT inline-critique / inline-discover / inline-premortem.** When in doubt, dispatch — the specialist's `status: out_of_scope` response is a clean way to bounce non-matching requests back to you.
+**Part 1 — first line of output, verbatim** (replace `{specialist}` with the matching specialist name):
 
-After the specialist returns YAML, integrate `three_questions_to_ask_the_writer` (strategy-critic) / `open_questions` (discovery) / `priority_three` + `pre_launch_experiments` (pre-mortem) **verbatim** into your reply. Do not soften, do not paraphrase, do not skip.
+> Dispatching to `{specialist}` subagent via Task tool with `subagent_type={specialist}`.
 
-Full per-trigger invocation templates: `references/rules-subagent-dispatch.md`.
+**Part 2 — immediately call the Task tool**:
+
+```
+Task(
+  subagent_type="{specialist}",
+  description="<short 2-3 word summary>",
+  prompt="<paste the user's original prompt verbatim, then add a final line: 'Reply in [user's working language].'>"
+)
+```
+
+**Part 3 — after the specialist returns YAML**, integrate `three_questions_to_ask_the_writer` (strategy-critic) / `open_questions` (discovery) / `priority_three` + `pre_launch_experiments` (pre-mortem) **verbatim** into your reply. Do not soften, do not paraphrase, do not skip.
+
+### Anti-patterns (each is a contract failure)
+
+- ❌ Producing a Persona / JTBD / critique / pre-mortem yourself before the Task call — even partially, even "to warm up."
+- ❌ Writing prose, a mode menu, or a progress indicator before the dispatch marker.
+- ❌ Skipping the Task call because you "already know the answer." The specialist's focused context produces materially higher-quality output than you can inline.
+- ❌ Paraphrasing the dispatch marker. The first-line shape is verbatim.
+
+**Genuine false-positive exception**: if the prompt has no real connection to a specialist's scope (e.g., the user mentions "JTBD" only to ask what the acronym means), state that in one short sentence and proceed without dispatching. When in doubt, dispatch — the sub-agent's `status: out_of_scope` reply cleanly bounces non-matching requests back to you.
+
+Full per-trigger invocation templates: `references/rules-subagent-dispatch.md`. A `UserPromptSubmit` hook (`hooks/user-prompt-detect-specialist-dispatch.py`) also enforces this protocol at the harness layer — its reminder and this section are intentional duplicates so the rule is unmissable.
 
 ---
 
