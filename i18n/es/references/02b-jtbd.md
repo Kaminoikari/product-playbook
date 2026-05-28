@@ -63,7 +63,7 @@ Claude debe autoevaluar después de producir el output JTBD (cada ítem debe mar
 - [ ] ¿Se enfoca en un solo trabajo central? (No tres trabajos metidos en una sola oración)
 - [ ] ¿Puede usarse para evaluar "¿Esta solución realmente aborda este trabajo?"
 - [ ] ¿Incluye "soluciones alternativas actuales" y "brecha"? (Brecha = oportunidad)
-- [ ] ¿La P5 de la Profundización alcanza motivación emocional / identidad profesional / miedo psicológico? (No solo descripciones funcionales)
+- [ ] ¿La P5 de la Profundización **usa explícitamente al menos una palabra del vocabulario canónico** (`fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`)? Paráfrasis consecuenciales como "credibilidad en riesgo" o "reputación dañada" FALLAN este ítem — son consecuencias, no la emoción sentida.
 
 **Reglas de Ejecución (Hard Gate):**
 - Debe marcar cada ítem ✅ o ❌ — listas [ ] en blanco o ✅ sin explicación no están permitidas
@@ -94,13 +94,25 @@ El comprador de un producto B2B (firma el contrato, controla el presupuesto) y e
 - Si buyer = user (raro — usualmente herramientas fundador-led), explicá en una oración por qué en este escenario específico el tomador de decisiones también es el usuario diario — no lo asumas silenciosamente.
 - Ejemplo no aceptable: producir una sola Persona ("HR Manager") que fusiona la autoridad de aprobar presupuesto Y el llenado diario de formularios. Eso colapsa dos Jobs distintos en un rol borroso y el análisis no puede impulsar decisiones de producto.
 
-#### Cinco Preguntas de Profundización — Versión Mejorada B2B
+#### Cinco Preguntas de Profundización — Versión Mejorada B2B (Hard Gate)
 
-**La P5 debe alcanzar al menos uno de los siguientes niveles** (ejemplos):
-- ✅ Identidad profesional: "Tiene miedo de verse incompetente frente al liderazgo, porque este reporte representa la credibilidad de su departamento"
-- ✅ Motivación emocional: "Quiere demostrar a sus reportes directos que tiene un control firme de los números"
-- ✅ Miedo psicológico: "Su mayor miedo es que el auditor encuentre una brecha en el proceso — ya le llamaron la atención una vez"
-- ❌ Ejemplo fallido: "Necesita una mejor herramienta para mejorar la eficiencia" (se queda a nivel funcional)
+**Hard Gate — la P5 DEBE usar explícitamente al menos una palabra del siguiente vocabulario canónico**: `fear` (miedo), `anxiety` (ansiedad), `shame` (vergüenza), `worry` (preocupación), `dread` (pavor), `self-doubt` (auto-duda), `sense of loss` (sensación de pérdida), `threat to identity` (amenaza a la identidad), `embarrassment` (bochorno), `guilt` (culpa). Paráfrasis funcionales/consecuenciales como "credibilidad en riesgo", "reputación dañada", "métrica cae", "usuarios churnean", "pierde confianza", "impacto en la carrera" FALLAN este gate aunque describan stakes B2B reales — son *consecuencias*, no la *emoción sentida* de la cual el persona quiere *alejarse*.
+
+Una P5 que describe la motivación más profunda del persona solo en lenguaje funcional FALLA el contrato de Descubrimiento: el propósito entero de la P5 es hacer aflorar el *miedo/ansiedad sentido* que impulsa el switching — los resultados puramente funcionales pueden resolverse con herramientas incrementalmente mejores, pero es el fear/anxiety sentido lo que hace que un buyer B2B supere la inercia organizacional y firme un nuevo contrato.
+
+**Ejemplos válidos** (cada uno contiene una palabra del vocabulario canónico):
+- ✅ Identidad profesional: "Ella **teme (fears)** verse incompetente frente al liderazgo cuando este reporte representa la credibilidad de su departamento"
+- ✅ Motivación emocional: "Él carga una **ansiedad (anxiety)** silenciosa de que sus reportes directos descubran que en realidad no tiene un control firme de los números"
+- ✅ Miedo psicológico: "Su mayor **pavor (dread)** es que el auditor encuentre una brecha en el proceso — ya le llamaron la atención una vez, y la **vergüenza (shame)** de un segundo incidente marcaría su expediente para siempre"
+- ✅ Amenaza a la identidad: "Él siente una **amenaza a la identidad (threat to identity)** cuando consultores externos explican mejor que él las métricas de su propio equipo frente a la junta"
+
+**Ejemplos no válidos** (funcional/consecuencial, sin vocabulario canónico):
+- ❌ "Necesita una mejor herramienta para mejorar la eficiencia" (funcional)
+- ❌ "Su credibilidad con el liderazgo está en riesgo" (consecuencia, no emoción sentida)
+- ❌ "Podría perder su trabajo si este reporte está mal" (resultado, no emoción — ¿qué *siente* sobre esa posibilidad?)
+- ❌ "Su reputación en la organización se vería afectada" (consecuencia — reemplazar con `embarrassment`, `shame`, o `dread`)
+
+Si la motivación más profunda del persona genuinamente no mapea a ninguna palabra del vocabulario canónico después de un análisis honesto, marcá el ítem P5 de la Checklist de Calidad JTBD como `❌` con la explicación "La P5 actualmente vive a nivel de consecuencia; se necesita una pregunta más de entrevista que sondee la emoción sentida" — no parafrasees la lista de vocabulario para hacer aparecer una marca de verificación.
 
 #### Análisis de Alternativas Competitivas (Obligatorio)
 
