@@ -4,6 +4,10 @@
 
 > "La unidad de análisis no es el consumidor, sino el trabajo que el consumidor está tratando de realizar." — Clayton Christensen
 
+**Cobertura JTBD de Tres Capas (Hard Gate — las tres capas requeridas):**
+
+Cada análisis JTBD DEBE hacer aflorar **las tres capas explícitamente**: **Funcional** (la tarea que se está completando), **Emocional** (cómo el usuario quiere sentirse durante/después), y **Social** (cómo el usuario quiere ser percibido). Producir solo la capa Funcional es el fallo más común en JTBD — los Jobs Emocionales y Sociales suelen ser los verdaderos disparadores de switching, especialmente en B2B. Si una Persona dada genuinamente no tiene un Job Emocional o Social significativo para el producto, decilo explícitamente con una oración de reasoning en lugar de omitir silenciosamente la fila.
+
 **Forma Canónica JTBD (Hard Gate — se requiere estructura de tres cláusulas):**
 
 Cada declaración JTBD (Primary, Funcional, Emocional, Social — cada capa) DEBE escribirse como una oración completa de tres cláusulas en la forma canónica. Las tres cláusulas son obligatorias:
@@ -68,11 +72,13 @@ Claude debe autoevaluar después de producir el output JTBD (cada ítem debe mar
 
 ---
 
-### 🏢 Requisitos de Profundización para Productos B2B
+### 🏢 Requisitos de Profundización para Productos B2B (Hard Gate)
 
-**Productos B2B (incluyendo B2B2C) deben completar el siguiente análisis:**
+**Hard Gate — para cualquier producto B2B (o B2B2C), los siguientes tres sub-análisis son TODOS obligatorios. Saltarse cualquiera es una contract failure, sin importar si el usuario lo pidió explícitamente.** Si el tipo de producto es ambiguo, hacé una pregunta de clarificación; no asumas silenciosamente B2C.
 
-#### Análisis de Jobs a Nivel Organizacional (Obligatorio — cubrir al menos 2 niveles)
+#### Análisis de Jobs a Nivel Organizacional (Hard Gate — cubrir al menos 2 niveles)
+
+Un análisis JTBD B2B que se queda puramente al nivel de usuario individual FALLA este gate. Los Jobs a nivel organizacional (auditoría de cumplimiento, flujos de aprobación cross-departamentales, control de costos, alineación de políticas de headcount, integridad de pista de auditoría) son necesidades que existen más allá de la tarea diaria de cualquier usuario individual y rutinariamente dominan las decisiones de switching B2B. La tabla de abajo DEBE producirse y al menos 2 de los 3 niveles DEBEN contener Jobs específicos de B2B (no enunciados genéricos de productividad).
 
 | Nivel | Descripción | Ejemplos |
 |-------|-------------|----------|
@@ -80,12 +86,13 @@ Claude debe autoevaluar después de producir el output JTBD (cada ítem debe mar
 | **Job Operacional** | Necesidades de coordinación a nivel proceso/gerente de departamento | Gestión de flujo de aprobaciones, sincronización de información entre equipos |
 | **Job de Tarea** | Necesidades operativas diarias de usuarios individuales | Llenar formularios, verificar estados, exportar reportes |
 
-#### Análisis Comprador vs. Usuario (Obligatorio)
+#### Análisis Comprador (Buyer) vs. Usuario (User) (Hard Gate)
 
-Si el comprador y el usuario son personas diferentes, analiza sus JTBD por separado:
-- **Job del Comprador**: Jobs que influyen la decisión de compra (justificación de ROI, reducción de riesgos, requisitos de cumplimiento)
-- **Job del Usuario**: Jobs que necesitan realizarse durante operaciones diarias (mejoras de eficiencia, reducción de errores)
-- Si son la misma persona, explica "por qué el tomador de decisiones es también el usuario en este escenario"
+El comprador de un producto B2B (firma el contrato, controla el presupuesto) y el usuario diario (toca el producto todos los días) son casi siempre dos roles, **correspondientes a Jobs diferentes**. Tratarlos como una sola Persona es el fallo más común en Descubrimiento B2B. Regla del Hard Gate:
+
+- Si buyer ≠ user (suposición por defecto en B2B), producir **dos bloques separados de Persona+JTBD**: uno para el Buyer (justificación de ROI, reducción de riesgo, compliance, consolidación de vendors, audit-readiness), y uno para el User (eficiencia, reducción de errores, contexto de uso diario). Y cross-link: notá dónde el Job del Buyer depende del Job del User (ej. "el Job de compliance del Buyer depende de que el User realmente complete el reporte cada ciclo, no de que lo haga en batch al final del mes").
+- Si buyer = user (raro — usualmente herramientas fundador-led), explicá en una oración por qué en este escenario específico el tomador de decisiones también es el usuario diario — no lo asumas silenciosamente.
+- Ejemplo no aceptable: producir una sola Persona ("HR Manager") que fusiona la autoridad de aprobar presupuesto Y el llenado diario de formularios. Eso colapsa dos Jobs distintos en un rol borroso y el análisis no puede impulsar decisiones de producto.
 
 #### Cinco Preguntas de Profundización — Versión Mejorada B2B
 
