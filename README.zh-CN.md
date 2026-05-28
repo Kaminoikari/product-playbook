@@ -487,7 +487,7 @@ Claude Code 会自动：
 
 **本地（免费，推荐）**：用 `claude` CLI 搭配你的 Claude Pro/Max 订阅（先 `claude login` 一次）跑这些 script。不需要 API key、没有额外成本。整套 eval 系统就是设计来在每次发版前本地跑一遍。
 
-**CI（可选，付费）**：`.github/workflows/eval-gate.yml` 会在每个 PR 与每次 push 到 `main`（含 `package.json` 变动）时跑这两套，把分数写进 workflow 的 Job Summary。**不挡 merge、不挡 publish** — 看到结果后由维护者决定要不要调整。CI 需要 `ANTHROPIC_API_KEY` secret（GitHub Actions 在 headless 容器无法走 OAuth）；没设 secret 时 eval job **会干净地 skip**（灰色 ⏭️），不会出现误导的红叉。
+**CI（可选，不额外计费）**：`.github/workflows/eval-gate.yml` 会在每个 PR 与每次 push 到 `main`（含 `package.json` 变动）时跑这两套，把分数写进 workflow 的 Job Summary。**不挡 merge、不挡 publish** — 看到结果后由维护者决定要不要调整。CI 同样走你的 Claude Pro/Max 订阅（不需 API key、没有按 token 计费的成本）：一次性设置为本机 `claude setup-token` 生成长期 token，把它加进 repo secret `CLAUDE_CODE_OAUTH_TOKEN`。没设 secret 时 eval job **会干净地 skip**（灰色 ⏭️），不会出现误导的红叉。
 
 ### 本地执行
 
@@ -508,7 +508,7 @@ python3 evals/run_behavioral_eval.py --fail-on none   # 只报告，不 exit 1
 python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-本地默认 `--runs 3`（多数决可吸收 LLM 变异性）；`claude` CLI 走你的 Claude Pro/Max OAuth session（`claude login`），没有按 token 计费的成本。CI 用 `--runs 1` 并需要 `ANTHROPIC_API_KEY` secret。
+本地默认 `--runs 3`（多数决可吸收 LLM 变异性）；`claude` CLI 走你的 Claude Pro/Max OAuth session（`claude login`），没有按 token 计费的成本。CI 用 `--runs 1`，靠同一个订阅通过 `CLAUDE_CODE_OAUTH_TOKEN` secret 认证（用 `claude setup-token` 一次性生成）。
 
 ### Severity 与计分
 

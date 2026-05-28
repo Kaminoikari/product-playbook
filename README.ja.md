@@ -488,7 +488,7 @@ token 削減イテレーション。スキル内容のセマンティクスは�
 
 **ローカル（無料、推奨）**：`claude` CLI を Claude Pro/Max サブスクリプションで認証して（一度だけ `claude login`）同じスクリプトを実行できます。API key 不要、追加コストなし。eval システムは各リリース前にローカルで実行する設計です。
 
-**CI（オプション、有料）**：`.github/workflows/eval-gate.yml` はすべての PR と `package.json` を変更する `main` への push で両方を実行し、スコアを workflow の Job Summary に書き込みます。**merge も publish もブロックしません** — リグレッションに対応するかどうかはメンテナが判断します。CI には `ANTHROPIC_API_KEY` secret が必要です（GitHub Actions は headless コンテナで OAuth が使えません）。secret 未設定時は eval job が**クリーンに skip**（グレー ⏭️）され、誤解を招く赤バツは出ません。
+**CI（オプション、追加課金なし）**：`.github/workflows/eval-gate.yml` はすべての PR と `package.json` を変更する `main` への push で両方を実行し、スコアを workflow の Job Summary に書き込みます。**merge も publish もブロックしません** — リグレッションに対応するかどうかはメンテナが判断します。CI もあなたの Claude Pro/Max サブスクリプションを使用します（API key 不要、トークン課金なし）：ローカルで `claude setup-token` を一度実行し、出力されたトークンを repo secret `CLAUDE_CODE_OAUTH_TOKEN` として追加してください。secret 未設定時は eval job が**クリーンに skip**（グレー ⏭️）され、誤解を招く赤バツは出ません。
 
 ### ローカル実行
 
@@ -509,7 +509,7 @@ python3 evals/run_behavioral_eval.py --fail-on none   # レポートのみ、exi
 python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-ローカルは `--runs 3` がデフォルト（多数決で LLM のばらつきを吸収）。`claude` CLI は Claude Pro/Max の OAuth セッション（`claude login`）を使うため、トークン課金はありません。CI は `--runs 1` で、`ANTHROPIC_API_KEY` secret が必要です。
+ローカルは `--runs 3` がデフォルト（多数決で LLM のばらつきを吸収）。`claude` CLI は Claude Pro/Max の OAuth セッション（`claude login`）を使うため、トークン課金はありません。CI は `--runs 1` で、同じサブスクリプションを `CLAUDE_CODE_OAUTH_TOKEN` secret 経由で利用します（`claude setup-token` で一度だけ生成）。
 
 ### Severity とスコアリング
 

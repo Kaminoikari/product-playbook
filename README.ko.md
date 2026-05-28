@@ -487,7 +487,7 @@ v1.2.0+ 에서 도입된 3개의 전문 sub-agent (`discovery-specialist`, `stra
 
 **로컬 (무료, 권장)**: `claude` CLI를 Claude Pro/Max 구독으로 인증해서 (한 번만 `claude login`) 같은 스크립트를 실행합니다. API key 불필요, 추가 비용 없음. eval 시스템은 각 릴리스 전에 로컬에서 실행하도록 설계되었습니다.
 
-**CI (선택, 유료)**: `.github/workflows/eval-gate.yml`은 모든 PR과 `package.json`을 변경하는 `main`으로의 push에서 두 가지 모두 실행하고, 점수를 workflow Job Summary에 기록합니다. **merge도 publish도 차단하지 않습니다** — 회귀에 대응할지는 유지보수자가 판단합니다. CI는 `ANTHROPIC_API_KEY` secret이 필요합니다 (GitHub Actions는 headless 컨테이너에서 OAuth를 사용할 수 없습니다). secret 미설정 시 eval job은 **깨끗하게 skip**(회색 ⏭️)되며 오해를 일으키는 빨간색 X는 표시되지 않습니다.
+**CI (선택, 추가 과금 없음)**: `.github/workflows/eval-gate.yml`은 모든 PR과 `package.json`을 변경하는 `main`으로의 push에서 두 가지 모두 실행하고, 점수를 workflow Job Summary에 기록합니다. **merge도 publish도 차단하지 않습니다** — 회귀에 대응할지는 유지보수자가 판단합니다. CI도 Claude Pro/Max 구독을 사용합니다 (API key 불필요, 토큰 과금 없음): 로컬에서 `claude setup-token`을 한 번 실행하고, 출력된 토큰을 repo secret `CLAUDE_CODE_OAUTH_TOKEN`으로 추가하세요. secret 미설정 시 eval job은 **깨끗하게 skip**(회색 ⏭️)되며 오해를 일으키는 빨간색 X는 표시되지 않습니다.
 
 ### 로컬 실행
 
@@ -508,7 +508,7 @@ python3 evals/run_behavioral_eval.py --fail-on none   # 보고만, exit 1 없음
 python3 evals/run_trigger_test.py --eval-file evals/trigger-eval-fuzzy.json
 ```
 
-로컬은 `--runs 3`이 기본값(다수결로 LLM 변동성 흡수). `claude` CLI는 Claude Pro/Max OAuth 세션(`claude login`)을 사용하므로 토큰당 비용이 없습니다. CI는 `--runs 1`을 사용하며 `ANTHROPIC_API_KEY` secret이 필요합니다.
+로컬은 `--runs 3`이 기본값(다수결로 LLM 변동성 흡수). `claude` CLI는 Claude Pro/Max OAuth 세션(`claude login`)을 사용하므로 토큰당 비용이 없습니다. CI는 `--runs 1`을 사용하며 동일한 구독을 `CLAUDE_CODE_OAUTH_TOKEN` secret을 통해 인증합니다 (`claude setup-token`으로 한 번만 생성).
 
 ### Severity 및 스코어링
 
