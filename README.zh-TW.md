@@ -478,6 +478,33 @@ Claude Code 會自動：
 
 **5 個 i18n 語系同步**(zh-TW、zh-CN、ja、es、ko),保留既有翻譯——結構性瘦身在各語系等比例套用。
 
+### Iteration 7:Eval Harness 韌性強化(Sprint 1 + 2A,v1.2.9)
+
+Harness 層的迭代,不是 skill 層。Skill 語意沒變,變的是**被測量的表面**。目標:解除 4 個一直在悄悄產出 0/0 verdict 的 eval,讓真實品質基線浮出水面。
+
+**Sprint 1 — 解鎖無法測量的群集(`d2023fb`、`cee67cb`):**
+
+4 個 eval(`eval-jtbd-depth`、`eval-prfaq-output`、`eval-subagent-discovery`、`eval-subagent-premortem`)每次都產出 0 pass / 0 fail,在彙總分數中與「沒問題」無法區分。三個原因:
+
+1. **CI headless 模式缺少 sub-agent** — CI 把 skill 裝到 `~/.claude/skills/`,卻沒把 `agents/*.md` 複製到 `~/.claude/agents/`。`claude -p` 因此無法透過 `Task` 派發,orchestrator 只能默默 inline 執行。
+2. **Specialist-dispatch hook 在 `claude -p` 不會載入** — plugin 層的 `hooks/` 在 headless 模式不會載入,只有 user 層 `~/.claude/settings.json` 的 UserPromptSubmit hook 會。CI 現在會在每次 behavioral run 之前以程式碼方式把 dispatch hook 註冊到 user 層。
+3. **Response + judge timeout 太緊** — 180s response / 120s judge 會把長篇 Discovery、Pre-mortem 輸出中途切斷,judge 看到截斷字串就吐出 0/0。提升到 600s / 240s,且非 JSON 輸出時重試一次。
+
+同時也從 evals 10/11/12 刪掉「orchestrator 必須透過 Task 派發」這類程序性 expectation——在 `claude -p` 沒有 nested Task 介面,無法驗證,也不是我們最終在意的性質。留下的 expectation 都針對 specialist 應產出的**輸出品質**。
+
+**Sprint 2A — judge 韌性 + CI 上限(`f973939`):**
+
+PR #9 review 之後的兩個跟進修正:
+
+1. **Judge 修復重試保留原始 context** — `claude -p` 是無狀態的,所以修復 prompt 現在會重新帶入完整原始 `judge_prompt`(response + expectations)加上前一次的 malformed output。新的 `_judge_output_complete()` 檢查會拒絕「沒有完整 N 個 indexed expectation」的回應,避免 model 在第一次輸出無法救援時憑空捏造一份看起來合理的 verdict。
+2. **CI `behavioral-eval` job timeout 90 → 120 分鐘** — 最壞情況 = 12 evals / 2 workers × (600s response + 240s judge + 240s repair) ≈ 108 分鐘,先前 90 分鐘上限可能默默 cancel 整輪 run。120 分鐘給 setup + artifact upload 留 ~10 分鐘餘裕。
+
+**新可見的基線**(本機 run,2026-05-28):**0 / 100** `at-risk`、**13 / 33** expectation 通過、**6 critical + 14 warning** 失敗。彙總分數並沒有退步,退的是**可見**分數——四個原本貢獻 0/0 的 eval 現在開始產出真實 signal。這 6 個 critical 失敗就是 Stage 2 明確的待修清單:三層 JTBD(functional / emotional / social)、B2B 組織層 Jobs、B2B buyer vs user persona 分離、Discovery scope 守備、pre-mortem leading-indicator 紀律。逐項細節見 [`docs/sprint1-local-eval-2026-05-28.md`](./docs/sprint1-local-eval-2026-05-28.md)。
+
+**Harness 改進住在 `evals/` 與 `.github/workflows/`,不會發到 npm。** 版本不需要再往 v1.2.9 之上 bump(v1.2.9 已經包含 user-level hook 與 evals 10/11/12 的 scope 調整)。
+
+**5 個 i18n 語系同步**(zh-TW、zh-CN、ja、es、ko)。
+
 ---
 
 ## 🧪 開發與評測

@@ -480,6 +480,33 @@ token 削減イテレーション。スキル内容のセマンティクスは�
 
 **5 つの i18n ロケール（zh-TW、zh-CN、ja、es、ko）にミラー** — 既存の翻訳を保持しつつ、構造的なスリム化を言語ごとに同一に適用。
 
+### イテレーション7:Eval Harness のレジリエンス強化（Sprint 1 + 2A、v1.2.9）
+
+ハーネス層のイテレーションであって、スキル層ではない。スキルのセマンティクスは変わっていない。変わったのは**測定対象の表面積**。目標は、ずっと 0/0 verdict を黙って出していた 4 つの eval を解除し、真の品質ベースラインを浮かび上がらせること。
+
+**Sprint 1 — 測定不能だったクラスタの解除（`d2023fb`、`cee67cb`):**
+
+4 つの eval(`eval-jtbd-depth`、`eval-prfaq-output`、`eval-subagent-discovery`、`eval-subagent-premortem`)は毎回 0 pass / 0 fail を返しており、集計スコアでは「問題なし」と区別がつかなかった。3 つの原因:
+
+1. **headless CI で sub-agent が欠落** — CI はスキルを `~/.claude/skills/` にインストールしていたが、`agents/*.md` を `~/.claude/agents/` にコピーしていなかった。そのため `claude -p` は `Task` 経由で dispatch できず、orchestrator が黙って inline で実行していた。
+2. **`claude -p` 下で specialist-dispatch hook が無音** — plugin レベルの `hooks/` は headless モードでは読み込まれず、user レベルの `~/.claude/settings.json` の UserPromptSubmit hook のみが読み込まれる。CI は各 behavioral run の前に dispatch hook を user レベルにプログラム的に登録するようになった。
+3. **Response + judge の timeout が短すぎた** — 180s response / 120s judge では長文の Discovery / Pre-mortem 出力が途中で切れ、judge は切り詰められた文字列を見て 0/0 を吐いていた。600s / 240s に引き上げ、非 JSON 出力時には 1 回リトライ。
+
+また evals 10/11/12 から「orchestrator が Task ツール経由で dispatch する」という手続き的 expectation も削除した — `claude -p` には nested Task の表面がなく検証不能で、最終的に我々が気にする性質でもない。残りの expectation は specialist が産出すべき**アウトプット品質**を対象とする。
+
+**Sprint 2A — judge のロバストネス + CI 上限(`f973939`):**
+
+PR #9 のコードレビューからの 2 つのフォローアップ修正:
+
+1. **Judge 修復リトライがオリジナルの context を保持** — `claude -p` はステートレスなので、修復 prompt は完全な元の `judge_prompt`(response + expectations)と前回の malformed output を再投入するようになった。新しい `_judge_output_complete()` チェックは N 個の indexed expectation がぴったり揃っていないペイロードを拒否し、初回出力が回復不能なときに model が「形だけ整った捏造 verdict」を吐くのを防ぐ。
+2. **CI `behavioral-eval` ジョブの timeout 90 → 120 分** — 最悪ケース = 12 evals / 2 workers × (600s response + 240s judge + 240s repair)≈ 108 分なので、以前の 90 分上限は有効な run を黙って cancel する可能性があった。120 分は setup + artifact upload に ~10 分の余裕を残す。
+
+**新たに可視化されたベースライン**(ローカル run、2026-05-28):**0 / 100** `at-risk`、**13 / 33** expectation がパス、**6 critical + 14 warning** の失敗。集計スコアは退行していない — 退行したのは**可視**スコアで、これまで 0/0 を貢献していた 4 つの eval が今は実シグナルを返すようになったため。この 6 つの critical 失敗が Stage 2 の明示的な backlog:3 層 JTBD(functional / emotional / social)、B2B 組織レベルの Jobs、B2B buyer vs user persona の分離、Discovery scope のガードレール、pre-mortem の leading-indicator 規律。expectation 単位の内訳は [`docs/sprint1-local-eval-2026-05-28.md`](./docs/sprint1-local-eval-2026-05-28.md) を参照。
+
+**ハーネス改善は `evals/` と `.github/workflows/` に住み、npm には出荷されない。** v1.2.9 を超えるバージョンバンプは不要(v1.2.9 にはすでに user-level hook と evals 10/11/12 の scope 調整が含まれている)。
+
+**5 つの i18n ロケール(zh-TW、zh-CN、ja、es、ko)にミラー**。
+
 ---
 
 ## 🧪 開発と評価
