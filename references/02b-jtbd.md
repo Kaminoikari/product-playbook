@@ -69,7 +69,7 @@ Claude must self-check after producing JTBD output (each item must be marked ✅
 - [ ] Does it focus on a single core job? (Not three jobs crammed into one sentence)
 - [ ] Can it be used to evaluate "Does this solution actually address this job?"
 - [ ] Does it include "current workarounds" and "gap"? (Gap = opportunity)
-- [ ] Does Q5 of the Deep-Dive reach emotional motivation / professional identity / psychological fear? (Not just functional descriptions)
+- [ ] Does Q5 of the Deep-Dive **explicitly use at least one canonical-vocabulary word** (`fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`)? Paraphrased consequences like "credibility at risk" or "reputation damaged" FAIL this item — they describe outcomes, not the felt emotion.
 
 **Execution Rules (Hard Gate):**
 - Must mark each item ✅ or ❌ — blank [ ] or unexplained ✅ lists are not allowed
@@ -100,13 +100,25 @@ For B2B products, the buyer (signs the contract, controls budget) and the daily 
 - If buyer = user (exceptional, e.g., founder-led tools), state explicitly in one sentence WHY the decision-maker is also the daily user in this specific scenario — do not assume.
 - Failing example: producing only one persona ("HR Manager") that conflates both budgeting authority and daily form-filling. That collapses two distinct Jobs into one fuzzy persona and the analysis cannot drive product decisions.
 
-#### Deep-Dive Five Questions — B2B Enhanced Version
+#### Deep-Dive Five Questions — B2B Enhanced Version (Hard Gate)
 
-**Q5 must reach at least one of the following levels** (examples):
-- ✅ Professional identity: "She's afraid of looking incompetent in front of leadership, because this report represents her department's credibility"
-- ✅ Emotional motivation: "He wants to demonstrate to his direct reports that he has a firm grasp of the numbers"
-- ✅ Psychological fear: "Her biggest fear is the auditor catching a process gap — she was already warned once before"
-- ❌ Failing example: "He needs a better tool to improve efficiency" (stays at the functional level)
+**Hard Gate — Q5 MUST explicitly use at least one psychological/emotional vocabulary word from this canonical list**: `fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`. Paraphrased functional outcomes ("credibility at risk", "reputation damaged", "metric drops", "users churn", "loses trust", "career impact") FAIL this gate even when they describe genuine B2B stakes — they describe *consequences*, not the *felt emotion* the persona is moving away from.
+
+A Q5 that scores the persona's deepest motivation in functional language fails the Discovery contract: the entire purpose of Q5 is to surface the felt fear/anxiety that drives switching, because functional outcomes alone can be solved with incrementally better tools, while felt fear/anxiety is what gets a B2B buyer to override organizational inertia and sign a new contract.
+
+**Passing examples** (each contains an underlined canonical-vocabulary word):
+- ✅ Professional identity: "She **fears** looking incompetent in front of leadership when this report represents her department's credibility"
+- ✅ Emotional motivation: "He carries quiet **anxiety** that his direct reports will catch him not having a firm grasp of the numbers"
+- ✅ Psychological fear: "Her biggest **dread** is the auditor catching a process gap — she was already warned once before, and the **shame** of a second incident would mark her file permanently"
+- ✅ Identity threat: "He feels a **threat to identity** when external consultants out-explain him on his own team's metrics in front of the board"
+
+**Failing examples** (functional / consequential, no canonical vocabulary):
+- ❌ "He needs a better tool to improve efficiency" (functional)
+- ❌ "Her credibility with leadership is at risk" (consequence, not felt emotion)
+- ❌ "She might lose her job if this report is wrong" (outcome, not felt emotion — what does she *feel* about that possibility?)
+- ❌ "His reputation in the organization would suffer" (consequence — replace with `embarrassment`, `shame`, or `dread`)
+
+If the persona's deepest motivation genuinely doesn't map to any of the canonical-vocabulary words after honest analysis, mark the JTBD Quality Checklist Q5 item as `❌` with the explanation "Q5 currently lives at the consequence layer; need one more interview question that probes felt emotion" — do not paraphrase the vocabulary list to make a checkmark appear.
 
 #### Competitive Alternatives Analysis (Required)
 
