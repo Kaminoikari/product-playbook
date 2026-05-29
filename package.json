@@ -1,6 +1,6 @@
 {
   "name": "product-playbook",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "description": "MUST use when user wants to plan or strategize a product/feature. 22 PM frameworks, 6 modes, from idea to dev handoff",
   "bin": {
     "product-playbook": "./install.sh"
@@ -14,6 +14,7 @@
     "eval:test": "python3 -m unittest evals.test_compute_eval_score",
     "eval:debt": "python3 scripts/eval-debt-report.py",
     "i18n:drift": "python3 scripts/i18n-drift-report.py",
+    "i18n:mirror": "python3 scripts/i18n-mirror-apply.py",
     "bundle:claude-ai": "bash scripts/build-claude-ai-bundle.sh"
   },
   "keywords": [

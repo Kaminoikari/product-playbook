@@ -26,3 +26,6 @@ evals/*-results.json
 evals/*-results.md
 evals/smoke-test.json
 evals/smoke-test.md
+
+# Mirror agent run logs
+logs/i18n-mirror-*.log
