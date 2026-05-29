@@ -11,7 +11,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -52,7 +52,7 @@ jobs:
       # "Download ZIP" of this repo is ~70MB because of demo GIFs in
       # assets/. Ship a trimmed bundle (~900KB) so the README's
       # "Upload to Claude.ai" path actually works.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         if: steps.version.outputs.exists == 'false'
         with:
           node-version: 20

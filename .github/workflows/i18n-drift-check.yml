@@ -41,9 +41,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -51,14 +51,16 @@ jobs:
         id: drift
         run: |
           # capture exit code (0 clean, 1 critical, 2 warning/info) without
-          # failing the step — this workflow is notification-only
+          # failing the step — this workflow is notification-only, and ANY
+          # of the three exit codes is a valid "report produced" state.
           set +e
           python3 scripts/i18n-drift-report.py --output drift-report.md
           echo "exit_code=$?" >> "$GITHUB_OUTPUT"
-          set -e
-
           # also produce JSON for any future tooling that wants to consume it
+          # (also runs with set +e — drift-report exits 1/2 on the same
+          # conditions and we still want the JSON artifact written)
           python3 scripts/i18n-drift-report.py --json > drift-report.json
+          set -e
 
       - name: Job Summary
         if: always()
@@ -90,7 +92,7 @@ jobs:
 
       - name: Upload drift report artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: i18n-drift-report
           path: |
