@@ -7,34 +7,34 @@
 ## 步驟序列
 
 ```
-Phase 0:現況分析
-  S1.  現況回顧 + JTBD 重新檢驗  [Core]
-       (合併:資料盤點 + 哪些既有 Job 做得好/做得不好)
+Phase 0: Current State Analysis
+  S1.  Current State Review + JTBD Re-validation  [Core]
+       (Merged: data inventory + which existing Jobs are done well/poorly)
 
-Phase 1:問題收斂
-  S2.  用戶痛點收集  [Core]
-       (留存/流失分析 + 用戶反饋彙整 + 行為數據)
-  S3.  痛點 + HMW + 機會排序  [Core]
+Phase 1: Problem Convergence
+  S2.  User Pain Points Collection  [Core]
+       (Retention/churn analysis + feedback synthesis + behavior data)
+  S3.  Pain Points + HMW + Opportunity Ranking  [Core]
        → references/03-define.md
-       (合併:痛點彙整表 + HMW + 機會評估表)
-  S4.  Positioning 重新評估  [Optional — 見觸發條件]
+       (Merged: Pain Points Summary + HMW + Opportunity Assessment Table)
+  S4.  Positioning Re-assessment  [Optional — see triggers]
        → references/03-define.md
 
-Phase 2:解法設計
-  S5.  PR-FAQ(描述改版後的體驗) [Core]
+Phase 2: Solution Design
+  S5.  PR-FAQ (post-revision experience)  [Core]
        → references/04a-prfaq.md
-  S6.  Pre-mortem  [Optional — 見觸發條件]
+  S6.  Pre-mortem  [Optional — see triggers]
        → references/04b-solutions.md
   S7.  MVP + Not Doing List  [Core]
        → references/04c-mvp.md
 
-Phase 3:驗證
-  S8.  North Star + Aha(改版前後對比)+ 假設驗證計畫  [Core]
+Phase 3: Validation
+  S8.  North Star + Aha (before/after comparison) + Hypothesis Validation Plan  [Core]
        → references/05a-northstar-aha.md + references/05c-validation-spec.md
-       (合併:任何改版都必須驗證假設;兩者高度耦合)
+       (Merged: any revision must validate hypotheses; tightly coupled)
 
 ────
-最終產出 → 產品規格摘要(改版版)
+Final output → Product Spec Summary (revision edition)
 ```
 
 ### S1 前置:產品上下文載入
@@ -49,6 +49,32 @@ Phase 3:驗證
 
 > 改版模式的 S1 會主動詢問使用者提供既有產品數據:DAU/MAU、留存率、主要用戶反饋、過去版本的關鍵決策等。若 context 已預填部分答案,改為確認而非重新收集。
 > S1 同時收集安全現況:現有認證/授權機制、已知安全漏洞或技術債、近期安全事件。這些資訊會影響改版的風險評估和 Pre-mortem(若觸發)。
+
+### S1 產出要求(Hard Gates)
+
+每一則改版模式 S1 回應都「必須」包含以下全部四項:
+
+1. **將此定調為改版,而非 0-to-1** — 以一兩句話開場,點明這是針對*既有產品*的分析:我們是依現況數據重新檢驗既有 JTBD、對比基準指標,並讀取 `.product-context.md` 取得先前決策。這與 0-to-1 探索(從一張白紙的用戶模型開始)不同。少了這層定調,使用者無從得知為什麼這些問題會不一樣。
+
+2. **逐字引用使用者的實際數字** — 在你的分析中,把使用者 prompt 裡的 MAU、留存下滑 %、cohort 規模、日期等原樣引述回去(例如:「上一季從 85% 掉到 72%,以 2,800 MAU 為基數,代表大約有 N 名受影響的用戶……」)。忽略這些數字的籠統討論會 FAIL 本關。
+
+3. **將使用者陳述的原因當作 H1,而非事實** — 當使用者點名一個可能原因(「留存下滑是功能複雜度造成的」),要明確標記為 H1,並從相同數據中提出至少「兩個」對立假設(H2、H3)。可考慮的對立假設範例:cohort 組成變動、onboarding 退步、定價變動、競品上線、客服品質下滑、功能下架、季節性效應。**不加批判地接受使用者陳述的原因會 FAIL 本關** — 改版模式的價值正在於假設紀律。
+
+4. **資料缺口清單,且至少含一項分群導向的缺口** — 具體列出還需要哪些額外數據,才能在 H1/H2/H3 之間做出區辨。**至少一項「必須」是分群缺口**:cohort(註冊月份)、tier(免費/付費)、role(管理者/一般用戶)、功能使用分群。只寫籠統的「再多做一些用戶訪談」會 FAIL 本關 — 要指名你會訪談「哪個分群」、具體會問「什麼」。
+
+### S1 收尾格式(Hard Gate)
+
+S1 回應結尾必須是編號的 CTA 選單,「絕不」用開放式問題。使用以下確切格式:
+
+```
+What's next? Pick one:
+  1️⃣ Share the requested data so we can move to S2 (pain-point convergence with hypothesis testing)
+  2️⃣ Refine the hypothesis list before collecting data (suggest more H_n candidates)
+  3️⃣ Skip to S3 if you already have enough data to converge on a top hypothesis
+  4️⃣ Pause and resume later (progress will be saved to .product-playbook-progress.md)
+```
+
+以「Any thoughts?」/「Let me know what you think」/「Share what you have」等結尾而沒有編號選單者會 FAIL 此契約 — 使用者需要一個清楚的把手來決定下一步。
 
 ### 快速路徑
 

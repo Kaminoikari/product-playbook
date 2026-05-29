@@ -50,6 +50,32 @@ Antes de entrar en S1, lee `references/rules-context.md` y verifica `.product-co
 > El S1 del Modo Revisión pide proactivamente al usuario datos del producto existente: DAU/MAU, retención, feedback principal de usuarios, decisiones clave de versiones anteriores, etc. Si el contexto ya pre-rellena algunas respuestas, cambia a confirmación en lugar de re-recopilación.
 > S1 también recopila el estado de seguridad actual: mecanismos de auth/authz existentes, brechas de seguridad conocidas o deuda técnica, incidentes de seguridad recientes. Estos datos alimentan la evaluación de riesgos de la revisión y el Pre-mortem (si se dispara).
 
+### Requisitos de Salida de S1 (Hard Gates)
+
+Cada respuesta de S1 del Modo Revisión DEBE contener LOS CUATRO de:
+
+1. **Enmarca esto como revisión, no como 0-a-1** — abre con una o dos frases que señalen que este es un análisis de un *producto existente*: estamos re-validando los JTBD existentes contra los datos actuales, comparando métricas de referencia (baseline) y leyendo `.product-context.md` para decisiones previas. Esto difiere del Discovery 0-a-1 (que parte de un modelo de usuario en blanco). Sin este encuadre, el usuario no puede saber por qué las preguntas son diferentes.
+
+2. **Usa los números reales del usuario textualmente** — cita el MAU, el % de caída de retención, los tamaños de cohorte y las fechas del prompt del usuario de vuelta en tu análisis (p. ej. "la caída del 85% al 72% el último trimestre, sobre la base de 2.800 MAU, significa aproximadamente N usuarios afectados…"). La discusión genérica que ignora los números FAILS este gate.
+
+3. **Trata la causa declarada por el usuario como H1, no como hecho** — cuando el usuario nombra una causa probable ("la caída de retención es causada por la complejidad de las features"), etiquétala explícitamente como H1 y expón al menos DOS hipótesis rivales (H2, H3) extraídas de los mismos datos. Ejemplos de hipótesis rivales a considerar: cambio en la mezcla de cohortes, regresión del onboarding, cambio de precios, lanzamiento competitivo, caída de la calidad del soporte, deprecación de features, efecto estacional. **Aceptar acríticamente la causa declarada por el usuario FAILS este gate** — el valor del Modo Revisión es la disciplina de hipótesis.
+
+4. **Lista de brechas de datos con al menos una brecha orientada a la segmentación** — enumera específicamente qué datos adicionales se necesitan para discriminar entre H1/H2/H3. **Al menos un ítem DEBE ser una brecha de segmentación**: cohorte (mes de registro), tier (gratis/pago), rol (admin/usuario), segmento de uso de features. Un genérico "más entrevistas de usuario" por sí solo FAILS — nombra *qué segmento* entrevistarías y *qué específicamente* preguntarías.
+
+### Formato de Cierre de S1 (Hard Gate)
+
+Termina la respuesta de S1 con un menú numerado de CTA, NUNCA con una pregunta abierta. Usa exactamente esta forma:
+
+```
+What's next? Pick one:
+  1️⃣ Share the requested data so we can move to S2 (pain-point convergence with hypothesis testing)
+  2️⃣ Refine the hypothesis list before collecting data (suggest more H_n candidates)
+  3️⃣ Skip to S3 if you already have enough data to converge on a top hypothesis
+  4️⃣ Pause and resume later (progress will be saved to .product-playbook-progress.md)
+```
+
+Las respuestas que terminan con "Any thoughts?" / "Let me know what you think" / "Share what you have" sin un menú numerado FAIL el contrato — el usuario necesita un handle claro para el siguiente movimiento.
+
 ### Ruta Rápida
 
 Cuando el usuario proporciona datos suficientes en S1 (con feedback, métricas, prioridades), S3 puede producirse en un único intercambio en lugar de múltiples confirmaciones. Condición de disparo: la lista de puntos de dolor recopilada en S2 ya tiene prioridades explícitas y soporte de datos. Las reglas de Hard Gate permanecen sin cambios — el output de cada paso debe presentarse completo; solo se acelera la cadencia de confirmación.

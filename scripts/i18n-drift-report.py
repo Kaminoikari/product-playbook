@@ -45,7 +45,11 @@ COUNT_SIGNALS = {
     "## headings":        lambda s: len(re.findall(r"^## ", s, re.M)),
     "### headings":       lambda s: len(re.findall(r"^### ", s, re.M)),
     "code fences":        lambda s: s.count("```"),
-    "FAIL markers":       lambda s: len(re.findall(r"\bFAIL\b", s)),
+    # FAIL is used as a keyword/enforcement marker; needs to count both
+    # "FAIL" and "FAILS" (verb inflection). Plain \bFAIL\b breaks on CJK
+    # because adjacent Japanese/Chinese chars are Unicode word chars, so
+    # `FAILします` doesn't match. Use letter-only boundaries instead.
+    "FAIL markers":       lambda s: len(re.findall(r"(?<![A-Za-z])FAILS?(?![A-Za-z])", s)),
 }
 
 LINE_RATIO_WARN = 0.85
@@ -56,8 +60,11 @@ SEVERITY_WEIGHT = {"critical": 15, "warning": 5, "info": 1}
 
 def analyze(text: str) -> tuple[dict[str, int], dict[str, int], int]:
     counts = {name: fn(text) for name, fn in COUNT_SIGNALS.items()}
+    # letter-only boundaries: Python's \b treats CJK chars as word chars, so
+    # `fear恐懼` would not match \bfear\b. Use (?<![A-Za-z]) / (?![A-Za-z]) to
+    # require non-Latin-letter boundaries, which is what we actually want.
     vocab = {
-        v: len(re.findall(r"\b" + re.escape(v) + r"\b", text, re.I))
+        v: len(re.findall(r"(?<![A-Za-z])" + re.escape(v) + r"s?(?![A-Za-z])", text, re.I))
         for v in VOCAB
     }
     lines = text.count("\n")

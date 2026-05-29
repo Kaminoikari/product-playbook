@@ -50,6 +50,32 @@ Phase 3：验证
 > 改版模式的 S1 会主动询问使用者提供既有产品数据：DAU/MAU、留存率、主要用户反馈、过去版本的关键决策等。若 context 已预填部分答案，改为确认而非重新收集。
 > S1 同时收集安全现况：现有认证／授权机制、已知安全漏洞或技术债、近期安全事件。这些资讯会影响改版的风险评估和 Pre-mortem（若触发）。
 
+### S1 输出要求（Hard Gate）
+
+每一次改版模式的 S1 回应都**必须**包含以下全部四项：
+
+1. **将其框定为改版，而非 0-to-1** — 以一到两句话开场，点明这是对*既有产品*的分析：我们要根据当前数据重新检验既有 JTBD、对比基线指标，并读取 `.product-context.md` 取得过往决策。这与 0-to-1 Discovery（从空白的用户模型起步）不同。缺少这层框定，用户就无法理解为什么这些问题不一样。
+
+2. **逐字引用用户的实际数字** — 在分析中把用户 prompt 里的 MAU、留存下降 %、cohort 规模、日期等引用回去（例如「上季从 85% 掉到 72%，对应 2,800 MAU 的基数，约影响 N 名用户……」）。忽略这些数字的泛泛讨论会 FAIL 此 Gate。
+
+3. **将用户陈述的成因视为 H1，而非事实** — 当用户指出一个可能成因（「留存下降是功能复杂度造成的」），明确将其标记为 H1，并从同一批数据中提出至少另外两个对立假设（H2、H3）。可考虑的对立假设示例：cohort 组成变化、onboarding 退化、定价变动、竞品上市、支持品质下降、功能下架、季节性因素。**毫无批判地接受用户陈述的成因会 FAIL 此 Gate** — 改版模式的价值正在于假设纪律。
+
+4. **数据缺口清单，且至少含一项分群导向的缺口** — 具体列出还需要哪些额外数据来区辨 H1/H2/H3。**至少一项必须是分群（segmentation）缺口**：cohort（注册月份）、tier（免费／付费）、role（管理员／一般用户）、功能使用分群。仅写泛泛的「多做用户访谈」会 FAIL — 要指明你会访谈*哪个分群*、具体*问什么*。
+
+### S1 收尾格式（Hard Gate）
+
+S1 回应必须以编号 CTA 选单结尾，绝不以开放式问题收尾。使用以下确切格式：
+
+```
+What's next? Pick one:
+  1️⃣ Share the requested data so we can move to S2 (pain-point convergence with hypothesis testing)
+  2️⃣ Refine the hypothesis list before collecting data (suggest more H_n candidates)
+  3️⃣ Skip to S3 if you already have enough data to converge on a top hypothesis
+  4️⃣ Pause and resume later (progress will be saved to .product-playbook-progress.md)
+```
+
+以「Any thoughts?」／「Let me know what you think」／「Share what you have」等结尾、且没有编号选单的回应无法通过此契约（FAIL）— 用户需要一个明确的下一步把手。
+
 ### 快速路径
 
 当使用者在 S1 已提供充分数据（含用户反馈、指标、痛点），S3 可在单次对话中产出，而非多次确认。触发条件：S2 收集到的痛点清单已有明确的优先级和数据支持。Hard Gate 规则不变 — 每个步骤的产出仍须完整呈现，只是确认节奏加快。

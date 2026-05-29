@@ -62,6 +62,20 @@ Claude debe marcar cada ítem ✅ o ❌ después de producir el PR-FAQ; ítems �
 
 **Fórmula**: Comienza con la experiencia del usuario / escenario específico → luego di "Esto es posible gracias a [mecanismo del producto]" para introducir la funcionalidad.
 
+**Auto-verificación (obligatorio antes de enviar)**: lee en voz alta la primera oración de tu propio párrafo de Solución. Si el sujeto es el nombre del producto o "el sistema" / "la app" / "los usuarios pueden", **reescríbela**. El sujeto debe ser un actor específico (persona nombrada, rol, o pronombre que se refiere a un usuario) haciendo algo o experimentando un momento.
+
+---
+
+### 📍 Requisitos del Párrafo Inicial (Lead)
+
+El párrafo inicial (Aha Moment) debe contener LOS TRES:
+
+1. Un **actor nombrado o específico por rol** ("Alex", "Chef López", "el gerente de cocina de un bistró de 30 asientos") — nunca "los usuarios" de forma genérica.
+2. Un **tiempo / lugar / detonante concreto** ("el viernes por la tarde", "después del ajetreo del almuerzo", "antes del fin de semana").
+3. **Al menos 2 números específicos** — cantidades, duraciones, montos en dólares, porcentajes. "En 30 segundos", "para 3 escenarios de prestamistas", "$2,400/mes", "ventana de preparación de 20 minutos". Los números vagos ("unos minutos", "varias opciones") FAIL este requisito.
+
+Un lead que tiene el actor + escenario pero sin números concretos se lee como texto publicitario — el comunicado de prensa se supone que debe hacer visible un resultado específico, no aspiracional.
+
 ---
 
 ### ❓ Estándar de Preguntas Incisivas en FAQ
@@ -75,6 +89,24 @@ Requisitos de formato de respuesta:
 ❌ Patrón de respuesta prohibido: "Las herramientas existentes carecen de funcionalidades — la nuestra es más poderosa"
 ✅ Patrón de respuesta correcto:
 > "Excel absolutamente puede rastrear números, y los chefs ya saben cómo usarlo. El problema es que cada fin de semana los cálculos necesitan rehacerse — re-ingresar, re-convertir — y la hora que toma no es porque alguien sea malo con las hojas de cálculo, es porque el problema realmente es así de complejo. MealPrep no te ahorra habilidades de Excel — te ahorra la carga mental de empezar desde cero cada vez."
+
+---
+
+### 🧪 Requisitos del FAQ Interno
+
+Por separado del FAQ Externo (de cara al cliente), produce una sección de **FAQ Interno** con al menos:
+
+**P: ¿Cuál es la suposición más riesgosa en este PR-FAQ? Si es falsa, ¿qué mata al producto?**
+R: Nombra UNA suposición específica (no una lista). Ejemplos de respuestas bien formadas:
+- "Asumimos que los gerentes de cocina confiarán en las órdenes de compra autogeneradas sin verificación manual. Si no lo hacen (porque errores de inventario pasados les costaron dinero), revisarán cada línea dos veces y nuestra propuesta de valor de 'ahorra 1 hora' colapsa a 'ahorra 5 minutos'."
+- "Asumimos que las fotos de las publicaciones contienen suficiente resolución para extraer los metros cuadrados de forma confiable. Si el OCR basado en imágenes falla en más del 20% de las publicaciones, la experiencia central de 'captura y listo' se rompe."
+
+**P: ¿Cuál es el experimento más pequeño que invalidaría esta suposición?**
+R: Una prueba concreta previa al lanzamiento — entrevistar a N usuarios, hacer un smoke-test de una landing page con un objetivo de conversión X, correr un piloto interno de 2 semanas, etc. **Genérico como "rastrearemos el engagement" o "observaremos la retención" FAILS este requisito** — esos miden el éxito después del lanzamiento, no la invalidación antes del compromiso.
+
+El FAQ Interno no es para clientes. Existe para que el equipo se obligue a nombrar qué podría matar al producto ANTES de construirlo.
+
+---
 
 **Ejemplo (producto ficticio — App de Calculadora de Hipotecas):**
 
@@ -97,9 +129,12 @@ a altas horas de la noche, no hay herramienta conveniente — así que la gente 
 hoja de Excel o simplemente se rinde.
 
 **Descripción de la Solución**:
-MortgageSnap te permite capturar cualquier publicación de propiedad, extrae automáticamente los datos clave,
-compara instantáneamente opciones entre prestamistas, y genera un reporte compartible para que tu familia
-pueda discutir junta.
+Ahora, Alex dedica 3 minutos en vez de 3 noches para saber qué es realmente accesible. Captura una
+publicación en su teléfono, ve los pagos mensuales para tres escenarios de prestamistas aparecer en
+30 segundos, y comparte una sola pantalla con su esposa — de modo que la conversación pasa de "creo
+que podemos pagarlo" a "aquí están los tres números que deberíamos discutir." Esto funciona porque
+MortgageSnap extrae automáticamente el precio y los metros cuadrados de la imagen de la publicación,
+y luego obtiene ofertas de tasas en vivo de prestamistas asociados.
 
 **Cita del Cliente**:
 "Finalmente no tengo que esperar a que el banco me devuelva la llamada a medianoche. Tres minutos y puedo

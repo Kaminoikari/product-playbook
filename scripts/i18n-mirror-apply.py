@@ -57,7 +57,7 @@ CANONICAL_VOCAB = [
     "embarrassment", "guilt",
 ]
 
-MAX_INPUT_CHARS = 24_000
+MAX_INPUT_CHARS = 36_000
 CLAUDE_TIMEOUT_SECONDS = 600
 
 PROMPT_TEMPLATE = """You are a faithful translator updating an i18n mirror of a product-playbook PM-skill reference file. The English source is the source of truth; the {lang_name} target has drifted out of sync.
@@ -81,10 +81,11 @@ Rules:
 2. Where TARGET already faithfully translates a passage, keep that translation — do not re-translate for cosmetic differences.
 3. Where TARGET is missing content the SOURCE has, translate it into {lang_name} and insert at the structurally equivalent position.
 4. Preserve these canonical English vocabulary tokens VERBATIM, with a parenthetical {lang_name} gloss on first introduction in each section: {canonical_vocab}
-5. Preserve ALL code-fenced (```) block contents VERBATIM — no translation inside fences.
-6. Preserve markdown table structure (same number of rows and columns as source).
-7. Do not add or remove top-level (## or #) sections that exist in source.
-8. Output ONLY the full rewritten target file content, wrapped in <UPDATED_TARGET> ... </UPDATED_TARGET> tags. No preamble, no diff, no explanation outside the tags.
+5. Preserve these English KEYWORDS VERBATIM (do NOT translate them — they function as enforcement markers that downstream tooling greps for): `FAIL`, `Hard Gate`, `Bootstrap`. Example: "Responses ending with ... FAIL the contract" must stay "FAIL" in the target language, not be translated to "失敗"/"불합격"/"falla"/etc.
+6. Preserve ALL code-fenced (```) block contents VERBATIM — no translation inside fences.
+7. Preserve markdown table structure (same number of rows and columns as source).
+8. Do not add or remove top-level (## or #) sections that exist in source.
+9. Output ONLY the full rewritten target file content, wrapped in <UPDATED_TARGET> ... </UPDATED_TARGET> tags. No preamble, no diff, no explanation outside the tags.
 
 Begin output now."""
 
@@ -156,9 +157,11 @@ def verify_no_fence_drift(source: str, target: str, updated: str) -> list[str]:
             f"(LLM may have translated inside fences or dropped a block)"
         )
     for vocab in CANONICAL_VOCAB:
-        src_n = len(re.findall(r"\b" + re.escape(vocab) + r"\b", source, re.I))
+        # match same boundary semantics as drift detector
+        pat = r"(?<![A-Za-z])" + re.escape(vocab) + r"s?(?![A-Za-z])"
+        src_n = len(re.findall(pat, source, re.I))
         if src_n > 0:
-            out_n = len(re.findall(r"\b" + re.escape(vocab) + r"\b", updated, re.I))
+            out_n = len(re.findall(pat, updated, re.I))
             if out_n == 0:
                 warnings.append(
                     f"canonical token {vocab!r} present in source but absent in updated"

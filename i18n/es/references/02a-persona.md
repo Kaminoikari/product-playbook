@@ -11,7 +11,7 @@ Cuando el orchestrator recibe el pedido de ejecutar trabajo de Descubrimiento (P
 
 Si los hallazgos de Descubrimiento sugieren fuertemente un artefacto downstream (ej. el análisis JTBD revela un ángulo de positioning claro), regístralo como una **open question o next-step pointer de una línea** al final — pero **NO produzcas el artefacto en sí**. La siguiente etapa tiene su propio step dedicado.
 
-Ejemplo no aceptable: terminar un análisis JTBD con una tabla RICE poblada, una lista de scope de MVP, o un párrafo "Recommended Positioning" — incluso si todas las otras sub-secciones de Descubrimiento están correctas, esta salida FALLA este Hard Gate.
+Ejemplo no aceptable: terminar un análisis JTBD con una tabla RICE poblada, una lista de scope de MVP, o un párrafo "Recommended Positioning" — incluso si todas las otras sub-secciones de Descubrimiento están correctas, esta salida FAIL este Hard Gate.
 
 ---
 
@@ -34,7 +34,7 @@ Regla del Hard Gate:
 - Si son la misma persona (raro — usualmente herramientas fundador-led o B2B de un solo dueño), explicá en una oración por qué el buyer también es el user diario en este escenario específico.
 - Cross-link entre las dos Personas: notá dónde el criterio de evaluación del Buyer depende de lo que el User realmente hace a diario (ej. "el criterio de audit-readiness del Buyer depende de que el User complete el formulario el mismo día y no en lote").
 
-Ejemplo no aceptable: producir una sola Persona ("HR Manager") que fusiona aprobar presupuesto Y completar formularios diarios — dos Jobs distintos forzados en un arquetipo borroso. Esa salida FALLA este Hard Gate.
+Ejemplo no aceptable: producir una sola Persona ("HR Manager") que fusiona aprobar presupuesto Y completar formularios diarios — dos Jobs distintos forzados en un arquetipo borroso. Esa salida FAIL este Hard Gate.
 
 ```
 | Campo | Persona 1: [Apodo] | Persona 2: [Apodo] | Persona 3: [Apodo] |
@@ -62,7 +62,7 @@ Para **productos B2B con múltiples user personas**, el reasoning DEBE referenci
 - **Budget authority** — quién controla la línea de presupuesto; relevante cuando buyer ≠ user y los criterios del buyer dominan la decisión inicial del deal
 - **Audit / compliance pressure ownership** — el rol de quién está en juego cuando aparecen hallazgos de auditoría; las personas presionadas por compliance suelen dominar la priorización en segmentos B2B regulados
 
-Un reasoning puro de "Persona X la usa más" o "Persona Y tiene más usuarios" FALLA este Hard Gate para productos B2B. La frecuencia es necesaria pero nunca suficiente — el switching B2B es impulsado por presión organizacional, no por tasas de uso individual.
+Un reasoning puro de "Persona X la usa más" o "Persona Y tiene más usuarios" FAIL este Hard Gate para productos B2B. La frecuencia es necesaria pero nunca suficiente — el switching B2B es impulsado por presión organizacional, no por tasas de uso individual.
 
 Para **productos B2C**, el reasoning debe referenciar al menos uno de: switching-trigger ownership, diferencial de severidad JTBD, network-effect seeding, o diferencial de willingness-to-pay. El reasoning puramente por frecuencia también falla para B2C.
 

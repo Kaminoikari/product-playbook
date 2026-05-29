@@ -8,6 +8,12 @@
 - **Retenido permanentemente**: persiste a través de sesiones
 - **En la primera creación**: recordar al usuario agregar a `.gitignore` (puede contener información sensible de estrategia)
 
+**Anuncio de inicio de Bootstrap (Hard Gate — requerido antes de recopilar cualquier información):** el primer mensaje de Bootstrap dirigido al usuario DEBE indicar tanto (a) que la información capturada se guardará para futuras sesiones, COMO (b) la ruta exacta `.product-context.md`. Ejemplo de redacción:
+
+> Configurando el contexto de producto para futuras sesiones — guardaré lo que capturemos en `.product-context.md` en la raíz del proyecto para que las ejecuciones posteriores puedan omitir volver a preguntar lo básico.
+
+Esto es innegociable: si la escritura del archivo de Bootstrap más tarde se topa con una barrera de permisos o una interrupción, al usuario igualmente se le debe haber indicado la ruta de antemano. Mencionar la ruta SOLO al completar ("✅ guardado en .product-context.md") falla cuando el completado nunca ocurre.
+
 ---
 
 ## 2. Detección de Tres Escenarios (al inicio)

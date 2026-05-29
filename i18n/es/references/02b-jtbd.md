@@ -32,7 +32,18 @@ Ejemplo: **Cuando** está comparando opciones de hipoteca a altas horas de la no
 
 **Tabla de Análisis de Cuatro Tipos JTBD:**
 
-Cada celda (Persona 1 / Persona 2) DEBE contener una oración JTBD completa de tres cláusulas. Las frases descriptivas sin la estructura "Cuando / quiero / para que" no son aceptables.
+Cada celda (Persona 1 / Persona 2) DEBE contener una oración JTBD completa de tres cláusulas. **Frases cortas como "Sentir que sigo cumpliendo conmigo mismo", "registrar entrenamientos a diario", "seguir el progreso fácilmente" todas FAIL el Hard Gate.** Usá el ejemplo desarrollado de abajo como la forma literal — cada celda debe leerse como una oración con `When …, I want to …, so …`.
+
+Ejemplo desarrollado (rastreador de hábitos de fitness B2C, una sola Persona — replicá esta forma para cada celda):
+
+| Tipo JTBD | Definición | Persona: Profesional Ocupado |
+|-----------|------------|-----------|
+| Job Funcional | Completar una tarea específica o lograr un objetivo funcional | **Cuando** llego a casa después de un largo día de trabajo y tengo 20 minutos antes de mi próximo compromiso, **quiero** registrar el entrenamiento que acabo de hacer y ver qué se recomienda a continuación, **para que** pueda mantener la racha sin gastar energía mental planificando. |
+| Job Emocional | Cómo se sienten o quieren sentirse | **Cuando** me pierdo un entrenamiento planificado dos días seguidos, **quiero** sentir que sigo en el camino en lugar de empezar de cero, **para que** no caiga en la espiral de todo-o-nada que mata mi consistencia. |
+| Job Social | Cómo quieren ser percibidos por otros | **Cuando** un amigo me pregunta cómo va mi entrenamiento, **quiero** mostrar un registro limpio de actividad reciente, **para que** se me vea como alguien que cumple los compromisos consigo mismo. |
+| Contexto del Job | Bajo qué circunstancias necesitan realizar este trabajo | **Cuando** mi agenda es volátil a lo largo de la semana (reuniones tempranas, llamadas nocturnas), **quiero** encajar entrenamientos en ventanas de 15–45 minutos donde sea que caigan, **para que** el entrenamiento se adapte a mi vida en lugar de competir con ella. |
+
+Tabla vacía (llená cada celda con oraciones completas `When …, I want to …, so …` — NO la acortes a frases):
 
 ```
 | Tipo JTBD | Definición | Persona 1 (debe usar la forma completa "Cuando … quiero … para que …") | Persona 2 (igual) |
@@ -63,7 +74,7 @@ Claude debe autoevaluar después de producir el output JTBD (cada ítem debe mar
 - [ ] ¿Se enfoca en un solo trabajo central? (No tres trabajos metidos en una sola oración)
 - [ ] ¿Puede usarse para evaluar "¿Esta solución realmente aborda este trabajo?"
 - [ ] ¿Incluye "soluciones alternativas actuales" y "brecha"? (Brecha = oportunidad)
-- [ ] ¿La P5 de la Profundización **usa explícitamente al menos una palabra del vocabulario canónico** (`fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`)? Paráfrasis consecuenciales como "credibilidad en riesgo" o "reputación dañada" FALLAN este ítem — son consecuencias, no la emoción sentida.
+- [ ] ¿La P5 de la Profundización **usa explícitamente al menos una palabra del vocabulario canónico** (`fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`)? Paráfrasis consecuenciales como "credibilidad en riesgo" o "reputación dañada" FAIL este ítem — son consecuencias, no la emoción sentida.
 
 **Reglas de Ejecución (Hard Gate):**
 - Debe marcar cada ítem ✅ o ❌ — listas [ ] en blanco o ✅ sin explicación no están permitidas
@@ -78,7 +89,7 @@ Claude debe autoevaluar después de producir el output JTBD (cada ítem debe mar
 
 #### Análisis de Jobs a Nivel Organizacional (Hard Gate — cubrir al menos 2 niveles)
 
-Un análisis JTBD B2B que se queda puramente al nivel de usuario individual FALLA este gate. Los Jobs a nivel organizacional (auditoría de cumplimiento, flujos de aprobación cross-departamentales, control de costos, alineación de políticas de headcount, integridad de pista de auditoría) son necesidades que existen más allá de la tarea diaria de cualquier usuario individual y rutinariamente dominan las decisiones de switching B2B. La tabla de abajo DEBE producirse y al menos 2 de los 3 niveles DEBEN contener Jobs específicos de B2B (no enunciados genéricos de productividad).
+Un análisis JTBD B2B que se queda puramente al nivel de usuario individual FAILS este gate. Los Jobs a nivel organizacional (auditoría de cumplimiento, flujos de aprobación cross-departamentales, control de costos, alineación de políticas de headcount, integridad de pista de auditoría) son necesidades que existen más allá de la tarea diaria de cualquier usuario individual y rutinariamente dominan las decisiones de switching B2B. La tabla de abajo DEBE producirse y al menos 2 de los 3 niveles DEBEN contener Jobs específicos de B2B (no enunciados genéricos de productividad).
 
 | Nivel | Descripción | Ejemplos |
 |-------|-------------|----------|
@@ -96,7 +107,7 @@ El comprador de un producto B2B (firma el contrato, controla el presupuesto) y e
 
 #### Cinco Preguntas de Profundización — Versión Mejorada B2B (Hard Gate)
 
-**Hard Gate — la P5 DEBE usar explícitamente al menos una palabra del siguiente vocabulario canónico**: `fear` (miedo), `anxiety` (ansiedad), `shame` (vergüenza), `worry` (preocupación), `dread` (pavor), `self-doubt` (auto-duda), `sense of loss` (sensación de pérdida), `threat to identity` (amenaza a la identidad), `embarrassment` (bochorno), `guilt` (culpa). Paráfrasis funcionales/consecuenciales como "credibilidad en riesgo", "reputación dañada", "métrica cae", "usuarios churnean", "pierde confianza", "impacto en la carrera" FALLAN este gate aunque describan stakes B2B reales — son *consecuencias*, no la *emoción sentida* de la cual el persona quiere *alejarse*.
+**Hard Gate — la P5 DEBE usar explícitamente al menos una palabra del siguiente vocabulario canónico**: `fear` (miedo), `anxiety` (ansiedad), `shame` (vergüenza), `worry` (preocupación), `dread` (pavor), `self-doubt` (auto-duda), `sense of loss` (sensación de pérdida), `threat to identity` (amenaza a la identidad), `embarrassment` (bochorno), `guilt` (culpa). Paráfrasis funcionales/consecuenciales como "credibilidad en riesgo", "reputación dañada", "métrica cae", "usuarios churnean", "pierde confianza", "impacto en la carrera" FAIL este gate aunque describan stakes B2B reales — son *consecuencias*, no la *emoción sentida* de la cual el persona quiere *alejarse*.
 
 Una P5 que describe la motivación más profunda del persona solo en lenguaje funcional FALLA el contrato de Descubrimiento: el propósito entero de la P5 es hacer aflorar el *miedo/ansiedad sentido* que impulsa el switching — los resultados puramente funcionales pueden resolverse con herramientas incrementalmente mejores, pero es el fear/anxiety sentido lo que hace que un buyer B2B supere la inercia organizacional y firme un nuevo contrato.
 

@@ -7,34 +7,34 @@
 ## ステップ順序
 
 ```
-Phase 0：現状分析
-  S1.  現状レビュー + JTBD 再検証  [Core]
-       （統合：データインベントリ + 既存 Job がうまくいっているか/いないか）
+Phase 0: Current State Analysis
+  S1.  Current State Review + JTBD Re-validation  [Core]
+       (Merged: data inventory + which existing Jobs are done well/poorly)
 
-Phase 1：問題の収束
-  S2.  ユーザーペインポイント収集  [Core]
-       （リテンション/チャーン分析 + フィードバック統合 + 行動データ）
-  S3.  ペインポイント + HMW + 機会ランキング  [Core]
+Phase 1: Problem Convergence
+  S2.  User Pain Points Collection  [Core]
+       (Retention/churn analysis + feedback synthesis + behavior data)
+  S3.  Pain Points + HMW + Opportunity Ranking  [Core]
        → references/03-define.md
-       （統合：ペインポイントサマリー + HMW + 機会評価表）
-  S4.  ポジショニング再評価  [Optional — トリガーを参照]
+       (Merged: Pain Points Summary + HMW + Opportunity Assessment Table)
+  S4.  Positioning Re-assessment  [Optional — see triggers]
        → references/03-define.md
 
-Phase 2：ソリューション設計
-  S5.  PR-FAQ（リビジョン後の体験）  [Core]
+Phase 2: Solution Design
+  S5.  PR-FAQ (post-revision experience)  [Core]
        → references/04a-prfaq.md
-  S6.  Pre-mortem  [Optional — トリガーを参照]
+  S6.  Pre-mortem  [Optional — see triggers]
        → references/04b-solutions.md
   S7.  MVP + Not Doing List  [Core]
        → references/04c-mvp.md
 
-Phase 3：バリデーション
-  S8.  North Star + Aha（Before/After 比較） + 仮説検証プラン  [Core]
+Phase 3: Validation
+  S8.  North Star + Aha (before/after comparison) + Hypothesis Validation Plan  [Core]
        → references/05a-northstar-aha.md + references/05c-validation-spec.md
-       （統合：いかなるリビジョンも仮説の検証が必須；密結合）
+       (Merged: any revision must validate hypotheses; tightly coupled)
 
 ────
-最終出力 → プロダクトスペックサマリー（リビジョン版）
+Final output → Product Spec Summary (revision edition)
 ```
 
 ### S1 プレステップ：プロダクトコンテキスト読み込み
@@ -50,9 +50,35 @@ S1 に入る前に、`references/rules-context.md` を読み込み、`.product-c
 > Revision Mode の S1 では、ユーザーに既存プロダクトデータを積極的に求めます：DAU/MAU、リテンション、主要ユーザーフィードバック、過去のバージョンの主要な決定など。コンテキストが一部の回答を事前入力済みの場合は、再収集ではなく確認に切り替えます。
 > S1 では現在のセキュリティステータスも収集します：既存の認証/認可メカニズム、既知のセキュリティ脆弱性や技術的負債、最近のセキュリティインシデント。これらのデータはリビジョンのリスク評価と Pre-mortem（トリガー時）に反映されます。
 
+### S1 出力要件（Hard Gates）
+
+すべての Revision Mode S1 のレスポンスは、以下の 4 つすべてを必ず含まなければなりません：
+
+1. **0-to-1 ではなく、リビジョンとしてフレーミングする** — 冒頭で 1〜2 文を使い、これが*既存プロダクト*の分析であることを明示する：既存の JTBD を現在のデータに照らして再検証し、ベースラインメトリクスを比較し、過去の決定について `.product-context.md` を読み込んでいる、という点を述べる。これは（ユーザーモデルを白紙から始める）0-to-1 Discovery とは異なる。このフレーミングがないと、ユーザーはなぜ質問が異なるのかを判断できない。
+
+2. **ユーザーの実際の数値をそのまま使う** — ユーザーのプロンプトに含まれる MAU、リテンション低下率（%）、コホートサイズ、日付を、分析の中でそのまま引用して返す（例：「前四半期に 85% から 72% へ低下したこと、2,800 MAU のベースに対して、影響を受けたユーザーはおよそ N 人を意味します…」）。数値を無視した一般論はこのゲートを FAIL する。
+
+3. **ユーザーが述べた原因を事実ではなく H1 として扱う** — ユーザーが有力な原因を挙げた場合（「リテンション低下は機能の複雑さによる」）、それを明示的に H1 とラベル付けし、同じデータから導かれる少なくとも 2 つの対立仮説（H2、H3）を提示する。検討すべき対立仮説の例：コホート構成のシフト、オンボーディングのリグレッション、価格変更、競合のローンチ、サポート品質の低下、機能の廃止、季節要因。**ユーザーが述べた原因を無批判に受け入れることはこのゲートを FAIL する** — Revision Mode の価値は仮説の規律にある。
+
+4. **少なくとも 1 つのセグメンテーション志向のギャップを含むデータギャップリスト** — H1/H2/H3 を識別するために、具体的にどの追加データが必要かを列挙する。**少なくとも 1 項目はセグメンテーションギャップでなければならない**：コホート（登録月）、ティア（無料/有料）、ロール（管理者/ユーザー）、機能利用セグメント。漠然とした「もっとユーザーインタビューを」だけでは FAIL — *どのセグメント*にインタビューするのか、*具体的に何を*聞くのかを名指しする。
+
+### S1 クロージングフォーマット（Hard Gate）
+
+S1 のレスポンスは、オープンエンドの質問ではなく、番号付きの CTA メニューで締めくくる。以下の正確な形を使う：
+
+```
+What's next? Pick one:
+  1️⃣ Share the requested data so we can move to S2 (pain-point convergence with hypothesis testing)
+  2️⃣ Refine the hypothesis list before collecting data (suggest more H_n candidates)
+  3️⃣ Skip to S3 if you already have enough data to converge on a top hypothesis
+  4️⃣ Pause and resume later (progress will be saved to .product-playbook-progress.md)
+```
+
+「Any thoughts?」/「Let me know what you think」/「Share what you have」のように番号付きメニューを欠いた締めくくりは、この契約を FAIL する — ユーザーには次の一手の明確な手がかりが必要。
+
 ### ファストパス
 
-S1 でユーザーが十分なデータ（フィードバック、メトリクス、優先順位を含む）を提供した場合、S3 を複数回の確認ではなく 1 回の往復で生成可能です。トリガー条件：S2 で収集したペインポイントリストに既に明確な優先順位とデータの裏付けがある。ハードゲートルールは変更なし — 各ステップの出力は完全に提示する必要があり、確認のリズムのみが加速します。
+S1 でユーザーが十分なデータ（フィードバック、メトリクス、優先順位を含む）を提供した場合、S3 を複数回の確認ではなく 1 回の往復で生成可能です。トリガー条件：S2 で収集したペインポイントリストに既に明確な優先順位とデータの裏付けがある。Hard Gate ルールは変更なし — 各ステップの出力は完全に提示する必要があり、確認のリズムのみが加速します。
 
 ## Optional トリガールール
 

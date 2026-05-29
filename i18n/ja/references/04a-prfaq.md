@@ -5,26 +5,26 @@
 プロダクトのプレスリリースを書くことから始めます — 顧客のアウトカムから逆算して考えることを強制します：
 
 ```
-## [プロダクト名] プレスリリース
+## [Product Name] Press Release
 
-**見出し**：[ユーザーは何を達成できるか？一文で。]
-**サブ見出し**：[何の問題を、誰のために解決するか？]
+**Headline**: [What can the user achieve? One sentence.]
+**Subheadline**: [What problem does it solve, and for whom?]
 
-**冒頭段落（Aha Moment）**：
-[ユーザーがプロダクトのコア価値を体験する瞬間を描写 — 「すごい！」の瞬間]
+**Opening Paragraph (Aha Moment)**:
+[Describe the moment the user experiences the product's core value — the "Wow!" moment]
 
-**ペインポイントの説明**：
-[ユーザーが今日直面している問題は何か？現在のソリューションがなぜ十分でないか？]
+**Pain Point Description**:
+[What problem are users facing today? Why aren't current solutions good enough?]
 
-**ソリューションの説明**：
-[当社プロダクトはこの問題をどう解決するか？（体験を描写 — 機能リストではなく）]
+**Solution Description**:
+[How does our product solve this problem? (Describe the experience — don't list features)]
 
-**顧客の声**：
-"[ターゲットユーザーの本物の感情的反応を代表する引用]"
+**Customer Quote**:
+"[A quote from a target user that represents a genuine emotional reaction]"
 
-**FAQ（最も難しい質問）**：
-Q: [最も答えにくい質問]
-A: [正直な回答]
+**FAQ (The Hardest Questions)**:
+Q: [The hardest question to answer]
+A: [An honest answer]
 ```
 
 > 人々をワクワクさせるプレスリリースが書けないなら、プロダクトの方向性に欠陥があるかもしれません — 問題定義に戻ってください。
@@ -39,7 +39,7 @@ ClaudeはPR-FAQ出力後、各項目に✅または❌を付ける必要があ�
 - [ ] 顧客の声は実際の人が言いそうな言葉か？
 - [ ] FAQには既存ツールとの鋭い比較が含まれているか？
 
-**実行ルール（ハードゲート）：**
+**実行ルール（Hard Gate）：**
 - 少なくとも1つの「内部的な緊張感」または「改善余地のある領域」を特定する必要がある — すべて✅にして完了とすることはできない
 - すべての項目が合格した場合、追加で「このPR-FAQの最も脆弱な仮定は何か」を記述
 - AmazonのPR-FAQの品質基準は、問題を見つけることから来る、問題がないことを確認することからではない
@@ -62,6 +62,20 @@ ClaudeはPR-FAQ出力後、各項目に✅または❌を付ける必要があ�
 
 **公式**：ユーザーの体験 / 具体的なシナリオから始める → 次に「これが可能なのは[プロダクトの仕組み]のおかげ」で機能を紹介。
 
+**自己検証（送信前に必須）**：自分のソリューション段落の最初の文を声に出して読んでください。主語がプロダクト名や「システム」/「アプリ」/「ユーザーは〜できる」であれば、**書き直してください**。主語は、何かをしている、またはある瞬間を体験している具体的なアクター（名前のある人物、役割、またはユーザーを指す代名詞）でなければなりません。
+
+---
+
+### 📍 リード / 冒頭段落の要件
+
+冒頭段落（Aha Moment）には、以下の3つすべてが含まれていなければなりません：
+
+1. **名前または役割が特定されたアクター**（「アレックス」「陳シェフ」「30席のビストロのキッチンマネージャー」）— 決して漠然とした「ユーザー」ではなく。
+2. **具体的な時間 / 場所 / きっかけ**（「金曜の午後」「ランチのピークが終わった後」「週末の前」）。
+3. **少なくとも2つの具体的な数字** — 数量、所要時間、金額、パーセンテージ。「30秒以内」「3つの融資シナリオにわたって」「月額2,400ドル」「20分の仕込み時間」。曖昧な数字（「数分」「いくつかの選択肢」）はこの要件をFAILします。
+
+アクターとシナリオはあるが具体的な数字がないリードは、マーケティングコピーのように読めます — プレスリリースは具体的なアウトカムを可視化するものであり、願望を語るものではありません。
+
 ---
 
 ### ❓ FAQ鋭い質問の基準
@@ -76,36 +90,59 @@ ClaudeはPR-FAQ出力後、各項目に✅または❌を付ける必要があ�
 ✅ 正しい回答パターン：
 > 「Excelは確かに数値管理ができますし、シェフたちも使い方を知っています。問題は、毎週末に計算をやり直す必要があることです — 再入力、再変換 — その1時間は誰かがスプレッドシートが苦手だからではなく、問題が本当に複雑だからです。MealPrepはExcelのスキルを節約するのではなく、毎回ゼロからやり直す精神的負担を節約するのです。」
 
+---
+
+### 🧪 内部FAQの要件
+
+外部FAQ（顧客向け）とは別に、少なくとも以下を含む**内部FAQ**セクションを作成します：
+
+**Q: このPR-FAQの最もリスクの高い仮定は何か？それが偽なら、何がプロダクトを殺すか？**
+A: 1つの具体的な仮定を挙げる（リストではなく）。よく練られた回答の例：
+- 「キッチンマネージャーが自動生成された発注書を手動検証なしで信頼すると仮定している。もし信頼しないなら（過去の在庫エラーで損をした経験から）、彼らは全項目をダブルチェックし、当社の『1時間節約』という価値提案は『5分節約』に崩壊する。」
+- 「物件写真には面積を確実に抽出できる十分な解像度があると仮定している。画像ベースのOCRが20%以上の物件で失敗するなら、コアとなる『撮るだけ』の体験は破綻する。」
+
+**Q: この仮定を無効化できる最小の実験は何か？**
+A: 具体的なローンチ前のテスト — N人のユーザーにインタビューする、コンバージョン目標Xでランディングページをスモークテストする、2週間の社内パイロットを実施する、など。**漠然とした「エンゲージメントを追跡する」や「リテンションを観察する」はこの要件をFAILします** — それらはローンチ後の成功を測るものであり、コミットメント前の無効化を測るものではありません。
+
+内部FAQは顧客のためのものではありません。チームが構築する前に、何がプロダクトを殺しうるかを自ら名指しすることを強制するために存在します。
+
+---
+
 **例（架空のプロダクト — 住宅ローン計算アプリ）：**
 
 ```
-## MortgageSnapで初めてのマイホーム購入者が3分で手が届く額を把握
+## MortgageSnap Helps First-Time Buyers Understand What They Can Afford in 3 Minutes
 
-**サブ見出し**：銀行に行かなくても、見積り待ちも不要 — 深夜でもパートナーと一緒に月々の支払額を確認
+**Subheadline**: No bank visits, no waiting for rate quotes — figure out your monthly payments with your partner, even at midnight
 
-**冒頭段落（Aha Moment）**：
-深夜にZillowをスクロールしていたアレックスは、気に入った家を見つけたが、
-本当に買えるのか見当もつかない。MortgageSnapを開いて物件ページのスクリーンショットを撮ると、
-アプリが自動的に価格と面積を抽出。30秒以内に3つのローンシナリオの月々支払額が表示される。
-妻に結果を共有し、初めて二人で同じ数字を見ながら話し合うことができた。
+**Opening Paragraph (Aha Moment)**:
+After scrolling through Zillow late at night, Alex spots a house he loves but has no idea if he can
+actually afford it. He opens MortgageSnap, screenshots the listing page, and the app automatically
+extracts the price and square footage. Within 30 seconds, it shows monthly payments across three
+loan scenarios. He shares the results with his wife, and for the first time, they're looking at the
+same numbers together.
 
-**ペインポイントの説明**：
-住宅ローンの選択肢を比較する初めてのマイホーム購入者は、複数の銀行のウェブサイトで
-手動で条件を入力し、回答を待つ必要がある。深夜に計算したい時に便利なツールがなく、
-結局Excelで無理やり計算するか、あきらめてしまう。
+**Pain Point Description**:
+First-time homebuyers comparing mortgage options have to manually enter terms across multiple bank
+websites and wait for responses. When you want to run the numbers late at night, there's no
+convenient tool — so people end up hacking together an Excel sheet or just giving up.
 
-**ソリューションの説明**：
-MortgageSnapなら物件情報をスキャンするだけで主要データを自動抽出し、
-各金融機関のオプションを即座に比較、共有可能なレポートを生成して
-家族で一緒に検討できます。
+**Solution Description**:
+Now, Alex spends 3 minutes instead of 3 evenings to know what's actually affordable. He snaps a
+listing on his phone, sees monthly payments across three lender scenarios appear within 30 seconds,
+and shares a single screen with his wife — so the conversation moves from "I think we can afford it"
+to "here are the three numbers we should talk about." This works because MortgageSnap automatically
+extracts price and square footage from the listing image, then pulls live rate offers from partnered
+lenders.
 
-**顧客の声**：
-"深夜に銀行からの折り返しを待つ必要がなくなりました。3分で妻に
-月々いくら払うことになるか正確に伝えられます。"
+**Customer Quote**:
+"I finally don't have to wait for the bank to call back at midnight. Three minutes and I can tell
+my wife exactly how much we'd pay each month."
 
-**FAQ**：
-Q: 住宅ローン計算機はすでにたくさんある — 何が違うのか？
-A: 既存の計算機は金利、ローン期間、その他のパラメータの入力を求めますが、
-初めてのマイホーム購入者はそれらの数字すら知りません。MortgageSnapの違いは、
-各金融機関の実際のオファーを自動的に取得すること — 必要なのは価格と頭金だけです。
+**FAQ**:
+Q: There are already tons of mortgage calculators out there — what's different?
+A: Existing calculators require you to input interest rates, loan terms, and other parameters, but
+most first-time buyers don't even know those numbers. MortgageSnap's difference is that it
+automatically pulls in real offers from various lenders — all you need to provide is the price and
+your down payment.
 ```
