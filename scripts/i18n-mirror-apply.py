@@ -21,7 +21,8 @@ Why whole-file reconciliation instead of section surgery:
 Safety:
   - Default dry-run. --apply required to write.
   - --max N cap (default 3) bounds blast radius per invocation.
-  - Subprocess timeout 600s per file.
+  - Subprocess timeout from _config.CLAUDE_TIMEOUT_SECONDS (default 600s,
+    overridable via PRODUCT_PLAYBOOK_CLAUDE_TIMEOUT_SECONDS env var).
   - Token cap: skips files where source+target > MAX_INPUT_CHARS (~24KB)
     to avoid silently truncating long files.
   - Uses subscription token from active claude session (no API billing).
@@ -51,14 +52,17 @@ LANG_NAME = {
     "es": "Spanish (Español)",
 }
 
-CANONICAL_VOCAB = [
-    "fear", "anxiety", "shame", "worry", "dread",
-    "self-doubt", "sense of loss", "threat to identity",
-    "embarrassment", "guilt",
-]
-
-MAX_INPUT_CHARS = 36_000
-CLAUDE_TIMEOUT_SECONDS = 600
+# K1: centralised tunables
+try:
+    from _config import CANONICAL_VOCAB, MAX_INPUT_CHARS, CLAUDE_TIMEOUT_SECONDS
+except ImportError:
+    CANONICAL_VOCAB = [
+        "fear", "anxiety", "shame", "worry", "dread",
+        "self-doubt", "sense of loss", "threat to identity",
+        "embarrassment", "guilt",
+    ]
+    MAX_INPUT_CHARS = 36_000
+    CLAUDE_TIMEOUT_SECONDS = 600
 
 MISSING_PROMPT_TEMPLATE = """You are a faithful translator creating an i18n mirror of a product-playbook PM-skill reference file. The English source is the source of truth; no {lang_name} translation exists yet.
 
@@ -292,7 +296,8 @@ def process_cluster(cluster: dict, root: Path, apply: bool, log_lines: list[str]
     try:
         raw = call_claude(prompt)
     except subprocess.TimeoutExpired:
-        return {"cluster": cluster, "status": "timeout", "reason": "claude -p exceeded 600s"}
+        return {"cluster": cluster, "status": "timeout",
+                "reason": f"claude -p exceeded {CLAUDE_TIMEOUT_SECONDS}s"}
     except RuntimeError as e:
         return {"cluster": cluster, "status": "error", "reason": str(e)}
 
@@ -337,6 +342,10 @@ def main() -> int:
     ap.add_argument("--include-warnings", action="store_true",
                     help="Process warning-level clusters too (default: critical only)")
     args = ap.parse_args()
+
+    if args.max < 0:
+        print(f"❌ --max must be >= 0 (got {args.max}).", file=sys.stderr)
+        return 2
 
     root = args.root.resolve()
     print(f"loading drift report...", file=sys.stderr)

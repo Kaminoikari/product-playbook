@@ -41,7 +41,10 @@ import sys
 from datetime import date
 from pathlib import Path
 
-SEVERITY_WEIGHTS = {"critical": 15, "warning": 5, "info": 1}
+try:
+    from _config import SEVERITY_WEIGHTS  # K1: centralised
+except ImportError:
+    SEVERITY_WEIGHTS = {"critical": 15, "warning": 5, "info": 1}
 SEVERITY_EMOJI = {"critical": "🔴", "warning": "🟡", "info": "🔵"}
 SEVERITY_ORDER = {"info": 0, "warning": 1, "critical": 2}
 
@@ -161,6 +164,15 @@ def render_markdown(report: dict, before_path: str, after_path: str) -> str:
     lines = [
         f"# Eval Lift Report — {report['generated']}",
         "",
+    ]
+    if s.get("paired_only"):
+        lines += [
+            "> **Mode: `--paired-only`** — added/removed expectations stripped. "
+            "`net_lift` below reflects only paired (before ∩ after) movement, "
+            "so it is immune to set-evolution phantom lift.",
+            "",
+        ]
+    lines += [
         f"- **Before**: `{before_path}` (score **{s['before_score']}**, band `{s['before_band']}`)",
         f"- **After**:  `{after_path}` (score **{s['after_score']}**, band `{s['after_band']}`)",
         f"- **Score Δ**: {s['before_score']} {score_arrow} {s['after_score']} (**{s['score_delta']:+d}**)",
@@ -404,6 +416,10 @@ def main() -> int:
                     help="Emit JSON to stdout instead of markdown to file")
     ap.add_argument("--force", action="store_true",
                     help="Skip eval-freshness check on --after (eval older than authored files)")
+    ap.add_argument("--paired-only", action="store_true",
+                    help="K4: drop added/removed expectations from the report — only paired "
+                         "(present-in-both) deltas count. Use when you suspect the eval set "
+                         "moved and want a set-evolution-immune hard delta.")
     args = ap.parse_args()
 
     if not args.before.is_file():
@@ -424,6 +440,15 @@ def main() -> int:
     before = load(args.before)
     after = load(args.after)
     report = compute(before, after)
+
+    # K4: paired-only mode — strip added/removed expectations and recompute
+    # summary so the net_lift number is set-evolution immune.
+    if args.paired_only:
+        report["added"] = []
+        report["removed"] = []
+        report["summary"]["added"] = 0
+        report["summary"]["removed"] = 0
+        report["summary"]["paired_only"] = True
 
     if args.json:
         json.dump(report, sys.stdout, indent=2, ensure_ascii=False, default=str)

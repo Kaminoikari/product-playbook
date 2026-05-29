@@ -34,11 +34,16 @@ from pathlib import Path
 
 LANGS = ["zh-TW", "zh-CN", "ja", "ko", "es"]
 
-VOCAB = [
-    "fear", "anxiety", "shame", "worry", "dread",
-    "self-doubt", "sense of loss", "threat to identity",
-    "embarrassment", "guilt",
-]
+# K1 follow-up: share canonical vocab with mirror-apply so the two cannot
+# drift. Fallback list mirrors the values in _config for self-contained use.
+try:
+    from _config import CANONICAL_VOCAB as VOCAB
+except ImportError:
+    VOCAB = [
+        "fear", "anxiety", "shame", "worry", "dread",
+        "self-doubt", "sense of loss", "threat to identity",
+        "embarrassment", "guilt",
+    ]
 
 COUNT_SIGNALS = {
     "Hard Gate mentions": lambda s: len(re.findall(r"Hard Gate", s)),

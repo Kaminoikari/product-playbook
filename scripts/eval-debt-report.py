@@ -29,7 +29,10 @@ from datetime import date
 from pathlib import Path
 
 
-SEVERITY_WEIGHT = {"critical": 15, "warning": 5, "info": 1}
+try:
+    from _config import SEVERITY_WEIGHTS as SEVERITY_WEIGHT  # K1: centralised
+except ImportError:
+    SEVERITY_WEIGHT = {"critical": 15, "warning": 5, "info": 1}
 SEVERITY_EMOJI = {"critical": "🔴", "warning": "🟡", "info": "🔵"}
 
 # Judge "reasons" beginning with these prefixes indicate the test harness

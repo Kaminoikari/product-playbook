@@ -196,11 +196,21 @@ def main() -> int:
                     help="Forward --one-at-a-time to patch-proposer; the tick "
                          "applies at most ONE patch regardless of --max-patches "
                          "(for precise L2 regression attribution)")
+    ap.add_argument("--multi-file", action="store_true",
+                    help="Forward --multi-file to patch-proposer; each failing "
+                         "expectation is patched across ALL primary files (not "
+                         "just primary[0]). Useful when the eval behavior is "
+                         "split across multiple files. Costs N× LLM calls.")
     ap.add_argument("--history", type=Path, default=DEFAULT_HISTORY,
                     help="Loop history JSONL path (default docs/loop-history.jsonl)")
     ap.add_argument("--force", action="store_true",
                     help="Skip eval-freshness check (eval older than authored files)")
     args = ap.parse_args()
+
+    if args.max_patches < 0:
+        print(f"❌ --max-patches must be >= 0 (got {args.max_patches}).",
+              file=sys.stderr)
+        return 1
 
     if not args.eval_results.is_file():
         print(f"❌ --eval-results not found: {args.eval_results}", file=sys.stderr)
@@ -266,6 +276,8 @@ def main() -> int:
         patch_cmd.append("--apply")
     if args.one_at_a_time:
         patch_cmd.append("--one-at-a-time")
+    if args.multi_file:
+        patch_cmd.append("--multi-file")
     if args.force:
         patch_cmd.append("--force")
     patch_rc, patch_out, _, patch_dt = run_cmd(patch_cmd, "Stage 2: patch-proposer (LLM)")

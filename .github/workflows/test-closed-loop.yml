@@ -18,12 +18,20 @@ on:
     paths:
       - 'scripts/**'
       - 'tests/**'
+      - 'package.json'
+      - 'install.sh'
+      - 'SKILL.md'
+      - '.claude-plugin/**'
       - '.github/workflows/test-closed-loop.yml'
   push:
     branches: [main]
     paths:
       - 'scripts/**'
       - 'tests/**'
+      - 'package.json'
+      - 'install.sh'
+      - 'SKILL.md'
+      - '.claude-plugin/**'
   workflow_dispatch:
 
 permissions:
@@ -38,5 +46,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Run unittest suite
-        run: python3 -m unittest tests/test_closed_loop.py -v
+      - name: Run unittest suite (closed-loop + install smoke)
+        run: python3 -m unittest discover tests -v

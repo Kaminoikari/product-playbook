@@ -352,5 +352,209 @@ class TestN5NoOpPatchDetection(unittest.TestCase):
         self.assertIn("delta_hg", src)
 
 
+class TestJudgeNoneGuard(unittest.TestCase):
+    """Post-K9 fix: judge() must not crash on records missing before_summary.score.
+
+    Previously the regression branch had a None guard (line 110) but the
+    "improving" fallback dereferenced score_now/score_prev unconditionally —
+    `(None - None)` TypeError on the format string. Real loop-tick.py always
+    writes before_summary, but hand-edited or pre-L5 history records can hit
+    this path. The fix returns insufficient-data instead of crashing.
+    """
+
+    def setUp(self):
+        self.m = _load("ls", "loop-summary.py")
+
+    def test_two_records_without_score_returns_insufficient_data(self):
+        h = [{"timestamp": "2026-05-28", "patch_log": "x"},
+             {"timestamp": "2026-05-29", "patch_log": "y"}]
+        v = self.m.judge(h)
+        self.assertEqual(v["status"], "insufficient-data")
+        self.assertIn("score", v["reason"].lower())
+
+    def test_mixed_missing_score_returns_insufficient_data(self):
+        # one record has score, the other doesn't — also must not crash
+        h = [{"before_summary": {"score": 70, "band": "needs",
+                                  "critical_failures": 2}},
+             {"timestamp": "2026-05-29"}]
+        v = self.m.judge(h)
+        self.assertEqual(v["status"], "insufficient-data")
+
+
+class TestSinceDateValidation(unittest.TestCase):
+    """Post-K9 fix: --since must reject malformed ISO dates with exit 2.
+
+    Previously --since used lexicographic string compare, so any non-ISO
+    input (e.g. typo `5-29-2026`) silently filtered to 0 ticks. Users would
+    see 'insufficient-data' and assume the loop hadn't ticked. Now the
+    invalid date is rejected up-front.
+    """
+
+    def test_main_rejects_malformed_since(self):
+        import subprocess
+        result = subprocess.run(
+            ["python3", str(SCRIPTS / "loop-summary.py"),
+             "--since", "notadate", "--history", "/dev/null"],
+            capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("not a valid ISO date", result.stderr)
+
+    def test_main_accepts_valid_since(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as td:
+            empty = Path(td) / "h.jsonl"
+            empty.write_text("")
+            out = Path(td) / "summary.md"
+            result = subprocess.run(
+                ["python3", str(SCRIPTS / "loop-summary.py"),
+                 "--since", "2026-01-01", "--history", str(empty),
+                 "--output", str(out)],
+                capture_output=True, text=True)
+            self.assertEqual(result.returncode, 2,
+                              "empty history → insufficient-data → exit 2")
+            self.assertNotIn("not a valid ISO date", result.stderr)
+
+
+class TestPruneKeepLastValidation(unittest.TestCase):
+    """Post-K9 fix: loop-history-prune --keep-last must reject 0 and negatives.
+
+    Python negative-slice quirk: lines[-0:] == lines[0:] (all records), and
+    lines[-(-3):] == lines[3:] (first-half drop). Both are footguns. The
+    fix rejects --keep-last < 1 with a clear message.
+    """
+
+    def test_keep_last_zero_rejected(self):
+        import subprocess
+        with tempfile.NamedTemporaryFile(suffix=".jsonl", mode="w", delete=False) as f:
+            f.write('{"timestamp":"2026-05-29","score":70}\n')
+            hpath = f.name
+        try:
+            result = subprocess.run(
+                ["python3", str(SCRIPTS / "loop-history-prune.py"),
+                 "--history", hpath, "--keep-last", "0"],
+                capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("--keep-last", result.stderr)
+        finally:
+            os.unlink(hpath)
+
+    def test_keep_last_negative_rejected(self):
+        import subprocess
+        with tempfile.NamedTemporaryFile(suffix=".jsonl", mode="w", delete=False) as f:
+            f.write('{"timestamp":"2026-05-29","score":70}\n')
+            hpath = f.name
+        try:
+            result = subprocess.run(
+                ["python3", str(SCRIPTS / "loop-history-prune.py"),
+                 "--history", hpath, "--keep-last", "-3"],
+                capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("footgun", result.stderr.lower())
+        finally:
+            os.unlink(hpath)
+
+    def test_keep_last_one_accepted(self):
+        import subprocess
+        with tempfile.NamedTemporaryFile(suffix=".jsonl", mode="w", delete=False) as f:
+            for i in range(5):
+                f.write(f'{{"timestamp":"2026-05-2{i}","score":{60+i}}}\n')
+            hpath = f.name
+        try:
+            result = subprocess.run(
+                ["python3", str(SCRIPTS / "loop-history-prune.py"),
+                 "--history", hpath, "--keep-last", "1"],
+                capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0)
+            # only the last record should survive
+            kept = Path(hpath).read_text().strip().splitlines()
+            self.assertEqual(len(kept), 1)
+            rec = json.loads(kept[0])
+            self.assertEqual(rec["score"], 64)
+        finally:
+            os.unlink(hpath)
+
+
+class TestNegativeMaxRejection(unittest.TestCase):
+    """Post-K9 fix: --max / --max-patches must reject negatives.
+
+    patch-proposer --max -1 produced 'deferring N+1' arithmetic in the
+    user-facing message; i18n-mirror-apply and loop-tick had the same shape.
+    All three now reject negatives up-front.
+    """
+
+    def test_patch_proposer_rejects_negative_max(self):
+        import subprocess
+        r = subprocess.run(["python3", str(SCRIPTS / "patch-proposer.py"),
+                            "--results", "/dev/null", "--max", "-1"],
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("--max must be >= 0", r.stderr)
+
+    def test_i18n_mirror_rejects_negative_max(self):
+        import subprocess
+        r = subprocess.run(["python3", str(SCRIPTS / "i18n-mirror-apply.py"),
+                            "--max", "-1"], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("--max must be >= 0", r.stderr)
+
+    def test_loop_tick_rejects_negative_max_patches(self):
+        import subprocess
+        r = subprocess.run(["python3", str(SCRIPTS / "loop-tick.py"),
+                            "--eval-results", "/dev/null",
+                            "--max-patches", "-1"],
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("--max-patches must be >= 0", r.stderr)
+
+
+class TestPairedOnlyBadge(unittest.TestCase):
+    """Post-K9 fix: --paired-only must surface a visible badge in markdown.
+
+    Previously only summary.paired_only=True was set in JSON; markdown
+    readers couldn't tell paired-only net_lift apart from default net_lift.
+    """
+
+    def setUp(self):
+        self.m = _load("lift", "eval-lift-report.py")
+
+    def test_badge_present_when_paired_only(self):
+        report = {
+            "generated": "2026-05-30",
+            "summary": {
+                "before_score": 70, "after_score": 75, "score_delta": 5,
+                "before_band": "needs", "after_band": "needs",
+                "paired": 1, "added": 0, "removed": 0,
+                "improved": 1, "regressed": 0, "unchanged_pass": 0,
+                "unchanged_fail": 0, "soft_moves": 0,
+                "lift_gain": 15, "lift_loss": 0, "net_lift": 15,
+                "soft_pass_gain": 0, "soft_pass_loss": 0,
+                "paired_only": True,
+            },
+            "improved": [], "regressed": [], "soft_moves": [],
+            "added": [], "removed": [],
+        }
+        md = self.m.render_markdown(report, "before.json", "after.json")
+        self.assertIn("--paired-only", md)
+        self.assertIn("set-evolution", md.lower())
+
+    def test_no_badge_when_default(self):
+        report = {
+            "generated": "2026-05-30",
+            "summary": {
+                "before_score": 70, "after_score": 75, "score_delta": 5,
+                "before_band": "needs", "after_band": "needs",
+                "paired": 1, "added": 0, "removed": 0,
+                "improved": 1, "regressed": 0, "unchanged_pass": 0,
+                "unchanged_fail": 0, "soft_moves": 0,
+                "lift_gain": 15, "lift_loss": 0, "net_lift": 15,
+                "soft_pass_gain": 0, "soft_pass_loss": 0,
+            },
+            "improved": [], "regressed": [], "soft_moves": [],
+            "added": [], "removed": [],
+        }
+        md = self.m.render_markdown(report, "before.json", "after.json")
+        self.assertNotIn("--paired-only", md)
+
+
 if __name__ == "__main__":
     unittest.main()

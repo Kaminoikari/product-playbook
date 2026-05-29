@@ -1,0 +1,16 @@
+# K8: weekly bump check for GitHub Actions versions used in our workflows.
+# Only watches actions/* — we don't have a package-lock or requirements.txt
+# to track (closed-loop scripts are stdlib-only by design).
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "ci"
+    commit-message:
+      prefix: "ci"
+      include: "scope"

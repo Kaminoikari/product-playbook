@@ -143,6 +143,18 @@ def judge(history: list[dict]) -> dict:
                 "latest_band": band_now,
             }
 
+    if score_now is None or score_prev is None:
+        return {
+            "status": "insufficient-data",
+            "icon": "⚪",
+            "reason": "Last 2 ticks lack `before_summary.score` — cannot judge "
+                      "trend. Likely a malformed or pre-L5 history record. "
+                      "Re-run a fresh tick before trusting this summary.",
+            "n_ticks": len(history),
+            "latest_score": score_now,
+            "latest_band": band_now,
+        }
+
     return {
         "status": "improving",
         "icon": "🟡",
@@ -216,6 +228,40 @@ def render_trajectory(history: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def aggregate_stage_durations(history: list[dict]) -> dict[str, dict]:
+    """K7: roll up per-tick stage_durations into averages + max.
+
+    Returns {stage_name: {"avg": float, "max": float, "n": int}}. Ticks
+    without a stage_durations dict (noop / pre-A4) are skipped silently.
+    """
+    buckets: dict[str, list[float]] = {}
+    for rec in history:
+        sd = rec.get("stage_durations") or {}
+        for stage, sec in sd.items():
+            if isinstance(sec, (int, float)):
+                buckets.setdefault(stage, []).append(float(sec))
+    out: dict[str, dict] = {}
+    for stage, vals in buckets.items():
+        out[stage] = {"avg": round(sum(vals) / len(vals), 2),
+                       "max": round(max(vals), 2),
+                       "n": len(vals)}
+    return out
+
+
+def render_stage_metrics(history: list[dict]) -> list[str]:
+    agg = aggregate_stage_durations(history)
+    if not agg:
+        return []
+    lines = ["", "## Harness self-metrics (K7)",
+             "",
+             "| Stage | avg (s) | max (s) | n ticks |",
+             "|-------|--------:|--------:|--------:|"]
+    for stage, m in sorted(agg.items()):
+        lines.append(f"| {stage} | {m['avg']} | {m['max']} | {m['n']} |")
+    lines.append("")
+    return lines
+
+
 def render_markdown(history: list[dict], verdict: dict) -> str:
     lines = [
         f"# Loop Trajectory Summary — {date.today().isoformat()}",
@@ -258,6 +304,7 @@ def render_markdown(history: list[dict], verdict: dict) -> str:
                 "",
             ]
 
+    lines += render_stage_metrics(history)
     return "\n".join(lines)
 
 
@@ -269,9 +316,27 @@ def main() -> int:
                     help="Markdown output path (default: docs/loop-summary-<date>.md)")
     ap.add_argument("--json", action="store_true",
                     help="Emit JSON verdict to stdout instead of markdown to file")
+    ap.add_argument("--since", type=str, default=None,
+                    help="K5: drop records older than this ISO date "
+                         "(YYYY-MM-DD). Lets you focus on a recent window "
+                         "without prune. Compared against the record's "
+                         "timestamp prefix.")
     args = ap.parse_args()
 
     history = load_history(args.history)
+    if args.since:
+        try:
+            date.fromisoformat(args.since)
+        except ValueError:
+            print(f"❌ --since {args.since!r} is not a valid ISO date "
+                  f"(expected YYYY-MM-DD).", file=sys.stderr)
+            return 2
+        before = len(history)
+        history = [r for r in history
+                   if (r.get("timestamp") or "")[:10] >= args.since]
+        if before != len(history):
+            print(f"K5: filtered {before} → {len(history)} ticks "
+                  f"(since={args.since})", file=sys.stderr)
     verdict = judge(history)
 
     if args.json:

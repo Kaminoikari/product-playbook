@@ -101,6 +101,13 @@ def main() -> int:
                     help="Report what would change, don't write")
     args = ap.parse_args()
 
+    if args.keep_last < 1:
+        print(f"❌ --keep-last must be >= 1 (got {args.keep_last}). "
+              f"Python's negative-slice semantics mean 0 silently keeps "
+              f"everything and negatives select from the front — both are "
+              f"footguns, so this is rejected up-front.", file=sys.stderr)
+        return 1
+
     if not args.history.is_file():
         print(f"❌ history file not found: {args.history}", file=sys.stderr)
         return 1

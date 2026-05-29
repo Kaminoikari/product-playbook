@@ -36,7 +36,8 @@ Why severity-weighted prioritization:
 Safety:
   - Default dry-run. --apply required to write.
   - --max N (default 3) caps how many reference files get touched per run.
-  - Subprocess timeout 600s per call.
+  - Subprocess timeout from _config.CLAUDE_TIMEOUT_SECONDS (default 600s,
+    overridable via PRODUCT_PLAYBOOK_CLAUDE_TIMEOUT_SECONDS env var).
   - Skips files where source + prompt context would exceed MAX_INPUT_CHARS.
   - Post-hoc check: rejects output that drops existing headings (over-write
     catastrophe) by counting `^#`/`^##`/`^###` before and after.
@@ -64,9 +65,18 @@ def _load_attribution() -> dict:
     return mod.EVAL_ATTRIBUTION
 
 
-SEVERITY_WEIGHT = {"critical": 15, "warning": 5, "info": 1}
+try:
+    from _config import SEVERITY_WEIGHTS as SEVERITY_WEIGHT  # K1
+except ImportError:
+    SEVERITY_WEIGHT = {"critical": 15, "warning": 5, "info": 1}
+# K1: import centralised tunables, but keep patch-proposer's larger
+# MAX_INPUT_CHARS (single-source-file mode tolerates more headroom than
+# mirror-apply's source+target mode)
+try:
+    from _config import CLAUDE_TIMEOUT_SECONDS  # noqa: F401
+except ImportError:
+    CLAUDE_TIMEOUT_SECONDS = 600
 MAX_INPUT_CHARS = 40_000
-CLAUDE_TIMEOUT_SECONDS = 600
 
 PROMPT_TEMPLATE = """You are extending a product-management skill's English source-of-truth reference file with a new Hard Gate block. Each Hard Gate is an enforcement-style addition that pushes the orchestrator to produce output satisfying a specific behavioral eval expectation that is currently failing.
 
@@ -111,8 +121,17 @@ def load_eval_results(path: Path) -> dict:
         return json.load(f)
 
 
-def group_failures_by_file(eval_data: dict, attribution: dict) -> dict[str, list[dict]]:
-    """Return {file_path: [failure_dict, ...]} for failing expectations only."""
+def group_failures_by_file(eval_data: dict, attribution: dict,
+                            multi_file: bool = False) -> dict[str, list[dict]]:
+    """Return {file_path: [failure_dict, ...]} for failing expectations only.
+
+    K6: when ``multi_file=True``, fan out each failing expectation across ALL
+    primary files (not just primary[0]). Trade-off: one failing eval with N
+    primary files becomes N patch attempts. Useful when you suspect the
+    expectation's behavior is split across multiple files and want the
+    proposer to try each — at the cost of more LLM calls. Default False
+    preserves the single-target behavior.
+    """
     failures: dict[str, list[dict]] = defaultdict(list)
     for b in eval_data.get("breakdown", []):
         if b.get("passed", True):
@@ -121,16 +140,17 @@ def group_failures_by_file(eval_data: dict, attribution: dict) -> dict[str, list
         primary = attr.get("primary", [])
         if not primary:
             continue
-        target = primary[0]
-        failures[target].append({
-            "eval_name": b["eval_name"],
-            "expectation_text": b.get("expectation_text", ""),
-            "severity": b.get("severity", "warning"),
-            "passes": b.get("passes", 0),
-            "runs": b.get("runs", 0),
-            "reasons": b.get("reasons", []),
-            "hint": attr.get("hint", ""),
-        })
+        targets = primary if multi_file else [primary[0]]
+        for target in targets:
+            failures[target].append({
+                "eval_name": b["eval_name"],
+                "expectation_text": b.get("expectation_text", ""),
+                "severity": b.get("severity", "warning"),
+                "passes": b.get("passes", 0),
+                "runs": b.get("runs", 0),
+                "reasons": b.get("reasons", []),
+                "hint": attr.get("hint", ""),
+            })
     return failures
 
 
@@ -367,7 +387,7 @@ def process_cluster(file_path: Path, failures: list[dict], root: Path,
             raw = call_claude(used_prompt)
         except subprocess.TimeoutExpired:
             return {"file": str(file_path), "status": "timeout",
-                    "reason": "claude -p exceeded 600s"}
+                    "reason": f"claude -p exceeded {CLAUDE_TIMEOUT_SECONDS}s"}
         except RuntimeError as e:
             return {"file": str(file_path), "status": "error", "reason": str(e)}
 
@@ -477,7 +497,16 @@ def main() -> int:
     ap.add_argument("--one-at-a-time", action="store_true",
                     help="Apply at most ONE patch this invocation regardless of --max; "
                          "designed for precise regression attribution (L2 cleanup)")
+    ap.add_argument("--multi-file", action="store_true",
+                    help="K6: fan out each failing eval across ALL its EVAL_ATTRIBUTION "
+                         "primary files (not just primary[0]). N× more patch attempts.")
     args = ap.parse_args()
+
+    if args.max < 0:
+        print(f"❌ --max must be >= 0 (got {args.max}). Negative caps "
+              f"produce wrong arithmetic in the deferred-count message.",
+              file=sys.stderr)
+        return 2
 
     root = args.root.resolve()
 
@@ -495,7 +524,11 @@ def main() -> int:
     eval_data = load_eval_results(args.results)
     attribution = _load_attribution()
 
-    grouped = group_failures_by_file(eval_data, attribution)
+    grouped = group_failures_by_file(eval_data, attribution,
+                                       multi_file=args.multi_file)
+    if args.multi_file:
+        print(f"K6: multi-file mode — failing evals fanned out across all primary files",
+              file=sys.stderr)
     sev_min = {"critical": 3, "warning": 2, "info": 1}[args.severity]
     sev_rank = {"critical": 3, "warning": 2, "info": 1}
 
