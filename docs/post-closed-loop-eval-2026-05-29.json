@@ -1,0 +1,1074 @@
+{
+  "kind": "behavioral",
+  "eval_file": "evals.json",
+  "runs_per_eval": 1,
+  "per_eval": [
+    {
+      "id": 1,
+      "name": "eval-mode-selection",
+      "pass": 2,
+      "total": 5
+    },
+    {
+      "id": 2,
+      "name": "eval-quick-mode-jtbd",
+      "pass": 9,
+      "total": 9
+    },
+    {
+      "id": 3,
+      "name": "eval-jtbd-depth",
+      "pass": 9,
+      "total": 9
+    },
+    {
+      "id": 4,
+      "name": "eval-prfaq-output",
+      "pass": 8,
+      "total": 8
+    },
+    {
+      "id": 5,
+      "name": "eval-revision-mode",
+      "pass": 8,
+      "total": 8
+    },
+    {
+      "id": 7,
+      "name": "eval-feature-extension",
+      "pass": 7,
+      "total": 7
+    },
+    {
+      "id": 6,
+      "name": "eval-quality-hardgate",
+      "pass": 5,
+      "total": 5
+    },
+    {
+      "id": 8,
+      "name": "eval-security-awareness",
+      "pass": 1,
+      "total": 6
+    },
+    {
+      "id": 9,
+      "name": "eval-context-bootstrap",
+      "pass": 4,
+      "total": 6
+    },
+    {
+      "id": 11,
+      "name": "eval-subagent-strategy-critic",
+      "pass": 5,
+      "total": 5
+    },
+    {
+      "id": 10,
+      "name": "eval-subagent-discovery",
+      "pass": 6,
+      "total": 6
+    },
+    {
+      "id": 12,
+      "name": "eval-subagent-premortem",
+      "pass": 5,
+      "total": 8
+    }
+  ],
+  "summary": {
+    "score": 0,
+    "band": "at-risk",
+    "critical_failures": 5,
+    "warning_failures": 6,
+    "info_failures": 2,
+    "total_expectations": 82,
+    "passed_expectations": 69
+  },
+  "breakdown": [
+    {
+      "eval_id": 1,
+      "eval_name": "eval-mode-selection",
+      "expectation_text": "Has not started executing any product framework analysis (no JTBD, Persona, PR-FAQ, etc. output produced)",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Response only presents mode options and asks questions; no JTBD/Persona/PR-FAQ analysis output is produced."
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "eval-mode-selection",
+      "expectation_text": "Responds in English",
+      "severity": "info",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "Response is entirely in Traditional Chinese (e.g. '你說的「不確定要做多深...」'), not English."
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "eval-mode-selection",
+      "expectation_text": "Response presents modes as a clear selection menu (numbered options or table) and lists at least the six modes Quick, Full, Revision, Custom, Build, and Feature Extension — missing any of these modes or inventing extras fails",
+      "severity": "critical",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "Only lists Quick and Full modes explicitly; the other four (Revision, Custom, Build, Feature Extension) are merely alluded to as '其餘四種模式', not listed."
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "eval-mode-selection",
+      "expectation_text": "This turn only asks about mode selection, does not simultaneously ask about product type or completeness level (three-step progressive rule)",
+      "severity": "warning",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "Simultaneously asks mode selection and target audience: '請回我兩件事:(1) 選哪個模式、(2) 目標對象是哪一種'."
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "eval-mode-selection",
+      "expectation_text": "Does not push a single mode as the answer before the user picks — a brief 'these two might suit you' note is fine, but a one-mode recommendation that closes the menu fails",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Recommends Quick Mode but keeps menu open and defers to user: '要不要先做完整版,決定權在你', presenting both options."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "Displays a progress indicator at the beginning of the response that shows all three Quick Mode steps (S1, S2, S3) with explicit status markers (e.g., 'S1 in progress', 'S2 pending', 'S3 pending') — a one-line text header that only mentions 'Quick Mode S1/S3' fails",
+      "severity": "info",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Header lists S1 (in progress), S2 (pending), S3 (pending) with explicit status markers ▶️/⬜, not just a one-line label."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "JTBD statements use the canonical 'When [situation], I want to [motivation], so [outcome]' template with all three clauses (When / I want to / so) present in each layer",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "All three layers (Functional/Emotional/Social) contain When… / I want to… / so… clauses in canonical form."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "Includes at least three JTBD types: Functional, Emotional, and Social",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Three layers table includes Functional, Emotional, and Social JTBD types."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "JTBD analysis includes concrete usage scenario descriptions (not abstract feature lists)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Statements describe concrete scenarios like 'When I finish reading and a key insight is still vivid' rather than abstract feature lists."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "After completing S1, asks the user for confirmation or feedback; does not automatically proceed to S2",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Ends with 'S1 complete and ready for your review. Does the core JTBD look right...' and offers next/refine commands without auto-proceeding."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "The post-S1 question is a meaningful question about JTBD decisions (not a generic 'Any thoughts?' but rather a confirmation about a specific Job or scenario)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Asks a specific JTBD-decision question: whether 'resurfacing, not capture volume, is the wedge'."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "Response contains no code creation, file creation, or development commands (Hard Gate compliance: development operations are prohibited during the planning flow)",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Response is pure planning prose; no code, file creation, or development commands present."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "Output stays scoped to S1 — no PR-FAQ press release, no External FAQ, no North Star Metric definition, and no other S2/S3 framework artifacts appear before the user confirms",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Only S1 JTBD content is produced; S2/S3 are merely listed as pending with no PR-FAQ or North Star artifacts."
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-quick-mode-jtbd",
+      "expectation_text": "Surfaces confidence or validation status for the JTBD claims (e.g., flags assumptions, marks unvalidated claims for user research, names a weakest-link assumption) rather than presenting them as established facts",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Quality Self-Check flags the emotional driver as 'desk-reasoned, zero user evidence' and lists open questions to validate before assumptions harden."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "Performs independent JTBD analysis for each of the two Personas: HR Specialist and Mid-level Manager",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Both Sophia (HR Specialist) and Marcus (Manager) receive independent three-layer JTBD analyses."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "Includes a complete Five Whys deep-dive with at least 3-5 progressively deeper 'why' questions",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Both personas have a full 5-step Five Whys deep-dive with progressively deeper questions."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "Quality self-review checklist marks each item as pass or fail (using checkmark or cross markers)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Checklist table marks each of 8 items with ✅ or ❌ markers."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "Clearly states which Persona to prioritize and provides specific reasoning",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Clearly designates Sophia as 主 Persona and Marcus as 次 with 降級理由 reasoning."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "The final question in the Five Whys (Q5) explicitly uses psychological or emotional vocabulary (e.g., fear, anxiety, shame, worry, dread, threat to professional identity) to describe the emotional root cause — not merely an implied-emotional functional statement (e.g., 'HR credibility is affected' is NOT sufficient; 'HR fears being held accountable during audits — that is a real fear' IS sufficient)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Q5 explicitly uses dread/shame and anxiety/self-doubt as felt emotional roots."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "B2B analysis includes organization-level Jobs (e.g., compliance auditing, cross-department approval workflows, cost control — needs beyond individual tasks)",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Includes org-level Strategic/Operational/Task Jobs table covering compliance and cross-department workflows."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "Quality self-review checklist contains at least 1 explicit cross/fail marker (warning markers do not count), and that failed item includes a specific improvement direction",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Items #7 and #8 carry ❌ markers each with specific 改善 improvement directions."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "Prioritization reasoning references B2B-specific dynamics (champion vs buyer, adoption multiplier, switching-trigger ownership, budget authority, or audit/compliance leverage) — not just 'they use it more often'",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Reasoning cites champion vs buyer, switching trigger ownership, and budget authority, not just frequency."
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "eval-jtbd-depth",
+      "expectation_text": "The two Personas' core jobs are substantively different in trigger, outcome, or stakes — they are not near-duplicates with role labels swapped",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Sophia's job (audit traceability/dread) differs substantively in trigger, outcome, and stakes from Marcus's (scheduling conflict/anxiety)."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "eval-prfaq-output",
+      "expectation_text": "PR-FAQ headline is written from the user benefit or experience perspective, not as a feature description",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Headline '讓小餐廳廚房經理在 12 分鐘內算好...並產出可直接下單的採購單' frames a user achievement/benefit, not a feature description."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "eval-prfaq-output",
+      "expectation_text": "Lead paragraph includes BOTH a concrete usage scenario (named time, place, or actor) AND at least 2 specific numeric figures (e.g., quantity, dollar amount, time duration) — one or the other alone fails",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Lead has actor/time/place (週五下午3點, 32座位bistro, 阿明) plus multiple figures (90分鐘, 38項, 12分鐘)."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "eval-prfaq-output",
+      "expectation_text": "The first sentence of the solution paragraph starts with user experience or a usage scenario, not with a system-feature verb (must not begin with 'PrepFlow lets you', 'The system will', 'Click to', or similar feature-first phrasing)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Solution opens '現在，阿明在週五收班後只需要 12 分鐘...' — starts with the actor's experience, not a system-feature verb."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "eval-prfaq-output",
+      "expectation_text": "External FAQ contains at least 1 pointed challenge comparing to existing tools (e.g., 'Why not just keep using Excel or spreadsheets?'), and the answer must explicitly acknowledge at least one specific advantage of the existing tool (e.g., 'Excel is flexible and kitchen staff are already familiar with it') — vague acknowledgments like 'if it works for you, keep using it' are insufficient",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Q1 challenges Excel directly and answer explicitly acknowledges specific advantages ('能算、也能存配方，而且廚師早就會用、不用重新學 —— 這是它的強項')."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "eval-prfaq-output",
+      "expectation_text": "User quote reads like a real kitchen worker speaking, not like an official press release",
+      "severity": "info",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Quote uses authentic colloquial voice ('算到懷疑人生', '半夜衝去全聯而崩潰'), not press-release tone."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "eval-prfaq-output",
+      "expectation_text": "Internal FAQ section is present and identifies a riskiest / weakest assumption with a concrete de-risking action — a generic 'we will track engagement' line fails",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Internal FAQ names riskiest assumption (predictable 來客數) with concrete pre-build experiment (collect 4 weekends actual vs prediction from 6-8 restaurants) and explicitly rejects 'track usage'."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "eval-prfaq-output",
+      "expectation_text": "PR-FAQ is internally consistent: numbers cited in the Lead match what the Solution promises, and the user quote's pain matches the Problem section. A contradiction between any two sections fails this check",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Core promise (12分鐘, 採購單) and quote pain (重算+少叫雞胸肉臨時補貨) match Problem/Solution; only a loose 90分鐘 vs '一小時' baseline approximation, not a hard contradiction."
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "eval-prfaq-output",
+      "expectation_text": "Quality self-review checklist contains at least 1 explicit cross/fail marker (warning markers do not count), and that failed item includes a specific improvement direction",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Checklist has an explicit ❌ (痛點來自真實使用者場景→Gap) with a specific Fix: 進入 S3 前至少訪談 5 位廚房經理回填數字."
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "eval-revision-mode",
+      "expectation_text": "Displays a Revision Mode progress indicator at the beginning of the response (including the step sequence)",
+      "severity": "info",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Opens with a Revision Mode progress bar showing S1/S6 and the full S1–S8 step sequence."
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "eval-revision-mode",
+      "expectation_text": "Clearly identifies this as an existing product revision scenario, not a 0-to-1 new product",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Explicitly frames it as 改版模式 for existing product TeamFlow with declining retention, not a new build."
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "eval-revision-mode",
+      "expectation_text": "Lists additional data or information that needs to be collected, including at least one segmentation-oriented gap (cohort / tier / role / feature-usage segment) — generic 'more interviews' alone fails",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Lists data gaps including segmentation: new-customer vs long-term cohort, buyer vs daily-user role, whole-company churn vs seat-level decline."
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "eval-revision-mode",
+      "expectation_text": "Uses the specific data provided in the prompt (MAU 2,800, retention drop from 85% to 72%) in the response",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Cites 'MAU：2,800' and '留存率：上季 85% → 本季 72%' explicitly."
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "eval-revision-mode",
+      "expectation_text": "Treats 'feature complexity' as a hypothesis to validate (H1), not as a confirmed root cause; surfaces at least one rival explanation (H2 / H3) — a response that uncritically accepts complexity as the answer fails",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "States 功能複雜度 is a symptom not necessarily the cause and offers rivals like onboarding fix or specific churn segment."
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "eval-revision-mode",
+      "expectation_text": "After S1, provides the user with clear action options (numbered menu or specific CTAs), not an open-ended question (e.g., must not end with just 'Any thoughts?')",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Ends with specific CTAs directing user to answer the numbered sections 1 (metrics) and 2 (feedback source), not an open-ended prompt."
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "eval-revision-mode",
+      "expectation_text": "Does not propose a specific revision or feature change at S1 — stays in problem-framing, not jumping to a solution like 'simplify the admin UI'",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Stays in problem-framing and explicitly warns against jumping to '做減法砍功能'; proposes no feature change."
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "eval-revision-mode",
+      "expectation_text": "Explains how Revision Mode differs from a 0-to-1 Discovery workflow (e.g., references re-validating existing JTBD, baseline metrics, .product-context.md, or segmented cohort analysis)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "References re-validating core JTBD, baseline metrics, segmented cohorts, and missing .product-context.md as the revision approach."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "eval-feature-extension",
+      "expectation_text": "Identifies this as a feature extension scenario (not Full Mode or Revision Mode) and activates the 4-step fast path",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Response activates '🔧 Feature Extension Mode' with the 4-step (S1-S4) fast path, distinct from Full/Revision Mode."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "eval-feature-extension",
+      "expectation_text": "Displays the feature extension progress indicator at the beginning of the response (S1/S4, not S1/S7 or S1/S12)",
+      "severity": "info",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Progress indicator at top shows 'Progress S1 / S4' with the four steps listed."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "eval-feature-extension",
+      "expectation_text": "Confirms or references the tech stack already provided by the user (Next.js + PostgreSQL + Redis) and the module list, without asking for re-description",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Table marks Tech stack ✅已知 'Next.js + PostgreSQL + Redis' and core modules as known, without asking re-description."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "eval-feature-extension",
+      "expectation_text": "Analyzes which existing modules the Wishlist feature would affect (mentions at least cart and catalog)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Module impact table analyzes auth, catalog, cart, checkout/payment, explicitly covering cart (寫入) and catalog (讀取)."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "eval-feature-extension",
+      "expectation_text": "Pauses after S1 completion AND makes an explicit commitment not to advance to S2 without confirmation (e.g., 'I will not proceed to S2 until you confirm') — trailing off without a stop commitment fails",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Pauses after S1 and states '確認上述後，我會進入 S2', conditioning advance on user confirmation rather than trailing off."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "eval-feature-extension",
+      "expectation_text": "Does not ask the user to provide JTBD, Persona, North Star, or other global product strategy elements unrelated to feature extension",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Confirmation questions cover product name/type, guest support, list structure, sharing, and data—none ask for JTBD/Persona/North Star."
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "eval-feature-extension",
+      "expectation_text": "Includes a quality self-check that identifies a specific weakness in the current S1 work (e.g., an assumption not yet validated, missing data on user behavior) — a 'looks good' rubber stamp fails",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Flags specific weaknesses: B2C marked 🟡假設, module impacts '初步推斷待確認', and item 4 missing user-feedback/data—not a rubber stamp."
+      ]
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "eval-quality-hardgate",
+      "expectation_text": "Quality self-review checklist uses explicit pass or fail markers for each item (no blank checkboxes allowed)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "All checklist items use explicit ✅ or ❌ markers; no blank checkboxes present."
+      ]
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "eval-quality-hardgate",
+      "expectation_text": "Quality self-review checklist contains at least 1 explicit cross/fail marker on a SUBSTANTIVE content gap (a cosmetic flag like 'formatting could be prettier' fails) — warning markers do not count",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Two ❌ markers flag substantive gaps: zero real-user evidence (confidence: low) and a possibly non-existent Social Job, not cosmetic issues."
+      ]
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "eval-quality-hardgate",
+      "expectation_text": "Failed items include a specific improvement explanation that references a downstream step or artifact dependent on the fix (e.g., 'this gap will block PR-FAQ writing because…') — a vague 'consider improving' fails",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Failed items include Impact referencing downstream S2 PR-FAQ/S3 North Star and concrete Fix steps (interview 5 users), tying gap to dependent artifacts."
+      ]
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "eval-quality-hardgate",
+      "expectation_text": "The final question in the Five Whys (Q5) uses explicit emotional vocabulary (e.g., fear, anxiety, shame, worry, dread, self-doubt, sense of loss) rather than merely describing functional consequences",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Q5 explicitly uses 焦慮 (anxiety)、自我懷疑 (self-doubt)、羞愧 (shame) — emotional vocabulary, not just functional consequences."
+      ]
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "eval-quality-hardgate",
+      "expectation_text": "All three JTBD layers (Functional, Emotional, Social) are present and each uses the canonical 'When [situation], I want to [motivation], so [outcome]' form",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "All three layers (Functional/Emotional/Social) present, each in canonical 當…我想要…以便… form."
+      ]
+    },
+    {
+      "eval_id": 8,
+      "eval_name": "eval-security-awareness",
+      "expectation_text": "Developer handoff package includes a security-related section covering at least 4 of: authentication/authorization, input validation, CORS, CSP, Rate Limiting — a generic mention of 2 items is too easy to satisfy and does not discriminate a thorough handoff",
+      "severity": "critical",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "Response refused to produce any handoff package, so no security section with 4+ items (auth, validation, CORS, CSP, rate limiting) exists."
+      ]
+    },
+    {
+      "eval_id": 8,
+      "eval_name": "eval-security-awareness",
+      "expectation_text": "TASKS.md or the task list includes security-related tasks (not just a vague description buried in the last phase)",
+      "severity": "critical",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "No TASKS.md or task list was produced at all; the response blocked delivery, so no security tasks are present."
+      ]
+    },
+    {
+      "eval_id": 8,
+      "eval_name": "eval-security-awareness",
+      "expectation_text": "Handoff includes an actual .gitignore file body (or explicit file content block) with concrete entries for .env, *.pem / *.key, and platform-specific credential files (e.g., serviceAccountKey.json, *.local) — a single sentence saying 'remember to gitignore .env' fails",
+      "severity": "warning",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "No .gitignore file body or content block with .env/*.pem/*.key entries appears; the response only declined to generate the package."
+      ]
+    },
+    {
+      "eval_id": 8,
+      "eval_name": "eval-security-awareness",
+      "expectation_text": "Raises security considerations specific to social platforms (at least 1 of: XSS protection, user-uploaded content filtering, real-time message encryption)",
+      "severity": "warning",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "No social-platform security considerations (XSS, UGC filtering, message encryption) are raised; only a refusal and planning options are given."
+      ]
+    },
+    {
+      "eval_id": 8,
+      "eval_name": "eval-security-awareness",
+      "expectation_text": "At least one security task lists concrete numeric or configuration values (e.g., password hashing parameters like argon2id memoryCost ≥ 19456, login rate limit 5/min/IP, specific CSP directives) — abstract 'add rate limiting' fails",
+      "severity": "warning",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "No security task with concrete numeric/config values exists since no tasks were produced."
+      ]
+    },
+    {
+      "eval_id": 8,
+      "eval_name": "eval-security-awareness",
+      "expectation_text": "No artifacts are promised in the handoff file tree but missing from the actual output (e.g., PRD.md or PRODUCT-SPEC.md listed in the tree but not produced)",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Response presents no handoff file tree and promises no artifacts, so nothing is promised-but-missing; it explicitly avoided generating outputs."
+      ]
+    },
+    {
+      "eval_id": 9,
+      "eval_name": "eval-context-bootstrap",
+      "expectation_text": "Identifies this as a feature extension scenario (adding a new feature to an existing product)",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Header explicitly states \"🔧 功能擴充模式\" (Feature Extension Mode) with S1 \"問題 + 既有系統上下文\", clearly framing it as adding a feature to an existing product."
+      ]
+    },
+    {
+      "eval_id": 9,
+      "eval_name": "eval-context-bootstrap",
+      "expectation_text": "Before feature planning, collects or confirms basic product information (product name TaskPro, product type B2B/B2C, one-line description, etc.) AND does NOT re-ask for information already supplied in the user's prompt (TaskPro name, tech stack)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Confirms TaskPro, product type (專案管理工具) and tech stack in a table marked ✅已知 and explicitly says \"你已提供的不必重答\", not re-asking supplied info."
+      ]
+    },
+    {
+      "eval_id": 9,
+      "eval_name": "eval-context-bootstrap",
+      "expectation_text": "Confirms or references the tech stack already provided by the user (React + Node.js + MongoDB) without asking for re-description",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Table row confirms \"React（前端）+ Node.js（後端）+ MongoDB（資料庫）\" as ✅已知 without asking for re-description."
+      ]
+    },
+    {
+      "eval_id": 9,
+      "eval_name": "eval-context-bootstrap",
+      "expectation_text": "Enters the 4-step feature extension flow (not the full 9–11 step Full Mode or 6–8 step Revision Mode)",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Progress bar shows S1/S4 with steps S1–S4, the 4-step feature extension flow, not Full or Revision Mode."
+      ]
+    },
+    {
+      "eval_id": 9,
+      "eval_name": "eval-context-bootstrap",
+      "expectation_text": "Mentions that product context will be saved for future use AND references the persistence file path (.product-context.md) — a single throwaway mention of either piece alone is insufficient",
+      "severity": "info",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "Only mentions not touching existing e-commerce context files; never states new product context will be saved nor references the .product-context.md path."
+      ]
+    },
+    {
+      "eval_id": 9,
+      "eval_name": "eval-context-bootstrap",
+      "expectation_text": "Bootstrap is sequenced as Step 0 BEFORE feature extension S1 (not interleaved with S1) — the response clearly shows Bootstrap → S1, not Bootstrap mid-S1",
+      "severity": "warning",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "No separate Step 0 Bootstrap precedes S1; the product-info confirmation table sits inside the \"## S1\" section, interleaving bootstrap with S1."
+      ]
+    },
+    {
+      "eval_id": 11,
+      "eval_name": "eval-subagent-strategy-critic",
+      "expectation_text": "The overall verdict is not 'strong' — the response clearly identifies this as a weak strategy or not yet a strategy",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Response opens '這還不是一個 strategy' and calls it 'bad strategy 的教科書範例', clearly not a strong verdict."
+      ]
+    },
+    {
+      "eval_id": 11,
+      "eval_name": "eval-subagent-strategy-critic",
+      "expectation_text": "The critique scores the diagnosis as missing or weak, explaining that the strategy names no central challenge (it states a goal and an aspiration instead)",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Explicitly flags '沒有 Diagnosis（診斷）— 最致命的缺口' and notes it states aspiration/goal not a challenge."
+      ]
+    },
+    {
+      "eval_id": 11,
+      "eval_name": "eval-subagent-strategy-critic",
+      "expectation_text": "Each critique points at a specific quoted sentence from the strategy and cites which principle is violated, rather than giving generic feedback",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Table quotes each sentence ('delight customers', 'leader in calendar tools', 'add more features faster') labeling them value/aspiration/tactic per Rumelt."
+      ]
+    },
+    {
+      "eval_id": 11,
+      "eval_name": "eval-subagent-strategy-critic",
+      "expectation_text": "At least one blind spot is surfaced (e.g. no explicit trade-offs, no competitive landscape, no invalidating assumption, or no one who would object)",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Surfaces blind spots: competing head-on with free preinstalled rivals and the untested assumption B2B decisions are driven by feature count."
+      ]
+    },
+    {
+      "eval_id": 11,
+      "eval_name": "eval-subagent-strategy-critic",
+      "expectation_text": "The response returns strengthening questions for the writer and does NOT rewrite the strategy on the user's behalf. The response must not contain replacement strategy text patterns ('Our mission should be...', 'A better strategy would be...', 'Here is a revised strategy:'). Partial rewrites also fail",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Returns three strengthening questions, says '先別急著潤飾文字', and offers to help without providing replacement strategy text."
+      ]
+    },
+    {
+      "eval_id": 10,
+      "eval_name": "eval-subagent-discovery",
+      "expectation_text": "JTBD analysis includes all three layers explicitly: functional, emotional, and social",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Primary job explicitly lists Functional, Emotional, and Social layers as separate labeled bullets."
+      ]
+    },
+    {
+      "eval_id": 10,
+      "eval_name": "eval-subagent-discovery",
+      "expectation_text": "Persona is built on motivations and context (goals, pain points, triggering events) rather than demographics alone",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Personas use Role, Context, Goals, Top pains, Trigger to act, and Decision criteria rather than demographics."
+      ]
+    },
+    {
+      "eval_id": 10,
+      "eval_name": "eval-subagent-discovery",
+      "expectation_text": "Because no user research was provided, low-evidence claims are explicitly flagged as low confidence / requiring validation, instead of being presented as established facts",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "States 'everything below is confidence: low / hypothesis-grade' and tags all pains as confidence: low requiring validation."
+      ]
+    },
+    {
+      "eval_id": 10,
+      "eval_name": "eval-subagent-discovery",
+      "expectation_text": "For this B2B product, the buyer persona and the daily-user persona are treated as separate roles",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Explicit Buyer ('Daniel') vs User ('Maya') split with separate roles, goals, and a note on why the split matters."
+      ]
+    },
+    {
+      "eval_id": 10,
+      "eval_name": "eval-subagent-discovery",
+      "expectation_text": "Output stays within Discovery scope — does NOT contain named Develop/Deliver/Strategy artifacts: no positioning statement template, no RICE table, no MVP scope list, no North Star Metric definition, no GTM plan",
+      "severity": "critical",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Only references downstream artifacts (Positioning, North Star, GTM) as impact; produces no positioning template, RICE table, MVP list, North Star definition, or GTM plan."
+      ]
+    },
+    {
+      "eval_id": 10,
+      "eval_name": "eval-subagent-discovery",
+      "expectation_text": "JTBD statements use the canonical 'When [situation], I want to [motivation], so I can [outcome]' format — three bullet points labeled functional/emotional/social without the canonical clause structure fails",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Functional and emotional jobs use full 'When..., I want to..., so I can...' structure; social bullet omits the 'When' clause but canonical format is clearly used overall."
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "eval-subagent-premortem",
+      "expectation_text": "Produces a substantial set of failure scenarios, targeting 15 or more, with at least 2 scenarios in each of the five categories",
+      "severity": "critical",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "Lists ~15 scenarios but market/demand (only F8) and team/execution (only F16) have just 1 each, and external/environment has none, failing the '2+ per category' rule."
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "eval-subagent-premortem",
+      "expectation_text": "Coverage spans all five failure categories: product/UX, market/demand, team/execution, operational/infrastructure, and external/environment",
+      "severity": "critical",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "Covers UX, demand (F8), team (F16), infra, but no genuine external/environment scenario (only GDPR mentioned within F6 security), so it does not span all five."
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "eval-subagent-premortem",
+      "expectation_text": "Each failure scenario has a leading indicator that would warn the team before the failure is irreversible — a concrete signal with a threshold and a detection timeframe, not a lagging metric",
+      "severity": "warning",
+      "passes": 0,
+      "runs": 1,
+      "passed": false,
+      "reasons": [
+        "Only the 4 experiments carry thresholds/timeframes; the 15 scenarios themselves lack per-scenario leading indicators with threshold and detection timeframe."
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "eval-subagent-premortem",
+      "expectation_text": "Identifies a top-3 priority set ranked by likelihood times impact, each with a concrete countermeasure to apply before launch",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Top 5 Kill Risks ranked by L×I (incl. top 3 F1/F2/F5 all High×Catastrophic), each with concrete pre-launch countermeasures via the experiment rules (managed transport, optimistic locking, PgBouncer)."
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "eval-subagent-premortem",
+      "expectation_text": "Failure scenarios are concrete narratives with a metric, timing, and causal mechanism — not abstract hedges such as 'adoption may be low'",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Scenarios are concrete with metrics/timing/mechanism, e.g. 'O(N²) ... 40人房間延遲飆到 3–8s' and '事故定位耗 9 小時', not abstract hedges."
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "eval-subagent-premortem",
+      "expectation_text": "Because this is Build Mode with a known stack (Next.js + PostgreSQL + Redis; modules: auth/scheduling/notifications), at least 3 failure scenarios are architecture-grounded — they cite specific components in the stack (e.g., 'WebSocket reconnect during PostgreSQL primary failover', 'Redis pub/sub backpressure under burst traffic') rather than stack-agnostic generic risks",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "F1 (Next.js serverless persistent connection), F3 (Redis pub/sub as source of truth/failover), F5 (shared PostgreSQL connection pool) clearly cite specific stack components."
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "eval-subagent-premortem",
+      "expectation_text": "Output includes at least 3 cheap pre-launch experiments to invalidate the highest-risk scenarios — each with a cost estimate (time or money) and a binary decision rule (e.g., 'if metric X < threshold Y → stop and redesign')",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Four experiments (Transport spike 2–3天, Concurrency 1–2天, Load 2–3天, Async灰度 1–2週) each have cost and binary Go/No-go decision rules."
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "eval-subagent-premortem",
+      "expectation_text": "Framed as 'the product has shipped and failed — what happened?' with past-tense failure narratives describing what went wrong — a risk-list voice ('risks may occur', 'users might churn') fails this framing check",
+      "severity": "warning",
+      "passes": 1,
+      "runs": 1,
+      "passed": true,
+      "reasons": [
+        "Explicitly framed '假設這功能上線 6–12 個月後已經失敗，反推為什麼' with failure-occurred narratives, not a 'risks may occur' voice."
+      ]
+    }
+  ]
+}

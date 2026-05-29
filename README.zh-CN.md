@@ -506,6 +506,55 @@ PR #9 review 之后的两个跟进修正：
 
 **已同步至 5 个 i18n 语系**（zh-TW、zh-CN、ja、es、ko）。
 
+### Iteration 8：Closed-Loop 自我修正 pipeline（v1.2.14）
+
+Stage 1（Sprint 1）让失败**可见**。Stage 2（手动）验证了模式：critical / warning 失败可以靠在对应 reference 加上 **Hard Gate 区块**（规则 + FAIL 范例 + ✅ 范例）然后镜像到 5 i18n 来翻过去。Iteration 8 把这个回圈端到端自动化并 ship 结果。
+
+**现在存在的 pipeline**（每一步都是 `scripts/` 下的 script，以 `npm run` 形式暴露）：
+
+```
+[手动 eval run]
+       ↓
+eval-results.behavioral.json
+       ↓
+scripts/eval-debt-report.py        ← 失败 → 文件归属（无 LLM）
+       ↓ 每个文件的修补 backlog
+scripts/patch-proposer.py          ← LLM 提案 Hard Gate diff（预设 dry-run）
+       ↓ EN diff 等人工 review
+references/*.md 由人类审查后套用 diff
+       ↓
+scripts/i18n-mirror-apply.py       ← LLM 把 EN 变动传到 5 语（预设 dry-run）
+       ↓ 5 语 diff
+i18n/*/references/*.md 由 --apply 写回
+       ↓
+scripts/i18n-drift-report.py       ← 确定性 detector（无 LLM）验证同步
+       ↓ exit 0 = 干净
+[手动 eval 重跑]
+       ↓
+scripts/eval-lift-report.py        ← per-expectation delta + 分数 vs 真实 lift 归因
+```
+
+两个用 LLM 的工具（`patch-proposer`、`i18n-mirror-apply`）预设都是 dry-run，搭配 `--max N` 爆炸半径上限与 `--apply` 写档闸门，确保每次写入都有人在回圈内。
+
+**CI 政策**同步调整：`eval-gate.yml` 改成 `workflow_dispatch` only（2026-05-28 的事件 —— auto-run on PR + push 在 Stage 2.3 smoke 测试时悄悄烧光维护者的 5 小时滚动 subscription 配额 —— 是触发点）。一个新的轻量 workflow `i18n-drift-check.yml` *依然*在 PR / push 动到 `references/` 或 `i18n/` 时 auto-fire，因为 detector 是确定性 Python 没有 API 呼叫 —— 通知模式，永不阻塞 merge。
+
+**Closed-loop 跑出来的数字**（本机 run，2026-05-29，`--runs 1`，完整 12 eval，分数 artifact [`docs/post-closed-loop-eval-2026-05-29.md`](./docs/post-closed-loop-eval-2026-05-29.md)，lift 归因 [`docs/eval-lift-closed-loop.md`](./docs/eval-lift-closed-loop.md)）：
+
+| Run | 覆盖 | Expectation 通过 | Critical | Warning | 汇总分数 |
+|---|---|---|---|---|---|
+| Sprint 1 baseline（2026-05-28） | 4 eval（局部） | 13 / 33（39 %） | 6 | 14 | 0 / `at-risk` |
+| **Closed-loop 之后（2026-05-29）** | **12 eval（完整）** | **69 / 82（84 %）** | **5** | **6** | **0 / `at-risk`** |
+
+两轮的汇总分数都压在 0（累积严重度扣分都超过 100 点预算），但底层的移动很剧烈。在跟 Sprint 1 baseline **共享的 4 个 eval**（apples-to-apples，31 paired expectation）：
+
+- **17 improved**（fail → pass），含 4 个 Stage 2 critical backlog：三层 JTBD、B2B buyer-vs-user 分离、Discovery scope 守备、B2B 组织层 Jobs
+- **2 regressed** —— 都在 `eval-subagent-premortem` 的 category coverage；`--runs 1` 的 LLM variance，`--runs 3` majority vote 预期会洗掉
+- **Net hard lift: +95 点**（gain +125、loss −30）
+
+新加入覆盖的 8 个 eval（51 个 expectation）补上可见度缺口；只剩 `eval-mode-selection`、`eval-security-awareness`、`eval-context-bootstrap`、`eval-subagent-premortem` 还挂着 5 个 critical。那些就是下一轮 `patch-proposer` 的目标。
+
+**5 个 i18n 语系同步。**
+
 ---
 
 ## 🧪 开发与评测

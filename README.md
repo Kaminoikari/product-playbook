@@ -504,6 +504,55 @@ Two follow-on fixes from PR #9 code review:
 
 **Mirrored to 5 i18n locales** (zh-TW, zh-CN, ja, es, ko).
 
+### Iteration 8: Closed-Loop Self-Correction Pipeline (v1.2.14)
+
+Stage 1 (Sprint 1) made failures *visible*. Stage 2 (manual) confirmed the pattern: critical / warning failures could be flipped by adding **Hard Gate blocks** (rule + FAIL examples + ✅ examples) to the relevant reference file, then mirroring to 5 i18n. Iteration 8 automates that loop end-to-end and ships the result.
+
+**The pipeline that now exists** (each step is a script under `scripts/` exposed as an `npm run` entrypoint):
+
+```
+[manual eval run]
+       ↓
+eval-results.behavioral.json
+       ↓
+scripts/eval-debt-report.py        ← failure → file attribution (no LLM)
+       ↓ per-file fix backlog
+scripts/patch-proposer.py          ← LLM proposes Hard Gate diff (dry-run default)
+       ↓ EN diff for human review
+references/*.md updated by hand-applied diff
+       ↓
+scripts/i18n-mirror-apply.py       ← LLM propagates EN change to 5 langs (dry-run default)
+       ↓ 5-language diffs
+i18n/*/references/*.md updated by --apply
+       ↓
+scripts/i18n-drift-report.py       ← deterministic detector (no LLM) verifies sync
+       ↓ exit 0 = clean
+[manual eval re-run]
+       ↓
+scripts/eval-lift-report.py        ← per-expectation delta + score-vs-real-lift attribution
+```
+
+Two LLM-using tools (`patch-proposer`, `i18n-mirror-apply`) are dry-run by default with `--max N` blast-radius caps and `--apply` gates so the human stays in the loop on every write.
+
+**CI policy** changed in tandem: `eval-gate.yml` is now `workflow_dispatch` only (the 2026-05-28 incident where auto-run on PR + push silently exhausted the maintainer's 5-hour subscription quota during Stage 2.3 smoke testing was the trigger). A new lightweight `i18n-drift-check.yml` *does* auto-fire on PR / push touching `references/` or `i18n/` because the detector is deterministic Python with no API calls — notification-only, never blocks merge.
+
+**Numbers from the post-closed-loop local run** (2026-05-29, `--runs 1`, full 12-eval suite, score artifact at [`docs/post-closed-loop-eval-2026-05-29.md`](./docs/post-closed-loop-eval-2026-05-29.md), lift attribution at [`docs/eval-lift-closed-loop.md`](./docs/eval-lift-closed-loop.md)):
+
+| Run | Coverage | Expectations Passing | Critical Failures | Warning Failures | Aggregate Score |
+|---|---|---|---|---|---|
+| Sprint 1 baseline (2026-05-28) | 4 evals (partial) | 13 / 33 (39 %) | 6 | 14 | 0 / `at-risk` |
+| **Post-closed-loop (2026-05-29)** | **12 evals (full)** | **69 / 82 (84 %)** | **5** | **6** | **0 / `at-risk`** |
+
+Aggregate score is capped at 0 in both runs (cumulative severity deductions exceed the 100-point budget), but the underlying movement is dramatic. On the **4 evals shared with the Sprint 1 baseline** (apples-to-apples, 31 paired expectations):
+
+- **17 improved** (fail → pass), including 4 of the Stage 2 critical backlog: 3-layer JTBD, B2B buyer-vs-user separation, Discovery-scope guardrails, B2B organization-level Jobs
+- **2 regressed** — both on `eval-subagent-premortem` category coverage; LLM variance on `--runs 1` that `--runs 3` majority vote is expected to wash out
+- **Net hard lift: +95 points** (gain +125, loss −30)
+
+The 8 evals added to coverage (51 new expectations) close the visibility gap; only `eval-mode-selection`, `eval-security-awareness`, `eval-context-bootstrap`, and `eval-subagent-premortem` still hold the 5 remaining critical failures. Those are the next round's `patch-proposer` targets.
+
+**Mirrored to 5 i18n locales.**
+
 ---
 
 ## 🧪 Development & Evals
@@ -512,7 +561,9 @@ The `evals/` directory ships two complementary test suites and a deterministic s
 
 **Local (free, recommended):** run the same scripts with the `claude` CLI authenticated via your Claude Pro/Max subscription (`claude login` once). No API key, no marginal cost. The eval system is designed to be run locally before each release.
 
-**CI (optional, no extra billing):** `.github/workflows/eval-gate.yml` will run both suites on every PR and on every push to `main` that changes `package.json`, then report the score to the workflow Job Summary. It **never blocks merge or publish** — the maintainer decides whether to act on regressions. CI runs on your Claude Pro/Max subscription (no API key, no per-token cost): one-time setup is `claude setup-token` locally, then add the printed token as repo secret `CLAUDE_CODE_OAUTH_TOKEN`. Without the secret, eval jobs **skip cleanly** (gray ⏭️) instead of failing red.
+**CI (manual trigger only, no extra billing):** `.github/workflows/eval-gate.yml` runs both suites on `workflow_dispatch` — Actions UI → "Eval Report" → "Run workflow", or `gh workflow run eval-gate.yml --ref <branch>`. Auto-trigger on PR / push was removed in Iteration 8 because each run consumes a 5-hour-rolling slice of subscription quota (see the 2026-05-28 incident in the Iteration 8 notes). It **never blocks merge or publish** — the maintainer decides whether to act on regressions. CI runs on your Claude Pro/Max subscription (no API key, no per-token cost): one-time setup is `claude setup-token` locally, then add the printed token as repo secret `CLAUDE_CODE_OAUTH_TOKEN`. Without the secret, eval jobs **skip cleanly** (gray ⏭️) instead of failing red.
+
+A separate lightweight workflow, `.github/workflows/i18n-drift-check.yml`, *does* auto-fire on every PR / push touching `references/` or `i18n/` because the underlying detector is deterministic Python with no API calls. It posts a Job Summary on every run and a PR comment only when critical drift is present. Notification-only, never blocks merge.
 
 ### Running locally
 
