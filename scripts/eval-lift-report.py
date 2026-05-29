@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -249,6 +250,74 @@ def render_markdown(report: dict, before_path: str, after_path: str) -> str:
                              f"{(r['item'].get('expectation_text') or '')[:120]}")
             lines.append("")
 
+    rescue = render_regression_rescue(report)
+    if rescue:
+        lines.append(rescue)
+
+    return "\n".join(lines)
+
+
+def render_regression_rescue(report: dict) -> str:
+    """L2: print actionable rescue info when the patch regressed the suite.
+
+    Triggers when net_lift < 0 OR there's any regression at critical severity.
+    Does NOT auto-revert — surfaces the recent authored-file commits and the
+    exact git commands so a human can decide.
+    """
+    has_critical_regression = any(
+        it["before"].get("severity") == "critical" or it["after"].get("severity") == "critical"
+        for it in report.get("regressed", [])
+    )
+    if report["summary"]["net_lift"] >= 0 and not has_critical_regression:
+        return ""
+
+    try:
+        log = subprocess.check_output(
+            ["git", "log", "--oneline", "-10", "--",
+             "references/", "SKILL.md", "agents/", "i18n/"],
+            text=True, stderr=subprocess.DEVNULL,
+        ).strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        log = "(could not read git log — not a git repo?)"
+
+    net = report["summary"]["net_lift"]
+    n_reg = len(report.get("regressed", []))
+    crit_reg = sum(1 for it in report.get("regressed", [])
+                   if it["after"].get("severity") == "critical")
+
+    lines = [
+        "## 🚨 Regression Rescue",
+        "",
+        f"**Net hard lift is {net:+d}** with **{n_reg} regressed expectation(s)** "
+        f"({crit_reg} critical). The most recent patch may have made things worse "
+        "than the baseline — inspect the regressed list above before deciding.",
+        "",
+        "**Recent commits touching authored files** (`references/`, `SKILL.md`, "
+        "`agents/`, `i18n/`):",
+        "",
+        "```",
+        log,
+        "```",
+        "",
+        "**If you decide to revert** (review carefully — do NOT auto-execute):",
+        "",
+        "```bash",
+        "# Inspect what the most recent authored-file commit changed:",
+        "git show HEAD -- references/ SKILL.md agents/ i18n/ | less",
+        "",
+        "# Revert that single commit (creates a new revert commit, preserves history):",
+        "git revert <SHA>",
+        "",
+        "# OR (rarely needed) discard the changes locally without a commit:",
+        "git checkout HEAD~1 -- references/ SKILL.md agents/ i18n/",
+        "```",
+        "",
+        "**Before committing a revert**, re-run the eval that produced the regression "
+        "to confirm the revert actually flips the failing expectations back to passing "
+        "— LLM variance on `--runs 1` can produce false-positive regressions that "
+        "majority vote (`--runs 3`) would wash out.",
+        "",
+    ]
     return "\n".join(lines)
 
 
@@ -286,6 +355,9 @@ def main() -> int:
         s = report["summary"]
         print(f"net hard lift: {s['net_lift']:+d}  (improved {s['improved']}, "
               f"regressed {s['regressed']}, soft moves {s['soft_moves']})", file=sys.stderr)
+        if s["net_lift"] < 0 or s["regressed"] > 0:
+            print(f"⚠️  Regression detected — see 'Regression Rescue' section at the "
+                  f"end of {out} for revert suggestions.", file=sys.stderr)
 
     return 0 if report["summary"]["net_lift"] >= 0 else 1
 

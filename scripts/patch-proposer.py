@@ -263,7 +263,14 @@ def process_cluster(file_path: Path, failures: list[dict], root: Path,
 
     return {"file": str(file_path), "status": status, "diff": diff,
             "warnings": warnings, "diff_lines": diff.count("\n"),
-            "n_failures_addressed": len(failures)}
+            "n_failures_addressed": len(failures),
+            "addressed": [{
+                "eval_name": f["eval_name"],
+                "expectation_text": f["expectation_text"],
+                "severity": f["severity"],
+                "before_passes": f["passes"],
+                "before_runs": f["runs"],
+            } for f in failures]}
 
 
 def main() -> int:
