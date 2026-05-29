@@ -329,8 +329,12 @@ def render_regression_rescue(report: dict) -> str:
     Does NOT auto-revert — surfaces the recent authored-file commits and the
     exact git commands so a human can decide.
     """
+    # O7: use ONLY `before` severity. `after` severity can change when the
+    # eval-set evolves between runs (an expectation renamed from warning to
+    # critical reads as a "critical regression" purely from set evolution,
+    # not behavior). The `before` view is the stable baseline.
     has_critical_regression = any(
-        it["before"].get("severity") == "critical" or it["after"].get("severity") == "critical"
+        it["before"].get("severity") == "critical"
         for it in report.get("regressed", [])
     )
     if report["summary"]["net_lift"] >= 0 and not has_critical_regression:
@@ -347,8 +351,9 @@ def render_regression_rescue(report: dict) -> str:
 
     net = report["summary"]["net_lift"]
     n_reg = len(report.get("regressed", []))
+    # O7: count via `before` severity, consistent with the trigger above
     crit_reg = sum(1 for it in report.get("regressed", [])
-                   if it["after"].get("severity") == "critical")
+                   if it["before"].get("severity") == "critical")
 
     lines = [
         "## 🚨 Regression Rescue",

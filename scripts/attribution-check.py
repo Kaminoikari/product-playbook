@@ -231,6 +231,10 @@ def render_markdown(report: dict) -> str:
                     "",
                 ]
 
+    suggestion = render_attribution_patch(report)
+    if suggestion:
+        lines += suggestion
+
     if report["untrackable"]:
         lines += [
             "## ⚪ Untrackable",
@@ -245,6 +249,50 @@ def render_markdown(report: dict) -> str:
         lines.append("")
 
     return "\n".join(lines)
+
+
+def render_attribution_patch(report: dict) -> list[str]:
+    """O3: synthesize a copy-pasteable EVAL_ATTRIBUTION edit for attribution gaps.
+
+    For every suspect where `patched_file_in_primary` is False, collect
+    (eval_name → set of patched_files NOT yet in primary). Render as a single
+    code block the user can read and adapt — not as a literal diff because
+    EVAL_ATTRIBUTION's Python literal formatting is hand-maintained.
+
+    Returns [] when no gap suspects exist (nothing to suggest).
+    """
+    gaps: dict[str, dict] = {}
+    for s in report["suspects"]:
+        if s["patched_file_in_primary"]:
+            continue
+        entry = gaps.setdefault(s["eval_name"], {
+            "current_primary": s["current_primary_attribution"],
+            "to_add": set(),
+        })
+        entry["to_add"].add(s["patched_file"])
+    if not gaps:
+        return []
+
+    block = ["", "## 🔧 Suggested `EVAL_ATTRIBUTION` Edits", "",
+             "The suspects above show **patched files that are NOT in the "
+             "current `primary` list**. Below is a copy-pasteable edit for "
+             "`scripts/eval-debt-report.py`'s `EVAL_ATTRIBUTION` mapping. "
+             "Apply only after confirming each suggestion matches the actual "
+             "orchestrator behavior (a wrong-target patch isn't always "
+             "evidence the mapping is wrong — sometimes the patch just "
+             "missed).", "",
+             "```python", "EVAL_ATTRIBUTION = {",
+             "    # ...existing entries unchanged...", ""]
+    for eval_name, entry in sorted(gaps.items()):
+        merged = sorted(set(entry["current_primary"]) | entry["to_add"])
+        added_only = sorted(entry["to_add"])
+        block.append(f"    {eval_name!r}: {{")
+        block.append(f"        # added by attribution-check: {added_only}")
+        block.append(f"        \"primary\": {merged!r},")
+        block.append(f"        # ...keep existing secondary + hint unchanged...")
+        block.append(f"    }},")
+    block += ["}", "```", ""]
+    return block
 
 
 def find_latest_patch_log(logs_dir: Path) -> Path | None:

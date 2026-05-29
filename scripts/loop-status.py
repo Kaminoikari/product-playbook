@@ -139,6 +139,8 @@ def main() -> int:
                     default=Path("evals/eval-results.behavioral.json"))
     ap.add_argument("--history", type=Path,
                     default=Path("docs/loop-history.jsonl"))
+    ap.add_argument("--json", action="store_true",
+                    help="Emit JSON to stdout instead of human box (for tooling)")
     args = ap.parse_args()
 
     eval_data = _read_eval(args.eval_results)
@@ -146,6 +148,23 @@ def main() -> int:
     history = _read_history(args.history)
     verdict = _verdict(history)
     last_tick = history[-1] if history else {}
+    next_action = _next_action(verdict, drift, eval_data)
+
+    if args.json:
+        payload = {
+            "eval": eval_data or None,
+            "i18n_drift": drift or None,
+            "last_tick": last_tick or None,
+            "verdict": verdict,
+            "next_action": next_action,
+        }
+        json.dump(payload, sys.stdout, indent=2, ensure_ascii=False, default=str)
+        print()
+        return {
+            "converged": 0, "improving": 0,
+            "stalled": 1, "regressing": 1,
+            "insufficient-data": 2,
+        }.get(verdict.get("status", ""), 2)
 
     print(f"┌─ closed-loop status ─────────────────────────────────────────")
     if eval_data:
@@ -178,7 +197,7 @@ def main() -> int:
           f"({verdict.get('reason', '')[:80]})")
     print(f"└──────────────────────────────────────────────────────────────")
     print()
-    print(f"Next: {_next_action(verdict, drift, eval_data)}")
+    print(f"Next: {next_action}")
 
     return {
         "converged": 0, "improving": 0,

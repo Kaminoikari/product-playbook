@@ -152,19 +152,36 @@ def build_failing_block(failures: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def call_claude(prompt: str) -> str:
-    result = subprocess.run(
-        ["claude", "-p", "--output-format", "text"],
-        input=prompt,
-        capture_output=True,
-        text=True,
-        timeout=CLAUDE_TIMEOUT_SECONDS,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"claude -p exited {result.returncode}\nstderr: {result.stderr[:500]}"
+def call_claude(prompt: str, *, max_attempts: int = 2) -> str:
+    """Invoke claude -p with one automatic retry on transient subprocess failure.
+
+    O5: transient claude -p failures (network blip, sandbox eviction, transient
+    rate limit) are common enough that aborting the whole batch on a single
+    failure is annoying. One retry with no backoff is enough to recover most
+    flake-class failures without burning meaningful extra budget.
+
+    Timeouts are still raised (not retried) — a 600s timeout is structural
+    (prompt too big / claude stuck) and a retry would just burn another 600s.
+    """
+    last_err: RuntimeError | None = None
+    for attempt in range(1, max_attempts + 1):
+        result = subprocess.run(
+            ["claude", "-p", "--output-format", "text"],
+            input=prompt,
+            capture_output=True,
+            text=True,
+            timeout=CLAUDE_TIMEOUT_SECONDS,
         )
-    return result.stdout
+        if result.returncode == 0:
+            return result.stdout
+        last_err = RuntimeError(
+            f"claude -p exited {result.returncode} (attempt {attempt}/{max_attempts})"
+            f"\nstderr: {result.stderr[:500]}"
+        )
+        if attempt < max_attempts:
+            print(f"  ⚠️  call_claude attempt {attempt} failed (rc={result.returncode}), "
+                  f"retrying...", file=sys.stderr)
+    raise last_err
 
 
 def extract_updated(raw: str) -> str:
@@ -337,33 +354,60 @@ def process_cluster(file_path: Path, failures: list[dict], root: Path,
         return {"file": str(file_path), "status": "skipped",
                 "reason": f"prompt too large ({total_chars} > {MAX_INPUT_CHARS} chars)"}
 
-    try:
-        raw = call_claude(prompt)
-    except subprocess.TimeoutExpired:
-        return {"file": str(file_path), "status": "timeout",
-                "reason": "claude -p exceeded 600s"}
-    except RuntimeError as e:
-        return {"file": str(file_path), "status": "error", "reason": str(e)}
+    # O1: when validate_hard_gate_structure rejects the first attempt, retry
+    # once with the failure reason embedded — gives the LLM one chance to fix
+    # the specific structural defect (missing FAIL or ✅) rather than giving up.
+    used_prompt = prompt
+    updated: str | None = None
+    structural_error: str | None = None
+    diff: str = ""
+    warnings: list[str] = []
+    for attempt in (1, 2):
+        try:
+            raw = call_claude(used_prompt)
+        except subprocess.TimeoutExpired:
+            return {"file": str(file_path), "status": "timeout",
+                    "reason": "claude -p exceeded 600s"}
+        except RuntimeError as e:
+            return {"file": str(file_path), "status": "error", "reason": str(e)}
 
-    try:
-        updated = extract_updated(raw)
-    except ValueError as e:
-        return {"file": str(file_path), "status": "parse-error", "reason": str(e)}
+        try:
+            updated = extract_updated(raw)
+        except ValueError as e:
+            return {"file": str(file_path), "status": "parse-error", "reason": str(e)}
 
-    warnings = post_hoc_validate(original, updated)
-    diff = render_diff(str(file_path), original, updated)
+        warnings = post_hoc_validate(original, updated)
+        diff = render_diff(str(file_path), original, updated)
 
-    if not diff.strip():
-        return {"file": str(file_path), "status": "no-change",
-                "reason": "LLM produced identical output (no patch proposed)"}
+        if not diff.strip():
+            return {"file": str(file_path), "status": "no-change",
+                    "reason": "LLM produced identical output (no patch proposed)"}
 
-    structural_error = validate_hard_gate_structure(original, updated)
-    if structural_error:
+        structural_error = validate_hard_gate_structure(original, updated)
+        if structural_error is None:
+            break  # passed structural validation — proceed to apply / dry-run
+
+        if attempt == 1:
+            print(f"  ⚠️  attempt 1 produced malformed Hard Gate "
+                  f"({structural_error[:80]}...) — retrying with sharpened prompt",
+                  file=sys.stderr)
+            used_prompt = prompt + (
+                f"\n\n<RETRY_REASON>\nYour previous output FAILED structural "
+                f"validation: {structural_error}\n\nFix the specific defect: if "
+                f"FAIL examples didn't increase, add at least one new concrete "
+                f"`FAIL` example next to the new Hard Gate. If ✅ PASS markers "
+                f"didn't increase, add at least one new concrete `✅ PASS` "
+                f"example. Re-emit the full updated reference file with the fix "
+                f"applied.\n</RETRY_REASON>\n"
+            )
+
+    if structural_error is not None:
         return {"file": str(file_path), "status": "malformed",
-                "reason": structural_error,
-                "diff": diff,  # surface the rejected diff so the human can iterate
+                "reason": f"structural validation failed after retry: {structural_error}",
+                "diff": diff,
                 "diff_lines": diff.count("\n"),
-                "warnings": warnings}
+                "warnings": warnings,
+                "retry_attempted": True}
 
     if apply:
         target.write_text(updated, encoding="utf-8")
@@ -400,6 +444,9 @@ def main() -> int:
                     help="Minimum severity to address (default: critical only)")
     ap.add_argument("--force", action="store_true",
                     help="Skip eval-freshness check (eval JSON older than authored files)")
+    ap.add_argument("--one-at-a-time", action="store_true",
+                    help="Apply at most ONE patch this invocation regardless of --max; "
+                         "designed for precise regression attribution (L2 cleanup)")
     args = ap.parse_args()
 
     root = args.root.resolve()
@@ -441,9 +488,14 @@ def main() -> int:
     for f, fs in ranked:
         print(f"  {f} — weight {cluster_weight(fs)}, {len(fs)} failure(s)", file=sys.stderr)
 
-    selected = ranked[: args.max]
-    if len(ranked) > args.max:
-        print(f"  (deferring {len(ranked) - args.max} — raise --max if intended)",
+    effective_cap = 1 if args.one_at_a_time else args.max
+    selected = ranked[:effective_cap]
+    if args.one_at_a_time and len(ranked) > 1:
+        print(f"  one-at-a-time mode: processing only the top-weighted cluster; "
+              f"{len(ranked) - 1} deferred to next invocation after re-eval",
+              file=sys.stderr)
+    elif len(ranked) > effective_cap:
+        print(f"  (deferring {len(ranked) - effective_cap} — raise --max if intended)",
               file=sys.stderr)
 
     prior_suspects = _load_prior_suspects()
