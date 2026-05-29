@@ -60,6 +60,25 @@ CANONICAL_VOCAB = [
 MAX_INPUT_CHARS = 36_000
 CLAUDE_TIMEOUT_SECONDS = 600
 
+MISSING_PROMPT_TEMPLATE = """You are a faithful translator creating an i18n mirror of a product-playbook PM-skill reference file. The English source is the source of truth; no {lang_name} translation exists yet.
+
+<SOURCE_FILE language="English" path="{source_path}">
+{source_content}
+</SOURCE_FILE>
+
+Your task: produce a complete {lang_name} translation that mirrors the SOURCE file exactly in structure (every heading, every list, every code block, every table) while reading naturally in {lang_name}.
+
+Rules:
+1. Mirror SOURCE's section structure, headers, code blocks, table layouts, and content depth. Same number of `##`/`###` headings, same number of code fences.
+2. Preserve these canonical English vocabulary tokens VERBATIM, with a parenthetical {lang_name} gloss on first introduction in each section: {canonical_vocab}
+3. Preserve these English KEYWORDS VERBATIM (do NOT translate them — they function as enforcement markers that downstream tooling greps for): `FAIL`, `Hard Gate`, `Bootstrap`.
+4. Preserve ALL code-fenced (```) block contents VERBATIM — no translation inside fences.
+5. Preserve markdown table structure (same number of rows and columns as source).
+6. Preserve any YAML frontmatter at the top of the file VERBATIM — those keys (`name:`, `description:`, etc.) are machine-read.
+7. Output ONLY the full {lang_name} target file content, wrapped in <UPDATED_TARGET> ... </UPDATED_TARGET> tags. No preamble, no diff, no explanation outside the tags.
+
+Begin output now."""
+
 PROMPT_TEMPLATE = """You are a faithful translator updating an i18n mirror of a product-playbook PM-skill reference file. The English source is the source of truth; the {lang_name} target has drifted out of sync.
 
 <SOURCE_FILE language="English" path="{source_path}">
@@ -183,7 +202,8 @@ def process_cluster(cluster: dict, root: Path, apply: bool, log_lines: list[str]
     source_path = root / cluster["source"]
     target_path = root / cluster["target"]
     source = source_path.read_text(encoding="utf-8")
-    target = target_path.read_text(encoding="utf-8")
+    is_missing = not target_path.is_file()
+    target = "" if is_missing else target_path.read_text(encoding="utf-8")
 
     total_chars = len(source) + len(target)
     if total_chars > MAX_INPUT_CHARS:
@@ -193,15 +213,23 @@ def process_cluster(cluster: dict, root: Path, apply: bool, log_lines: list[str]
             "reason": f"source+target too large ({total_chars} > {MAX_INPUT_CHARS} chars); manual edit recommended",
         }
 
-    prompt = PROMPT_TEMPLATE.format(
-        lang_name=LANG_NAME[cluster["lang"]],
-        source_path=cluster["source"],
-        target_path=cluster["target"],
-        source_content=source,
-        target_content=target,
-        drift_summary=build_drift_summary(cluster["drifts"]),
-        canonical_vocab=", ".join(CANONICAL_VOCAB),
-    )
+    if is_missing:
+        prompt = MISSING_PROMPT_TEMPLATE.format(
+            lang_name=LANG_NAME[cluster["lang"]],
+            source_path=cluster["source"],
+            source_content=source,
+            canonical_vocab=", ".join(CANONICAL_VOCAB),
+        )
+    else:
+        prompt = PROMPT_TEMPLATE.format(
+            lang_name=LANG_NAME[cluster["lang"]],
+            source_path=cluster["source"],
+            target_path=cluster["target"],
+            source_content=source,
+            target_content=target,
+            drift_summary=build_drift_summary(cluster["drifts"]),
+            canonical_vocab=", ".join(CANONICAL_VOCAB),
+        )
 
     log_lines.append(f"\n=== {cluster['target']} (lang={cluster['lang']}) ===")
     log_lines.append(f"  invoking claude -p (input ~{len(prompt)} chars)...")
@@ -224,6 +252,7 @@ def process_cluster(cluster: dict, root: Path, apply: bool, log_lines: list[str]
         return {"cluster": cluster, "status": "no-change", "diff": ""}
 
     if apply:
+        target_path.parent.mkdir(parents=True, exist_ok=True)
         target_path.write_text(updated, encoding="utf-8")
         status = "applied"
     else:
@@ -257,8 +286,23 @@ def main() -> int:
     print(f"loading drift report...", file=sys.stderr)
     report = load_drift_report(root, args.file, args.lang)
 
+    # Missing-file mirrors are conceptually critical drift (whole file absent)
+    # — synthesize cluster-shaped entries so they flow through the same
+    # eligibility + processing pipeline. The drift_summary will be empty;
+    # process_cluster() detects the missing target and switches prompts.
+    missing_clusters = []
+    for m in report.get("missing", []):
+        lang_seg = m["target"].split("/")[1]  # i18n/<lang>/...
+        missing_clusters.append({
+            "source": m["source"],
+            "target": m["target"],
+            "lang": lang_seg,
+            "drifts": [{"signal": "missing-file", "severity": "critical",
+                        "source": 1, "target": 0}],
+        })
+
     eligible = []
-    for c in report["clusters"]:
+    for c in list(missing_clusters) + list(report["clusters"]):
         worst = max((d["severity"] for d in c["drifts"]),
                     key=lambda s: {"info": 0, "warning": 1, "critical": 2}[s])
         if worst == "critical" or (args.include_warnings and worst == "warning"):

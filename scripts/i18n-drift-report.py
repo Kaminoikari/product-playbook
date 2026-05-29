@@ -136,6 +136,7 @@ def _source_targets(repo_root: Path) -> list[tuple[Path, str]]:
     target_subpath is the path *inside* i18n/<lang>/ where the mirror lives.
     For references/, the mirror is at i18n/<lang>/references/<name>.md.
     For SKILL.md (repo root), the mirror is at i18n/<lang>/SKILL.md.
+    For agents/, the mirror is at i18n/<lang>/agents/<name>.md (L4).
     """
     pairs: list[tuple[Path, str]] = []
     refs_dir = repo_root / "references"
@@ -146,14 +147,19 @@ def _source_targets(repo_root: Path) -> list[tuple[Path, str]]:
     skill = repo_root / "SKILL.md"
     if skill.is_file():
         pairs.append((skill, "SKILL.md"))
+    agents_dir = repo_root / "agents"
+    if agents_dir.is_dir():
+        for p in sorted(agents_dir.glob("*.md")):
+            if p.is_file():
+                pairs.append((p, f"agents/{p.name}"))
     return pairs
 
 
 def scan(repo_root: Path, file_filter: str | None, lang_filter: str | None) -> dict:
-    """Walk references/ + SKILL.md and emit per-file drift report data."""
+    """Walk references/ + SKILL.md + agents/ and emit per-file drift report data."""
     pairs = _source_targets(repo_root)
     if not pairs:
-        raise SystemExit(f"no references/*.md or SKILL.md found under {repo_root}")
+        raise SystemExit(f"no references/*.md, SKILL.md, or agents/*.md found under {repo_root}")
 
     if file_filter:
         pairs = [(p, t) for (p, t) in pairs if file_filter in p.name]
