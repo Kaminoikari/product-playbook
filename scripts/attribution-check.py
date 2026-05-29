@@ -75,8 +75,12 @@ def index_eval(eval_data: dict) -> dict[tuple[int | None, str], dict]:
     """Index breakdown by (eval_name, expectation_text) for cross-source matching."""
     out: dict[tuple[str, str], dict] = {}
     for b in eval_data.get("breakdown", []):
-        key = (b["eval_name"], b["expectation_text"])
-        out[key] = b
+        eval_name = b.get("eval_name")
+        exp_text = b.get("expectation_text")
+        if not eval_name or exp_text is None:
+            # malformed breakdown row — can't index it, skip
+            continue
+        out[(eval_name, exp_text)] = b
     return out
 
 

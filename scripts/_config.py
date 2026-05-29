@@ -36,6 +36,13 @@ CLAUDE_TIMEOUT_SECONDS = _getenv_int("CLAUDE_TIMEOUT_SECONDS", 600)
 MAX_INPUT_CHARS = _getenv_int("MAX_INPUT_CHARS", 36_000)
 MAX_RETRIES = _getenv_int("MAX_RETRIES", 2)
 
+# loop-tick wraps each Stage in subprocess.run(timeout=...). Must be >=
+# CLAUDE_TIMEOUT_SECONDS × expected concurrent LLM calls. With --max 3 +
+# --multi-file fan-out to ~2 primaries each, worst-case patch-proposer is
+# 6 × CLAUDE_TIMEOUT_SECONDS. Default 1800s covers typical --max 3 runs;
+# bump via PRODUCT_PLAYBOOK_LOOP_SUBPROCESS_TIMEOUT when running --multi-file.
+LOOP_SUBPROCESS_TIMEOUT = _getenv_int("LOOP_SUBPROCESS_TIMEOUT", 1800)
+
 # Severity weights (used by eval-debt-report scoring and lift computation)
 SEVERITY_WEIGHTS = {"critical": 15, "warning": 5, "info": 1}
 

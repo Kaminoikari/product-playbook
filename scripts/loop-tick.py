@@ -36,7 +36,10 @@ Convergence (delegated to loop-summary.judge):
 Safety:
   - Dry-run by default. --apply is the single gate that turns on writes
     for BOTH patch-proposer (EN) and i18n-mirror-apply (i18n).
-  - Each subprocess timeout: 900s (matches longest underlying script).
+  - Per-stage subprocess timeout from _config.LOOP_SUBPROCESS_TIMEOUT
+    (default 1800s, overridable via PRODUCT_PLAYBOOK_LOOP_SUBPROCESS_TIMEOUT
+    env var). Bump it when running --multi-file, which fan-outs across
+    primaries and multiplies LLM-call count per stage.
   - Exit codes: 0 success, 1 subprocess failure, 2 nothing to do.
 """
 
@@ -57,7 +60,10 @@ MIRROR_APPLY = SCRIPTS / "i18n-mirror-apply.py"
 DRIFT_REPORT = SCRIPTS / "i18n-drift-report.py"
 
 DEFAULT_HISTORY = Path("docs") / "loop-history.jsonl"
-SUBPROCESS_TIMEOUT = 900
+try:
+    from _config import LOOP_SUBPROCESS_TIMEOUT as SUBPROCESS_TIMEOUT
+except ImportError:
+    SUBPROCESS_TIMEOUT = 1800
 
 
 def run_cmd(cmd: list[str], description: str) -> tuple[int, str, str, float]:
@@ -125,9 +131,13 @@ def count_proposed_patches(eval_path: Path, severity: str) -> int:
             continue
         if sev_rank.get(b.get("severity", "warning"), 2) < min_rank:
             continue
-        attr = attribution.get(b["eval_name"], {})
-        if attr.get("primary"):
-            files.add(attr["primary"][0])
+        eval_name = b.get("eval_name")
+        if not eval_name:
+            continue
+        attr = attribution.get(eval_name, {})
+        primary = attr.get("primary") or []
+        if primary:
+            files.add(primary[0])
     return len(files)
 
 
@@ -349,14 +359,17 @@ def main() -> int:
         try:
             drift = json.loads(drift_json)
             drift_summary = drift.get("summary", {})
-            crit = sum(1 for c in drift["clusters"]
-                       for d in c["drifts"] if d["severity"] == "critical")
-            warn = sum(1 for c in drift["clusters"]
-                       for d in c["drifts"] if d["severity"] == "warning")
+            clusters = drift.get("clusters", [])
+            crit = sum(1 for c in clusters
+                       for d in c.get("drifts", []) if d.get("severity") == "critical")
+            warn = sum(1 for c in clusters
+                       for d in c.get("drifts", []) if d.get("severity") == "warning")
             print(f"  drift: {drift_summary.get('clean')}/{drift_summary.get('total_pairs')} clean, "
                   f"critical={crit}, warning={warn}", file=sys.stderr)
-        except json.JSONDecodeError:
-            pass
+        except (json.JSONDecodeError, TypeError):
+            # malformed JSON or non-dict structure — surface but don't crash
+            print("  drift: (skipped — drift-report stdout unparseable)",
+                  file=sys.stderr)
 
     # --- Stage 5: append history ---
     record = {

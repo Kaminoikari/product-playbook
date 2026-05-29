@@ -136,14 +136,17 @@ def group_failures_by_file(eval_data: dict, attribution: dict,
     for b in eval_data.get("breakdown", []):
         if b.get("passed", True):
             continue
-        attr = attribution.get(b["eval_name"], {})
+        eval_name = b.get("eval_name")
+        if not eval_name:
+            continue
+        attr = attribution.get(eval_name, {})
         primary = attr.get("primary", [])
         if not primary:
             continue
         targets = primary if multi_file else [primary[0]]
         for target in targets:
             failures[target].append({
-                "eval_name": b["eval_name"],
+                "eval_name": eval_name,
                 "expectation_text": b.get("expectation_text", ""),
                 "severity": b.get("severity", "warning"),
                 "passes": b.get("passes", 0),

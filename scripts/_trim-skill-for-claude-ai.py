@@ -8,6 +8,7 @@ its Language Detection block points at i18n/*/SKILL.md — both need
 local rewrites for the Claude.ai bundle only.
 """
 
+import argparse
 import pathlib
 import re
 import sys
@@ -75,8 +76,11 @@ def main(skill_path: str) -> int:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: _trim-skill-for-claude-ai.py <path-to-SKILL.md>",
-              file=sys.stderr)
-        sys.exit(2)
-    sys.exit(main(sys.argv[1]))
+    ap = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    ap.add_argument("skill_path",
+                    help="Path to the SKILL.md inside the unpacked bundle")
+    args = ap.parse_args()
+    sys.exit(main(args.skill_path))

@@ -120,8 +120,10 @@ def load_drift_report(root: Path, file_filter: str | None, lang_filter: str | No
     if lang_filter:
         cmd += ["--lang", lang_filter]
     # drift report exits 0 (clean), 1 (critical), or 2 (warning/info) — all
-    # are valid "report produced" states; only fail on other codes
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    # are valid "report produced" states; only fail on other codes.
+    # Cap at 60s — drift-report is pure-Python file diffing, should finish
+    # in <10s; longer means something is wrong (FS hang, infinite loop).
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
     if result.returncode not in (0, 1, 2):
         raise RuntimeError(
             f"drift report exited {result.returncode}\nstderr: {result.stderr[:500]}"

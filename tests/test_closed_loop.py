@@ -507,6 +507,84 @@ class TestNegativeMaxRejection(unittest.TestCase):
         self.assertIn("--max-patches must be >= 0", r.stderr)
 
 
+class TestSeverityWeightsCrossSourceConsistency(unittest.TestCase):
+    """Closed-loop scripts read SEVERITY_WEIGHTS from scripts/_config.py,
+    while the eval runners (evals/run_*.py) read from
+    evals/compute_eval_score.py. The two MUST agree, otherwise the score a
+    loop-tick observes differs from the score the eval reports.
+
+    No active drift today — this test exists to catch future divergence.
+    """
+
+    def test_severity_weights_match(self):
+        import sys
+        sys.path.insert(0, str(REPO_ROOT / "evals"))
+        sys.path.insert(0, str(SCRIPTS))
+        import _config
+        import compute_eval_score
+        self.assertEqual(_config.SEVERITY_WEIGHTS,
+                          compute_eval_score.SEVERITY_WEIGHTS,
+                          "SEVERITY_WEIGHTS drifted between scripts/_config and "
+                          "evals/compute_eval_score — closed-loop scores would "
+                          "diverge from eval runner scores")
+
+    def test_band_thresholds_match(self):
+        import sys
+        sys.path.insert(0, str(REPO_ROOT / "evals"))
+        sys.path.insert(0, str(SCRIPTS))
+        import _config
+        import compute_eval_score
+        # compute_eval_score uses [(90, 'healthy'), (70, 'needs-attention'), ...]
+        thresholds = {label: t for t, label in compute_eval_score.BAND_THRESHOLDS}
+        self.assertEqual(_config.BAND_HEALTHY, thresholds["healthy"])
+        self.assertEqual(_config.BAND_NEEDS_ATTENTION, thresholds["needs-attention"])
+
+
+class TestLoopTickDriftJsonResilience(unittest.TestCase):
+    """Post-round-5 fix: loop-tick's drift-json parse used bare dict indexing
+    inside a try/except that only caught JSONDecodeError. A drift JSON missing
+    `clusters` or `drifts` keys would KeyError → tick crash.
+
+    The fix uses .get() everywhere and catches (JSONDecodeError, TypeError).
+    """
+
+    def test_source_uses_get_for_clusters(self):
+        import inspect
+        m = _load("lt", "loop-tick.py")
+        src = inspect.getsource(m.main)
+        # The defensive .get patterns must be in the drift-handling block
+        self.assertIn('clusters = drift.get("clusters", [])', src)
+        self.assertIn('c.get("drifts", [])', src)
+        self.assertIn("(json.JSONDecodeError, TypeError)", src)
+
+
+class TestLoopSubprocessTimeoutCentralised(unittest.TestCase):
+    """Post-round-3 fix: loop-tick.SUBPROCESS_TIMEOUT was hardcoded 900s.
+    Pulling from _config.LOOP_SUBPROCESS_TIMEOUT (default 1800s) so:
+      - it scales when --multi-file multiplies LLM-call count per stage
+      - env override PRODUCT_PLAYBOOK_LOOP_SUBPROCESS_TIMEOUT works
+    """
+
+    def test_loop_tick_imports_from_config(self):
+        import sys
+        sys.path.insert(0, str(SCRIPTS))
+        import _config
+        lt = _load("lt", "loop-tick.py")
+        self.assertEqual(lt.SUBPROCESS_TIMEOUT, _config.LOOP_SUBPROCESS_TIMEOUT)
+
+    def test_default_is_at_least_3x_claude_timeout(self):
+        # SUBPROCESS_TIMEOUT must comfortably hold patch-proposer's worst case:
+        # --max 3 × CLAUDE_TIMEOUT_SECONDS sequential LLM calls. If someone
+        # sets CLAUDE_TIMEOUT to 600s, SUBPROCESS_TIMEOUT must be >= 1800s.
+        import sys
+        sys.path.insert(0, str(SCRIPTS))
+        import _config
+        self.assertGreaterEqual(_config.LOOP_SUBPROCESS_TIMEOUT,
+                                 _config.CLAUDE_TIMEOUT_SECONDS * 3,
+                                 "LOOP_SUBPROCESS_TIMEOUT must be >= "
+                                 "3 × CLAUDE_TIMEOUT_SECONDS to cover --max 3")
+
+
 class TestPairedOnlyBadge(unittest.TestCase):
     """Post-K9 fix: --paired-only must surface a visible badge in markdown.
 
