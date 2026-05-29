@@ -1,0 +1,294 @@
+#!/usr/bin/env python3
+"""Compute per-expectation lift between two eval-results.behavioral.json runs.
+
+After a manual eval round, this turns the "before" and "after" JSON into a
+file-attributed scoreboard so the maintainer can see exactly which
+expectations moved, by how much, and whether the lift covers the cost of
+the patch that was applied.
+
+Inputs:
+  --before <path>   Older eval-results.behavioral.json (the baseline)
+  --after  <path>   Newer eval-results.behavioral.json (post-patch)
+Output:
+  --output <path>   Markdown report (default: docs/eval-lift-<date>.md)
+  --json            Emit JSON to stdout instead of markdown to file
+
+Matching:
+  Pairs by (eval_id, expectation_text). An expectation that appears in only
+  one file is reported under "added" / "removed" (typically harness changes
+  like the dispatch_expectations_removed_2026_05_28 cleanup).
+
+Severity weights match evals/compute_eval_score.py:
+  critical=15, warning=5, info=1.
+
+Lift score = Σ(weight if improved) − Σ(weight if regressed). Positive means
+the patch lifted the suite; negative means it regressed. Pass-rate delta
+(passes/runs ratio per expectation, when both still failing) is reported
+separately as "soft lift" — a 0/3 → 1/3 is movement even though both runs
+count as fail under strict majority.
+
+Exit codes:
+  0  net lift ≥ 0 (no regression worse than gains)
+  1  net lift < 0 (regression dominates — patch made things worse)
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from datetime import date
+from pathlib import Path
+
+SEVERITY_WEIGHTS = {"critical": 15, "warning": 5, "info": 1}
+SEVERITY_EMOJI = {"critical": "🔴", "warning": "🟡", "info": "🔵"}
+SEVERITY_ORDER = {"info": 0, "warning": 1, "critical": 2}
+
+
+def load(path: Path) -> dict:
+    with path.open() as f:
+        return json.load(f)
+
+
+def index_breakdown(data: dict) -> dict[tuple[int, str], dict]:
+    """Index breakdown by (eval_id, expectation_text) for cross-run matching."""
+    return {
+        (b["eval_id"], b["expectation_text"]): b
+        for b in data.get("breakdown", [])
+    }
+
+
+def classify_pair(before: dict, after: dict) -> str:
+    bp = before.get("passed", False)
+    ap = after.get("passed", False)
+    if bp and ap:
+        return "unchanged-pass"
+    if not bp and not ap:
+        return "unchanged-fail"
+    if not bp and ap:
+        return "improved"
+    return "regressed"
+
+
+def soft_lift(before: dict, after: dict) -> int:
+    """Pass count delta when neither side flipped strict-majority status."""
+    return after.get("passes", 0) - before.get("passes", 0)
+
+
+def compute(before_data: dict, after_data: dict) -> dict:
+    before = index_breakdown(before_data)
+    after = index_breakdown(after_data)
+    all_keys = set(before) | set(after)
+
+    paired = []      # both sides present
+    added = []       # in after only
+    removed = []     # in before only
+    for k in all_keys:
+        b = before.get(k)
+        a = after.get(k)
+        if b and a:
+            paired.append((k, b, a))
+        elif a:
+            added.append((k, a))
+        else:
+            removed.append((k, b))
+
+    improved, regressed = [], []
+    unchanged_pass, unchanged_fail = [], []
+    soft_moves = []   # both failing but passes/runs ratio moved
+    for k, b, a in paired:
+        cls = classify_pair(b, a)
+        if cls == "improved":
+            improved.append({"key": k, "before": b, "after": a})
+        elif cls == "regressed":
+            regressed.append({"key": k, "before": b, "after": a})
+        elif cls == "unchanged-pass":
+            unchanged_pass.append({"key": k, "before": b, "after": a})
+        else:
+            unchanged_fail.append({"key": k, "before": b, "after": a})
+            sl = soft_lift(b, a)
+            if sl != 0:
+                soft_moves.append({"key": k, "before": b, "after": a, "delta": sl})
+
+    def hard_score(items: list[dict], sign: int) -> int:
+        return sum(
+            sign * SEVERITY_WEIGHTS.get(it["after"].get("severity", "warning"), 5)
+            for it in items
+        )
+
+    lift_gain = hard_score(improved, +1)
+    lift_loss = hard_score(regressed, -1)   # already negative
+    net_lift = lift_gain + lift_loss        # both already signed
+    soft_gain = sum(m["delta"] for m in soft_moves if m["delta"] > 0)
+    soft_loss = sum(m["delta"] for m in soft_moves if m["delta"] < 0)
+
+    return {
+        "generated": date.today().isoformat(),
+        "summary": {
+            "before_score": before_data.get("summary", {}).get("score"),
+            "after_score": after_data.get("summary", {}).get("score"),
+            "score_delta": (after_data.get("summary", {}).get("score", 0)
+                            - before_data.get("summary", {}).get("score", 0)),
+            "before_band": before_data.get("summary", {}).get("band"),
+            "after_band": after_data.get("summary", {}).get("band"),
+            "paired": len(paired),
+            "added": len(added),
+            "removed": len(removed),
+            "improved": len(improved),
+            "regressed": len(regressed),
+            "unchanged_pass": len(unchanged_pass),
+            "unchanged_fail": len(unchanged_fail),
+            "soft_moves": len(soft_moves),
+            "lift_gain": lift_gain,
+            "lift_loss": lift_loss,
+            "net_lift": net_lift,
+            "soft_pass_gain": soft_gain,
+            "soft_pass_loss": soft_loss,
+        },
+        "improved": improved,
+        "regressed": regressed,
+        "soft_moves": soft_moves,
+        "added": [{"key": k, "item": a} for k, a in added],
+        "removed": [{"key": k, "item": b} for k, b in removed],
+    }
+
+
+def render_markdown(report: dict, before_path: str, after_path: str) -> str:
+    s = report["summary"]
+    score_arrow = "↑" if s["score_delta"] > 0 else ("↓" if s["score_delta"] < 0 else "→")
+    lift_emoji = "✅" if s["net_lift"] >= 0 else "❌"
+    lines = [
+        f"# Eval Lift Report — {report['generated']}",
+        "",
+        f"- **Before**: `{before_path}` (score **{s['before_score']}**, band `{s['before_band']}`)",
+        f"- **After**:  `{after_path}` (score **{s['after_score']}**, band `{s['after_band']}`)",
+        f"- **Score Δ**: {s['before_score']} {score_arrow} {s['after_score']} (**{s['score_delta']:+d}**)",
+        f"- **Net hard lift**: **{s['net_lift']:+d}** points {lift_emoji} (gain {s['lift_gain']:+d} / loss {s['lift_loss']:+d})",
+        "",
+        "## Movement Summary",
+        "",
+        "| Class | Count |",
+        "|-------|------:|",
+        f"| 🟢 Improved (fail → pass) | {s['improved']} |",
+        f"| 🔴 Regressed (pass → fail) | {s['regressed']} |",
+        f"| ⚪ Unchanged-pass | {s['unchanged_pass']} |",
+        f"| ⚪ Unchanged-fail | {s['unchanged_fail']} |",
+        f"| 〰️ Soft moves (still failing but ratio shifted) | {s['soft_moves']} |",
+        f"| ➕ Added expectations | {s['added']} |",
+        f"| ➖ Removed expectations | {s['removed']} |",
+        "",
+    ]
+
+    def render_items(title: str, items: list[dict], show_delta: bool = False) -> list[str]:
+        if not items:
+            return []
+        out = [f"## {title}", "", "| Eval | Severity | Expectation | Before | After |",
+               "|------|----------|-------------|-------:|------:|"]
+        # sort by severity desc then by eval_id
+        items.sort(key=lambda it: (
+            -SEVERITY_ORDER.get(it["after"].get("severity", "warning"), 1),
+            it["after"].get("eval_id", 0),
+        ))
+        for it in items:
+            sev = it["after"].get("severity", "warning")
+            emoji = SEVERITY_EMOJI.get(sev, "")
+            eval_name = it["after"].get("eval_name", "?")
+            text = (it["after"].get("expectation_text") or "")[:90].replace("|", "\\|")
+            bp = it["before"]
+            ap = it["after"]
+            b_str = f"{bp.get('passes', '?')}/{bp.get('runs', '?')}"
+            a_str = f"{ap.get('passes', '?')}/{ap.get('runs', '?')}"
+            out.append(
+                f"| {eval_name} | {emoji} {sev} | {text} | {b_str} | {a_str} |"
+            )
+        out.append("")
+        return out
+
+    lines += render_items("🟢 Improved (highest-leverage wins)", report["improved"])
+    lines += render_items("🔴 Regressed (action required — patch reverted gains)", report["regressed"])
+
+    if report["soft_moves"]:
+        lines += [
+            "## 〰️ Soft Moves (pass-rate shifted but still failing)",
+            "",
+            "These didn't flip strict-majority pass, but the underlying pass ratio moved. Worth investigating — small wording uplifts can sometimes push a 1/3 to 2/3 in the next round.",
+            "",
+            "| Eval | Severity | Expectation | Before | After | Δ |",
+            "|------|----------|-------------|-------:|------:|--:|",
+        ]
+        report["soft_moves"].sort(key=lambda m: (-m["delta"], m["after"].get("eval_id", 0)))
+        for m in report["soft_moves"]:
+            sev = m["after"].get("severity", "warning")
+            emoji = SEVERITY_EMOJI.get(sev, "")
+            eval_name = m["after"].get("eval_name", "?")
+            text = (m["after"].get("expectation_text") or "")[:90].replace("|", "\\|")
+            bp = m["before"]
+            ap = m["after"]
+            lines.append(
+                f"| {eval_name} | {emoji} {sev} | {text} | "
+                f"{bp.get('passes', '?')}/{bp.get('runs', '?')} | "
+                f"{ap.get('passes', '?')}/{ap.get('runs', '?')} | "
+                f"{m['delta']:+d} |"
+            )
+        lines.append("")
+
+    if report["added"] or report["removed"]:
+        lines += ["## ➕➖ Expectation Set Changes", ""]
+        if report["added"]:
+            lines.append("**Added** (typically new harness coverage):")
+            for a in report["added"]:
+                sev = a["item"].get("severity", "?")
+                lines.append(f"- `{a['item'].get('eval_name', '?')}` [{sev}]: "
+                             f"{(a['item'].get('expectation_text') or '')[:120]}")
+            lines.append("")
+        if report["removed"]:
+            lines.append("**Removed** (typically harness pruning):")
+            for r in report["removed"]:
+                sev = r["item"].get("severity", "?")
+                lines.append(f"- `{r['item'].get('eval_name', '?')}` [{sev}]: "
+                             f"{(r['item'].get('expectation_text') or '')[:120]}")
+            lines.append("")
+
+    return "\n".join(lines)
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                  formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--before", type=Path, required=True,
+                    help="Baseline eval-results.behavioral.json")
+    ap.add_argument("--after", type=Path, required=True,
+                    help="Post-patch eval-results.behavioral.json")
+    ap.add_argument("--output", type=Path, default=None,
+                    help="Markdown report path (default: docs/eval-lift-<date>.md)")
+    ap.add_argument("--json", action="store_true",
+                    help="Emit JSON to stdout instead of markdown to file")
+    args = ap.parse_args()
+
+    if not args.before.is_file():
+        raise SystemExit(f"--before file not found: {args.before}")
+    if not args.after.is_file():
+        raise SystemExit(f"--after file not found: {args.after}")
+
+    before = load(args.before)
+    after = load(args.after)
+    report = compute(before, after)
+
+    if args.json:
+        json.dump(report, sys.stdout, indent=2, ensure_ascii=False, default=str)
+        print()
+    else:
+        out = args.output or Path("docs") / f"eval-lift-{report['generated']}.md"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(render_markdown(report, str(args.before), str(args.after)),
+                       encoding="utf-8")
+        print(f"wrote {out}", file=sys.stderr)
+        s = report["summary"]
+        print(f"net hard lift: {s['net_lift']:+d}  (improved {s['improved']}, "
+              f"regressed {s['regressed']}, soft moves {s['soft_moves']})", file=sys.stderr)
+
+    return 0 if report["summary"]["net_lift"] >= 0 else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
