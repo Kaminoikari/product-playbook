@@ -27,5 +27,6 @@ evals/*-results.md
 evals/smoke-test.json
 evals/smoke-test.md
 
-# Mirror agent run logs
+# Closed-loop tool run logs
 logs/i18n-mirror-*.log
+logs/patch-proposer-*.log

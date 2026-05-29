@@ -14,6 +14,7 @@
     "eval:test": "python3 -m unittest evals.test_compute_eval_score",
     "eval:debt": "python3 scripts/eval-debt-report.py",
     "eval:lift": "python3 scripts/eval-lift-report.py",
+    "eval:patch": "python3 scripts/patch-proposer.py",
     "i18n:drift": "python3 scripts/i18n-drift-report.py",
     "i18n:mirror": "python3 scripts/i18n-mirror-apply.py",
     "bundle:claude-ai": "bash scripts/build-claude-ai-bundle.sh"
