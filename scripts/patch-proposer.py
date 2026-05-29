@@ -409,6 +409,36 @@ def process_cluster(file_path: Path, failures: list[dict], root: Path,
                 "warnings": warnings,
                 "retry_attempted": True}
 
+    # N5: no-op patch detection. The diff is non-empty (we'd have returned
+    # "no-change" earlier otherwise), and structural validation passed (so a
+    # Hard Gate header IS being added). But if the diff doesn't actually
+    # introduce new behavioral anchors — same `Hard Gate` count, same `FAIL`
+    # count, same `## ` heading count — it's a cosmetic reorder that the
+    # orchestrator won't behave differently for. Flag as applied-cosmetic so
+    # downstream attribution-check doesn't expect a flip.
+    def _count(text: str, pat: str) -> int:
+        return len(re.findall(pat, text))
+    delta_hg = _count(updated, r"Hard Gate") - _count(original, r"Hard Gate")
+    delta_fail = (_count(updated, r"(?<![A-Za-z])FAILS?(?![A-Za-z])")
+                  - _count(original, r"(?<![A-Za-z])FAILS?(?![A-Za-z])"))
+    delta_h2 = (_count(updated, r"^## ") - _count(original, r"^## "))
+    if delta_hg == 0 and delta_fail == 0 and delta_h2 == 0:
+        return {"file": str(file_path), "status": "applied-cosmetic",
+                "reason": "diff exists but no new Hard Gate / FAIL / ## heading was "
+                          "introduced — likely a reorder or whitespace change with no "
+                          "behavioral consequence. Not applying to avoid misleading "
+                          "downstream attribution-check.",
+                "diff": diff,
+                "diff_lines": diff.count("\n"),
+                "warnings": warnings,
+                "addressed": [{
+                    "eval_name": f["eval_name"],
+                    "expectation_text": f["expectation_text"],
+                    "severity": f["severity"],
+                    "before_passes": f["passes"],
+                    "before_runs": f["runs"],
+                } for f in failures]}
+
     if apply:
         target.write_text(updated, encoding="utf-8")
         status = "applied"

@@ -335,6 +335,25 @@ def main() -> int:
         print(f"❌ stale --after-eval: {reason}", file=sys.stderr)
         return 2
 
+    # N4: pair sanity — if patch log is newer than after-eval, the patches in
+    # the log were applied AFTER the eval ran, so the eval can't have observed
+    # their effects. The resulting "suspect / flipped" classification would be
+    # nonsense. Warn loudly (not fatal — user may know better).
+    try:
+        log_mtime = log_path.stat().st_mtime
+        eval_mtime = args.after_eval.stat().st_mtime
+        if log_mtime > eval_mtime and not args.force:
+            delta_min = (log_mtime - eval_mtime) / 60
+            print(f"⚠️  pair sanity: patch log `{log_path}` is NEWER than after-eval "
+                  f"`{args.after_eval}` by {delta_min:.1f} min. The patches in this log "
+                  f"were applied AFTER the eval was run, so the eval cannot reflect "
+                  f"their effects — every patch will look 'suspect'. Did you forget "
+                  f"to re-run eval after applying patches? --force to proceed anyway.",
+                  file=sys.stderr)
+            return 2
+    except OSError:
+        pass  # filesystem oddity — fall through, the actual analysis will surface real issues
+
     patch_log = load_patch_log(log_path)
     after = load_eval(args.after_eval)
     attribution = load_attribution()

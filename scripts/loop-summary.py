@@ -155,11 +155,50 @@ def judge(history: list[dict]) -> dict:
     }
 
 
+SPARK_CHARS = "▁▂▃▄▅▆▇█"
+
+
+def _sparkline(values: list[int | float]) -> str:
+    """N6: ASCII sparkline of numeric values, normalised to 8 levels.
+
+    Returns empty string for fewer than 2 values (no trend to show).
+    """
+    if len(values) < 2:
+        return ""
+    nums = [v for v in values if isinstance(v, (int, float))]
+    if len(nums) < 2:
+        return ""
+    lo, hi = min(nums), max(nums)
+    span = hi - lo
+    if span == 0:
+        return SPARK_CHARS[3] * len(nums)  # flat line in the middle
+    out = []
+    for v in nums:
+        idx = int((v - lo) / span * (len(SPARK_CHARS) - 1))
+        out.append(SPARK_CHARS[idx])
+    return "".join(out)
+
+
 def render_trajectory(history: list[dict]) -> str:
-    """Markdown table of score/band/failure counts per tick."""
+    """Markdown table of score/band/failure counts per tick + N6 sparkline."""
     if not history:
         return "_(no history)_\n"
-    lines = [
+    scores = [(rec.get("before_summary") or {}).get("score") for rec in history]
+    crits = [(rec.get("before_summary") or {}).get("critical_failures") for rec in history]
+    spark_score = _sparkline([s for s in scores if s is not None])
+    spark_crit = _sparkline([c for c in crits if c is not None])
+
+    preamble = []
+    if spark_score:
+        score_seq = " → ".join(str(s) for s in scores if s is not None)
+        preamble.append(f"**Score trend**: `{spark_score}`  ({score_seq})")
+    if spark_crit:
+        crit_seq = " → ".join(str(c) for c in crits if c is not None)
+        preamble.append(f"**Criticals trend**: `{spark_crit}`  ({crit_seq})")
+    if preamble:
+        preamble.append("")
+
+    lines = preamble + [
         "| # | When | Mode | Score | Band | ✗crit | ✗warn | Patches | Note |",
         "|--:|------|------|------:|------|------:|------:|--------:|------|",
     ]

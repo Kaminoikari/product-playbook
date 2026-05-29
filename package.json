@@ -19,6 +19,8 @@
     "loop:tick": "python3 scripts/loop-tick.py",
     "loop:summary": "python3 scripts/loop-summary.py",
     "loop:status": "python3 scripts/loop-status.py",
+    "loop:prune": "python3 scripts/loop-history-prune.py",
+    "test:closed-loop": "python3 -m unittest tests/test_closed_loop.py -v",
     "i18n:drift": "python3 scripts/i18n-drift-report.py",
     "i18n:mirror": "python3 scripts/i18n-mirror-apply.py",
     "bundle:claude-ai": "bash scripts/build-claude-ai-bundle.sh"

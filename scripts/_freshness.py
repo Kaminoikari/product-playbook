@@ -15,6 +15,9 @@ Usage:
 
 Watched paths (any descendant .md file counts):
   references/   agents/   i18n/   SKILL.md
+Plus the eval spec itself:
+  evals/evals.json — if the eval spec changes, old eval-results no longer
+                     match the current contract even if no .md file changed.
 """
 
 from __future__ import annotations
@@ -22,7 +25,7 @@ from __future__ import annotations
 from pathlib import Path
 
 
-WATCHED = ["references", "agents", "i18n", "SKILL.md"]
+WATCHED = ["references", "agents", "i18n", "SKILL.md", "evals/evals.json"]
 
 
 def _latest_authored_mtime(root: Path) -> tuple[float, Path | None]:

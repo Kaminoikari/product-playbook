@@ -192,6 +192,10 @@ def main() -> int:
                     help="Minimum severity for patch-proposer (default: critical)")
     ap.add_argument("--max-patches", type=int, default=3,
                     help="Cap on patch-proposer --max (default 3)")
+    ap.add_argument("--one-at-a-time", action="store_true",
+                    help="Forward --one-at-a-time to patch-proposer; the tick "
+                         "applies at most ONE patch regardless of --max-patches "
+                         "(for precise L2 regression attribution)")
     ap.add_argument("--history", type=Path, default=DEFAULT_HISTORY,
                     help="Loop history JSONL path (default docs/loop-history.jsonl)")
     ap.add_argument("--force", action="store_true",
@@ -260,6 +264,10 @@ def main() -> int:
     ]
     if args.apply:
         patch_cmd.append("--apply")
+    if args.one_at_a_time:
+        patch_cmd.append("--one-at-a-time")
+    if args.force:
+        patch_cmd.append("--force")
     patch_rc, patch_out, _, patch_dt = run_cmd(patch_cmd, "Stage 2: patch-proposer (LLM)")
     stage_durations["patch"] = round(patch_dt, 2)
     if patch_rc != 0:
