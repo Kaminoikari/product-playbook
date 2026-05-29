@@ -332,12 +332,24 @@ def main() -> int:
                     help="Markdown report path (default: docs/eval-lift-<date>.md)")
     ap.add_argument("--json", action="store_true",
                     help="Emit JSON to stdout instead of markdown to file")
+    ap.add_argument("--force", action="store_true",
+                    help="Skip eval-freshness check on --after (eval older than authored files)")
     args = ap.parse_args()
 
     if not args.before.is_file():
         raise SystemExit(f"--before file not found: {args.before}")
     if not args.after.is_file():
         raise SystemExit(f"--after file not found: {args.after}")
+
+    import importlib.util
+    fspec = importlib.util.spec_from_file_location("_freshness",
+                                                    Path(__file__).parent / "_freshness.py")
+    fmod = importlib.util.module_from_spec(fspec)
+    fspec.loader.exec_module(fmod)
+    is_fresh, reason = fmod.check_eval_freshness(args.after, Path.cwd())
+    if not is_fresh and not args.force:
+        print(f"❌ stale --after eval: {reason}", file=sys.stderr)
+        return 2
 
     before = load(args.before)
     after = load(args.after)

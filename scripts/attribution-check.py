@@ -265,6 +265,8 @@ def main() -> int:
                     help="Markdown report path (default: docs/attribution-check-<date>.md)")
     ap.add_argument("--json", action="store_true",
                     help="Emit JSON to stdout instead of markdown to file")
+    ap.add_argument("--force", action="store_true",
+                    help="Skip eval-freshness check on --after-eval")
     args = ap.parse_args()
 
     log_path = args.patch_log or find_latest_patch_log(Path("logs"))
@@ -274,6 +276,15 @@ def main() -> int:
         return 2
     if not args.after_eval.is_file():
         print(f"❌ --after-eval not found: {args.after_eval}", file=sys.stderr)
+        return 2
+
+    fspec = importlib.util.spec_from_file_location("_freshness",
+                                                    Path(__file__).parent / "_freshness.py")
+    fmod = importlib.util.module_from_spec(fspec)
+    fspec.loader.exec_module(fmod)
+    is_fresh, reason = fmod.check_eval_freshness(args.after_eval, Path.cwd())
+    if not is_fresh and not args.force:
+        print(f"❌ stale --after-eval: {reason}", file=sys.stderr)
         return 2
 
     patch_log = load_patch_log(log_path)

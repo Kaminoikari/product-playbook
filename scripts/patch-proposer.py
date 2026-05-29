@@ -288,9 +288,22 @@ def main() -> int:
     ap.add_argument("--severity", choices=["critical", "warning", "info"],
                     default="critical",
                     help="Minimum severity to address (default: critical only)")
+    ap.add_argument("--force", action="store_true",
+                    help="Skip eval-freshness check (eval JSON older than authored files)")
     args = ap.parse_args()
 
     root = args.root.resolve()
+
+    import importlib.util
+    fspec = importlib.util.spec_from_file_location("_freshness",
+                                                    Path(__file__).parent / "_freshness.py")
+    fmod = importlib.util.module_from_spec(fspec)
+    fspec.loader.exec_module(fmod)
+    is_fresh, reason = fmod.check_eval_freshness(args.results, root)
+    if not is_fresh and not args.force:
+        print(f"❌ stale eval: {reason}", file=sys.stderr)
+        return 2
+
     print(f"loading eval results from {args.results}...", file=sys.stderr)
     eval_data = load_eval_results(args.results)
     attribution = _load_attribution()

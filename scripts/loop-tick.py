@@ -26,10 +26,12 @@ Why no internal eval call:
   closes between manual eval runs — each tick = one rotation around the
   fix → re-verify → measure-lift cycle.
 
-Convergence hints (read from history):
-  If the last 2 ticks both showed (a) zero critical patches proposed OR
-  (b) net_lift < +5, this tick exits with a "loop appears to have converged"
-  note. Loop history lives in docs/loop-history.jsonl (one record per tick).
+Convergence (delegated to loop-summary.judge):
+  This tick fast-paths "0 patches needed → converged" without history. For
+  anything else, it loads loop-summary.py and asks judge() for the verdict
+  across all prior ticks. That keeps L0 and L5 aligned on the single
+  question "are we done?"  Loop history lives in docs/loop-history.jsonl
+  (one record per tick).
 
 Safety:
   - Dry-run by default. --apply is the single gate that turns on writes
@@ -142,21 +144,32 @@ def append_history(history_path: Path, record: dict) -> None:
 
 
 def detect_convergence(history: list[dict], current_patches: int) -> str | None:
-    """Return a convergence note string, or None if loop should keep going."""
+    """Return a convergence note string, or None if loop should keep going.
+
+    Delegates the cross-tick verdict to loop-summary.judge() — that is the
+    single source of truth for convergence judgement (opt #1). Adds the
+    tick-local fast path: if current_patches == 0, this tick contributed
+    nothing, so flag as converged without needing N ticks of history.
+    """
     if current_patches == 0:
         return "✅ Converged: no critical failures in current eval results."
-    if len(history) < 2:
+    if not history:
         return None
-    last_two = history[-2:]
-    all_low_lift = all(r.get("net_lift", 0) is not None and r.get("net_lift", 0) < 5
-                       for r in last_two if "net_lift" in r)
-    same_patch_count = all(r.get("patches_proposed_count", -1) == current_patches
-                           for r in last_two)
-    if all_low_lift and same_patch_count:
-        return ("⚠️  Possible stall: last 2 ticks produced net_lift < +5 and the "
-                "same number of proposed patches as this tick. The current attack "
-                "vector may have hit diminishing returns — consider adjusting "
-                "EVAL_ATTRIBUTION mapping or rewording the patch-proposer prompt.")
+
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "loop_summary", Path(__file__).parent / "loop-summary.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    verdict = mod.judge(history)
+
+    if verdict["status"] in ("converged", "improving", "insufficient-data"):
+        return None  # loop should keep going (or wait for more ticks)
+
+    if verdict["status"] == "stalled":
+        return ("⚠️  " + verdict["reason"])
+    if verdict["status"] == "regressing":
+        return ("🔴 " + verdict["reason"])
     return None
 
 
@@ -173,11 +186,23 @@ def main() -> int:
                     help="Cap on patch-proposer --max (default 3)")
     ap.add_argument("--history", type=Path, default=DEFAULT_HISTORY,
                     help="Loop history JSONL path (default docs/loop-history.jsonl)")
+    ap.add_argument("--force", action="store_true",
+                    help="Skip eval-freshness check (eval older than authored files)")
     args = ap.parse_args()
 
     if not args.eval_results.is_file():
         print(f"❌ --eval-results not found: {args.eval_results}", file=sys.stderr)
         return 1
+
+    import importlib.util
+    fspec = importlib.util.spec_from_file_location(
+        "_freshness", Path(__file__).parent / "_freshness.py")
+    fmod = importlib.util.module_from_spec(fspec)
+    fspec.loader.exec_module(fmod)
+    is_fresh, reason = fmod.check_eval_freshness(args.eval_results, Path.cwd())
+    if not is_fresh and not args.force:
+        print(f"❌ stale eval: {reason}", file=sys.stderr)
+        return 2
 
     started = datetime.now().isoformat(timespec="seconds")
     print(f"\n╔══════════════════════════════════════════════════════════════╗", file=sys.stderr)
