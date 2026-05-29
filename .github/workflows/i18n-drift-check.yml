@@ -1,0 +1,136 @@
+# i18n Drift Check — runs the deterministic detector (no LLM, no API calls,
+# no subscription quota) whenever references/ or i18n/ changes. Posts a job
+# summary every run, and a PR comment only when critical drift is present.
+#
+# This workflow is safe to auto-fire because it consumes no Claude quota —
+# `scripts/i18n-drift-report.py` is pure Python file diffing. Distinct from
+# eval-gate.yml, which is workflow_dispatch-only because each run burns
+# subscription tokens (see feedback memory: no-ci-auto-eval).
+#
+# Severity-to-action mapping (notification-only — never fails the workflow):
+#   - critical drift  → post / update PR comment + Job Summary  (loud)
+#   - warning / info  → Job Summary only                         (quiet)
+#   - no drift        → Job Summary "all clean"                  (silent on PR)
+
+name: i18n Drift Check
+
+on:
+  pull_request:
+    paths:
+      - 'references/**'
+      - 'i18n/**'
+      - 'scripts/i18n-drift-report.py'
+  push:
+    branches: [main]
+    paths:
+      - 'references/**'
+      - 'i18n/**'
+      - 'scripts/i18n-drift-report.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run drift detector
+        id: drift
+        run: |
+          # capture exit code (0 clean, 1 critical, 2 warning/info) without
+          # failing the step — this workflow is notification-only
+          set +e
+          python3 scripts/i18n-drift-report.py --output drift-report.md
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+          # also produce JSON for any future tooling that wants to consume it
+          python3 scripts/i18n-drift-report.py --json > drift-report.json
+
+      - name: Job Summary
+        if: always()
+        run: |
+          {
+            echo "## i18n Drift Check"
+            echo ""
+            case "${{ steps.drift.outputs.exit_code }}" in
+              0)
+                echo "✅ **All clean** — no drift between English references and i18n mirrors."
+                ;;
+              1)
+                echo "🔴 **Critical drift present** — canonical vocabulary tokens missing from at least one i18n file. Run \`npm run i18n:mirror -- --apply\` locally to propose translations, or fix manually."
+                ;;
+              2)
+                echo "🟡 **Warning/info drift only** — structural divergence (Hard Gate count, headings, FAIL markers). Review and decide if it matters before merging."
+                ;;
+              *)
+                echo "⚠️ Detector exited unexpectedly (code ${{ steps.drift.outputs.exit_code }}). Check the run logs."
+                ;;
+            esac
+            echo ""
+            echo "<details><summary>Full drift report</summary>"
+            echo ""
+            cat drift-report.md
+            echo ""
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload drift report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: i18n-drift-report
+          path: |
+            drift-report.md
+            drift-report.json
+
+      - name: Comment on PR (critical drift only)
+        if: github.event_name == 'pull_request' && steps.drift.outputs.exit_code == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # Marker lets us find and delete prior comments from this workflow
+          # so each PR has at most one drift comment at a time (not a comment
+          # storm as the branch updates).
+          MARKER="<!-- i18n-drift-check-bot -->"
+
+          # Delete any existing drift comments by this workflow on this PR
+          gh api "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" \
+            --jq ".[] | select(.body | startswith(\"${MARKER}\")) | .id" \
+            | xargs -r -I{} gh api -X DELETE "repos/${{ github.repository }}/issues/comments/{}"
+
+          # Build comment body
+          {
+            echo "${MARKER}"
+            echo "## 🔴 i18n Drift Check — critical drift present"
+            echo ""
+            echo "This PR introduces or leaves drift where canonical vocabulary tokens are missing from at least one i18n file. The orchestrator loading that i18n won't see the rule, so behavior in that language may diverge from English."
+            echo ""
+            echo "**To fix locally:**"
+            echo '```bash'
+            echo "npm run i18n:mirror -- --apply   # LLM-driven auto-mirror, dry-run by default"
+            echo "npm run i18n:drift               # verify"
+            echo '```'
+            echo ""
+            echo "Or open the failing files side-by-side and add the missing canonical tokens manually."
+            echo ""
+            echo "<details><summary>Full drift report</summary>"
+            echo ""
+            cat drift-report.md
+            echo ""
+            echo "</details>"
+            echo ""
+            echo "_This comment is notification-only. The workflow does not block merge — the maintainer decides whether to act._"
+          } > comment-body.md
+
+          gh pr comment "${PR_NUMBER}" --body-file comment-body.md
