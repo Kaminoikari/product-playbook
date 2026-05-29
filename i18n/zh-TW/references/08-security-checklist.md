@@ -207,6 +207,31 @@ build/
 | Pre-mortem 步驟 | 提示使用者考慮安全性失敗情境 |
 | 改版模式 S1 | 提示使用者提供既有產品的安全現況 |
 
+**交接包務必附帶明確的安全段落（Hard Gate）**：開發交接包「必須」產出 — 絕不可以安全性尚未完整設計為由拒絕、阻擋或延遲交付；而是要附上一個清楚標示的安全段落來交付。該安全段落「必須」針對以下 5 個指名領域中的**至少 4 個**提供產品專屬的具體內容：(a) 認證與授權、(b) 輸入驗證、(c) CORS、(d) Content-Security-Policy / 安全性 Headers（CSP）、(e) Rate Limiting。僅以一行籠統帶過 1～2 個領域，或寫成「安全性留待日後決定」這類延遲說法，都「不算數」。該段落也必須註明 `.env` / secrets 應放進 `.gitignore`。
+
+❌ FAIL 範例（eval 評審會否決的反模式）：
+- 「在安全架構經專家完整審查前，我無法產出交接包。」（拒絕交付 → 根本沒有任何安全段落）
+- 交接包的安全文字只有「這個 app 應該要安全並遵循最佳實踐。」（零個指名領域）
+- 「安全性：我們會用 HTTPS 並驗證輸入。」（只有 2 個領域 — 輸入驗證 + 傳輸 — 低於 4-of-5 門檻）
+- 有「安全性考量」標題，但內容留成「TODO / 開發時再補」。
+- 列了 auth 與 CORS，卻完全沒提 secrets/`.env` 存放在哪裡。
+
+✅ PASS 範例（滿足期望的具體模式）：
+- 「### 安全性要求 — **Auth**：JWT access token（20 分鐘）+ HttpOnly refresh cookie，RBAC 角色 `admin`/`member`；**輸入驗證**：所有 API body 以 Zod 驗證、Prisma 參數化查詢；**CORS**：僅允許 `https://app.example.com`、`credentials: true`；**CSP**：`default-src 'self'; script-src 'self'`，並加上 `X-Frame-Options: DENY`；**Rate Limiting**：全域 100 req/min/IP，`/auth/login` 為 5 req/min。Secrets 放在 `.env`（已 git-ignore）；`.env.example` 只附 key 名稱。」（5/5 領域，產品專屬）
+- 一份交接包的「安全架構」段落涵蓋 認證/授權、輸入驗證、CORS allow-list、Rate Limiting 分級（4/5），各自對應到產品實際的端點，並加上一行針對 `.env`/`*.key` 的 `.gitignore` 設定。
+
+**TASKS.md 必須包含獨立的頂層安全任務（Hard Gate）**：產出的 TASKS.md / 任務清單「必須」把安全工作列為**具名、獨立的任務**，而非夾在某個不相關功能任務裡的一句話，也不是停在最後階段的籠統「全面強化」項目。至少需要**2 個各自獨立的安全任務**（例如：實作 auth + 授權檢查、加入 server-side 輸入驗證、設定 CORS allow-list、加入安全性 Headers/CSP、加入 rate limiting、把 `.env`/secrets 加進 `.gitignore`）。每一項都必須是範圍明確、可勾選的條目。
+
+❌ FAIL 範例（eval 評審會否決的反模式）：
+- 完全沒有產出 TASKS.md（交付被阻擋）。
+- 唯一的安全提及是夾在功能任務裡的子句：「做好登入頁（並確保它是安全的）。」
+- 在最後階段只有一條包山包海的條目：「Phase 5：安全強化階段。」沒有任何拆解。
+- 安全性只出現在任務清單上方的敘述文字，卻從未成為實際的任務條目。
+
+✅ PASS 範例（滿足期望的具體模式）：
+- 「- [ ] **[Security] 實作 JWT auth + 各路由授權（RBAC）**\n- [ ] **[Security] 加入 server-side 輸入驗證（所有 POST/PUT body 套 Zod schema）**\n- [ ] **[Security] 設定 CORS allow-list + 安全性 Headers（CSP、HSTS、X-Frame-Options）**\n- [ ] **[Security] 加入 rate limiting（全域 100/min、登入 5/min）**\n- [ ] **[Security] 把 `.env`、`*.key`、`*.pem` 加進 `.gitignore`；建立 `.env.example`**」
+- 一份 TASKS.md，其 Authentication epic 把「以 argon2 雜湊密碼」、「對所有 `/api/*` 路由強制授權檢查」、「5 次登入失敗後鎖定」列為各自可勾選的任務。
+
 ## 品質自檢
 
 ```

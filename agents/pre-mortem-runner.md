@@ -54,6 +54,20 @@ Good = metric + timing + quantity + causal mechanism. Bad = a hedge.
 
 ## Five failure categories — minimum 2 scenarios per category for completeness
 
+**Per-category quota with five live categories (Hard Gate)**: The `scenarios` list MUST contain ≥15 entries AND ≥2 entries in EVERY one of the five `category` enums — `product_ux`, `market_demand`, `team_execution`, `operational`, AND `external`. A category counts as covered ONLY if it has its own ≥2 standalone scenario objects with their own `id` and `failure_story`; a category mentioned merely as a clause inside another category's scenario (e.g. naming "GDPR" inside an `operational` security scenario, or noting "a competitor might react" inside a `product_ux` story) does NOT count toward that category's quota. Before returning, count entries per `category` value and confirm `external` specifically is not 0 or 1 — `external` is the category most often dropped and is non-optional.
+
+❌ FAIL examples (anti-patterns the eval judge would reject):
+- 15 scenarios where `market_demand` has only F8 (one entry) and `team_execution` has only F16 (one entry) — three categories under quota even though the total hits 15.
+- Zero standalone `external` scenarios, with the only outside-world risk being "GDPR compliance surfaces" buried as a sub-clause inside an `operational` security scenario F6 — `external` reads as 0.
+- Loading 11 scenarios into `product_ux` + `operational` and treating "demand" and "external" as one-line afterthoughts to reach the count.
+- A scenario tagged `category: external` whose `failure_story` is actually about an internal onboarding flow — mislabelling to fake coverage.
+
+✅ PASS examples (concrete patterns that satisfy the expectation):
+- ≥2 distinct `external` scenarios as their own objects, e.g. F13 "Apple's iOS 19 privacy API removes the device-ID we key attribution on, so paid acquisition ROAS becomes unmeasurable within one OS-update cycle" AND F14 "an incumbent bundles our core feature into their free tier in Q3, collapsing standalone willingness-to-pay".
+- A pre-return tally line in `summary_for_main_agent` reasoning: product_ux=4, market_demand=3, team_execution=3, operational=3, external=2 → all ≥2, total 15.
+- `market_demand` carrying its own ≥2 objects (e.g. "switching cost exceeds new-value delta for the SMB segment" AND "the job is episodic — fires twice a year — so no retention loop forms") rather than a single demand scenario.
+- `team_execution` with ≥2 standalone objects (e.g. "key-person dependency: the one engineer holding the matching-algorithm context leaves in month 5" AND "PM bandwidth is the decision bottleneck, so GTM and eng ship to divergent mental models").
+
 ### A. Product / UX
 
 JTBD not delivered, or delivered non-habitually:
@@ -175,5 +189,6 @@ All narrative content (failure stories, leading indicators, summaries, questions
 4. Build Mode: ≥3 scenarios grounded in real architecture evidence?
 5. `priority_three` actually highest likelihood × impact (not most dramatic-sounding)?
 6. `pre_launch_experiments` cheap enough to actually run (not six-month studies)?
+7. Per-category tally taken — `product_ux`, `market_demand`, `team_execution`, `operational`, `external` each ≥2 standalone scenario objects (not sub-clauses), with `external` explicitly confirmed not 0 or 1?
 
 A pre-mortem listing 15 generic risks without leading indicators is theatre. 8 specific scenarios each with a monitorable indicator is real risk management. Prefer the latter even if it means missing "15+" — but try for 15 with quality first.

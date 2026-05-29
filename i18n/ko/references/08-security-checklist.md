@@ -207,6 +207,31 @@ build/
 | Pre-mortem 단계 | 사용자에게 보안 실패 시나리오를 고려하도록 프롬프트 |
 | 리비전 모드 S1 | 사용자에게 기존 제품의 현재 보안 상태를 제공하도록 프롬프트 |
 
+**핸드오프는 항상 명시적인 보안 섹션과 함께 전달하세요 (Hard Gate)**: 개발 핸드오프 패키지는 반드시 작성되어야 합니다 — 보안이 완전히 설계되지 않았다는 이유로 전달을 거부하거나, 차단하거나, 연기해서는 절대 안 됩니다; 대신 명확히 레이블이 붙은 보안 섹션과 함께 패키지를 전달하세요. 해당 보안 섹션은 다음 5가지 명명된 영역 중 **최소 4가지**를 제품 특화된 세부 내용으로 구체적으로 다루어야 합니다: (a) 인증 & 인가, (b) 입력 유효성 검증, (c) CORS, (d) Content-Security-Policy / 보안 헤더 (CSP), (e) Rate Limiting. 1~2개 영역만 일반적으로 한 줄 언급하거나 "보안은 나중에 결정"과 같이 연기하는 것은 인정되지 않습니다. 해당 섹션은 또한 `.env` / 시크릿이 `.gitignore`에 속한다는 점을 명시해야 합니다.
+
+❌ FAIL 예시 (eval 심사관이 거부할 안티패턴):
+- "보안 아키텍처가 전문가에 의해 완전히 검토될 때까지 핸드오프 패키지를 생성할 수 없습니다." (전달 거부 → 보안 섹션이 아예 존재하지 않음)
+- 보안 관련 텍스트가 "앱은 안전해야 하고 모범 사례를 따라야 합니다."뿐인 핸드오프. (명명된 영역 0개)
+- "보안: HTTPS를 사용하고 입력을 검증하겠습니다." (입력 유효성 검증 + 전송, 2개 영역뿐 — 4-of-5 기준 미달)
+- "보안 고려사항" 제목은 있지만 "TODO / 개발 중에 채워질 예정"으로 남겨진 경우.
+- 인증과 CORS는 나열하지만 시크릿/`.env`가 어디에 저장되는지에 대한 언급이 누락된 경우.
+
+✅ PASS 예시 (기대를 충족하는 구체적 패턴):
+- "### 보안 요구사항 — **Auth**: JWT access token (20분) + HttpOnly refresh cookie, RBAC 역할 `admin`/`member`; **입력 유효성 검증**: 모든 API 바디를 Zod로 검증, 파라미터화된 Prisma 쿼리; **CORS**: `https://app.example.com`만 allow-list, `credentials: true`; **CSP**: `default-src 'self'; script-src 'self'`, 추가로 `X-Frame-Options: DENY`; **Rate Limiting**: 글로벌 100 req/min/IP, `/auth/login`에 5 req/min. 시크릿은 `.env`에 보관 (git-ignored); `.env.example`은 키 이름만 포함." (5/5 영역, 제품 특화)
+- Authentication/Authorization, 입력 유효성 검증, CORS allow-list, Rate Limiting 계층 (4/5)을 다루는 핸드오프 "보안 아키텍처" 섹션으로, 각각 제품의 실제 엔드포인트와 연결되며, `.env`/`*.key`에 대한 `.gitignore` 라인을 포함.
+
+**TASKS.md는 개별적이고 최상위 수준의 보안 작업을 포함해야 합니다 (Hard Gate)**: 생성된 TASKS.md / 작업 목록은 보안 작업을 **명명된 독립 작업**으로 포함해야 하며, 관련 없는 기능 작업 안에 묻힌 문장이나 마지막 단계에 방치된 모호한 "전체 강화" 항목이어서는 안 됩니다. 최소 **2개의 별개 보안 작업**이 필요합니다 (예: 인증 + 인가 체크 구현, 서버사이드 입력 유효성 검증 추가, CORS allow-list 설정, 보안 헤더/CSP 추가, rate limiting 추가, `.env`/시크릿을 `.gitignore`에 추가). 각각은 명확한 범위를 가진 체크 가능한 라인 항목이어야 합니다.
+
+❌ FAIL 예시 (eval 심사관이 거부할 안티패턴):
+- TASKS.md가 아예 생성되지 않음 (전달 차단).
+- 유일한 보안 언급이 기능 작업 안의 절(節)인 경우: "로그인 페이지 구축 (그리고 안전하게 만들기)."
+- 마지막 단계의 단일 포괄 항목: "Phase 5: 보안 강화 패스." 세부 분해 없음.
+- 보안이 작업 목록 위의 산문에만 나타나고 실제 작업 항목으로는 결코 나타나지 않는 경우.
+
+✅ PASS 예시 (기대를 충족하는 구체적 패턴):
+- "- [ ] **[Security] JWT 인증 + 라우트별 인가 (RBAC) 구현**\n- [ ] **[Security] 서버사이드 입력 유효성 검증 추가 (모든 POST/PUT 바디에 Zod 스키마)**\n- [ ] **[Security] CORS allow-list + 보안 헤더 (CSP, HSTS, X-Frame-Options) 설정**\n- [ ] **[Security] rate limiting 추가 (글로벌 100/min, 로그인 5/min)**\n- [ ] **[Security] `.env`, `*.key`, `*.pem`을 `.gitignore`에 추가; `.env.example` 생성**"
+- Authentication epic이 "argon2로 비밀번호 해싱", "모든 `/api/*` 라우트에 인가 체크 강제", "5회 로그인 실패 후 잠금"을 별개의 체크 가능한 작업으로 나열하는 TASKS.md.
+
 ## 품질 자체 점검
 
 ```

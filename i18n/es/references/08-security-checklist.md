@@ -150,30 +150,30 @@ Max-Age: 86400 (24 horas)
 ### 9. Plantilla de Seguridad .gitignore
 
 ```gitignore
-# Variables de entorno y secretos
+# Environment variables and secrets
 .env
 .env.local
 .env.*.local
 *.pem
 *.key
 
-# Progreso de planificación de producto (puede contener información de negocio sensible)
+# Product planning progress (may contain sensitive business information)
 .product-playbook-progress.md
 
-# IDE y OS
+# IDE and OS
 .idea/
 .vscode/
 *.swp
 .DS_Store
 Thumbs.db
 
-# Dependencias
+# Dependencies
 node_modules/
 __pycache__/
 *.pyc
 venv/
 
-# Output de build
+# Build output
 dist/
 build/
 .next/
@@ -206,6 +206,31 @@ build/
 | Al producir el PRD | Integrar resultados de verificación de seguridad en PRD §6 "Consideraciones Técnicas → Requisitos de Seguridad" |
 | Paso de Pre-mortem | Invitar al usuario a considerar escenarios de falla de seguridad |
 | Modo Revisión S1 | Invitar al usuario a proporcionar la postura de seguridad actual del producto existente |
+
+**Siempre Entrega el Handoff Con una Sección de Seguridad Explícita (Hard Gate)**: El paquete de handoff de desarrollo DEBE producirse — nunca rechaces, bloquees ni difieras la entrega con el argumento de que la seguridad no ha sido completamente diseñada; en su lugar entrega el paquete con una sección de seguridad claramente etiquetada. Esa sección de seguridad DEBE abordar concretamente **al menos 4 de estas 5 áreas nombradas** con detalle específico del producto: (a) Autenticación y Autorización, (b) Validación de Input, (c) CORS, (d) Content-Security-Policy / cabeceras de seguridad (CSP), (e) Rate Limiting. Una mención genérica de una sola línea de solo 1–2 áreas, o un aplazamiento como "la seguridad se determinará más adelante", NO cuenta. La sección también debe indicar que `.env` / secretos pertenecen a `.gitignore`.
+
+❌ Ejemplos de FAIL (anti-patrones que el juez de eval rechazaría):
+- "No puedo generar el paquete de handoff hasta que la arquitectura de seguridad haya sido completamente revisada por un especialista." (rechaza la entrega → no existe ninguna sección de seguridad)
+- Un handoff cuyo único texto de seguridad es "La app debe ser segura y seguir las mejores prácticas." (cero áreas nombradas)
+- "Seguridad: usaremos HTTPS y validaremos los inputs." (solo 2 áreas — validación de input + transporte — por debajo del umbral de 4 de 5)
+- Un encabezado "Consideraciones de Seguridad" que existe pero queda como "TODO / a completar durante el desarrollo."
+- Listar auth y CORS pero omitir cualquier mención de dónde se almacenan los secretos/`.env`.
+
+✅ Ejemplos de PASS (patrones concretos que satisfacen la expectativa):
+- "### Requisitos de Seguridad — **Auth**: JWT access token (20 min) + HttpOnly refresh cookie, roles RBAC `admin`/`member`; **Validación de Input**: todos los bodies de API validados con Zod, consultas Prisma parametrizadas; **CORS**: allow-list solo `https://app.example.com`, `credentials: true`; **CSP**: `default-src 'self'; script-src 'self'`, más `X-Frame-Options: DENY`; **Rate Limiting**: 100 req/min/IP global, 5 req/min en `/auth/login`. Los secretos viven en `.env` (git-ignored); `.env.example` entrega solo nombres de claves." (5/5 áreas, específico del producto)
+- Una sección "Arquitectura de Seguridad" del handoff que cubre Autenticación/Autorización, Validación de Input, allow-list CORS y niveles de Rate Limiting (4/5), cada uno ligado a los endpoints reales del producto, más una línea de `.gitignore` para `.env`/`*.key`.
+
+**TASKS.md Debe Contener Tareas de Seguridad Discretas y de Nivel Superior (Hard Gate)**: El TASKS.md / lista de tareas generado DEBE incluir el trabajo de seguridad como **tareas nombradas e independientes**, no como una frase enterrada dentro de una tarea de funcionalidad no relacionada ni como un ítem vago de "endurecer todo" aparcado en la fase final. Se requieren al menos **2 tareas de seguridad distintas** (p.ej., implementar verificaciones de auth + autorización, agregar validación de input del lado del servidor, configurar allow-list de CORS, agregar cabeceras de seguridad/CSP, agregar rate limiting, agregar `.env`/secretos a `.gitignore`). Cada una debe ser un ítem de línea verificable con un alcance claro.
+
+❌ Ejemplos de FAIL (anti-patrones que el juez de eval rechazaría):
+- No se produce ningún TASKS.md (entrega bloqueada).
+- La única mención de seguridad es una cláusula dentro de una tarea de funcionalidad: "Construir la página de login (y asegurarse de que sea segura)."
+- Un único bullet genérico en la última fase: "Fase 5: Pasada de endurecimiento de seguridad." sin desglose.
+- La seguridad aparece solo en prosa sobre la lista de tareas pero nunca como un ítem de tarea real.
+
+✅ Ejemplos de PASS (patrones concretos que satisfacen la expectativa):
+- "- [ ] **[Seguridad] Implementar JWT auth + autorización por ruta (RBAC)**\n- [ ] **[Seguridad] Agregar validación de input del lado del servidor (schemas Zod en todos los bodies POST/PUT)**\n- [ ] **[Seguridad] Configurar allow-list de CORS + cabeceras de seguridad (CSP, HSTS, X-Frame-Options)**\n- [ ] **[Seguridad] Agregar rate limiting (global 100/min, login 5/min)**\n- [ ] **[Seguridad] Agregar `.env`, `*.key`, `*.pem` a `.gitignore`; crear `.env.example`**"
+- Un TASKS.md donde el epic de Autenticación lista "Hashear contraseñas con argon2", "Aplicar verificaciones de autorización en todas las rutas `/api/*`" y "Bloquear tras 5 logins fallidos" como tareas verificables separadas.
 
 ## Autoevaluación de Calidad
 

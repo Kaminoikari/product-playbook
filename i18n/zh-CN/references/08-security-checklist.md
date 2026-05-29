@@ -207,6 +207,31 @@ build/
 | Pre-mortem 步骤 | 提示使用者考虑安全性失败情境 |
 | 改版模式 S1 | 提示使用者提供既有产品的安全现况 |
 
+**交接包必须始终附带明确的安全段落（Hard Gate）**：开发交接包必须产出 — 绝不可以「安全性尚未完整设计」为由拒绝、阻挡或延后交付；而应交付包含清楚标示之安全段落的交接包。该安全段落必须以产品专属的细节，具体涵盖**以下 5 个具名面向中的至少 4 个**：(a) 认证与授权、(b) 输入验证、(c) CORS、(d) Content-Security-Policy / 安全性 Headers (CSP)、(e) Rate Limiting。仅一行带过、只提到 1–2 个面向，或写下「安全性日后再定」之类的延后说辞，皆不算数。该段落还必须注明 `.env` / secrets 应放入 `.gitignore`。
+
+❌ FAIL 范例（eval 评审会拒绝的反模式）：
+- 「在安全架构经专家完整审查之前，我无法产出交接包。」（拒绝交付 → 根本不存在安全段落）
+- 交接包中唯一的安全文字是「应用程式应保持安全并遵循最佳实践。」（零个具名面向）
+- 「安全性：我们会使用 HTTPS 并验证输入。」（仅 2 个面向 — 输入验证 + 传输 — 低于 4-of-5 门槛）
+- 存在一个「安全性考量」标题，却留为「TODO / 开发期间再补」。
+- 列出 auth 与 CORS，却完全未提及 secrets/`.env` 的存放位置。
+
+✅ PASS 范例（满足期望的具体模式）：
+- 「### 安全性要求 — **Auth**：JWT access token（20 分钟）+ HttpOnly refresh cookie，RBAC 角色 `admin`/`member`；**输入验证**：所有 API body 以 Zod 验证、参数化 Prisma 查询；**CORS**：仅允许清单 `https://app.example.com`，`credentials: true`；**CSP**：`default-src 'self'; script-src 'self'`，加上 `X-Frame-Options: DENY`；**Rate Limiting**：全域 100 req/min/IP，`/auth/login` 5 req/min。Secrets 放在 `.env`（已 git-ignore）；`.env.example` 仅附 key 名称。」（5/5 面向，产品专属）
+- 一份交接包的「安全架构」段落涵盖 认证/授权、输入验证、CORS 允许清单与 Rate Limiting 分级（4/5），各自绑定到产品实际的端点，并附上一行将 `.env`/`*.key` 加入 `.gitignore`。
+
+**TASKS.md 必须包含独立、顶层的安全任务（Hard Gate）**：所产出的 TASKS.md / 任务清单必须将安全性工作列为**具名、独立的任务**，而非夹在某个无关功能任务里的一句话，或塞在最后阶段、含糊的「全面强化」项目。至少需要 **2 个独立的安全任务**（例如：实作 auth + 授权检查、加入 server-side 输入验证、配置 CORS 允许清单、加入安全性 Headers/CSP、加入 rate limiting、将 `.env`/secrets 加入 `.gitignore`）。每一项都必须是范围清楚、可勾选的条目。
+
+❌ FAIL 范例（eval 评审会拒绝的反模式）：
+- 完全没有产出 TASKS.md（交付被阻挡）。
+- 唯一的安全提及是某功能任务里的一句话：「做登入页面（并确保它安全）。」
+- 在最后阶段放一个包山包海的项目：「Phase 5：安全强化。」却毫无细分。
+- 安全性只出现在任务清单上方的叙述文字里，却从未成为实际的任务条目。
+
+✅ PASS 范例（满足期望的具体模式）：
+- 「- [ ] **[Security] 实作 JWT auth + 逐路由授权（RBAC）**\n- [ ] **[Security] 加入 server-side 输入验证（所有 POST/PUT body 套 Zod schema）**\n- [ ] **[Security] 配置 CORS 允许清单 + 安全性 Headers（CSP、HSTS、X-Frame-Options）**\n- [ ] **[Security] 加入 rate limiting（全域 100/min，登入 5/min）**\n- [ ] **[Security] 将 `.env`、`*.key`、`*.pem` 加入 `.gitignore`；建立 `.env.example`**」
+- 一份 TASKS.md，其 Authentication epic 将「以 argon2 杂凑密码」、「在所有 `/api/*` 路由强制授权检查」、「5 次登入失败后锁定」列为各自可勾选的任务。
+
 ## 品质自检
 
 ```

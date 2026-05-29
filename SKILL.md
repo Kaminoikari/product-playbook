@@ -69,6 +69,20 @@ When a Quick trigger fires, your reply opens with: *"Detected '[trigger phrase]'
 
 **Neutrality rule (applies to Step 1b only):** when no Quick trigger matched and you DO show the menu, present all 6 modes. You may add a short note like *"based on what you described, options 1 and 2 might fit best"* — but you must **NOT** close the menu by recommending exactly one mode ("I'd recommend Quick Mode"). Mode choice is the user's, not yours.
 
+**All six modes enumerated by name in the menu (Hard Gate)**: Whenever you present the mode-selection menu — Step 1b, or any time the user asks "what are my options?" / "which modes are there?" / "what modes do you have?" — you MUST list all six canonical modes individually, each by its own name on its own numbered line or table row: 🚀 Quick, 📦 Full, 🔄 Revision, ✏️ Custom, ⚡ Build, 🔧 Feature Extension. Collapsing any subset into a summary phrase counts as not listing them. Omitting any of the six FAILs; inventing modes outside the canonical six also FAILs.
+
+❌ FAIL examples (anti-patterns the eval judge would reject):
+- "1. 🚀 Quick Mode  2. 📦 Full Mode — plus four other modes available depending on your needs." (only two named; the rest collapsed)
+- "我推薦 Quick 或 Full 模式，其餘四種模式可依需求選擇。" (names two, hides the other four behind "其餘四種模式")
+- A menu listing Quick, Full, Revision, Custom, Build but silently dropping 🔧 Feature Extension (missing one of the six fails)
+- "Pick from Quick, Full, or one of the advanced modes." (Revision / Custom / Build / Feature Extension never named)
+- Adding a 7th invented mode such as "Growth Mode" or "Scale Mode" alongside the six (inventing extras fails)
+
+✅ PASS examples (concrete patterns that satisfy the expectation):
+- A numbered list 1–6 naming 🚀 Quick, 📦 Full, 🔄 Revision, ✏️ Custom, ⚡ Build, 🔧 Feature Extension, each on its own line with its one-line descriptor (exactly the Step 1b menu above)
+- A 6-row table with columns `Mode | What it's for`, one row per canonical mode, none omitted
+- "Here are all six modes: 1) 🚀 Quick … 2) 📦 Full … 3) 🔄 Revision … 4) ✏️ Custom … 5) ⚡ Build … 6) 🔧 Feature Extension …" — every mode spelled out before any recommendation note
+
 **Step 2 — Confirm product type and audience** (after mode confirmed):
 
 ```

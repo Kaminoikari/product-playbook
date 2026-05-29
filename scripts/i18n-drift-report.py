@@ -130,15 +130,33 @@ def compare(src_text: str, tgt_text: str) -> list[dict]:
     return drifts
 
 
-def scan(repo_root: Path, file_filter: str | None, lang_filter: str | None) -> dict:
-    """Walk references/ and emit per-file drift report data."""
-    refs_dir = repo_root / "references"
-    if not refs_dir.is_dir():
-        raise SystemExit(f"references/ not found under {repo_root}")
+def _source_targets(repo_root: Path) -> list[tuple[Path, str]]:
+    """Return [(source_path, target_subpath), ...] of files to mirror-check.
 
-    source_files = sorted(p for p in refs_dir.glob("*.md") if p.is_file())
+    target_subpath is the path *inside* i18n/<lang>/ where the mirror lives.
+    For references/, the mirror is at i18n/<lang>/references/<name>.md.
+    For SKILL.md (repo root), the mirror is at i18n/<lang>/SKILL.md.
+    """
+    pairs: list[tuple[Path, str]] = []
+    refs_dir = repo_root / "references"
+    if refs_dir.is_dir():
+        for p in sorted(refs_dir.glob("*.md")):
+            if p.is_file():
+                pairs.append((p, f"references/{p.name}"))
+    skill = repo_root / "SKILL.md"
+    if skill.is_file():
+        pairs.append((skill, "SKILL.md"))
+    return pairs
+
+
+def scan(repo_root: Path, file_filter: str | None, lang_filter: str | None) -> dict:
+    """Walk references/ + SKILL.md and emit per-file drift report data."""
+    pairs = _source_targets(repo_root)
+    if not pairs:
+        raise SystemExit(f"no references/*.md or SKILL.md found under {repo_root}")
+
     if file_filter:
-        source_files = [p for p in source_files if file_filter in p.name]
+        pairs = [(p, t) for (p, t) in pairs if file_filter in p.name]
 
     langs = [lang_filter] if lang_filter else LANGS
     for lang in langs:
@@ -148,10 +166,10 @@ def scan(repo_root: Path, file_filter: str | None, lang_filter: str | None) -> d
     clusters = []
     clean = 0
     missing = []
-    for src in source_files:
+    for src, target_subpath in pairs:
         src_text = src.read_text(encoding="utf-8")
         for lang in langs:
-            tgt = repo_root / "i18n" / lang / "references" / src.name
+            tgt = repo_root / "i18n" / lang / target_subpath
             if not tgt.is_file():
                 missing.append({"source": str(src.relative_to(repo_root)),
                                 "target": str(tgt.relative_to(repo_root)),

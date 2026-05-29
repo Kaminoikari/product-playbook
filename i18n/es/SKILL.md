@@ -29,8 +29,8 @@ Detecta el idioma del primer mensaje del usuario y cambia silenciosamente:
 - 繁體中文 → `i18n/zh-TW/SKILL.md`
 - 日本語 → `i18n/ja/SKILL.md`
 - 简体中文 → `i18n/zh-CN/SKILL.md`
-- 한국어 → `i18n/ko/SKILL.md`
 - Español → continúa con este archivo
+- 한국어 → `i18n/ko/SKILL.md`
 
 También cambia si el usuario solicita explícitamente un idioma (p.ej., "please use English"). NO pidas confirmación. NO menciones el cambio.
 
@@ -40,9 +40,26 @@ También cambia si el usuario solicita explícitamente un idioma (p.ej., "please
 
 Usa **confirmación progresiva** — evita volcar todas las opciones. Si el usuario ya especificó, aplica directamente.
 
-**Paso 1 — Confirmar modo** (siempre preguntar a menos que ya esté especificado):
+**Paso 1 — Confirmar modo**
 
-> Selecciona un modo (número o nombre), o solo describe tu producto y te recomendaré:
+**Paso 1a — Triggers rápidos (verificar PRIMERO; auto-aplicar el modo coincidente sin mostrar el menú):**
+
+Escanea el primer mensaje del usuario en busca de estas frases o paráfrasis cercanas. Si ALGUNA coincide, salta el menú por completo y entra al modo coincidente en S1 inmediatamente.
+
+| Frase trigger (o paráfrasis cercana) | Modo auto-aplicado |
+|---|---|
+| "validar idea rápido", "30 min dirección", "verificación rápida" | 🚀 Rápido |
+| "plan de producto completo", "planificación integral", "hacer todo el proceso" | 📦 Completo |
+| "ya sé qué construir", "saltar discovery", "directo al MVP" | ⚡ Build |
+| "renovar mi producto", "optimizar existente", "rediseñar nuestra app" | 🔄 Revisión |
+| **"agregar una feature", "feature para producto existente", "planificar esta feature", "construir feature [X] para nuestra app"** | 🔧 Extensión de Feature |
+| "pre-mortem", "qué podría salir mal", "encontrar modos de fallo" | enrutar a `pre-mortem-runner` según el Protocolo de Despacho de Especialistas |
+
+Cuando se active un trigger rápido, tu respuesta abre con: *"Detecté '[frase trigger]' — entrando a [Modo] en S1."* NO presentes el menú de 6 modos. Procede al Paso 2 de confirmación de tipo de producto (o directamente al S1 del modo si el tipo de producto ya está implícito).
+
+**Paso 1b — Menú (solo si NINGÚN trigger rápido coincidió):**
+
+> Selecciona un modo (número o nombre) — elige el que coincida con tu situación. Si no estás seguro, describe brevemente tu producto y lo reduciré a **dos candidatos** para que elijas entre ellos (nunca solo uno).
 > 1. 🚀 **Modo Rápido** — 3 pasos, ~30 min (JTBD → PR-FAQ → North Star)
 > 2. 📦 **Modo Completo** — 9–11 pasos, documento de planificación integral
 > 3. 🔄 **Modo Revisión** — 6–8 pasos, optimizar producto existente
@@ -50,12 +67,21 @@ Usa **confirmación progresiva** — evita volcar todas las opciones. Si el usua
 > 5. ⚡ **Modo Build** — 7 pasos, salta Discovery, directo a solución
 > 6. 🔧 **Modo Extensión de Feature** — 4 pasos, agregar funcionalidad a producto existente
 
-Triggers rápidos (auto-aplican el modo correspondiente):
-- "validar idea rápido" / "30 min dirección" → Quick
-- "plan de producto completo" → Full
-- "ya sé lo que construir" → Build
-- "renovar mi producto" / "optimizar" → Revision
-- "agregar funcionalidad" / "feature a producto existente" → Feature Extension
+**Regla de neutralidad (aplica solo al Paso 1b):** cuando ningún trigger rápido coincidió y SÍ muestras el menú, presenta los 6 modos. Puedes añadir una nota corta como *"según lo que describiste, las opciones 1 y 2 podrían encajar mejor"* — pero NO debes cerrar el menú recomendando exactamente un modo ("Recomiendo el Modo Rápido"). La elección de modo es del usuario, no tuya.
+
+**Los seis modos enumerados por nombre en el menú (Hard Gate)**: Siempre que presentes el menú de selección de modo — Paso 1b, o cada vez que el usuario pregunte "¿cuáles son mis opciones?" / "¿qué modos hay?" / "¿qué modos tienes?" — DEBES listar los seis modos canónicos individualmente, cada uno por su propio nombre en su propia línea numerada o fila de tabla: 🚀 Rápido, 📦 Completo, 🔄 Revisión, ✏️ Personalizado, ⚡ Build, 🔧 Extensión de Feature. Colapsar cualquier subconjunto en una frase resumen cuenta como no listarlos. Omitir cualquiera de los seis FALLA (FAIL); inventar modos fuera de los seis canónicos también FALLA (FAIL).
+
+❌ Ejemplos de FAIL (anti-patrones que el juez de eval rechazaría):
+- "1. 🚀 Modo Rápido  2. 📦 Modo Completo — más otros cuatro modos disponibles según tus necesidades." (solo dos nombrados; el resto colapsado)
+- "Recomiendo el modo Rápido o Completo, los otros cuatro modos se pueden elegir según necesidad." (nombra dos, esconde los otros cuatro tras "los otros cuatro modos")
+- Un menú que lista Rápido, Completo, Revisión, Personalizado, Build pero silenciosamente omite 🔧 Extensión de Feature (faltar uno de los seis falla)
+- "Elige entre Rápido, Completo, o uno de los modos avanzados." (Revisión / Personalizado / Build / Extensión de Feature nunca nombrados)
+- Añadir un 7º modo inventado como "Modo Growth" o "Modo Scale" junto a los seis (inventar extras falla)
+
+✅ Ejemplos de PASS (patrones concretos que satisfacen la expectativa):
+- Una lista numerada 1–6 nombrando 🚀 Rápido, 📦 Completo, 🔄 Revisión, ✏️ Personalizado, ⚡ Build, 🔧 Extensión de Feature, cada uno en su propia línea con su descriptor de una línea (exactamente el menú del Paso 1b arriba)
+- Una tabla de 6 filas con columnas `Modo | Para qué sirve`, una fila por modo canónico, ninguno omitido
+- "Aquí están los seis modos: 1) 🚀 Rápido … 2) 📦 Completo … 3) 🔄 Revisión … 4) ✏️ Personalizado … 5) ⚡ Build … 6) 🔧 Extensión de Feature …" — cada modo deletreado antes de cualquier nota de recomendación
 
 **Paso 2 — Confirmar tipo de producto y audiencia** (tras confirmar modo):
 
@@ -95,7 +121,7 @@ Tras confirmar el modo, lee el archivo de reglas del modo correspondiente para l
 | Tipo de producto confirmado | `rules-product-type.md` (ajustes B2B/B2C) |
 | Modo tiene pasos Optional | `rules-optional-trigger.md` (triggers + bundle Persona-Journey + Punto de Decisión de Fase) |
 | Lectura/escritura de contexto de producto | `rules-context.md` |
-| A punto de delegar en un sub-agente especialista (discovery / strategy-critic / pre-mortem-runner) — cargar en la primera consideración de dispatch en cualquier modo | `rules-subagent-dispatch.md` |
+| A punto de delegar en un sub-agente especialista (discovery / strategy-critic / pre-mortem-runner) — cargar en la primera consideración de dispatch en cualquier modo, O inmediatamente cuando el usuario pega un artefacto con forma de estrategia / persona / JTBD y pide crítica/revisión (incluso fuera del paso canónico) | `rules-subagent-dispatch.md` |
 | Usuario pide lista de frameworks / comandos complementarios | `rules-commands.md` |
 | Usuario sube archivo | `rules-file-integration.md` |
 | Usuario dice pausar/guardar/continuar | `rules-progress.md` |
@@ -154,7 +180,67 @@ Otras reglas:
 3. **No omitir pasos** — sigue la secuencia del modo; no saltes porque "el usuario probablemente solo quiere el resultado final".
 4. **Handoff de dev solo tras completar todo** — "iniciar desarrollo" / "generar paquete de handoff" requiere todos los pasos ✅. Solicitudes a mitad del proceso reciben: *"Estamos en S[X]/S[Y]. Recomiendo completar los pasos restantes. ¿Continuar, o proceder al progreso actual?"*
 5. **El indicador de progreso es la fuente única de verdad** — completitud = todos los pasos ✅ en el indicador; no inferir.
-6. **Las autoevaluaciones de calidad deben revelar problemas** — tras cada paso, ejecuta la checklist inline (en tu archivo de reglas de modo) o carga `rules-quality-review.md`. La checklist NO DEBE tener todos los ítems ✅; si todos pasan, identifica proactivamente "el aspecto más débil de este output" y explica cómo fortalecerlo.
+6. **Las autoevaluaciones de calidad deben revelar problemas** — tras cada paso, DEBES cargar `references/rules-quality-review.md` y seguir su protocolo exactamente. El bloque "Format" en ese archivo es autoritativo (solo marcadores ✅/❌, sin sustitutos ⚠️/parcial/en blanco, cada ❌ incluye impacto downstream). Los archivos de reglas de modo NO contienen una checklist inline sustituta — `rules-quality-review.md` es la fuente única de verdad. La checklist NO DEBE tener todos los ítems ✅; si todos pasan, baja el listón y vuelve a revisar hasta que surja al menos un ❌ en una brecha de contenido sustantiva.
+7. **Los sub-agentes especialistas deben ser despachados, no simulados inline** — cuando se activen las condiciones de trigger en la tabla de abajo, DEBES invocar al especialista vía la herramienta Task con el `subagent_type` coincidente. Ejecutar la crítica/discovery inline tú mismo falla el contrato (los especialistas existen precisamente porque contexto separado = output de mayor calidad). Ver `## 🤝 Protocolo de Despacho de Especialistas` abajo.
+
+---
+
+## 🤝 Protocolo de Despacho de Especialistas (siempre verificar antes de responder)
+
+Tres sub-agentes especialistas viven en contextos aislados: `strategy-critic`, `discovery-specialist`, `pre-mortem-runner`. Su valor proviene del contexto enfocado — ejecutar su trabajo inline en el agente principal lo diluye.
+
+**Tabla de triggers de despacho** (cualquier fila coincide → despachar inmediatamente, incluso a mitad de modo, incluso fuera del paso canónico):
+
+| Trigger | Especialista | Mensaje de ejemplo del usuario |
+|---|---|---|
+| El usuario pega un artefacto de estrategia ("nuestra misión es…", "nuestra estrategia es…", Strategy Blocks, Rumelt kernel, DHM, Empowered Teams charter) Y pide revisión/crítica/feedback | `strategy-critic` | "Revisa esta estrategia: 'Nuestra misión es deleitar a los clientes…'" |
+| Trabajo de Persona / JTBD / OST / Journey Map / Continuous Discovery | `discovery-specialist` | Full Mode S2-S6, Build Mode S2, cualquier paso Custom que seleccione discovery |
+| El usuario pregunta "qué podría salir mal" / pre-mortem / análisis de riesgo | `pre-mortem-runner` | "Haz un pre-mortem de este MVP", o Full Mode S10 / Build Mode S4 |
+
+### Forma de respuesta requerida cuando se activa un trigger
+
+Cuando cualquier fila coincide, tu respuesta DEBE estructurarse como exactamente estas tres partes, en orden. Ninguna otra forma es aceptable — sin prosa, sin menú de modos, sin indicador de progreso, y sin análisis inline antes de la llamada a Task.
+
+**Parte 1 — primera línea del output, verbatim** (reemplaza `{specialist}` con el nombre del especialista coincidente):
+
+> Dispatching to `{specialist}` subagent via Task tool with `subagent_type={specialist}`.
+
+**Parte 2 — inmediatamente llama a la herramienta Task**:
+
+```
+Task(
+  subagent_type="{specialist}",
+  description="<short 2-3 word summary>",
+  prompt="<paste the user's original prompt verbatim, then add a final line: 'Reply in [user's working language].'>"
+)
+```
+
+**Parte 3 — después de que el especialista devuelva YAML**, integra `three_questions_to_ask_the_writer` (strategy-critic) / `open_questions` (discovery) / `priority_three` + `pre_launch_experiments` (pre-mortem) **verbatim** en tu respuesta. No suavices, no parafrasees, no omitas.
+
+### Anti-patrones (cada uno es un fallo de contrato)
+
+- ❌ Producir una Persona / JTBD / crítica / pre-mortem tú mismo antes de la llamada a Task — incluso parcialmente, incluso "para calentar".
+- ❌ Escribir prosa, un menú de modos, o un indicador de progreso antes del marcador de despacho.
+- ❌ Saltarse la llamada a Task porque "ya sabes la respuesta". El contexto enfocado del especialista produce output de calidad materialmente superior a la que puedes inline.
+- ❌ Parafrasear el marcador de despacho. La forma de la primera línea es verbatim.
+
+**Excepción genuina de falso positivo**: si el prompt no tiene conexión real con el alcance de un especialista (p.ej., el usuario menciona "JTBD" solo para preguntar qué significa el acrónimo), indícalo en una frase corta y procede sin despachar. En caso de duda, despacha — la respuesta `status: out_of_scope` del sub-agente rebota limpiamente las solicitudes no coincidentes de vuelta a ti.
+
+### Fallback de referencia cuando el despacho Task no está disponible
+
+Algunos entornos no pueden despachar sub-agentes (notablemente runs headless `claude -p`, algunos harnesses MCP, y ciertos contextos de eval CI). En esos entornos la herramienta `Task` está ausente o inerte, así que el despacho anterior colapsará inline silenciosamente. Para prevenir el colapso de contenido, **antes de producir output inline para cualquier fila de trigger coincidente, DEBES leer los archivos de referencia correspondientes y tratar sus Hard Gates como propios**:
+
+| Especialista (si el despacho falla / no está disponible) | Archivos de referencia a leer PRIMERO, luego satisfacer Hard Gates inline |
+|---|---|
+| `discovery-specialist` | `references/02a-persona.md` (estructura de Persona + Hard Gate de Comprador/Usuario B2B + vocabulario de Priorización B2B) Y `references/02b-jtbd.md` (JTBD de 3 capas + Hard Gates de Jobs a Nivel Org B2B) Y `references/rules-quality-review.md` (formato de marcadores ✅/❌ + Hard Gate de ≥1 ❌). Añade `references/02c-ost-journey.md` si la solicitud incluye OST o Journey Map. |
+| `strategy-critic` | `references/01-strategy.md` (diagnóstico de Rumelt + formato de crítica de tres preguntas) Y `references/rules-quality-review.md` |
+| `pre-mortem-runner` | `references/04-develop.md` (sección Pre-mortem — 15+ escenarios en 5 categorías + formato de indicador líder) Y `references/rules-quality-review.md` |
+
+**La autoevaluación de calidad siempre es requerida.** Siempre que el prompt del usuario pida una autoevaluación de calidad, checklist, o crítica de fin de paso — o siempre que estés a punto de emitir output de fin de paso de cualquier tipo — DEBES haber leído `references/rules-quality-review.md` y seguir su formato exacto de marcadores `✅`/`❌` con al menos un `❌` en una brecha de contenido sustantiva. Esto es innegociable independientemente de si se intentó el despacho o de si se usó la ruta de fallback.
+
+Esto **no** es licencia para saltar el despacho cuando SÍ está disponible. El orden es: (1) intentar despacho; (2) si la herramienta Task no está disponible o la llamada no puede completarse, leer las referencias listadas y producir output de grado especialista inline; (3) cita que usaste el fallback inline en una nota corta al final ("Fallback inline usado — despacho Task no disponible en este entorno."). Las referencias anteriores incorporan los mismos Hard Gates que el especialista habría aplicado, así que seguirlas fielmente cierra la brecha de calidad.
+
+Plantillas completas de invocación por trigger: `references/rules-subagent-dispatch.md`. Un hook `UserPromptSubmit` (`hooks/user-prompt-detect-specialist-dispatch.py`) también aplica este protocolo en la capa del harness — su recordatorio y esta sección son duplicados intencionales para que la regla sea imposible de pasar por alto.
 
 ---
 

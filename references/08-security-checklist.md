@@ -207,6 +207,31 @@ build/
 | Pre-mortem step | Prompt the user to consider security failure scenarios |
 | Revision mode S1 | Prompt the user to provide the existing product's current security posture |
 
+**Always Ship the Handoff With an Explicit Security Section (Hard Gate)**: The development handoff package MUST be produced — never refuse, block, or defer delivery on the grounds that security has not been fully designed; instead deliver the package with a clearly labeled security section. That security section MUST concretely address **at least 4 of these 5 named areas** with product-specific detail: (a) Authentication & Authorization, (b) Input Validation, (c) CORS, (d) Content-Security-Policy / security headers (CSP), (e) Rate Limiting. A generic one-line mention of only 1–2 areas, or a deferral such as "security to be determined later," does NOT count. The section must also note that `.env` / secrets belong in `.gitignore`.
+
+❌ FAIL examples (anti-patterns the eval judge would reject):
+- "I can't generate the handoff package until the security architecture has been fully reviewed by a specialist." (refuses delivery → no security section exists at all)
+- A handoff whose only security text is "The app should be secure and follow best practices." (zero named areas)
+- "Security: we'll use HTTPS and validate inputs." (only 2 areas — input validation + transport — below the 4-of-5 bar)
+- A "Security Considerations" heading that exists but is left as "TODO / to be filled in during development."
+- Listing auth and CORS but omitting any mention of where secrets/`.env` are stored.
+
+✅ PASS examples (concrete patterns that satisfy the expectation):
+- "### Security Requirements — **Auth**: JWT access token (20 min) + HttpOnly refresh cookie, RBAC roles `admin`/`member`; **Input Validation**: all API bodies validated with Zod, parameterized Prisma queries; **CORS**: allow-list `https://app.example.com` only, `credentials: true`; **CSP**: `default-src 'self'; script-src 'self'`, plus `X-Frame-Options: DENY`; **Rate Limiting**: 100 req/min/IP global, 5 req/min on `/auth/login`. Secrets live in `.env` (git-ignored); `.env.example` ships key names only." (5/5 areas, product-specific)
+- A handoff "Security Architecture" section covering Authentication/Authorization, Input Validation, CORS allow-list, and Rate Limiting tiers (4/5), each tied to the product's actual endpoints, plus a `.gitignore` line for `.env`/`*.key`.
+
+**TASKS.md Must Contain Discrete, Top-Level Security Tasks (Hard Gate)**: The generated TASKS.md / task list MUST include security work as **named, standalone tasks**, not as a sentence buried inside an unrelated feature task or a vague "harden everything" item parked in the final phase. At least **2 distinct security tasks** are required (e.g., implement auth + authorization checks, add server-side input validation, configure CORS allow-list, add security headers/CSP, add rate limiting, add `.env`/secrets to `.gitignore`). Each must be a checkable line item with a clear scope.
+
+❌ FAIL examples (anti-patterns the eval judge would reject):
+- No TASKS.md is produced at all (delivery blocked).
+- The only security mention is a clause inside a feature task: "Build the login page (and make sure it's secure)."
+- A single catch-all bullet in the last phase: "Phase 5: Security hardening pass." with no breakdown.
+- Security appears only in prose above the task list but never as an actual task item.
+
+✅ PASS examples (concrete patterns that satisfy the expectation):
+- "- [ ] **[Security] Implement JWT auth + per-route authorization (RBAC)**\n- [ ] **[Security] Add server-side input validation (Zod schemas on all POST/PUT bodies)**\n- [ ] **[Security] Configure CORS allow-list + security headers (CSP, HSTS, X-Frame-Options)**\n- [ ] **[Security] Add rate limiting (global 100/min, login 5/min)**\n- [ ] **[Security] Add `.env`, `*.key`, `*.pem` to `.gitignore`; create `.env.example`**"
+- A TASKS.md where the Authentication epic lists "Hash passwords with argon2", "Enforce authorization checks on all `/api/*` routes", and "Lock out after 5 failed logins" as separate checkable tasks.
+
 ## Quality Self-Check
 
 ```
