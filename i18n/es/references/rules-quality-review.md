@@ -6,8 +6,14 @@
 
 Después del output de cada paso:
 1. Marcar cada ítem de la checklist ✅ o ❌. Cada ❌ declara: brecha, impacto downstream, dirección de mejora.
-2. **≥1 ❌ requerido** (Hard Gate). ⚠️ NO sustituye. Sin bypass por apéndice "aspecto más débil". ❌ debe ser una brecha sustantiva de contenido, no formato/redacción. Si todo se siente ✅ → baja la vara, re-revisa. Todo artefacto tiene una dimensión más débil.
-3. Formato: `📝 Autoevaluación de Calidad:` luego `- ✅/❌ ítem → Brecha / Impacto / Mejora`.
+2. **≥1 ❌ requerido** (Hard Gate). ⚠️ NO sustituye. Sin bypass por apéndice "aspecto más débil". ❌ debe ser una brecha sustantiva de contenido, no formato/redacción. **Marcadores cosméticos de formato/redacción FAIL the Hard Gate**. Si todo se siente ✅ → baja la vara, re-revisa. Todo artefacto tiene una dimensión más débil.
+3. Formato:
+
+   ```
+   📝 Autoevaluación de Calidad:
+   - ✅ [ítem de checklist]
+   - ❌ [ítem de checklist] → Brecha: …  ·  Impacto: bloquea [paso downstream]  ·  Mejora: [acción concreta]
+   ```
 
 Autoverificación sobre la autoverificación: sin ❌ → rehaz el paso 2.
 
@@ -17,7 +23,7 @@ Autoverificación sobre la autoverificación: sin ❌ → rehaz el paso 2.
 
 **Persona**: 1) por propósito/motivación no demografía, 2) MECE, 3) TA principal vs secundario claro, 4) puntos de dolor de observación/inferencia real, 5) "enfoque actual + razón" lo suficientemente específico para identificar workarounds.
 
-**JTBD**: 1) contexto específico (no "en cualquier momento"), 2) un solo job central, 3) funcional + emocional + social presentes, 4) usable para evaluar soluciones, 5) "enfoque actual + brecha" indicado, 6) Q5 de las cinco preguntas toca emoción/identidad/miedo.
+**JTBD**: 1) contexto específico (no "en cualquier momento"), 2) un solo job central, 3) funcional + emocional + social presentes, 4) usable para evaluar soluciones, 5) "enfoque actual + brecha" indicado, 6) **Q5 de las cinco preguntas usa vocabulario emocional explícito** — al menos uno: *fear (miedo), anxiety (ansiedad), shame (vergüenza), worry (preocupación), dread (pavor), self-doubt (autoduda), sense of loss (sensación de pérdida), threat to identity (amenaza a la identidad), embarrassment (bochorno), guilt (culpa)*. Consecuencias funcionales ("la credibilidad de HR sufre", "los usuarios se van", "la métrica baja") FAIL este ítem — describen resultados, no la emoción sentida. ✅ ejemplo: "HR fears ser responsabilizado personalmente en una auditoría"; ❌ ejemplo: "La credibilidad de HR con liderazgo está en riesgo".
 
 **Positioning (April Dunford)**: 1) alternativa competitiva desde la perspectiva del usuario, 2) atributo único que los competidores no pueden igualar, 3) valor en lenguaje del usuario no del producto, 4) mercado objetivo lo suficientemente específico para encontrarlos, 5) los 5 elementos lógicamente consistentes.
 

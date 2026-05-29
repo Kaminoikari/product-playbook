@@ -12,9 +12,10 @@ Signals compared per (source, target) pair:
   - Size signal: i18n line count below 85% of source => warn
 
 Severity:
-  - critical: vocab token missing or under-represented (behavioral risk)
-  - warning:  structural count divergence (Hard Gate, headings, fences)
-  - info:     line-count ratio drift only
+  - critical: vocab token completely absent from i18n (canonical rule won't transfer)
+  - warning:  structural count divergence (Hard Gate, headings, fences) OR
+              vocab under-emphasis (i18n has <half of source occurrences)
+  - info:     line-count ratio drift only, or i18n stricter than source
 
 Input:  references/*.md and i18n/<lang>/references/*.md
 Output: docs/i18n-drift-<YYYY-MM-DD>.md (default; --output overrides)
@@ -87,13 +88,29 @@ def compare(src_text: str, tgt_text: str) -> list[dict]:
                 "severity": "info",
             })
     for v in VOCAB:
-        if s_vocab[v] > 0 and t_vocab[v] < s_vocab[v]:
+        # presence-only: if source uses this canonical token at all, target
+        # must also use it at least once. Exact count mismatch is OK —
+        # inflections ("fears" vs "fear") and natural translation density
+        # vary by language. What we guard against is the token being absent
+        # entirely, which means the canonical vocabulary rule won't transfer
+        # when the orchestrator loads the i18n reference.
+        if s_vocab[v] > 0 and t_vocab[v] == 0:
+            drifts.append({
+                "kind": "vocab-missing",
+                "signal": f"vocab `{v}`",
+                "source": s_vocab[v],
+                "target": t_vocab[v],
+                "severity": "critical",
+            })
+        elif s_vocab[v] > 0 and t_vocab[v] < s_vocab[v] // 2:
+            # heuristic: i18n with less than half source count signals
+            # under-emphasis worth flagging at warning level
             drifts.append({
                 "kind": "vocab-under",
                 "signal": f"vocab `{v}`",
                 "source": s_vocab[v],
                 "target": t_vocab[v],
-                "severity": "critical",
+                "severity": "warning",
             })
     if s_lines > 0 and (t_lines / s_lines) < LINE_RATIO_WARN:
         drifts.append({
