@@ -142,7 +142,7 @@ jobs:
 
       - name: Upload trigger results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: trigger-eval-results
           path: |
@@ -243,7 +243,7 @@ jobs:
 
       - name: Upload behavioral results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: behavioral-eval-results
           path: |
