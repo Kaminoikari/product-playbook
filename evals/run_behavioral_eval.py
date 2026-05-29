@@ -210,7 +210,7 @@ def main():
     args = ap.parse_args()
 
     eval_path = Path(args.eval_file)
-    data = json.loads(eval_path.read_text())
+    data = json.loads(eval_path.read_text(encoding="utf-8"))
     items = data["evals"]
 
     if args.only:
@@ -262,12 +262,13 @@ def main():
             "per_eval": per_eval_status,
             "summary": {k: v for k, v in summary.items() if k != "breakdown"},
             "breakdown": summary["breakdown"],
-        }, indent=2, ensure_ascii=False))
+        }, indent=2, ensure_ascii=False), encoding="utf-8")
         print(f"  → wrote {args.json_out}")
 
     if args.markdown_out:
         Path(args.markdown_out).write_text(
-            format_summary_markdown(summary, title="Behavioral Eval Results")
+            format_summary_markdown(summary, title="Behavioral Eval Results"),
+            encoding="utf-8",
         )
         print(f"  → wrote {args.markdown_out}")
 

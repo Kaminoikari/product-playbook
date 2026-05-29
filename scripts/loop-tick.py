@@ -89,7 +89,7 @@ def run_cmd(cmd: list[str], description: str) -> tuple[int, str, str, float]:
 
 
 def summarize_eval(eval_path: Path) -> dict:
-    data = json.loads(eval_path.read_text())
+    data = json.loads(eval_path.read_text(encoding="utf-8"))
     summary = data.get("summary", {})
     return {
         "path": str(eval_path),
@@ -114,7 +114,7 @@ def count_proposed_patches(eval_path: Path, severity: str) -> int:
     # we don't actually need to call the LLM — patch-proposer prints the
     # eligible-files line to stderr before the first LLM call. But for v1
     # we just read the eval JSON ourselves and count failing attributions.
-    data = json.loads(eval_path.read_text())
+    data = json.loads(eval_path.read_text(encoding="utf-8"))
     sev_rank = {"critical": 3, "warning": 2, "info": 1}
     min_rank = sev_rank.get(severity, 3)
 
@@ -145,7 +145,7 @@ def read_history(history_path: Path) -> list[dict]:
     if not history_path.is_file():
         return []
     out = []
-    for line in history_path.read_text().splitlines():
+    for line in history_path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if line:
             try:
@@ -306,7 +306,7 @@ def main() -> int:
         log_path = Path("logs") / f"patch-proposer-{_date.today().isoformat()}.log"
         if log_path.is_file():
             try:
-                log = json.loads(log_path.read_text())
+                log = json.loads(log_path.read_text(encoding="utf-8"))
                 patches_applied_files = [
                     r["file"] for r in log.get("results", [])
                     if r.get("status") == "applied"

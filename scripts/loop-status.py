@@ -40,7 +40,7 @@ def _read_eval(eval_path: Path) -> dict:
     if not eval_path.is_file():
         return {}
     try:
-        data = json.loads(eval_path.read_text())
+        data = json.loads(eval_path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
     s = data.get("summary", {})
@@ -88,7 +88,7 @@ def _read_history(history_path: Path) -> list[dict]:
     if not history_path.is_file():
         return []
     out = []
-    for line in history_path.read_text().splitlines():
+    for line in history_path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if line:
             try:
