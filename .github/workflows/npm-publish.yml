@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
     paths: [package.json]
+  # Manual trigger for recovery when the push event didn't fire (e.g. PR
+  # was merged by a bot using GITHUB_TOKEN, which suppresses downstream
+  # workflow runs). The version-changed check below keeps this idempotent.
+  workflow_dispatch:
 
 permissions:
   contents: read
