@@ -47,6 +47,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -79,17 +80,24 @@ def index_eval(eval_data: dict) -> dict[tuple[int | None, str], dict]:
     return out
 
 
-def analyze(patch_log: dict, after_eval: dict, attribution: dict) -> dict:
+def analyze(patch_log: dict, after_eval: dict, attribution: dict,
+             suppressions: set[tuple[str, str]] | None = None) -> dict:
     after_idx = index_eval(after_eval)
     suspects: list[dict] = []
     flipped: list[dict] = []
     untrackable: list[dict] = []
+    suppressed_count = 0
+    suppressions = suppressions or set()
 
     for result in patch_log.get("results", []):
         if result.get("status") != "applied":
             continue
         patched_file = result["file"]
         for addressed in result.get("addressed", []):
+            # M7: skip pairs the human has manually marked as off-limits
+            if (patched_file, addressed["eval_name"]) in suppressions:
+                suppressed_count += 1
+                continue
             key = (addressed["eval_name"], addressed["expectation_text"])
             after = after_idx.get(key)
             if after is None:
@@ -144,6 +152,7 @@ def analyze(patch_log: dict, after_eval: dict, attribution: dict) -> dict:
             "expectations_flipped": len(flipped),
             "expectations_suspect": len(suspects),
             "expectations_untrackable": len(untrackable),
+            "expectations_suppressed": suppressed_count,
         },
         "flipped": flipped,
         "suspects": suspects,
@@ -295,6 +304,93 @@ def render_attribution_patch(report: dict) -> list[str]:
     return block
 
 
+def auto_apply_attribution_patch(report: dict, debt_source_path: Path,
+                                   dry_run: bool = True) -> dict:
+    """M4: edit eval-debt-report.py's EVAL_ATTRIBUTION literal in place.
+
+    For every gap suspect (patched_file NOT in primary), find the matching
+    `"<eval_name>": {` block in the source file and append patched_file to
+    that entry's `"primary": [...]` list.
+
+    Safety:
+      - ast.parse() the source before AND after the edit; abort on syntax break
+      - Only modifies the `"primary": [...]` line within each matched entry
+      - Idempotent: skips entries where patched_file is already in primary
+      - Default dry-run; --apply writes the file
+
+    Returns a dict describing what changed.
+    """
+    import ast as _ast
+    src = debt_source_path.read_text(encoding="utf-8")
+    # baseline parse
+    _ast.parse(src)
+
+    # collect (eval_name, files_to_add)
+    edits: dict[str, list[str]] = {}
+    for s in report.get("suspects", []):
+        if s.get("patched_file_in_primary"):
+            continue
+        edits.setdefault(s["eval_name"], []).append(s["patched_file"])
+
+    if not edits:
+        return {"action": "noop", "reason": "no gap suspects to apply",
+                "edits": {}, "dry_run": dry_run}
+
+    changes: list[dict] = []
+    new_src = src
+    for eval_name, files_to_add in edits.items():
+        pattern = re.compile(
+            r'("' + re.escape(eval_name) + r'":\s*\{[^{}]*?"primary":\s*)'
+            r'(\[[^\]]*\])',
+            re.DOTALL,
+        )
+        m = pattern.search(new_src)
+        if not m:
+            changes.append({"eval": eval_name, "status": "not-found-in-source",
+                            "files_to_add": files_to_add})
+            continue
+        original_list_literal = m.group(2)
+        try:
+            current = _ast.literal_eval(original_list_literal)
+        except (ValueError, SyntaxError):
+            changes.append({"eval": eval_name, "status": "list-parse-failed",
+                            "files_to_add": files_to_add})
+            continue
+        added = [f for f in files_to_add if f not in current]
+        if not added:
+            changes.append({"eval": eval_name, "status": "already-present",
+                            "files_to_add": files_to_add})
+            continue
+        new_list = current + added
+        # format with double-quoted strings to match repo convention
+        formatted = "[" + ", ".join(repr(p).replace("'", '"') for p in new_list) + "]"
+        new_src = new_src[:m.start(2)] + formatted + new_src[m.end(2):]
+        changes.append({"eval": eval_name, "status": "edited",
+                        "added": added, "now_primary": new_list})
+
+    # verify resulting source still parses
+    try:
+        _ast.parse(new_src)
+    except SyntaxError as e:
+        return {"action": "abort", "reason": f"post-edit syntax error: {e}",
+                "edits": changes, "dry_run": dry_run}
+
+    if dry_run:
+        # show diff to stderr
+        import difflib
+        diff = "".join(difflib.unified_diff(
+            src.splitlines(keepends=True),
+            new_src.splitlines(keepends=True),
+            fromfile=f"a/{debt_source_path.name}",
+            tofile=f"b/{debt_source_path.name}",
+        ))
+        print(diff, file=sys.stderr)
+        return {"action": "dry-run", "edits": changes, "dry_run": True}
+
+    debt_source_path.write_text(new_src, encoding="utf-8")
+    return {"action": "applied", "edits": changes, "dry_run": False}
+
+
 def find_latest_patch_log(logs_dir: Path) -> Path | None:
     if not logs_dir.is_dir():
         return None
@@ -315,6 +411,11 @@ def main() -> int:
                     help="Emit JSON to stdout instead of markdown to file")
     ap.add_argument("--force", action="store_true",
                     help="Skip eval-freshness check on --after-eval")
+    ap.add_argument("--auto-apply", action="store_true",
+                    help="Edit scripts/eval-debt-report.py EVAL_ATTRIBUTION in place "
+                         "for every gap suspect (M4); shows diff in dry-run mode")
+    ap.add_argument("--auto-apply-write", action="store_true",
+                    help="With --auto-apply, actually write changes (default is dry-run)")
     args = ap.parse_args()
 
     log_path = args.patch_log or find_latest_patch_log(Path("logs"))
@@ -357,7 +458,18 @@ def main() -> int:
     patch_log = load_patch_log(log_path)
     after = load_eval(args.after_eval)
     attribution = load_attribution()
-    report = analyze(patch_log, after, attribution)
+
+    # M7: load suppressions if available
+    try:
+        sup_spec = importlib.util.spec_from_file_location(
+            "_suppressions", Path(__file__).parent / "_suppressions.py")
+        sup_mod = importlib.util.module_from_spec(sup_spec)
+        sup_spec.loader.exec_module(sup_mod)
+        suppressions = sup_mod.load_suppressions()
+    except (ImportError, OSError, AttributeError):
+        suppressions = set()
+
+    report = analyze(patch_log, after, attribution, suppressions)
 
     if args.json:
         json.dump(report, sys.stdout, indent=2, ensure_ascii=False, default=str)
@@ -371,6 +483,14 @@ def main() -> int:
         print(f"  flipped={s['expectations_flipped']}  "
               f"suspect={s['expectations_suspect']}  "
               f"untrackable={s['expectations_untrackable']}", file=sys.stderr)
+
+    if args.auto_apply:
+        debt_src = Path(__file__).parent / "eval-debt-report.py"
+        result = auto_apply_attribution_patch(report, debt_src,
+                                              dry_run=not args.auto_apply_write)
+        print(json.dumps(result, ensure_ascii=False, indent=2,
+                          default=lambda o: list(o) if isinstance(o, set) else str(o)),
+              file=sys.stderr)
 
     if report["summary"]["expectations_addressed"] == 0:
         return 2

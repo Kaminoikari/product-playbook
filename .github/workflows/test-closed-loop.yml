@@ -1,0 +1,42 @@
+# Closed-loop unittest suite — pure-Python regression guard for the
+# deterministic harness layers (guardrails, validators, judge logic).
+#
+# This workflow is safe to auto-fire on EVERY PR because it consumes ZERO
+# Claude quota:
+#   - Tests use importlib + assertEqual on pure functions
+#   - No `claude -p` subprocess invocations
+#   - No evals/run_behavioral_eval.py call
+#
+# Distinct from eval-gate.yml (workflow_dispatch only — burns subscription
+# tokens). The "no-CI-auto-eval" policy applies to LLM-driven behavioral
+# eval, not to deterministic Python unit tests.
+
+name: Closed-Loop Tests
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'tests/**'
+      - '.github/workflows/test-closed-loop.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'tests/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run unittest suite
+        run: python3 -m unittest tests/test_closed_loop.py -v

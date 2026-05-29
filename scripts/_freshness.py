@@ -24,8 +24,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-
-WATCHED = ["references", "agents", "i18n", "SKILL.md", "evals/evals.json"]
+try:
+    from _config import WATCHED  # M6: centralised
+except ImportError:
+    # fallback when imported via importlib without sys.path adjustment
+    WATCHED = ["references", "agents", "i18n", "SKILL.md", "evals/evals.json"]
 
 
 def _latest_authored_mtime(root: Path) -> tuple[float, Path | None]:

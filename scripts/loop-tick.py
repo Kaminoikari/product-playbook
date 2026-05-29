@@ -277,6 +277,7 @@ def main() -> int:
     print(patch_out)
 
     patches_applied_files: list[str] = []
+    patches_cosmetic_files: list[str] = []
     if args.apply:
         # read the log it wrote to identify which files actually changed
         from datetime import date as _date
@@ -287,6 +288,12 @@ def main() -> int:
                 patches_applied_files = [
                     r["file"] for r in log.get("results", [])
                     if r.get("status") == "applied"
+                ]
+                # M3: track cosmetic-only patches separately so the history
+                # record is honest about what behaviorally landed
+                patches_cosmetic_files = [
+                    r["file"] for r in log.get("results", [])
+                    if r.get("status") == "applied-cosmetic"
                 ]
             except json.JSONDecodeError:
                 pass
@@ -346,6 +353,7 @@ def main() -> int:
         "before_summary": before,
         "patches_proposed_count": proposed_count,
         "patches_applied": patches_applied_files,
+        "patches_cosmetic": patches_cosmetic_files,
         "mirrors_applied": mirror_applied,
         "drift_after": drift_summary,
         "convergence_note": convergence_note,

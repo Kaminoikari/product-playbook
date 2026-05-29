@@ -150,6 +150,19 @@ def main() -> int:
     last_tick = history[-1] if history else {}
     next_action = _next_action(verdict, drift, eval_data)
 
+    # M2: stale-eval warning — if the eval JSON is older than the latest
+    # authored-file change, the score on this dashboard reflects pre-change
+    # behavior. Don't silently report a "verdict" that's based on stale data.
+    stale_reason = None
+    if eval_data:
+        fspec = importlib.util.spec_from_file_location(
+            "_freshness", SCRIPTS / "_freshness.py")
+        fmod = importlib.util.module_from_spec(fspec)
+        fspec.loader.exec_module(fmod)
+        is_fresh, reason = fmod.check_eval_freshness(args.eval_results, Path.cwd())
+        if not is_fresh:
+            stale_reason = reason
+
     if args.json:
         payload = {
             "eval": eval_data or None,
@@ -157,6 +170,7 @@ def main() -> int:
             "last_tick": last_tick or None,
             "verdict": verdict,
             "next_action": next_action,
+            "stale_eval": stale_reason,
         }
         json.dump(payload, sys.stdout, indent=2, ensure_ascii=False, default=str)
         print()
@@ -167,6 +181,9 @@ def main() -> int:
         }.get(verdict.get("status", ""), 2)
 
     print(f"┌─ closed-loop status ─────────────────────────────────────────")
+    if stale_reason:
+        print(f"│ ⚠️  STALE EVAL — score below reflects PRE-CHANGE behavior")
+        print(f"│    {stale_reason[:80]}...")
     if eval_data:
         print(f"│ eval     {eval_data['score']} ({eval_data['band']})  "
               f"{eval_data['passed']}/{eval_data['total']} passed  "

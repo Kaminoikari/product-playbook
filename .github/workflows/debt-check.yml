@@ -84,13 +84,54 @@ jobs:
         id: debt_head
         run: |
           # debt-report needs an eval-results JSON. If the repo doesn't ship
-          # one (typical — eval results live in branches), the report can't
-          # run. In that case, exit gracefully with a job-summary note.
+          # one (typical — eval results live in branches), fall back to a
+          # diff-based static prediction (M5).
           if [ ! -f "evals/eval-results.behavioral.json" ]; then
             echo "no_eval=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           python3 scripts/eval-debt-report.py --output debt-head.md
+
+      - name: Diff-based debt prediction (M5, when no baseline available)
+        if: steps.debt_head.outputs.no_eval == 'true' && github.event_name == 'pull_request'
+        id: debt_diff
+        run: |
+          # Static prediction: for each file in the PR diff under references/,
+          # agents/, SKILL.md, look up which evals EVAL_ATTRIBUTION lists it
+          # under primary. Print "this PR likely affects evals: [...]".
+          # Pure Python; no LLM, no eval run.
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD \
+                    -- 'references/**' 'agents/**' 'SKILL.md' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "no_changes=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python3 - <<PYEOF > debt-prediction.md
+          import importlib.util
+          from pathlib import Path
+          spec = importlib.util.spec_from_file_location('m', 'scripts/eval-debt-report.py')
+          m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+          changed = """$CHANGED""".strip().splitlines()
+          impact: dict[str, list[str]] = {}
+          for eval_name, entry in m.EVAL_ATTRIBUTION.items():
+              hits = [c for c in changed if c in entry.get('primary', [])]
+              if hits:
+                  impact.setdefault(eval_name, []).extend(hits)
+          print(f"## Diff-Based Debt Prediction\n")
+          print(f"This PR touches {len(changed)} attributed file(s); no baseline eval is")
+          print(f"available in the branch, so this is a static prediction based on")
+          print(f"\`EVAL_ATTRIBUTION\` primary mappings.\n")
+          if not impact:
+              print("✅ **No mapped evals** affected — changed files aren't in any")
+              print("\`primary\` list. Either the change is unscoped, or EVAL_ATTRIBUTION")
+              print("is missing coverage for these files.\n")
+          else:
+              print(f"⚠️  **{len(impact)} eval(s) likely affected** by this PR:\n")
+              for ev, files in sorted(impact.items()):
+                  print(f"- \`{ev}\` ← {files}")
+              print(f"\nRun \`npm run eval:behavioral\` locally before merging if any are critical.")
+          PYEOF
 
       - name: Job Summary
         if: always()
@@ -101,7 +142,13 @@ jobs:
             if [ "${{ steps.attribution.outputs.exit_code }}" = "2" ]; then
               echo "🔴 **EVAL_ATTRIBUTION references a file this PR removed/renamed.** See PR comment above."
             elif [ "${{ steps.debt_head.outputs.no_eval }}" = "true" ]; then
-              echo "ℹ️  No \`evals/eval-results.behavioral.json\` in this branch — debt report needs a baseline eval run to compare against. Run \`npm run eval:behavioral\` locally if you want a debt projection."
+              echo "ℹ️  No baseline eval in this branch. Using diff-based static prediction (M5):"
+              echo ""
+              if [ -f debt-prediction.md ]; then
+                cat debt-prediction.md
+              else
+                echo "(no PR-side files changed under tracked dirs)"
+              fi
             else
               echo "✅ Debt report generated successfully — see artifact for details."
               echo ""

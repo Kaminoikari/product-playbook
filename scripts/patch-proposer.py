@@ -499,12 +499,33 @@ def main() -> int:
     sev_min = {"critical": 3, "warning": 2, "info": 1}[args.severity]
     sev_rank = {"critical": 3, "warning": 2, "info": 1}
 
+    # M7: load suppressions
+    try:
+        sup_spec = importlib.util.spec_from_file_location(
+            "_suppressions", Path(__file__).parent / "_suppressions.py")
+        sup_mod = importlib.util.module_from_spec(sup_spec)
+        sup_spec.loader.exec_module(sup_mod)
+        suppressed = sup_mod.load_suppressions()
+    except (ImportError, OSError, AttributeError):
+        suppressed = set()
+
     # filter by minimum severity per failure, then drop empty clusters
     filtered = {}
+    sup_skipped = 0
     for f, fails in grouped.items():
-        keep = [x for x in fails if sev_rank.get(x["severity"], 1) >= sev_min]
+        keep = []
+        for x in fails:
+            if sev_rank.get(x["severity"], 1) < sev_min:
+                continue
+            if (f, x["eval_name"]) in suppressed:
+                sup_skipped += 1
+                continue
+            keep.append(x)
         if keep:
             filtered[f] = keep
+    if sup_skipped:
+        print(f"M7: skipped {sup_skipped} suppressed (file, eval) pair(s) "
+              f"from docs/loop-suppressions.jsonl", file=sys.stderr)
     if args.file:
         filtered = {f: v for f, v in filtered.items() if args.file in f}
 
@@ -559,6 +580,21 @@ def main() -> int:
         encoding="utf-8",
     )
     print(f"\nlog: {log_path}", file=sys.stderr)
+
+    # M3: surface cosmetic vs real applies in the summary print, so the user
+    # doesn't read "3 applied" and assume 3 real Hard Gates landed when one
+    # was actually a no-op reorder.
+    real = sum(1 for r in results if r["status"] == "applied")
+    cosmetic = sum(1 for r in results if r["status"] == "applied-cosmetic")
+    malformed = sum(1 for r in results if r["status"] == "malformed")
+    if args.apply:
+        print(f"\nsummary: applied={real}  applied-cosmetic={cosmetic}  malformed={malformed}",
+              file=sys.stderr)
+        if cosmetic > 0:
+            print(f"⚠️  {cosmetic} cosmetic-only patch(es) skipped — see status "
+                  f"'applied-cosmetic' in the log; downstream attribution-check "
+                  f"will not expect these to flip any expectation",
+                  file=sys.stderr)
 
     if not args.apply and any(r["status"] == "dry-run" for r in results):
         print("\nto write these changes: re-run with --apply", file=sys.stderr)
