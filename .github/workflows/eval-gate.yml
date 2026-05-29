@@ -1,25 +1,34 @@
-# Eval Report — report trigger + behavioral eval results on every PR and on
-# every push to main that changes package.json (i.e. before publish).
+# Eval Report — trigger + behavioral eval results, on manual dispatch only.
 #
-# IMPORTANT: this workflow is REPORTING, not gating. It runs with
-# --fail-on none so a failing eval never blocks merge or the publish workflow.
-# Severity bands and per-expectation results are surfaced in the Job Summary
-# and uploaded as artifacts. The maintainer decides whether to act on a
-# regression before merging / publishing.
+# POLICY (2026-05-29): this workflow is MANUAL-TRIGGER ONLY. It never fires
+# automatically on PR or push. The maintainer runs evals locally as part of
+# their normal workflow; CI eval exists as an opt-in convenience for cases
+# where the maintainer explicitly wants a clean-room CI run (e.g. validating
+# a release candidate from a different machine). Auto-trigger was removed
+# because every eval run consumes the maintainer's Claude subscription
+# quota (5-hour rolling cap), and silent auto-burn was causing real
+# disruption — see the 2026-05-28 quota-exhaustion incident.
+#
+# To trigger this workflow:
+#   - GitHub UI: Actions → Eval Report → Run workflow
+#   - CLI:       gh workflow run eval-gate.yml --ref <branch>
+#
+# This workflow is REPORTING, not gating. --fail-on none means a failing
+# eval never blocks merge or the publish workflow. Severity bands and
+# per-expectation results are surfaced in the Job Summary and uploaded as
+# artifacts. The maintainer decides whether to act on a regression.
 #
 # Severity bands and scoring logic live in evals/compute_eval_score.py.
 #
 # AUTH MODEL — subscription token only (no API key, no marginal cost):
-#   - Local: developers run the same scripts with `claude` CLI authenticated
-#     via Claude Pro/Max OAuth (`claude login`).
+#   - Local: `claude` CLI authenticated via Claude Pro/Max OAuth (`claude login`).
 #   - CI: requires a long-lived subscription token. One-time setup:
 #       1. Local: `claude setup-token` (requires an active Claude subscription)
 #       2. Copy the printed token into repo Settings → Secrets and variables →
 #          Actions → New secret named `CLAUDE_CODE_OAUTH_TOKEN`
 #     If the secret is NOT set, the preflight job skips trigger-eval and
 #     behavioral-eval cleanly (gray ⏭️) instead of producing a misleading
-#     red ❌. Repo can therefore live happily in local-only mode; add the
-#     secret later to flip on CI reporting.
+#     red ❌.
 #   - ANTHROPIC_API_KEY is intentionally not consulted — the project's policy
 #     is to use only subscription credentials so eval runs incur no marginal
 #     billing.
@@ -28,13 +37,15 @@
 # eval is ~10–40 min. CI uses --runs 1 to keep cost low; local runs default
 # to --runs 3 for majority voting.
 
-name: Eval Report
+name: Eval Report (manual only)
 
 on:
-  pull_request:
-  push:
-    branches: [main]
-    paths: [package.json]
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: 'Majority-vote runs per expectation (default 1 for cost)'
+        required: false
+        default: '1'
 
 permissions:
   contents: read
@@ -111,9 +122,11 @@ jobs:
 
       - name: Run trigger eval (reporting only, never blocks)
         working-directory: evals
+        env:
+          RUNS: ${{ inputs.runs }}
         run: |
           python3 run_trigger_test.py \
-            --runs 1 \
+            --runs "${RUNS:-1}" \
             --workers 2 \
             --fail-on none \
             --json eval-results.trigger.json \
@@ -206,11 +219,13 @@ jobs:
         working-directory: evals
         run: python3 -m unittest test_compute_eval_score.py -v
 
-      - name: Run behavioral eval (reporting only, runs=1 in CI)
+      - name: Run behavioral eval (reporting only)
         working-directory: evals
+        env:
+          RUNS: ${{ inputs.runs }}
         run: |
           python3 run_behavioral_eval.py \
-            --runs 1 \
+            --runs "${RUNS:-1}" \
             --workers 2 \
             --response-timeout 600 \
             --judge-timeout 240 \
