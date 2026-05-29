@@ -81,7 +81,7 @@ PROMPT_TEMPLATE = """You are extending a product-management skill's English sour
 <ATTRIBUTION_HINT>
 {hint}
 </ATTRIBUTION_HINT>
-
+{prior_attempt_block}
 Your task: produce an updated REFERENCE_FILE that adds one Hard Gate block per failing expectation (or one combined Hard Gate block if the expectations cluster naturally). The Hard Gate must follow this pattern that has worked across Stage 2 uplifts:
 
   **[Description] (Hard Gate)**: [imperative rule statement that names what must be present in the output and what specifically counts as failing it]
@@ -202,6 +202,43 @@ def post_hoc_validate(original: str, updated: str) -> list[str]:
     return warnings
 
 
+def validate_hard_gate_structure(original: str, updated: str) -> str | None:
+    """A2: strict structural check on newly-added Hard Gate blocks.
+
+    Returns None if OK, else an error string explaining what's missing.
+
+    Contract: if updated adds a new `Hard Gate` block (count went up), the
+    delta must also contain (a) at least one `FAIL` example and (b) at least
+    one ✅ PASS marker. A Hard Gate without FAIL/PASS examples is a sentence
+    the orchestrator can ignore — it provides no behavioral anchor.
+
+    Why fatal vs warning: post_hoc_validate already returns soft warnings for
+    similar concerns; those don't block apply. This check blocks apply, so
+    malformed Hard Gates never land on disk. patch-proposer returns
+    status="malformed" instead of "applied" in that case.
+    """
+    o_hg = original.count("Hard Gate")
+    u_hg = updated.count("Hard Gate")
+    if u_hg <= o_hg:
+        return None  # no new gate added — nothing to validate
+
+    o_fail = len(re.findall(r"(?<![A-Za-z])FAILS?(?![A-Za-z])", original))
+    u_fail = len(re.findall(r"(?<![A-Za-z])FAILS?(?![A-Za-z])", updated))
+    o_pass = original.count("✅")
+    u_pass = updated.count("✅")
+
+    if u_fail <= o_fail:
+        return (f"new Hard Gate added (count {o_hg} → {u_hg}) but FAIL examples "
+                f"did not increase ({o_fail} → {u_fail}). A Hard Gate without a "
+                f"FAIL example is unenforceable — patch rejected.")
+    if u_pass <= o_pass:
+        return (f"new Hard Gate added (count {o_hg} → {u_hg}) but ✅ PASS markers "
+                f"did not increase ({o_pass} → {u_pass}). A Hard Gate needs a "
+                f"PASS counter-example for the orchestrator to learn the shape "
+                f"— patch rejected.")
+    return None
+
+
 def render_diff(file_path: str, current: str, updated: str) -> str:
     return "".join(difflib.unified_diff(
         current.splitlines(keepends=True),
@@ -212,8 +249,51 @@ def render_diff(file_path: str, current: str, updated: str) -> str:
     ))
 
 
+def _load_prior_suspects() -> dict[tuple[str, str], dict]:
+    """D9: read the latest attribution-check report's JSON twin (if any).
+
+    Returns mapping {(patched_file, eval_name): suspect_record} for
+    'patch-wording-insufficient' suspects only — i.e., the patched file IS
+    in EVAL_ATTRIBUTION.primary but the eval still fails. For those, the
+    next proposer call gets a "previous attempt was insufficient" pep talk
+    in the prompt so the LLM doesn't generate a near-identical weak gate.
+
+    Reads the most recent docs/attribution-check-*.md by surfacing the
+    structured JSON via re-running with --json. Falls back to no-op if
+    none exists. Skipped silently — feedback is a nice-to-have, not a hard
+    dependency.
+    """
+    docs = Path("docs")
+    if not docs.is_dir():
+        return {}
+    reports = sorted(docs.glob("attribution-check-*.md"), reverse=True)
+    if not reports:
+        return {}
+    # we can't reparse the markdown reliably; instead recompute JSON from the
+    # latest patch log + the most recent after-eval the user pointed at. but
+    # that's brittle — for v1, just parse the markdown headers for the
+    # "patched file → eval" pairs in the Suspect section with hypothesis
+    # "attribution looks right but patch wording was insufficient".
+    latest = reports[0]
+    suspects: dict[tuple[str, str], dict] = {}
+    try:
+        text = latest.read_text(encoding="utf-8")
+    except OSError:
+        return {}
+    # crude but bounded: split on '### N. `<file>` → eval `<name>`'
+    pattern = re.compile(
+        r"###\s+\d+\.\s+`([^`]+)`\s+→\s+eval\s+`([^`]+)`.*?"
+        r"\*\*Patched file in primary\?\*\*\s+✅",
+        re.DOTALL,
+    )
+    for m in pattern.finditer(text):
+        suspects[(m.group(1), m.group(2))] = {"source": str(latest)}
+    return suspects
+
+
 def process_cluster(file_path: Path, failures: list[dict], root: Path,
-                    apply: bool) -> dict:
+                    apply: bool,
+                    prior_suspects: dict[tuple[str, str], dict] | None = None) -> dict:
     target = root / file_path
     if not target.is_file():
         return {"file": str(file_path), "status": "missing",
@@ -223,11 +303,33 @@ def process_cluster(file_path: Path, failures: list[dict], root: Path,
     failing_block = build_failing_block(failures)
     hint = failures[0]["hint"]
 
+    prior_attempt_block = ""
+    if prior_suspects:
+        relevant = [f for f in failures
+                    if (str(file_path), f["eval_name"]) in prior_suspects]
+        if relevant:
+            evals = ", ".join(sorted({f["eval_name"] for f in relevant}))
+            prior_attempt_block = (
+                f"\n<PRIOR_ATTEMPT_WARNING>\n"
+                f"A previous patch on this file targeted these same eval(s) "
+                f"({evals}) and the expectation(s) STILL FAILED in the after-eval. "
+                f"That means the prior Hard Gate wording was not strong enough to "
+                f"change orchestrator behavior. For this attempt:\n"
+                f"  - Do NOT produce a near-identical Hard Gate to whatever's already "
+                f"in the file.\n"
+                f"  - Try a sharper angle: split the rule into multiple smaller gates, "
+                f"add more concrete FAIL examples that match the actual failure modes "
+                f"in the eval reasons, or call out a specific anti-pattern "
+                f"the orchestrator is currently producing.\n"
+                f"</PRIOR_ATTEMPT_WARNING>\n"
+            )
+
     prompt = PROMPT_TEMPLATE.format(
         file_path=str(file_path),
         file_content=original,
         failing_expectations=failing_block,
         hint=hint or "(none provided)",
+        prior_attempt_block=prior_attempt_block,
     )
 
     total_chars = len(prompt)
@@ -254,6 +356,14 @@ def process_cluster(file_path: Path, failures: list[dict], root: Path,
     if not diff.strip():
         return {"file": str(file_path), "status": "no-change",
                 "reason": "LLM produced identical output (no patch proposed)"}
+
+    structural_error = validate_hard_gate_structure(original, updated)
+    if structural_error:
+        return {"file": str(file_path), "status": "malformed",
+                "reason": structural_error,
+                "diff": diff,  # surface the rejected diff so the human can iterate
+                "diff_lines": diff.count("\n"),
+                "warnings": warnings}
 
     if apply:
         target.write_text(updated, encoding="utf-8")
@@ -336,11 +446,17 @@ def main() -> int:
         print(f"  (deferring {len(ranked) - args.max} — raise --max if intended)",
               file=sys.stderr)
 
+    prior_suspects = _load_prior_suspects()
+    if prior_suspects:
+        print(f"D9: prior attribution-check flagged {len(prior_suspects)} "
+              f"(file, eval) pair(s) as wording-insufficient — prompt will warn",
+              file=sys.stderr)
+
     results = []
     for i, (f, fs) in enumerate(selected, 1):
         print(f"\n[{i}/{len(selected)}] {f} (weight {cluster_weight(fs)}, {len(fs)} failures)",
               file=sys.stderr)
-        r = process_cluster(Path(f), fs, root, args.apply)
+        r = process_cluster(Path(f), fs, root, args.apply, prior_suspects)
         results.append(r)
         print(f"  status: {r['status']}", file=sys.stderr)
         if r.get("warnings"):

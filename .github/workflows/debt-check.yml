@@ -1,0 +1,122 @@
+# Eval Debt Check — runs the deterministic debt-report (no LLM, no eval run)
+# when references/, agents/, or SKILL.md changes in a PR. Predicts whether
+# this PR is likely to change the eval debt picture by comparing the debt
+# report at base vs head.
+#
+# This workflow is safe to auto-fire because it consumes ZERO Claude quota:
+#   - it does NOT run any eval
+#   - it only runs `scripts/eval-debt-report.py`, which is pure Python
+#     reading the existing eval-results.behavioral.json
+#
+# Distinct from eval-gate.yml (manual-only, burns subscription tokens) and
+# i18n-drift-check.yml (deterministic, already in place). See the no-CI-auto-eval
+# feedback memory for why all real eval runs stay manual.
+
+name: Eval Debt Check
+
+on:
+  pull_request:
+    paths:
+      - 'references/**'
+      - 'agents/**'
+      - 'SKILL.md'
+      - 'scripts/eval-debt-report.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  debt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check EVAL_ATTRIBUTION paths against the PR's file tree (A1)
+        id: attribution
+        run: |
+          # If a primary/secondary path in EVAL_ATTRIBUTION points at a file
+          # the PR removed or renamed, debt-report exits 2 here. That's the
+          # signal we need — surface it as the first comment, before bothering
+          # with the score-delta calculation.
+          set +e
+          python3 scripts/eval-debt-report.py --stdout > /dev/null 2>attribution.err
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+      - name: Report attribution drift (if any)
+        if: steps.attribution.outputs.exit_code == '2' && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          MARKER="<!-- debt-check-attribution-bot -->"
+          gh api "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" \
+            --jq ".[] | select(.body | startswith(\"${MARKER}\")) | .id" \
+            | xargs -r -I{} gh api -X DELETE "repos/${{ github.repository }}/issues/comments/{}"
+          {
+            echo "${MARKER}"
+            echo "## 🔴 EVAL_ATTRIBUTION points at nonexistent file(s)"
+            echo ""
+            echo "This PR appears to have renamed or removed a file that"
+            echo "\`scripts/eval-debt-report.py\` lists in \`EVAL_ATTRIBUTION\`."
+            echo "Update the mapping in that file before merging, or the"
+            echo "patch-proposer will target a file that doesn't exist."
+            echo ""
+            echo "<details><summary>Detector output</summary>"
+            echo ""
+            echo '```'
+            cat attribution.err
+            echo '```'
+            echo ""
+            echo "</details>"
+          } > attribution-comment.md
+          gh pr comment "${PR_NUMBER}" --body-file attribution-comment.md
+
+      - name: Generate debt report at HEAD
+        if: steps.attribution.outputs.exit_code != '2'
+        id: debt_head
+        run: |
+          # debt-report needs an eval-results JSON. If the repo doesn't ship
+          # one (typical — eval results live in branches), the report can't
+          # run. In that case, exit gracefully with a job-summary note.
+          if [ ! -f "evals/eval-results.behavioral.json" ]; then
+            echo "no_eval=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python3 scripts/eval-debt-report.py --output debt-head.md
+
+      - name: Job Summary
+        if: always()
+        run: |
+          {
+            echo "## Eval Debt Check"
+            echo ""
+            if [ "${{ steps.attribution.outputs.exit_code }}" = "2" ]; then
+              echo "🔴 **EVAL_ATTRIBUTION references a file this PR removed/renamed.** See PR comment above."
+            elif [ "${{ steps.debt_head.outputs.no_eval }}" = "true" ]; then
+              echo "ℹ️  No \`evals/eval-results.behavioral.json\` in this branch — debt report needs a baseline eval run to compare against. Run \`npm run eval:behavioral\` locally if you want a debt projection."
+            else
+              echo "✅ Debt report generated successfully — see artifact for details."
+              echo ""
+              echo "<details><summary>Debt report (head)</summary>"
+              echo ""
+              cat debt-head.md
+              echo ""
+              echo "</details>"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload debt report artifact
+        if: always() && steps.debt_head.outputs.no_eval != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-debt-report
+          path: debt-head.md
+          if-no-files-found: ignore

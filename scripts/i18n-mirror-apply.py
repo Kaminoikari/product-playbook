@@ -165,8 +165,30 @@ def extract_updated(raw: str) -> str:
     return m.group(1)
 
 
+_FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
+
+
+def _extract_frontmatter_keys(text: str) -> set[str]:
+    m = _FRONTMATTER_RE.match(text)
+    if not m:
+        return set()
+    keys = set()
+    for line in m.group(1).splitlines():
+        # only top-level keys (no leading whitespace); ignore list/comment lines
+        if line and not line[0].isspace() and ":" in line and not line.startswith("#"):
+            keys.add(line.split(":", 1)[0].strip())
+    return keys
+
+
 def verify_no_fence_drift(source: str, target: str, updated: str) -> list[str]:
-    """Catch obvious LLM mistakes before showing the diff to a human."""
+    """Catch obvious LLM mistakes before showing the diff to a human.
+
+    A3: extended beyond fence counting to also check frontmatter keys, heading
+    counts (with ±1 tolerance for CJK section-merge), and table rows. Each of
+    these is a machine-read invariant the orchestrator depends on; silent
+    breakage by the translator would cause sub-agent loading or table
+    rendering to fail without any code path catching it.
+    """
     warnings = []
     src_fences = source.count("```")
     out_fences = updated.count("```")
@@ -175,6 +197,40 @@ def verify_no_fence_drift(source: str, target: str, updated: str) -> list[str]:
             f"code fence count mismatch: source={src_fences}, updated={out_fences} "
             f"(LLM may have translated inside fences or dropped a block)"
         )
+
+    # A3: frontmatter — keys MUST match if source has any
+    src_keys = _extract_frontmatter_keys(source)
+    if src_keys:
+        out_keys = _extract_frontmatter_keys(updated)
+        missing_keys = src_keys - out_keys
+        if missing_keys:
+            warnings.append(
+                f"frontmatter keys missing in updated: {sorted(missing_keys)} "
+                f"(source has {sorted(src_keys)}); sub-agent loading depends on these"
+            )
+
+    # A3: heading counts — allow ±1 tolerance for CJK occasionally merging
+    # adjacent sub-sections, but flag larger drift
+    for level, label in [(r"^## ", "##"), (r"^### ", "###")]:
+        src_n = len(re.findall(level, source, re.M))
+        out_n = len(re.findall(level, updated, re.M))
+        if abs(src_n - out_n) > 1:
+            warnings.append(
+                f"{label} heading count drifted: source={src_n}, updated={out_n} "
+                f"(>1 difference suggests structural drop, not translation merge)"
+            )
+
+    # A3: markdown tables — pipe-row count must match (every row is a `|...|`)
+    src_rows = sum(1 for ln in source.splitlines()
+                   if ln.lstrip().startswith("|") and ln.rstrip().endswith("|"))
+    out_rows = sum(1 for ln in updated.splitlines()
+                   if ln.lstrip().startswith("|") and ln.rstrip().endswith("|"))
+    if src_rows and src_rows != out_rows:
+        warnings.append(
+            f"markdown table rows changed: source={src_rows}, updated={out_rows} "
+            f"(translator may have collapsed or split table cells)"
+        )
+
     for vocab in CANONICAL_VOCAB:
         # match same boundary semantics as drift detector
         pat = r"(?<![A-Za-z])" + re.escape(vocab) + r"s?(?![A-Za-z])"

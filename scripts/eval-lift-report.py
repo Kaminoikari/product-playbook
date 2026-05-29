@@ -234,27 +234,92 @@ def render_markdown(report: dict, before_path: str, after_path: str) -> str:
         lines.append("")
 
     if report["added"] or report["removed"]:
-        lines += ["## ➕➖ Expectation Set Changes", ""]
-        if report["added"]:
-            lines.append("**Added** (typically new harness coverage):")
-            for a in report["added"]:
-                sev = a["item"].get("severity", "?")
-                lines.append(f"- `{a['item'].get('eval_name', '?')}` [{sev}]: "
-                             f"{(a['item'].get('expectation_text') or '')[:120]}")
-            lines.append("")
-        if report["removed"]:
-            lines.append("**Removed** (typically harness pruning):")
-            for r in report["removed"]:
-                sev = r["item"].get("severity", "?")
-                lines.append(f"- `{r['item'].get('eval_name', '?')}` [{sev}]: "
-                             f"{(r['item'].get('expectation_text') or '')[:120]}")
-            lines.append("")
+        lines += render_set_evolution(report)
 
     rescue = render_regression_rescue(report)
     if rescue:
         lines.append(rescue)
 
     return "\n".join(lines)
+
+
+def render_set_evolution(report: dict) -> list[str]:
+    """B5: dedicated panel for expectation-set changes.
+
+    Separates the "score moved" attribution into two buckets:
+      (a) behavior moved — paired expectations went from fail → pass or vice versa
+      (b) set moved      — expectations were added/removed between runs
+
+    Surfaces an inflation warning when *removed* expectations carried more
+    severity weight than *added* — that's a signal the score went up because
+    the harness got easier, not because the behavior improved.
+
+    Why this section exists: stage-2-1 → 2-3 once saw +25 nominal score with
+    only +5 hard-lift. The other +20 was 6 failing expectations that got
+    pruned (some criticals among them). Without this surfaced, that kind of
+    score inflation reads as a real win when it isn't.
+    """
+    added = report["added"]
+    removed = report["removed"]
+    added_critical = [a for a in added if a["item"].get("severity") == "critical"]
+    added_warning = [a for a in added if a["item"].get("severity") == "warning"]
+    removed_critical = [r for r in removed if r["item"].get("severity") == "critical"]
+    removed_warning = [r for r in removed if r["item"].get("severity") == "warning"]
+
+    # phantom_lift: severity-weighted score impact purely from set changes,
+    # assuming added expectations are failing (worst-case for harness) and
+    # removed expectations were failing (best-case score inflation if true).
+    # This is an UPPER BOUND on how much of score_delta could be set-driven.
+    phantom_loss = (len(added_critical) * SEVERITY_WEIGHTS["critical"]
+                    + len(added_warning) * SEVERITY_WEIGHTS["warning"])
+    phantom_gain = (len(removed_critical) * SEVERITY_WEIGHTS["critical"]
+                    + len(removed_warning) * SEVERITY_WEIGHTS["warning"])
+    phantom_net = phantom_gain - phantom_loss
+
+    lines = ["## ➕➖ Expectation Set Changes", ""]
+    lines.append(
+        f"- Added: **{len(added)}** total "
+        f"(crit={len(added_critical)}, warn={len(added_warning)})"
+    )
+    lines.append(
+        f"- Removed: **{len(removed)}** total "
+        f"(crit={len(removed_critical)}, warn={len(removed_warning)})"
+    )
+    lines.append(
+        f"- Phantom lift upper bound: **{phantom_net:+d}** "
+        f"(gain {phantom_gain:+d} from removals / loss {phantom_loss:+d} from additions)"
+    )
+    lines.append("")
+
+    if phantom_net >= 5:
+        lines += [
+            "### ⚠️  Expectation Set Inflation Warning",
+            "",
+            f"Up to **{phantom_net} points** of the score delta "
+            f"({report['summary']['score_delta']:+d}) could come from removed "
+            f"expectations rather than improved behavior. Compare this against "
+            f"net hard lift ({report['summary']['net_lift']:+d}); if hard lift "
+            f"is much smaller than score delta, the suite got *easier*, not better. "
+            f"Decide whether removals were principled (drifted out of scope) or "
+            f"accidental (eval renames) before celebrating the score.",
+            "",
+        ]
+
+    if added:
+        lines.append("**Added** (typically new harness coverage):")
+        for a in added:
+            sev = a["item"].get("severity", "?")
+            lines.append(f"- `{a['item'].get('eval_name', '?')}` [{sev}]: "
+                         f"{(a['item'].get('expectation_text') or '')[:120]}")
+        lines.append("")
+    if removed:
+        lines.append("**Removed** (typically harness pruning):")
+        for r in removed:
+            sev = r["item"].get("severity", "?")
+            lines.append(f"- `{r['item'].get('eval_name', '?')}` [{sev}]: "
+                         f"{(r['item'].get('expectation_text') or '')[:120]}")
+        lines.append("")
+    return lines
 
 
 def render_regression_rescue(report: dict) -> str:

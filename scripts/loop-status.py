@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+"""Single-pane status dashboard for the closed-loop harness.
+
+B6 of the optimisation pass. Aggregates the key numbers from across the
+deterministic stages (eval-debt + i18n-drift + loop-history + loop-summary)
+into one screen so you don't have to remember 3-4 separate commands every
+time you want to know "where are we".
+
+What it shows:
+  - Latest eval: score, band, pass/fail counts (from --eval-results JSON)
+  - i18n drift: clean ratio + critical/warning counts
+  - Last tick: timestamp, mode, patches applied/proposed, stage durations
+  - Trajectory verdict: from loop-summary.judge() (✅/🟡/⚠️/🔴/⚪)
+  - Next action: a single sentence tailored to the verdict
+
+No LLM, no subprocess overhead. Pure read-and-format.
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import json
+import subprocess
+import sys
+from datetime import date
+from pathlib import Path
+
+SCRIPTS = Path(__file__).parent
+
+
+def _load_module(name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _read_eval(eval_path: Path) -> dict:
+    if not eval_path.is_file():
+        return {}
+    try:
+        data = json.loads(eval_path.read_text())
+    except json.JSONDecodeError:
+        return {}
+    s = data.get("summary", {})
+    return {
+        "path": str(eval_path),
+        "score": s.get("score"),
+        "band": s.get("band"),
+        "passed": s.get("passed_expectations"),
+        "total": s.get("total_expectations"),
+        "critical": s.get("critical_failures"),
+        "warning": s.get("warning_failures"),
+    }
+
+
+def _read_drift() -> dict:
+    """Run drift report --json once; tolerate non-zero exit (1/2 = drift found)."""
+    try:
+        result = subprocess.run(
+            ["python3", str(SCRIPTS / "i18n-drift-report.py"), "--json"],
+            capture_output=True, text=True, timeout=30,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        return {}
+    if result.returncode not in (0, 1, 2):
+        return {}
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {}
+    summary = data.get("summary", {}) or {}
+    crit = sum(1 for c in data.get("clusters", [])
+               for d in c.get("drifts", []) if d.get("severity") == "critical")
+    warn = sum(1 for c in data.get("clusters", [])
+               for d in c.get("drifts", []) if d.get("severity") == "warning")
+    return {
+        "total_pairs": summary.get("total_pairs"),
+        "clean": summary.get("clean"),
+        "missing_files": summary.get("missing_files", 0),
+        "critical_drift": crit,
+        "warning_drift": warn,
+    }
+
+
+def _read_history(history_path: Path) -> list[dict]:
+    if not history_path.is_file():
+        return []
+    out = []
+    for line in history_path.read_text().splitlines():
+        line = line.strip()
+        if line:
+            try:
+                out.append(json.loads(line))
+            except json.JSONDecodeError:
+                pass
+    return out
+
+
+def _verdict(history: list[dict]) -> dict:
+    if not history:
+        return {"status": "insufficient-data", "icon": "⚪",
+                "reason": "no loop ticks recorded yet"}
+    summary_mod = _load_module("loop_summary", SCRIPTS / "loop-summary.py")
+    return summary_mod.judge(history)
+
+
+def _next_action(verdict: dict, drift: dict, eval_data: dict) -> str:
+    status = verdict.get("status", "")
+    if status == "converged":
+        if drift.get("critical_drift", 0) > 0 or drift.get("missing_files", 0) > 0:
+            return ("✅ eval converged but i18n has unresolved drift — run "
+                    "`python3 scripts/i18n-mirror-apply.py --apply` to close")
+        return "✅ healthy plateau — stop iterating, ship when ready"
+    if status == "improving":
+        return ("🟡 keep iterating: `python3 scripts/loop-tick.py "
+                "--eval-results <latest>.json --apply`, then re-eval manually")
+    if status == "stalled":
+        return ("⚠️  run `npm run eval:attribution -- --after-eval <latest>.json` "
+                "to find suspects, then either edit EVAL_ATTRIBUTION or "
+                "hand-write the Hard Gate")
+    if status == "regressing":
+        return ("🔴 read the most recent docs/eval-lift-*.md Regression Rescue "
+                "section; verify with --runs 3 before reverting")
+    crit = (eval_data or {}).get("critical", 0) or 0
+    if not eval_data:
+        return "⚪ baseline run needed — `npm run eval:behavioral` first"
+    if crit > 0:
+        return f"⚪ run a tick: {crit} critical failure(s) to address"
+    return ("⚪ score looks healthy but not enough trajectory data — run "
+            "another tick to confirm convergence formally")
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                  formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--eval-results", type=Path,
+                    default=Path("evals/eval-results.behavioral.json"))
+    ap.add_argument("--history", type=Path,
+                    default=Path("docs/loop-history.jsonl"))
+    args = ap.parse_args()
+
+    eval_data = _read_eval(args.eval_results)
+    drift = _read_drift()
+    history = _read_history(args.history)
+    verdict = _verdict(history)
+    last_tick = history[-1] if history else {}
+
+    print(f"┌─ closed-loop status ─────────────────────────────────────────")
+    if eval_data:
+        print(f"│ eval     {eval_data['score']} ({eval_data['band']})  "
+              f"{eval_data['passed']}/{eval_data['total']} passed  "
+              f"crit={eval_data['critical']} warn={eval_data['warning']}  "
+              f"← {eval_data['path']}")
+    else:
+        print(f"│ eval     (no eval results at {args.eval_results})")
+    if drift:
+        if drift.get("critical_drift", 0) == 0 and drift.get("missing_files", 0) == 0:
+            print(f"│ i18n     ✅ clean ({drift['clean']}/{drift['total_pairs']} pairs)")
+        else:
+            print(f"│ i18n     ⚠️  {drift['clean']}/{drift['total_pairs']} clean, "
+                  f"crit={drift['critical_drift']} warn={drift['warning_drift']} "
+                  f"missing={drift['missing_files']}")
+    if last_tick:
+        ts = last_tick.get("timestamp", "?")[:16].replace("T", " ")
+        mode = last_tick.get("mode", "?")
+        prop = last_tick.get("patches_proposed_count", "?")
+        applied = len(last_tick.get("patches_applied") or [])
+        durations = last_tick.get("stage_durations") or {}
+        dur_str = ""
+        if durations:
+            dur_str = "  ⏱ " + " ".join(f"{k}={v}s" for k, v in durations.items())
+        print(f"│ tick     {ts}  mode={mode}  proposed={prop} applied={applied}{dur_str}")
+    else:
+        print(f"│ tick     (no history at {args.history})")
+    print(f"│ verdict  {verdict.get('icon', '⚪')} {verdict.get('status', '?')}  "
+          f"({verdict.get('reason', '')[:80]})")
+    print(f"└──────────────────────────────────────────────────────────────")
+    print()
+    print(f"Next: {_next_action(verdict, drift, eval_data)}")
+
+    return {
+        "converged": 0, "improving": 0,
+        "stalled": 1, "regressing": 1,
+        "insufficient-data": 2,
+    }.get(verdict.get("status", ""), 2)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

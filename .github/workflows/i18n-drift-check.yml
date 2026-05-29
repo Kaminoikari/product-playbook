@@ -19,12 +19,16 @@ on:
     paths:
       - 'references/**'
       - 'i18n/**'
+      - 'agents/**'
+      - 'SKILL.md'
       - 'scripts/i18n-drift-report.py'
   push:
     branches: [main]
     paths:
       - 'references/**'
       - 'i18n/**'
+      - 'agents/**'
+      - 'SKILL.md'
       - 'scripts/i18n-drift-report.py'
   workflow_dispatch:
 

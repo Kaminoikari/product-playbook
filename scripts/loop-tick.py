@@ -46,6 +46,7 @@ import argparse
 import json
 import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -59,19 +60,26 @@ DEFAULT_HISTORY = Path("docs") / "loop-history.jsonl"
 SUBPROCESS_TIMEOUT = 900
 
 
-def run_cmd(cmd: list[str], description: str) -> tuple[int, str, str]:
-    """Run subprocess, capture output, return (returncode, stdout, stderr)."""
+def run_cmd(cmd: list[str], description: str) -> tuple[int, str, str, float]:
+    """Run subprocess; return (rc, stdout, stderr, elapsed_seconds).
+
+    Elapsed is captured even on timeout/failure so loop-history can record
+    where time was spent (A4: harness self-metrics).
+    """
     print(f"\n━━━━━ {description}", file=sys.stderr)
     print(f"  $ {' '.join(cmd)}", file=sys.stderr)
+    t0 = time.monotonic()
     try:
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=SUBPROCESS_TIMEOUT,
         )
     except subprocess.TimeoutExpired:
-        return 124, "", f"timed out after {SUBPROCESS_TIMEOUT}s"
+        return 124, "", f"timed out after {SUBPROCESS_TIMEOUT}s", time.monotonic() - t0
+    elapsed = time.monotonic() - t0
     if result.stderr.strip():
         print(result.stderr, file=sys.stderr, end="")
-    return result.returncode, result.stdout, result.stderr
+    print(f"  ⏱  {elapsed:.1f}s", file=sys.stderr)
+    return result.returncode, result.stdout, result.stderr, elapsed
 
 
 def summarize_eval(eval_path: Path) -> dict:
@@ -231,11 +239,14 @@ def main() -> int:
         })
         return 2
 
+    stage_durations: dict[str, float] = {}
+
     # --- Stage 1: eval-debt-report ---
-    debt_rc, debt_out, _ = run_cmd(
+    debt_rc, debt_out, _, debt_dt = run_cmd(
         ["python3", str(EVAL_DEBT), "--input", str(args.eval_results)],
         "Stage 1: eval-debt-report (deterministic)",
     )
+    stage_durations["debt"] = round(debt_dt, 2)
     if debt_rc != 0:
         print(f"❌ eval-debt-report failed (rc={debt_rc})", file=sys.stderr)
         return 1
@@ -249,7 +260,8 @@ def main() -> int:
     ]
     if args.apply:
         patch_cmd.append("--apply")
-    patch_rc, patch_out, _ = run_cmd(patch_cmd, "Stage 2: patch-proposer (LLM)")
+    patch_rc, patch_out, _, patch_dt = run_cmd(patch_cmd, "Stage 2: patch-proposer (LLM)")
+    stage_durations["patch"] = round(patch_dt, 2)
     if patch_rc != 0:
         print(f"❌ patch-proposer failed (rc={patch_rc})", file=sys.stderr)
         return 1
@@ -276,11 +288,12 @@ def main() -> int:
     if args.apply and patches_applied_files:
         # widen --max to cover all i18n langs for each touched EN file
         mirror_max = max(10, len(patches_applied_files) * 5 + 2)
-        mirror_rc, mirror_out, _ = run_cmd(
+        mirror_rc, mirror_out, _, mirror_dt = run_cmd(
             ["python3", str(MIRROR_APPLY),
              "--include-warnings", "--max", str(mirror_max), "--apply"],
             "Stage 3: i18n-mirror-apply (LLM)",
         )
+        stage_durations["mirror"] = round(mirror_dt, 2)
         if mirror_rc != 0:
             print(f"⚠️  i18n-mirror-apply failed (rc={mirror_rc}) — EN patches "
                   "are already applied; drift will surface what was missed.",
@@ -299,10 +312,11 @@ def main() -> int:
               file=sys.stderr)
 
     # --- Stage 4: i18n-drift-report (always) ---
-    drift_rc, drift_json, _ = run_cmd(
+    drift_rc, drift_json, _, drift_dt = run_cmd(
         ["python3", str(DRIFT_REPORT), "--json"],
         "Stage 4: i18n-drift-report (deterministic)",
     )
+    stage_durations["drift"] = round(drift_dt, 2)
     drift_summary = None
     if drift_rc in (0, 1, 2):
         try:
@@ -327,6 +341,7 @@ def main() -> int:
         "mirrors_applied": mirror_applied,
         "drift_after": drift_summary,
         "convergence_note": convergence_note,
+        "stage_durations": stage_durations,
     }
     append_history(args.history, record)
     print(f"\n  → history appended to {args.history}", file=sys.stderr)

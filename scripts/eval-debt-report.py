@@ -303,6 +303,23 @@ def render_report(results: dict, source_path: Path) -> str:
     return "\n".join(header + sections + footer)
 
 
+def _check_attribution_paths(root: Path) -> list[str]:
+    """A1: assert every primary/secondary path in EVAL_ATTRIBUTION still exists.
+
+    EVAL_ATTRIBUTION is hand-written hardcoded strings. When source files get
+    renamed or refactored, those strings go stale silently — debt-report keeps
+    "working" but the attribution it computes is wrong, and patch-proposer
+    targets nonexistent files. This catches the drift up front.
+    """
+    missing: list[str] = []
+    for eval_name, entry in EVAL_ATTRIBUTION.items():
+        for kind in ("primary", "secondary"):
+            for p in entry.get(kind, []):
+                if not (root / p).is_file():
+                    missing.append(f"{eval_name}.{kind}: {p}")
+    return missing
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
@@ -320,7 +337,23 @@ def main() -> int:
         action="store_true",
         help="Write report to stdout instead of a file.",
     )
+    parser.add_argument(
+        "--skip-attribution-check",
+        action="store_true",
+        help="Skip EVAL_ATTRIBUTION path existence check (debug only).",
+    )
     args = parser.parse_args()
+
+    if not args.skip_attribution_check:
+        missing = _check_attribution_paths(Path.cwd())
+        if missing:
+            print("❌ EVAL_ATTRIBUTION references nonexistent file(s):",
+                  file=sys.stderr)
+            for m in missing:
+                print(f"  - {m}", file=sys.stderr)
+            print("\nUpdate EVAL_ATTRIBUTION in this file after the rename/refactor, "
+                  "or pass --skip-attribution-check to bypass.", file=sys.stderr)
+            return 2
 
     input_path = Path(args.input)
     if not input_path.is_file():
