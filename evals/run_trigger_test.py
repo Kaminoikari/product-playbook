@@ -84,7 +84,11 @@ def test_single_query(query: str, timeout: int = 60) -> bool:
         "claude", "-p", query,
         "--output-format", "stream-json",
         "--verbose",
-        "--max-turns", "2",
+        # 4 turns, not 1-2: the meta-skill often needs a couple of turns to
+        # commit to a lens and start delivering, and its trigger signals (the
+        # Skill call or the provenance line) do not appear until it does. Fewer
+        # turns truncate real triggers into false negatives.
+        "--max-turns", "4",
     ] + plugin_isolation_args()
 
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
