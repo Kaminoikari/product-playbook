@@ -43,7 +43,7 @@ class TestPackageShape(unittest.TestCase):
         # canonical user-facing entry points; if any of these go missing,
         # the plugin install will silently break
         for required in (".claude-plugin/", "skills/", "SKILL.md",
-                          "agents/", "references/", "i18n/"):
+                          "agents/", "references/"):
             self.assertIn(required, files,
                            f"{required!r} missing from package.json files — "
                            f"plugin consumers won't get it")
@@ -112,12 +112,6 @@ class TestCriticalUserFacingFiles(unittest.TestCase):
                          "SKILL.md must begin with YAML frontmatter")
         self.assertIn("\n---\n", text[3:],
                        "SKILL.md frontmatter must be closed by ---")
-
-    def test_all_5_readmes_present(self):
-        for lang_suffix in (".zh-TW", ".ja", ".zh-CN", ".es", ".ko"):
-            p = REPO_ROOT / f"README{lang_suffix}.md"
-            self.assertTrue(p.is_file(),
-                             f"README{lang_suffix}.md missing — promised in README links")
 
 
 if __name__ == "__main__":

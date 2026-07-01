@@ -84,38 +84,6 @@ class TestA2HardGateStructure(unittest.TestCase):
         self.assertIn("✅", err)
 
 
-class TestA3MirrorValidation(unittest.TestCase):
-    """A3: i18n mirror verify_no_fence_drift catches structural drift."""
-
-    def setUp(self):
-        self.m = _load("mm", "i18n-mirror-apply.py")
-
-    def test_frontmatter_preserved(self):
-        src = "---\nname: x\ndescription: y\n---\nbody"
-        warns = self.m.verify_no_fence_drift(src, "", src)
-        self.assertFalse(any("frontmatter" in w for w in warns))
-
-    def test_frontmatter_key_dropped(self):
-        src = "---\nname: x\ndescription: y\n---\nbody"
-        upd = "---\nname: x\n---\nbody"
-        warns = self.m.verify_no_fence_drift(src, "", upd)
-        self.assertTrue(any("frontmatter" in w for w in warns))
-
-    def test_heading_off_by_one_tolerated(self):
-        warns = self.m.verify_no_fence_drift("## A\n## B\n## C\n", "", "## A\n## B\n")
-        self.assertFalse(any("heading count" in w for w in warns))
-
-    def test_heading_big_drop_flagged(self):
-        warns = self.m.verify_no_fence_drift("## A\n## B\n## C\n## D\n", "", "## A\n")
-        self.assertTrue(any("heading count" in w for w in warns))
-
-    def test_table_row_mismatch(self):
-        src = "| a | b |\n|--|--|\n| 1 | 2 |\n| 3 | 4 |\n"
-        upd = "| a | b |\n|--|--|\n| 1 | 2 |\n"
-        warns = self.m.verify_no_fence_drift(src, "", upd)
-        self.assertTrue(any("table rows" in w for w in warns))
-
-
 class TestFreshness(unittest.TestCase):
     """Eval freshness gate — both the original watched dirs and N2 evals.json."""
 
@@ -487,13 +455,6 @@ class TestNegativeMaxRejection(unittest.TestCase):
         r = subprocess.run(["python3", str(SCRIPTS / "patch-proposer.py"),
                             "--results", "/dev/null", "--max", "-1"],
                            capture_output=True, text=True)
-        self.assertEqual(r.returncode, 2)
-        self.assertIn("--max must be >= 0", r.stderr)
-
-    def test_i18n_mirror_rejects_negative_max(self):
-        import subprocess
-        r = subprocess.run(["python3", str(SCRIPTS / "i18n-mirror-apply.py"),
-                            "--max", "-1"], capture_output=True, text=True)
         self.assertEqual(r.returncode, 2)
         self.assertIn("--max must be >= 0", r.stderr)
 
