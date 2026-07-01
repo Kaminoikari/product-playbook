@@ -1,0 +1,464 @@
+/* ============================================
+   PRD / 規格文件 — 專業印刷級 CSS
+   用於 Playwright page.pdf() 渲染
+   ============================================ */
+
+/* --- 頁面設定 --- */
+@page {
+  size: A4;
+  margin: 1.8cm 2cm;
+}
+
+/* --- CJK 專業排版 --- */
+body {
+  font-family: "PingFang TC", "Noto Sans TC", "Heiti TC", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
+  font-size: 10pt;
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  color: #1a1a2e;
+  word-break: break-all;
+}
+
+/* --- 防止排版事故 --- */
+h1, h2, h3, h4 { page-break-after: avoid; }
+table { page-break-inside: auto; }
+tr { page-break-inside: avoid; page-break-after: auto; }
+thead { display: table-header-group; }
+p { orphans: 3; widows: 3; }
+blockquote, ul, ol { page-break-inside: avoid; }
+img { page-break-inside: avoid; }
+
+/* --- 標題層級 --- */
+h1 {
+  font-size: 18pt;
+  font-weight: 700;
+  color: #1a1a2e;
+  border-bottom: 3px solid #2563eb;
+  padding-bottom: 6px;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1e40af;
+  border-bottom: 1.5px solid #dbeafe;
+  padding-bottom: 4px;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-size: 11pt;
+  font-weight: 600;
+  color: #1e3a5f;
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
+h4 {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #334155;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+/* --- 封面頁 --- */
+.cover-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: white;
+  page-break-after: always;
+  padding: 60px 40px;
+}
+
+.cover-page h1 {
+  font-size: 28pt;
+  color: white;
+  border-bottom: none;
+  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+}
+
+.cover-page .subtitle {
+  font-size: 14pt;
+  color: #94a3b8;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+.cover-page .meta-info {
+  font-size: 10pt;
+  color: #64748b;
+  line-height: 2;
+}
+
+.cover-page .meta-info strong {
+  color: #cbd5e1;
+}
+
+.cover-page .version-badge {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  font-size: 11pt;
+  font-weight: 600;
+  padding: 4px 16px;
+  border-radius: 20px;
+  margin-top: 24px;
+}
+
+/* --- 目錄頁 --- */
+.toc-page {
+  page-break-after: always;
+  padding-top: 40px;
+}
+
+.toc-page h2 {
+  font-size: 16pt;
+  color: #1a1a2e;
+  border-bottom: 2px solid #1a1a2e;
+  margin-bottom: 24px;
+}
+
+.toc {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc li {
+  display: flex;
+  align-items: baseline;
+  padding: 6px 0;
+  font-size: 10.5pt;
+  border-bottom: 1px dotted #e2e8f0;
+}
+
+.toc li:last-child { border-bottom: none; }
+
+.toc .toc-title {
+  flex-shrink: 0;
+  color: #1e40af;
+}
+
+.toc .toc-dots {
+  flex-grow: 1;
+  border-bottom: 1px dotted #cbd5e1;
+  margin: 0 8px;
+  min-width: 20px;
+}
+
+.toc .toc-page-num {
+  flex-shrink: 0;
+  color: #64748b;
+  font-size: 9pt;
+}
+
+.toc .toc-indent {
+  padding-left: 20px;
+  font-size: 9.5pt;
+}
+
+/* --- 表格 --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 16px 0;
+  font-size: 9pt;
+}
+
+th {
+  background: #1e40af;
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 6px 10px;
+  border: 1px solid #1e40af;
+}
+
+td {
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  vertical-align: top;
+}
+
+tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+/* 元資料表（無框線） */
+.meta-table td {
+  border: none;
+  padding: 3px 10px;
+}
+.meta-table td:first-child {
+  font-weight: 600;
+  color: #475569;
+  width: 120px;
+}
+
+/* --- 變更追蹤標記 --- */
+.new {
+  display: inline-block;
+  background: #059669;
+  color: white;
+  font-size: 7pt;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.upd {
+  display: inline-block;
+  background: #d97706;
+  color: white;
+  font-size: 7pt;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.blk {
+  display: inline-block;
+  background: #dc2626;
+  color: white;
+  font-size: 7pt;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+
+.pnd {
+  display: inline-block;
+  background: #eab308;
+  color: white;
+  font-size: 7pt;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+
+/* 變更行背景 */
+.new-row td {
+  background: #ecfdf5 !important;
+  border-left: 3px solid #059669;
+}
+
+.upd-row td {
+  background: #fffbeb !important;
+  border-left: 3px solid #d97706;
+}
+
+/* --- 視覺 Diff（增量更新專用） --- */
+.diff-removed {
+  text-decoration: line-through;
+  color: #94a3b8;
+  background: #fef2f2;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.diff-added {
+  background: #ecfdf5;
+  border-left: 3px solid #059669;
+  padding: 4px 10px;
+  margin: 4px 0;
+}
+
+.diff-context {
+  color: #64748b;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+/* Diff 圖例 */
+.diff-legend {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 12px 0 20px 0;
+  font-size: 9pt;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.diff-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.diff-legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.diff-legend-swatch.swatch-new { background: #059669; }
+.diff-legend-swatch.swatch-upd { background: #d97706; }
+.diff-legend-swatch.swatch-del { background: #e2e8f0; text-decoration: line-through; }
+.diff-legend-swatch.swatch-unchanged { background: white; border: 1px solid #d1d5db; }
+
+/* --- 提示框 --- */
+.note {
+  background: #fffbeb;
+  border-left: 3px solid #f59e0b;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-size: 9pt;
+  border-radius: 0 4px 4px 0;
+}
+
+.info {
+  background: #eff6ff;
+  border-left: 3px solid #2563eb;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-size: 9pt;
+  border-radius: 0 4px 4px 0;
+}
+
+.warning {
+  background: #fef2f2;
+  border-left: 3px solid #dc2626;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-size: 9pt;
+  border-radius: 0 4px 4px 0;
+}
+
+/* --- 引用 --- */
+blockquote {
+  border-left: 3px solid #cbd5e1;
+  margin: 10px 0;
+  padding: 4px 14px;
+  color: #64748b;
+  font-size: 9pt;
+}
+
+/* --- 清單 --- */
+ul, ol {
+  margin: 6px 0;
+  padding-left: 22px;
+}
+
+li {
+  margin-bottom: 3px;
+}
+
+li > ul, li > ol {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+/* --- 連結 --- */
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+/* --- 程式碼 --- */
+code {
+  font-family: "SF Mono", "Menlo", "Monaco", monospace;
+  font-size: 8.5pt;
+  background: #f1f5f9;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 8.5pt;
+  overflow-x: auto;
+  page-break-inside: avoid;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* --- 分隔線 --- */
+hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 20px 0;
+}
+
+/* --- 刪除線 --- */
+.strike {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* --- 強制分頁 --- */
+.page-break {
+  page-break-before: always;
+}
+
+/* --- 小字 --- */
+.small {
+  font-size: 8pt;
+  color: #64748b;
+}
+
+/* --- 頁尾浮水印 --- */
+.doc-footer {
+  margin-top: 40px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 8pt;
+  color: #94a3b8;
+  text-align: center;
+}
+
+/* --- 核取方塊 --- */
+.checkbox-empty {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid #94a3b8;
+  border-radius: 2px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.checkbox-checked {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  background: #059669;
+  border-radius: 2px;
+  margin-right: 5px;
+  vertical-align: middle;
+  color: white;
+  font-size: 7pt;
+  text-align: center;
+  line-height: 11px;
+}
+
+/* --- 風險等級色彩 --- */
+.risk-high { color: #dc2626; font-weight: 600; }
+.risk-medium { color: #d97706; font-weight: 600; }
+.risk-low { color: #059669; font-weight: 600; }

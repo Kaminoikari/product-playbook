@@ -1,0 +1,114 @@
+/* ============================================
+   HTML 報告轉 PDF — 列印優化 CSS
+   用於路徑 B（HTML 報告 → Playwright PDF）
+   覆蓋 06-html-report.md 的互動樣式
+   ============================================ */
+
+/* --- 頁面設定 --- */
+@page {
+  size: A4;
+  margin: 1.5cm 1.8cm;
+}
+
+/* --- 列印時隱藏互動元素 --- */
+@media print {
+  /* 隱藏 sticky 導航 */
+  nav, .toc-nav, .sticky-nav {
+    display: none !important;
+  }
+
+  /* 展開所有手風琴 */
+  details {
+    open: true;
+  }
+  details > summary {
+    list-style: none;
+  }
+  details > summary::marker,
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* 移除 hover 效果 */
+  * {
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 卡片樣式改為列印友善 */
+  .card, [class*="card"] {
+    box-shadow: none !important;
+    border: 1px solid #e2e8f0;
+    break-inside: avoid;
+  }
+
+  /* Hero 區塊列印適配 */
+  .hero, [class*="hero"] {
+    min-height: auto !important;
+    padding: 30px 20px !important;
+    page-break-after: always;
+  }
+
+  /* 表格不截斷 */
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+
+  /* 標題不孤立 */
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+
+  /* 防寡行 */
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* 連結顯示 URL */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #64748b;
+    word-break: break-all;
+  }
+
+  /* 隱藏滾動提示和互動按鈕 */
+  .scroll-hint,
+  .back-to-top,
+  [onclick],
+  button:not(.no-hide) {
+    display: none !important;
+  }
+}
+
+/* --- CJK 字體 fallback（CDN 不可用時） --- */
+body {
+  font-family: "Noto Sans TC", "PingFang TC", "Heiti TC", "Microsoft JhengHei", system-ui, sans-serif;
+}
+
+/* --- Mermaid 圖表列印優化 --- */
+.mermaid svg {
+  max-width: 100% !important;
+  height: auto !important;
+  page-break-inside: avoid;
+}
+
+/* --- PMF 等級圖列印適配 --- */
+.pmf-level, [class*="pmf"] {
+  break-inside: avoid;
+}
+
+/* --- 邏輯鏈視覺化列印適配 --- */
+.logic-chain, [class*="logic-chain"] {
+  break-inside: avoid;
+  overflow: visible !important;
+}
