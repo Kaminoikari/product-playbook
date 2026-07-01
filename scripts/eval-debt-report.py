@@ -46,16 +46,16 @@ INFRA_ERROR_PREFIXES = ("response error:", "judge error:")
 EVAL_ATTRIBUTION: dict[str, dict] = {
     "eval-mode-selection": {
         "primary": ["SKILL.md"],
-        "secondary": ["references/rules-commands.md"],
+        "secondary": [],
         "hint": "Onboarding Step 1 (Confirm mode) — neutral menu, no single-mode push.",
     },
     "eval-quick-mode-jtbd": {
-        "primary": ["references/02b-jtbd.md", "references/rules-quick.md"],
+        "primary": ["references/02b-jtbd.md"],
         "secondary": [],
         "hint": "Quick Mode S1 JTBD — three layers (functional/emotional/social), concrete scenario.",
     },
     "eval-jtbd-depth": {
-        "primary": ["references/02b-jtbd.md", "references/rules-full.md"],
+        "primary": ["references/02b-jtbd.md"],
         "secondary": ["references/rules-quality-review.md"],
         "hint": "Per-Persona JTBD; Five Whys Q5 emotion vocab; B2B organisation-level Jobs.",
     },
@@ -65,7 +65,7 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
         "hint": "PR-FAQ solution paragraph opens with user feel; ≥1 ❌ Hard Gate in self-check.",
     },
     "eval-revision-mode": {
-        "primary": ["references/rules-revision.md"],
+        "primary": [],
         "secondary": [],
         "hint": "Revision Mode post-S1 — concrete CTA menu, not open question.",
     },
@@ -75,7 +75,7 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
         "hint": "≥1 ❌ in self-check with fix direction; Q5 emotional vocab not 'metacognitive'.",
     },
     "eval-feature-extension": {
-        "primary": ["references/rules-build.md"],
+        "primary": [],
         "secondary": [],
         "hint": "Feature Extension Quick Path section.",
     },
@@ -99,7 +99,7 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
     },
     "eval-subagent-strategy-critic": {
         "primary": ["agents/strategy-critic.md"],
-        "secondary": ["references/rules-subagent-dispatch.md", "SKILL.md"],
+        "secondary": ["SKILL.md"],
         "hint": "Rumelt diagnosis identification; quote specific sentence; no-rewrite enforcement; dispatch-marker visibility (orchestrator-side).",
     },
     "eval-subagent-premortem": {

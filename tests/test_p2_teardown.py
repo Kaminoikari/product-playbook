@@ -16,3 +16,26 @@ class TestP2Teardown(unittest.TestCase):
         # topic-switch and the two session-start hooks + planning-gate remain
         self.assertIn("user-prompt-detect-topic-switch.py", blob)
         self.assertIn("session-start-inject-metaskill.py", blob)
+
+    def test_slash_commands_deleted(self):
+        self.assertFalse((ROOT / "commands").exists() and any((ROOT / "commands").glob("product-*.md")))
+
+    def test_mode_spine_refs_deleted(self):
+        gone = ["rules-full", "rules-quick", "rules-revision", "rules-custom", "rules-build",
+                "rules-product-type", "rules-optional-trigger", "rules-progress",
+                "rules-end-of-flow", "rules-subagent-dispatch", "rules-commands"]
+        for name in gone:
+            self.assertFalse((ROOT / "references" / f"{name}.md").exists(), name)
+
+    def test_change_propagation_kept(self):
+        self.assertTrue((ROOT / "references" / "rules-change-propagation.md").exists())
+
+    def test_new_system_has_no_reference_to_deleted_orchestration(self):
+        # The runtime new system (skills/) must not reference any deleted mode-spine file.
+        # NOTE: grep skills/ ONLY — test files legitimately name the deleted files to assert
+        # their absence, and hooks/ still references rules-progress until Task 4 adapts it.
+        import subprocess
+        pattern = r"rules-(full|quick|revision|custom|build|product-type|optional-trigger|progress|end-of-flow|subagent-dispatch|commands)\b"
+        hits = subprocess.run(["grep", "-rlE", pattern, str(ROOT / "skills")],
+                              capture_output=True, text=True).stdout.strip()
+        self.assertEqual(hits, "", f"dangling ref in skills/: {hits}")
