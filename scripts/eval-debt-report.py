@@ -93,7 +93,7 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
         "hint": "Handoff: auth/CORS/CSP coverage; security tasks in TASKS.md; .gitignore mention.",
     },
     "eval-subagent-discovery": {
-        "primary": ["agents/discovery-specialist.md"],
+        "primary": ["skills/persona-journey/SKILL.md", "skills/jtbd/SKILL.md"],
         "secondary": [],
         "hint": "B2B branch — separate Buyer Persona vs User Persona.",
     },

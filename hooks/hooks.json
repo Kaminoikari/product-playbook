@@ -30,11 +30,6 @@
             "type": "command",
             "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-detect-topic-switch.py",
             "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-detect-specialist-dispatch.py",
-            "timeout": 5
           }
         ]
       }
