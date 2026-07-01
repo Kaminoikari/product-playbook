@@ -25,9 +25,9 @@ class TestP4Packaging(unittest.TestCase):
         body = (ROOT / "skills/product-playbook/SKILL.md").read_text(encoding="utf-8")
         self.assertIn("${CLAUDE_PLUGIN_ROOT}/references/recipes/", body)
 
-    def test_document_export_assets_use_skill_dir(self):
+    def test_document_export_assets_use_plugin_root(self):
         body = (ROOT / "skills/document-export/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("${CLAUDE_SKILL_DIR}/assets/", body)
+        self.assertIn("${CLAUDE_PLUGIN_ROOT}/skills/document-export/assets/", body)
         # the runtime read instruction no longer uses a bare assets/ path
         import re
         self.assertNotRegex(body, r"reads `assets/prd-style\.css`")

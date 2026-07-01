@@ -17,7 +17,7 @@ The Product Playbook is a **Claude Code plugin** built from composable product-t
 
 A meta-skill (`product-playbook`) reads the outcome you actually want, picks the lens or lenses that get you there, and lets them blend when the situation needs more than one perspective, without walking every framework as a separate step. Every output ends with a one-line provenance tag naming the lens(es) applied, for example `— Frameworks: JTBD · Pre-mortem`.
 
-A small set of relative guardrails stay dormant by default and surface only as a single non-blocking nudge when the outcome would genuinely be harmed by the current path, never a hard stop. Claude detects the language you're writing in and replies in it; the lens content itself is authored in English.
+A small set of relative guardrails stay dormant by default and surface only as a single non-blocking nudge when the outcome would genuinely be harmed by the current path; you can always proceed past them. Claude detects the language you're writing in and replies in it; the lens content itself is authored in English.
 
 ---
 
@@ -27,7 +27,7 @@ A small set of relative guardrails stay dormant by default and surface only as a
 
 ```
 /plugin marketplace add kaminoikari/product-playbook
-/plugin install product-playbook
+/plugin install product-playbook@product-playbook
 ```
 
 ### Option 2: `install.sh`
