@@ -104,7 +104,7 @@ For a larger, end-to-end ask, the meta-skill can suggest one of four recipes, a 
 
 ### 🪝 Session continuity
 
-Three lifecycle hooks (`hooks/hooks.json`) keep planning state without Claude needing to remember it across turns: injecting the meta-skill and any saved progress at session start, watching for off-topic detours mid-session, and reminding Claude to keep planning output to documents until the user explicitly moves to build. All hooks are advisory; none of them block the user.
+Three lifecycle hooks (`hooks/hooks.json`) keep planning state without Claude needing to remember it across turns: injecting the meta-skill and any saved progress at session start, watching for off-topic detours mid-session, and reminding Claude to keep planning output to documents until the user explicitly moves to build. The session-start injection asserts product-playbook firmly for product and feature planning intent (so it holds its ground when other ideation plugins are installed) and stays dormant for everything else. No hook ever blocks you.
 
 ### 📄 Document export
 
@@ -139,6 +139,14 @@ python3 -m unittest discover tests
 ```
 
 Every expectation is tagged `critical` / `warning` / `info`, scored 0–100, and banded `healthy` / `needs-attention` / `at-risk`. See `evals/compute_eval_score.py` for the single source of truth on scoring.
+
+**Plugin isolation (default on):** every eval call runs `claude -p` with known-interfering plugins disabled (currently `superpowers`, whose session-start "brainstorm first" directive would otherwise pre-empt product-playbook on ambiguous prompts and skew the score). Disabling a plugin that is not installed is a no-op, so clean CI environments are unaffected. Set `PRODUCT_PLAYBOOK_EVAL_ISOLATE=0` to turn it off, or override the list via `PRODUCT_PLAYBOOK_EVAL_DISABLE_PLUGINS=<name@marketplace,...>`.
+
+**Long unattended runs:** a full `npm run eval` makes ~230 `claude` calls against your subscription quota. To run it detached (survives the terminal, keeps the Mac awake):
+
+```bash
+nohup caffeinate -is bash -c 'cd <repo> && npm run eval' > /tmp/full-eval.log 2>&1 & disown
+```
 
 ---
 
