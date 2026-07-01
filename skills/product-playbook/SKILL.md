@@ -1,6 +1,6 @@
 ---
 name: product-playbook
-description: Use when the user wants to plan, scope, validate, or strategize a product or feature, before producing any planning artifact. Triggers on "plan a feature", "add a feature", "is this worth building", "product strategy", "MVP", "PMF", "North Star", and the same intent in any language ("規劃新功能", "新機能を企画").
+description: MUST use whenever the user is working through a product or feature: planning, scoping, validating, prioritizing, or deciding whether to build it. This includes the open-ended case of exploring whether a raw idea is worth pursuing, who it serves, and what job it does. Triggers on "is this worth building", "should we build", "plan a feature", "add a feature", "product strategy", "MVP", "PMF", "North Star", "PR-FAQ", "positioning", "go/no-go", and the same intent in any language ("規劃新功能", "值不值得做", "新機能を企画").
 ---
 
 # Product Playbook

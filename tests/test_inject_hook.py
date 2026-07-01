@@ -14,6 +14,12 @@ class TestInjectHook(unittest.TestCase):
         ctx = payload["hookSpecificOutput"]["additionalContext"]
         self.assertIn("PRODUCT-PLAYBOOK-METASKILL", ctx)
         self.assertIn("Read the outcome", ctx)
+        # The directive competes strongly for product intent...
+        self.assertIn("EXTREMELY-IMPORTANT-PRODUCT-PLAYBOOK", ctx)
+        self.assertIn("you MUST", ctx)
+        # ...but stays scoped: it must tell the model to stand down outside product work.
+        self.assertIn("ignore this block entirely", ctx)
+        self.assertIn("dormant outside product", ctx)
 
     def test_hook_never_blocks_when_metaskill_unreadable(self):
         # Safety property: on read failure the hook must exit 0, not crash the session.
