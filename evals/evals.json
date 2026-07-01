@@ -3,430 +3,254 @@
   "evals": [
     {
       "id": 1,
-      "name": "eval-mode-selection",
-      "prompt": "Hi, I'm a freelance designer and I recently had an idea to build a SaaS tool that helps other freelancers manage their clients and projects. I'm not sure how thorough I need to make this plan — I have limited time but I want to think through the direction clearly before I start. Can you help me plan this?",
-      "expected_output": "Presents six execution mode options (Quick/Full/Revision/Custom/Build/Feature Extension), each with a brief description, asks the user which one they want to choose, and does not start executing any analysis steps.",
+      "name": "lens-selection-single",
+      "prompt": "Help me understand what job users are hiring my note-taking app to do. It's aimed at busy professionals who want to capture ideas quickly during their day.",
+      "expected_output": "Applies the JTBD lens alone, producing a job statement in the canonical three-clause form, and ends with a provenance line naming JTBD. No other framework artifacts appear.",
       "expectations": [
         {
-          "text": "Has not started executing any product framework analysis (no JTBD, Persona, PR-FAQ, etc. output produced)",
+          "text": "Produces a JTBD job statement using the canonical 'When [situation], I want to [motivation], so I can [outcome]' clause structure, grounded in the note-taking app scenario",
           "severity": "critical"
         },
         {
-          "text": "Responds in English",
+          "text": "Ends with a provenance line of the form '— Frameworks: …' that names JTBD",
+          "severity": "critical"
+        },
+        {
+          "text": "Stays to the single JTBD lens; no Persona template, RICE table, PR-FAQ, or pre-mortem list appears for this narrow ask",
+          "severity": "warning"
+        },
+        {
+          "text": "No mode menu, progress indicator, or step-by-step confirmation ceremony precedes the JTBD statement",
           "severity": "info"
-        },
-        {
-          "text": "Response presents modes as a clear selection menu (numbered options or table) and lists at least the six modes Quick, Full, Revision, Custom, Build, and Feature Extension — missing any of these modes or inventing extras fails",
-          "severity": "critical"
-        },
-        {
-          "text": "This turn only asks about mode selection, does not simultaneously ask about product type or completeness level (three-step progressive rule)",
-          "severity": "warning"
-        },
-        {
-          "text": "Does not push a single mode as the answer before the user picks — a brief 'these two might suit you' note is fine, but a one-mode recommendation that closes the menu fails",
-          "severity": "warning"
         }
       ]
     },
     {
       "id": 2,
-      "name": "eval-quick-mode-jtbd",
-      "prompt": "I want to build a B2C knowledge-capture app that lets users quickly jot down key takeaways and ideas from their daily reading, and easily review them later. Please use Quick Mode and execute S1 directly.",
-      "expected_output": "Executes S1 JTBD analysis in Quick Mode, producing JTBD statements covering Functional, Emotional, and Social types, then pauses after S1 completion to wait for user confirmation before proceeding to S2.",
+      "name": "lens-blend",
+      "prompt": "We're deciding whether to build a bulk CSV import feature for our analytics dashboard. Weigh whether it's worth building and check what could go wrong before we commit.",
+      "expected_output": "One integrated recommendation blending prioritization (RICE) and failure-risk (pre-mortem) into a single go/no-go answer, ending with a provenance line naming both frameworks together.",
       "expectations": [
         {
-          "text": "Displays a progress indicator at the beginning of the response that shows all three Quick Mode steps (S1, S2, S3) with explicit status markers (e.g., 'S1 in progress', 'S2 pending', 'S3 pending') — a one-line text header that only mentions 'Quick Mode S1/S3' fails",
+          "text": "Delivers a single integrated go/no-go recommendation for the CSV import feature",
+          "severity": "critical"
+        },
+        {
+          "text": "The reasoning visibly blends prioritization scoring (e.g. RICE) with failure-risk analysis (Pre-mortem) into one integrated argument",
+          "severity": "critical"
+        },
+        {
+          "text": "Ends with one provenance line naming both RICE and Pre-mortem together on a single line (e.g. '— Frameworks: RICE · Pre-mortem')",
+          "severity": "critical"
+        },
+        {
+          "text": "The response presents one integrated argument; it avoids two separate step-by-step framework walkthroughs",
+          "severity": "warning"
+        },
+        {
+          "text": "No mode menu or progress indicator appears before the recommendation",
           "severity": "info"
-        },
-        {
-          "text": "JTBD statements use the canonical 'When [situation], I want to [motivation], so [outcome]' template with all three clauses (When / I want to / so) present in each layer",
-          "severity": "warning"
-        },
-        {
-          "text": "Includes at least three JTBD types: Functional, Emotional, and Social",
-          "severity": "critical"
-        },
-        {
-          "text": "JTBD analysis includes concrete usage scenario descriptions (not abstract feature lists)",
-          "severity": "warning"
-        },
-        {
-          "text": "After completing S1, asks the user for confirmation or feedback; does not automatically proceed to S2",
-          "severity": "warning"
-        },
-        {
-          "text": "The post-S1 question is a meaningful question about JTBD decisions (not a generic 'Any thoughts?' but rather a confirmation about a specific Job or scenario)",
-          "severity": "warning"
-        },
-        {
-          "text": "Response contains no code creation, file creation, or development commands (Hard Gate compliance: development operations are prohibited during the planning flow)",
-          "severity": "critical"
-        },
-        {
-          "text": "Output stays scoped to S1 — no PR-FAQ press release, no External FAQ, no North Star Metric definition, and no other S2/S3 framework artifacts appear before the user confirms",
-          "severity": "warning"
-        },
-        {
-          "text": "Surfaces confidence or validation status for the JTBD claims (e.g., flags assumptions, marks unvalidated claims for user research, names a weakest-link assumption) rather than presenting them as established facts",
-          "severity": "warning"
         }
       ]
     },
     {
       "id": 3,
-      "name": "eval-jtbd-depth",
-      "prompt": "I'm building a B2B HR leave management system that primarily serves two user types: HR Specialists (responsible for maintaining leave policies and approval workflows) and Mid-level Managers (responsible for approving their direct reports' leave requests). Please perform an in-depth JTBD analysis for these two Personas, including the Five Whys deep-dive and a quality self-review checklist.",
-      "expected_output": "Performs a complete JTBD analysis for both the HR Specialist and the Mid-level Manager, including three JTBD types, Five Whys deep-dive, and a quality self-review checklist with pass/fail markers, and indicates which Persona should be prioritized and why.",
+      "name": "provenance-format",
+      "prompt": "Rank these features for our mobile app by priority: push notifications, dark mode, and offline mode.",
+      "expected_output": "A priority ranking of the three features, ending with a provenance line in the exact '— Frameworks: X' shape naming the framework(s) applied, by name only.",
       "expectations": [
         {
-          "text": "Performs independent JTBD analysis for each of the two Personas: HR Specialist and Mid-level Manager",
+          "text": "Produces a priority ranking of the three features using a named prioritization framework (e.g. RICE)",
           "severity": "critical"
         },
         {
-          "text": "Includes a complete Five Whys deep-dive with at least 3-5 progressively deeper 'why' questions",
-          "severity": "warning"
-        },
-        {
-          "text": "Quality self-review checklist marks each item as pass or fail (using checkmark or cross markers)",
-          "severity": "warning"
-        },
-        {
-          "text": "Clearly states which Persona to prioritize and provides specific reasoning",
-          "severity": "warning"
-        },
-        {
-          "text": "The final question in the Five Whys (Q5) explicitly uses psychological or emotional vocabulary (e.g., fear, anxiety, shame, worry, dread, threat to professional identity) to describe the emotional root cause — not merely an implied-emotional functional statement (e.g., 'HR credibility is affected' is NOT sufficient; 'HR fears being held accountable during audits — that is a real fear' IS sufficient)",
-          "severity": "warning"
-        },
-        {
-          "text": "B2B analysis includes organization-level Jobs (e.g., compliance auditing, cross-department approval workflows, cost control — needs beyond individual tasks)",
+          "text": "Ends with a provenance line in the exact form '— Frameworks: …' as the final line of the response",
           "severity": "critical"
         },
         {
-          "text": "Quality self-review checklist contains at least 1 explicit cross/fail marker (warning markers do not count), and that failed item includes a specific improvement direction",
+          "text": "The provenance line names the framework by its framework name (e.g. RICE); it does not use a process-step label such as 'Step 2' or 'Prioritization phase'",
           "severity": "warning"
         },
         {
-          "text": "Prioritization reasoning references B2B-specific dynamics (champion vs buyer, adoption multiplier, switching-trigger ownership, budget authority, or audit/compliance leverage) — not just 'they use it more often'",
+          "text": "Provenance stays names-only: no per-framework contribution breakdown appears, because the user did not request one",
           "severity": "warning"
-        },
-        {
-          "text": "The two Personas' core jobs are substantively different in trigger, outcome, or stakes — they are not near-duplicates with role labels swapped",
-          "severity": "critical"
         }
       ]
     },
     {
       "id": 4,
-      "name": "eval-prfaq-output",
-      "prompt": "I'm building a restaurant prep planning tool called 'PrepFlow'. I've already completed the JTBD analysis. The target users are kitchen managers at small restaurants (10-50 seats), and the core JTBD is: 'When it's Friday afternoon and the kitchen manager needs to prep for the weekend rush, they need a tool that can quickly calculate ingredient quantities and auto-generate a purchase order, so they can avoid running short on ingredients or wasting food due to estimation errors.' Please execute PR-FAQ (S2) directly and produce the full PR-FAQ document with quality self-review.",
-      "expected_output": "A complete PR-FAQ document including a headline written from the user's perspective, a lead paragraph with a concrete scenario, a solution experience description, a realistic user quote, External FAQ (including pointed challenges), Internal FAQ, and a quality self-review checklist.",
+      "name": "guardrail-proportional",
+      "prompt": "Skip the analysis, just write me the full PRD for a subscription-billing feature right now.",
+      "expected_output": "A single-line, non-blocking guardrail nudge naming the missing problem statement, delivered alongside a usable PRD; the user can override in one word and the assistant still produces the deliverable.",
       "expectations": [
         {
-          "text": "PR-FAQ headline is written from the user benefit or experience perspective, not as a feature description",
-          "severity": "warning"
+          "text": "Surfaces a guardrail noting there is no problem statement yet, expressed in a single line",
+          "severity": "critical"
         },
         {
-          "text": "Lead paragraph includes BOTH a concrete usage scenario (named time, place, or actor) AND at least 2 specific numeric figures (e.g., quantity, dollar amount, time duration) — one or the other alone fails",
-          "severity": "warning"
+          "text": "The guardrail is advisory: it offers to proceed immediately if the user already has a problem statement or wants to continue anyway",
+          "severity": "critical"
         },
         {
-          "text": "The first sentence of the solution paragraph starts with user experience or a usage scenario, not with a system-feature verb (must not begin with 'PrepFlow lets you', 'The system will', 'Click to', or similar feature-first phrasing)",
-          "severity": "warning"
+          "text": "The assistant still produces a usable PRD or PRD outline in this turn; the guardrail does not block the deliverable",
+          "severity": "critical"
         },
         {
-          "text": "External FAQ contains at least 1 pointed challenge comparing to existing tools (e.g., 'Why not just keep using Excel or spreadsheets?'), and the answer must explicitly acknowledge at least one specific advantage of the existing tool (e.g., 'Excel is flexible and kitchen staff are already familiar with it') — vague acknowledgments like 'if it works for you, keep using it' are insufficient",
-          "severity": "warning"
-        },
-        {
-          "text": "User quote reads like a real kitchen worker speaking, not like an official press release",
-          "severity": "info"
-        },
-        {
-          "text": "Internal FAQ section is present and identifies a riskiest / weakest assumption with a concrete de-risking action — a generic 'we will track engagement' line fails",
-          "severity": "warning"
-        },
-        {
-          "text": "PR-FAQ is internally consistent: numbers cited in the Lead match what the Solution promises, and the user quote's pain matches the Problem section. A contradiction between any two sections fails this check",
-          "severity": "warning"
-        },
-        {
-          "text": "Quality self-review checklist contains at least 1 explicit cross/fail marker (warning markers do not count), and that failed item includes a specific improvement direction",
+          "text": "The guardrail line stays free of a mode menu, a lecture, or a multi-step ceremony",
           "severity": "warning"
         }
       ]
     },
     {
       "id": 5,
-      "name": "eval-revision-mode",
-      "prompt": "Our product is TeamFlow, a B2B workflow management tool primarily serving mid-sized companies of 50-200 employees. We currently have 2,800 MAU, but retention has dropped from 85% last quarter to 72%. User interviews indicate that feature complexity is the main pain point. I'd like to do a product revision — can you help?",
-      "expected_output": "Identifies this as a revision scenario, triggers Revision Mode, displays the Revision Mode progress indicator, leverages the data provided in the prompt (MAU 2,800, retention drop from 85% to 72%), lists what additional data needs to be gathered, and explains the Revision Mode workflow structure.",
+      "name": "jtbd-depth",
+      "prompt": "I'm building a B2B HR leave-management system serving two user types: HR Specialists, who maintain leave policies and approval workflows, and Mid-level Managers, who approve their direct reports' leave requests. Run a deep JTBD analysis for both personas, including a Five Whys dig to the emotional root cause.",
+      "expected_output": "Independent JTBD analysis for each persona in the canonical three-clause form, a Five Whys chain reaching at least five layers per persona, the final why naming an explicit emotional root cause, and organization-level B2B jobs beyond individual tasks.",
       "expectations": [
         {
-          "text": "Displays a Revision Mode progress indicator at the beginning of the response (including the step sequence)",
-          "severity": "info"
-        },
-        {
-          "text": "Clearly identifies this as an existing product revision scenario, not a 0-to-1 new product",
+          "text": "Produces independent JTBD analysis for each of the two personas: HR Specialist and Mid-level Manager",
           "severity": "critical"
         },
         {
-          "text": "Lists additional data or information that needs to be collected, including at least one segmentation-oriented gap (cohort / tier / role / feature-usage segment) — generic 'more interviews' alone fails",
-          "severity": "warning"
-        },
-        {
-          "text": "Uses the specific data provided in the prompt (MAU 2,800, retention drop from 85% to 72%) in the response",
-          "severity": "warning"
-        },
-        {
-          "text": "Treats 'feature complexity' as a hypothesis to validate (H1), not as a confirmed root cause; surfaces at least one rival explanation (H2 / H3) — a response that uncritically accepts complexity as the answer fails",
+          "text": "The two personas' core jobs differ substantively in trigger, outcome, or stakes; they are not the same job with role labels swapped",
           "severity": "critical"
         },
         {
-          "text": "After S1, provides the user with clear action options (numbered menu or specific CTAs), not an open-ended question (e.g., must not end with just 'Any thoughts?')",
+          "text": "Each Five Whys chain reaches at least five progressively deeper 'why' layers",
           "severity": "warning"
         },
         {
-          "text": "Does not propose a specific revision or feature change at S1 — stays in problem-framing, not jumping to a solution like 'simplify the admin UI'",
+          "text": "The final Five Whys layer (Q5) names an explicit psychological or emotional root cause using vocabulary such as fear, anxiety, shame, worry, or dread; a merely implied-emotional functional statement does not satisfy this (for example 'HR credibility is affected' fails; 'HR fears being held accountable during an audit' passes)",
           "severity": "warning"
         },
         {
-          "text": "Explains how Revision Mode differs from a 0-to-1 Discovery workflow (e.g., references re-validating existing JTBD, baseline metrics, .product-context.md, or segmented cohort analysis)",
+          "text": "The B2B analysis includes organization-level jobs such as compliance auditing, cross-department approval workflows, or cost control, beyond individual-task jobs",
+          "severity": "critical"
+        },
+        {
+          "text": "Each JTBD statement uses the canonical 'When [situation], I want to [motivation], so I can [outcome]' clause structure with all three clauses present",
           "severity": "warning"
         }
       ]
     },
     {
       "id": 6,
-      "name": "eval-quality-hardgate",
-      "prompt": "I want to build a B2C fitness habit tracking app that lets busy professionals log their daily workouts and get personalized training recommendations. Please use Quick Mode and execute S1 JTBD analysis, including the Five Whys deep-dive and quality self-review checklist.",
-      "expected_output": "A complete Quick Mode S1 JTBD analysis with Five Whys deep-dive and quality self-review checklist. The quality self-review checklist must mark each item as pass or fail (no blank checkboxes allowed), and at least 1 item must be marked as failed with a specific improvement explanation.",
+      "name": "prfaq-quality",
+      "prompt": "I'm building a restaurant-prep planning tool called PrepFlow for kitchen managers at small restaurants (10-50 seats). The core job: on Friday afternoon, before the weekend rush, the manager needs to calculate ingredient quantities and generate a purchase order fast, so they avoid running short or wasting food from bad estimates. Write the full PR-FAQ.",
+      "expected_output": "A complete Amazon-style working-backwards PR-FAQ: a customer-obsessed headline, a lead paragraph with a concrete scenario and real numbers, a solution description opening from the user's experience, an External FAQ with a pointed competitive challenge, an Internal FAQ naming the riskiest assumption, and a realistic user quote.",
       "expectations": [
         {
-          "text": "Quality self-review checklist uses explicit pass or fail markers for each item (no blank checkboxes allowed)",
-          "severity": "warning"
-        },
-        {
-          "text": "Quality self-review checklist contains at least 1 explicit cross/fail marker on a SUBSTANTIVE content gap (a cosmetic flag like 'formatting could be prettier' fails) — warning markers do not count",
-          "severity": "warning"
-        },
-        {
-          "text": "Failed items include a specific improvement explanation that references a downstream step or artifact dependent on the fix (e.g., 'this gap will block PR-FAQ writing because…') — a vague 'consider improving' fails",
-          "severity": "warning"
-        },
-        {
-          "text": "The final question in the Five Whys (Q5) uses explicit emotional vocabulary (e.g., fear, anxiety, shame, worry, dread, self-doubt, sense of loss) rather than merely describing functional consequences",
-          "severity": "warning"
-        },
-        {
-          "text": "All three JTBD layers (Functional, Emotional, Social) are present and each uses the canonical 'When [situation], I want to [motivation], so [outcome]' form",
+          "text": "The solution paragraph opens with the user's experience or usage scenario; it does not open with a system-feature verb such as 'PrepFlow lets you' or 'The system will'",
           "severity": "critical"
+        },
+        {
+          "text": "The headline is written from the user's benefit or experience perspective",
+          "severity": "warning"
+        },
+        {
+          "text": "The lead paragraph names a concrete usage scenario (time, place, or actor) and includes at least two specific numeric figures (quantity, dollar amount, or time duration); one figure alone does not satisfy this",
+          "severity": "warning"
+        },
+        {
+          "text": "The External FAQ raises at least one pointed challenge comparing PrepFlow to an existing alternative such as spreadsheets, and the answer names a specific real advantage of that alternative",
+          "severity": "warning"
+        },
+        {
+          "text": "The Internal FAQ names the riskiest or weakest assumption with a concrete de-risking action; a generic engagement-tracking line does not satisfy this",
+          "severity": "warning"
+        },
+        {
+          "text": "The user quote reads like a real kitchen worker speaking in their own voice",
+          "severity": "info"
         }
       ]
     },
     {
       "id": 7,
-      "name": "eval-feature-extension",
-      "prompt": "Our product is an e-commerce platform built with Next.js + PostgreSQL + Redis. The main modules are auth, catalog, cart, checkout, and payment. We want to add a 'Wishlist' feature that lets users save products they're interested in and easily add them to the cart later. Please help me plan this feature.",
-      "expected_output": "Identifies this as a feature extension scenario, triggers the feature extension fast path (4 steps), displays the 4-step progress indicator, and in S1 confirms the existing system context (tech stack, affected modules) without asking the user to re-describe architecture information already provided.",
+      "name": "security-awareness",
+      "prompt": "I've finished planning a B2C social platform with registration and login, user profiles, post publishing, real-time messaging, and push notifications. Produce the developer handoff package.",
+      "expected_output": "A developer handoff package covering authentication, input validation, and platform-appropriate security controls, with a concrete .gitignore body for secrets and explicit security tasks in the task list.",
       "expectations": [
         {
-          "text": "Identifies this as a feature extension scenario (not Full Mode or Revision Mode) and activates the 4-step fast path",
+          "text": "The handoff includes a security-related section covering at least four of: authentication/authorization, input validation, CORS, CSP, rate limiting",
           "severity": "critical"
         },
         {
-          "text": "Displays the feature extension progress indicator at the beginning of the response (S1/S4, not S1/S7 or S1/S12)",
-          "severity": "info"
-        },
-        {
-          "text": "Confirms or references the tech stack already provided by the user (Next.js + PostgreSQL + Redis) and the module list, without asking for re-description",
-          "severity": "warning"
-        },
-        {
-          "text": "Analyzes which existing modules the Wishlist feature would affect (mentions at least cart and catalog)",
-          "severity": "warning"
-        },
-        {
-          "text": "Pauses after S1 completion AND makes an explicit commitment not to advance to S2 without confirmation (e.g., 'I will not proceed to S2 until you confirm') — trailing off without a stop commitment fails",
-          "severity": "warning"
-        },
-        {
-          "text": "Does not ask the user to provide JTBD, Persona, North Star, or other global product strategy elements unrelated to feature extension",
+          "text": "The task list (TASKS.md or equivalent) includes explicit, individually listed security-related tasks",
           "severity": "critical"
         },
         {
-          "text": "Includes a quality self-check that identifies a specific weakness in the current S1 work (e.g., an assumption not yet validated, missing data on user behavior) — a 'looks good' rubber stamp fails",
+          "text": "The handoff includes a concrete .gitignore file body with entries for .env, *.pem/*.key, and a platform-specific credential file such as serviceAccountKey.json",
+          "severity": "warning"
+        },
+        {
+          "text": "Raises at least one security consideration specific to social platforms, such as XSS protection, user-generated content filtering, or real-time message encryption",
+          "severity": "warning"
+        },
+        {
+          "text": "At least one security task lists a concrete numeric or configuration value, such as a password-hashing parameter, a login rate limit, or a specific CSP directive",
           "severity": "warning"
         }
       ]
     },
     {
       "id": 8,
-      "name": "eval-security-awareness",
-      "prompt": "I've completed the product planning (Full Mode) for a B2C social platform. The platform has user registration and login, user profiles, post publishing, real-time messaging, and push notifications. Now I need to generate the developer handoff package. Please produce the developer handoff package.",
-      "expected_output": "The developer handoff package includes security-related content: mentions authentication/authorization, input validation, CORS, or other security considerations in the architecture or TASKS.md. Should not produce a purely functional handoff package with no security mentions.",
+      "name": "strategy-critic-teardown",
+      "prompt": "Here's our strategy, review it: 'Our mission is to delight customers. Our vision is to be the leader in calendar tools. Our strategy is to add more features faster than competitors.' How strong is this?",
+      "expected_output": "A hostile-but-fair critique against Rumelt's Good Strategy Kernel: the diagnosis and guiding policy are scored weak or missing, each critique quotes a specific sentence and names the violated principle, at least one blind spot surfaces, and the response returns strengthening questions for the writer.",
       "expectations": [
         {
-          "text": "Developer handoff package includes a security-related section covering at least 4 of: authentication/authorization, input validation, CORS, CSP, Rate Limiting — a generic mention of 2 items is too easy to satisfy and does not discriminate a thorough handoff",
+          "text": "The overall verdict identifies this as a weak strategy or not yet a strategy; it does not present the input as strong",
           "severity": "critical"
         },
         {
-          "text": "TASKS.md or the task list includes security-related tasks (not just a vague description buried in the last phase)",
+          "text": "The critique scores the diagnosis as missing or weak, explaining that the strategy names a goal and an aspiration but no central challenge",
           "severity": "critical"
         },
         {
-          "text": "Handoff includes an actual .gitignore file body (or explicit file content block) with concrete entries for .env, *.pem / *.key, and platform-specific credential files (e.g., serviceAccountKey.json, *.local) — a single sentence saying 'remember to gitignore .env' fails",
+          "text": "Each critique quotes a specific sentence from the strategy and names the principle it violates",
           "severity": "warning"
         },
         {
-          "text": "Raises security considerations specific to social platforms (at least 1 of: XSS protection, user-uploaded content filtering, real-time message encryption)",
+          "text": "At least one blind spot surfaces, such as missing trade-offs, missing competitive landscape, or an unstated invalidating assumption",
           "severity": "warning"
         },
         {
-          "text": "At least one security task lists concrete numeric or configuration values (e.g., password hashing parameters like argon2id memoryCost ≥ 19456, login rate limit 5/min/IP, specific CSP directives) — abstract 'add rate limiting' fails",
-          "severity": "warning"
-        },
-        {
-          "text": "No artifacts are promised in the handoff file tree but missing from the actual output (e.g., PRD.md or PRODUCT-SPEC.md listed in the tree but not produced)",
+          "text": "The response returns strengthening questions for the writer and contains no replacement strategy text such as 'Our mission should be...' or 'Here is a revised strategy:'",
           "severity": "critical"
         }
       ]
     },
     {
       "id": 9,
-      "name": "eval-context-bootstrap",
-      "prompt": "We have an existing project management tool called TaskPro, but we've never used your product planning tool before. Now we want to add a Gantt chart feature to TaskPro. The tech stack is React + Node.js + MongoDB.",
-      "expected_output": "Detects this is an existing product's first use (no .product-context.md), performs a Context Bootstrap to collect basic product information (product name, one-line description, type) before entering the feature extension S1, then enters the feature extension flow. Should not skip Bootstrap and jump straight into feature planning.",
+      "name": "pre-mortem-scenarios",
+      "prompt": "Imagine our real-time collaboration feature for a calendar app has launched and failed. Walk backwards through why.",
+      "expected_output": "10 or more concrete failure scenarios across the five categories (product/UX, market/demand, team/execution, operational, external), each with a leading indicator observable before the failure becomes irreversible, and a ranked top-3 priority set with pre-launch countermeasures.",
       "expectations": [
         {
-          "text": "Identifies this as a feature extension scenario (adding a new feature to an existing product)",
+          "text": "Produces at least 10 concrete failure scenarios with at least one scenario in each of the five categories: product/UX, market/demand, team/execution, operational/infrastructure, and external/environment",
           "severity": "critical"
         },
         {
-          "text": "Before feature planning, collects or confirms basic product information (product name TaskPro, product type B2B/B2C, one-line description, etc.) AND does NOT re-ask for information already supplied in the user's prompt (TaskPro name, tech stack)",
+          "text": "Each failure scenario names a leading indicator that would warn the team before the failure becomes irreversible, expressed as a concrete signal with a threshold and a detection timeframe",
           "severity": "warning"
         },
         {
-          "text": "Confirms or references the tech stack already provided by the user (React + Node.js + MongoDB) without asking for re-description",
+          "text": "Identifies a top-3 priority set ranked by likelihood and impact, each with a concrete pre-launch countermeasure",
           "severity": "warning"
         },
         {
-          "text": "Enters the 4-step feature extension flow (not the full 9–11 step Full Mode or 6–8 step Revision Mode)",
-          "severity": "critical"
+          "text": "Failure scenarios read as concrete narratives combining a metric, a timing, and a causal mechanism; abstract hedges such as 'adoption may be low' do not satisfy this",
+          "severity": "warning"
         },
         {
-          "text": "Mentions that product context will be saved for future use AND references the persistence file path (.product-context.md) — a single throwaway mention of either piece alone is insufficient",
+          "text": "The framing imagines the product has already shipped and failed, using past-tense failure narratives; a forward-looking risk list ('risks may occur') does not satisfy this framing check",
           "severity": "info"
-        },
-        {
-          "text": "Bootstrap is sequenced as Step 0 BEFORE feature extension S1 (not interleaved with S1) — the response clearly shows Bootstrap → S1, not Bootstrap mid-S1",
-          "severity": "warning"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "name": "eval-subagent-discovery",
-      "prompt": "I'm planning a B2B product in Full Mode. The product is a calendar app for engineering team leads who manage 5-15 people. I'm now at the Persona and JTBD step. I have not done any user research yet. Please produce the Persona and JTBD analysis for this step.",
-      "expected_output": "Deep Discovery-stage analysis: a motivation-and-context-driven Persona (for B2B, separate buyer and user personas), a JTBD with all three layers (functional, emotional, social), with evidence-aware confidence flagged low because no research data was provided. The orchestrator dispatches the work to the discovery-specialist sub-agent and stays within the Discovery scope — does not drift into prioritization, MVP, PRD, or GTM.",
-      "expectations": [
-        {
-          "text": "JTBD analysis includes all three layers explicitly: functional, emotional, and social",
-          "severity": "critical"
-        },
-        {
-          "text": "Persona is built on motivations and context (goals, pain points, triggering events) rather than demographics alone",
-          "severity": "warning"
-        },
-        {
-          "text": "Because no user research was provided, low-evidence claims are explicitly flagged as low confidence / requiring validation, instead of being presented as established facts",
-          "severity": "warning"
-        },
-        {
-          "text": "For this B2B product, the buyer persona and the daily-user persona are treated as separate roles",
-          "severity": "critical"
-        },
-        {
-          "text": "Output stays within Discovery scope — does NOT contain named Develop/Deliver/Strategy artifacts: no positioning statement template, no RICE table, no MVP scope list, no North Star Metric definition, no GTM plan",
-          "severity": "critical"
-        },
-        {
-          "text": "JTBD statements use the canonical 'When [situation], I want to [motivation], so I can [outcome]' format — three bullet points labeled functional/emotional/social without the canonical clause structure fails",
-          "severity": "warning"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "name": "eval-subagent-strategy-critic",
-      "prompt": "We're in the strategy step of Full Mode. Here is our strategy, please review it: 'Our mission is to delight customers. Our vision is to be the leader in calendar tools. Our strategy is to add more features faster than competitors.' Tell me how strong this strategy is.",
-      "expected_output": "A hostile-but-fair critique evaluating the strategy against Rumelt's Good Strategy Kernel, delegated to the strategy-critic sub-agent. The diagnosis and guiding policy are scored weak or missing, every critique points at a specific quoted sentence and the principle it violates, at least one blind spot is surfaced, and concrete strengthening questions are returned to the writer. The strategy is critiqued, not rewritten.",
-      "expectations": [
-        {
-          "text": "The overall verdict is not 'strong' — the response clearly identifies this as a weak strategy or not yet a strategy",
-          "severity": "critical"
-        },
-        {
-          "text": "The critique scores the diagnosis as missing or weak, explaining that the strategy names no central challenge (it states a goal and an aspiration instead)",
-          "severity": "critical"
-        },
-        {
-          "text": "Each critique points at a specific quoted sentence from the strategy and cites which principle is violated, rather than giving generic feedback",
-          "severity": "warning"
-        },
-        {
-          "text": "At least one blind spot is surfaced (e.g. no explicit trade-offs, no competitive landscape, no invalidating assumption, or no one who would object)",
-          "severity": "warning"
-        },
-        {
-          "text": "The response returns strengthening questions for the writer and does NOT rewrite the strategy on the user's behalf. The response must not contain replacement strategy text patterns ('Our mission should be...', 'A better strategy would be...', 'Here is a revised strategy:'). Partial rewrites also fail",
-          "severity": "critical"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "name": "eval-subagent-premortem",
-      "prompt": "We're using Build Mode on our existing calendar app (built with Next.js + PostgreSQL + Redis; modules: auth, scheduling, notifications). We're adding a real-time collaboration feature. I'm now at the risk-assessment step. Please run the pre-mortem for this feature.",
-      "expected_output": "A pre-mortem delegated to the pre-mortem-runner sub-agent. The runner assumes the feature has shipped and failed: 15 or more concrete failure scenarios spanning all five categories (product/UX, market/demand, team/execution, operational, external), each with a leading indicator that is observable before the failure becomes irreversible, and a top-3 priority set ranked by likelihood and impact with pre-launch countermeasures. Because this is Build Mode with a known stack, at least 3 scenarios are grounded in the actual stack components.",
-      "expectations": [
-        {
-          "text": "Produces a substantial set of failure scenarios, targeting 15 or more, with at least 2 scenarios in each of the five categories",
-          "severity": "critical"
-        },
-        {
-          "text": "Coverage spans all five failure categories: product/UX, market/demand, team/execution, operational/infrastructure, and external/environment",
-          "severity": "critical"
-        },
-        {
-          "text": "Each failure scenario has a leading indicator that would warn the team before the failure is irreversible — a concrete signal with a threshold and a detection timeframe, not a lagging metric",
-          "severity": "warning"
-        },
-        {
-          "text": "Identifies a top-3 priority set ranked by likelihood times impact, each with a concrete countermeasure to apply before launch",
-          "severity": "warning"
-        },
-        {
-          "text": "Failure scenarios are concrete narratives with a metric, timing, and causal mechanism — not abstract hedges such as 'adoption may be low'",
-          "severity": "warning"
-        },
-        {
-          "text": "Because this is Build Mode with a known stack (Next.js + PostgreSQL + Redis; modules: auth/scheduling/notifications), at least 3 failure scenarios are architecture-grounded — they cite specific components in the stack (e.g., 'WebSocket reconnect during PostgreSQL primary failover', 'Redis pub/sub backpressure under burst traffic') rather than stack-agnostic generic risks",
-          "severity": "warning"
-        },
-        {
-          "text": "Output includes at least 3 cheap pre-launch experiments to invalidate the highest-risk scenarios — each with a cost estimate (time or money) and a binary decision rule (e.g., 'if metric X < threshold Y → stop and redesign')",
-          "severity": "warning"
-        },
-        {
-          "text": "Framed as 'the product has shipped and failed — what happened?' with past-tense failure narratives describing what went wrong — a risk-list voice ('risks may occur', 'users might churn') fails this framing check",
-          "severity": "warning"
         }
       ]
     }
   ],
   "_notes": {
-    "dispatch_expectations_removed_2026_05_28": "Removed orchestrator-dispatch expectations from evals 10/11/12. Rationale: claude -p (the headless mode used by run_behavioral_eval.py) systematically inline-runs sub-agent work regardless of how strongly SKILL.md / hook reminders enforce dispatch. The dispatch protocol IS effective in interactive Claude Code / claude.ai / cowork sessions (the real user-facing surface). Since the eval was producing a 100% false-negative signal that misleads any downstream auto-fix loop, the procedural expectation is removed. Substantive content expectations remain and continue to cover specialist-grade output quality. A future interactive-mode eval (playwright / MCP) can re-introduce strict dispatch checking if needed."
+    "p3_outcome_first_rewrite_2026_07_01": "Replaced the 12 mode-bound cases (Quick/Full/Revision/Custom/Build/Feature-Extension, discovery/strategy-critic/pre-mortem sub-agent dispatch) with 9 outcome-first cases scoring the lens architecture: right lens(es) selected, provenance line format, proportional non-blocking guardrails, and per-lens output quality. Reframed survivors (jtbd-depth, prfaq-quality, security-awareness, strategy-critic-teardown, pre-mortem-scenarios) keep their substantive quality bar and drop mode/hard-gate framing. This suite is interactive-only: run manually via `npm run eval:behavioral` in a repo-local session (the meta-skill and lenses are injected by a SessionStart hook that does not fire under headless `claude -p`); it is not wired into CI (repo policy: eval-gate is workflow_dispatch only)."
   }
 }
