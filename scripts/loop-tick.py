@@ -12,12 +12,8 @@ What one tick does:
   Reads:   evals/eval-results.behavioral.json (or --eval-results <path>)
   Stage 1: scripts/eval-debt-report.py            (no LLM)
   Stage 2: scripts/patch-proposer.py              (LLM; dry-run unless --apply)
-  Stage 3: scripts/i18n-mirror-apply.py           (LLM; runs only if --apply,
-                                                   because mirroring nothing
-                                                   new makes no sense)
-  Stage 4: scripts/i18n-drift-report.py           (no LLM; verifies clean)
-  Stage 5: append iteration record to docs/loop-history.jsonl
-  Stage 6: print recommended next manual action (re-eval + lift)
+  Stage 3: append iteration record to docs/loop-history.jsonl
+  Stage 4: print recommended next manual action (re-eval + lift)
 
 Why no internal eval call:
   Per the no-ci-auto-eval policy memory, eval runs must be human-initiated.
@@ -34,8 +30,7 @@ Convergence (delegated to loop-summary.judge):
   (one record per tick).
 
 Safety:
-  - Dry-run by default. --apply is the single gate that turns on writes
-    for BOTH patch-proposer (EN) and i18n-mirror-apply (i18n).
+  - Dry-run by default. --apply is the single gate that turns on writes.
   - Per-stage subprocess timeout from _config.LOOP_SUBPROCESS_TIMEOUT
     (default 1800s, overridable via PRODUCT_PLAYBOOK_LOOP_SUBPROCESS_TIMEOUT
     env var). Bump it when running --multi-file, which fan-outs across
@@ -56,8 +51,6 @@ from pathlib import Path
 SCRIPTS = Path(__file__).parent
 EVAL_DEBT = SCRIPTS / "eval-debt-report.py"
 PATCH_PROPOSER = SCRIPTS / "patch-proposer.py"
-MIRROR_APPLY = SCRIPTS / "i18n-mirror-apply.py"
-DRIFT_REPORT = SCRIPTS / "i18n-drift-report.py"
 
 DEFAULT_HISTORY = Path("docs") / "loop-history.jsonl"
 try:
@@ -197,7 +190,7 @@ def main() -> int:
     ap.add_argument("--eval-results", type=Path, required=True,
                     help="Path to eval-results.behavioral.json (the 'before' state)")
     ap.add_argument("--apply", action="store_true",
-                    help="Apply patches AND mirrors (default: dry-run for both)")
+                    help="Apply patches (default: dry-run)")
     ap.add_argument("--severity", choices=["critical", "warning"], default="critical",
                     help="Minimum severity for patch-proposer (default: critical)")
     ap.add_argument("--max-patches", type=int, default=3,
@@ -320,58 +313,7 @@ def main() -> int:
             except json.JSONDecodeError:
                 pass
 
-    # --- Stage 3: i18n-mirror-apply --- (only meaningful when patches were applied)
-    mirror_applied = False
-    if args.apply and patches_applied_files:
-        # widen --max to cover all i18n langs for each touched EN file
-        mirror_max = max(10, len(patches_applied_files) * 5 + 2)
-        mirror_rc, mirror_out, _, mirror_dt = run_cmd(
-            ["python3", str(MIRROR_APPLY),
-             "--include-warnings", "--max", str(mirror_max), "--apply"],
-            "Stage 3: i18n-mirror-apply (LLM)",
-        )
-        stage_durations["mirror"] = round(mirror_dt, 2)
-        if mirror_rc != 0:
-            print(f"⚠️  i18n-mirror-apply failed (rc={mirror_rc}) — EN patches "
-                  "are already applied; drift will surface what was missed.",
-                  file=sys.stderr)
-        else:
-            mirror_applied = True
-            # show only the summary line, not all diffs (would flood output)
-            for line in mirror_out.splitlines():
-                if line.startswith("[") or "status:" in line:
-                    print(line)
-    elif args.apply:
-        print("\n━━━━━ Stage 3: i18n-mirror-apply — SKIPPED (no patches applied)",
-              file=sys.stderr)
-    else:
-        print("\n━━━━━ Stage 3: i18n-mirror-apply — SKIPPED (dry-run mode)",
-              file=sys.stderr)
-
-    # --- Stage 4: i18n-drift-report (always) ---
-    drift_rc, drift_json, _, drift_dt = run_cmd(
-        ["python3", str(DRIFT_REPORT), "--json"],
-        "Stage 4: i18n-drift-report (deterministic)",
-    )
-    stage_durations["drift"] = round(drift_dt, 2)
-    drift_summary = None
-    if drift_rc in (0, 1, 2):
-        try:
-            drift = json.loads(drift_json)
-            drift_summary = drift.get("summary", {})
-            clusters = drift.get("clusters", [])
-            crit = sum(1 for c in clusters
-                       for d in c.get("drifts", []) if d.get("severity") == "critical")
-            warn = sum(1 for c in clusters
-                       for d in c.get("drifts", []) if d.get("severity") == "warning")
-            print(f"  drift: {drift_summary.get('clean')}/{drift_summary.get('total_pairs')} clean, "
-                  f"critical={crit}, warning={warn}", file=sys.stderr)
-        except (json.JSONDecodeError, TypeError):
-            # malformed JSON or non-dict structure — surface but don't crash
-            print("  drift: (skipped — drift-report stdout unparseable)",
-                  file=sys.stderr)
-
-    # --- Stage 5: append history ---
+    # --- Stage 3: append history ---
     record = {
         "timestamp": started,
         "mode": "apply" if args.apply else "dry-run",
@@ -379,15 +321,13 @@ def main() -> int:
         "patches_proposed_count": proposed_count,
         "patches_applied": patches_applied_files,
         "patches_cosmetic": patches_cosmetic_files,
-        "mirrors_applied": mirror_applied,
-        "drift_after": drift_summary,
         "convergence_note": convergence_note,
         "stage_durations": stage_durations,
     }
     append_history(args.history, record)
     print(f"\n  → history appended to {args.history}", file=sys.stderr)
 
-    # --- Stage 6: next-action suggestion ---
+    # --- Stage 4: next-action suggestion ---
     print(f"\n╔══════════════════════════════════════════════════════════════╗", file=sys.stderr)
     print(f"║ Next action", file=sys.stderr)
     print(f"╚══════════════════════════════════════════════════════════════╝", file=sys.stderr)
@@ -399,7 +339,7 @@ This was a DRY-RUN. Review the proposed diffs above. To apply:
     elif patches_applied_files:
         next_eval = "evals/eval-results.behavioral.json"
         print(f"""
-{len(patches_applied_files)} EN file(s) patched, mirrors {'applied' if mirror_applied else 'NOT applied'}.
+{len(patches_applied_files)} file(s) patched.
 
 To verify lift, run the next manual eval, then compute the delta:
   python3 evals/run_behavioral_eval.py --runs 1 --fail-on none \\

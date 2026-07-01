@@ -501,24 +501,6 @@ class TestSeverityWeightsCrossSourceConsistency(unittest.TestCase):
         self.assertEqual(_config.BAND_NEEDS_ATTENTION, thresholds["needs-attention"])
 
 
-class TestLoopTickDriftJsonResilience(unittest.TestCase):
-    """Post-round-5 fix: loop-tick's drift-json parse used bare dict indexing
-    inside a try/except that only caught JSONDecodeError. A drift JSON missing
-    `clusters` or `drifts` keys would KeyError → tick crash.
-
-    The fix uses .get() everywhere and catches (JSONDecodeError, TypeError).
-    """
-
-    def test_source_uses_get_for_clusters(self):
-        import inspect
-        m = _load("lt", "loop-tick.py")
-        src = inspect.getsource(m.main)
-        # The defensive .get patterns must be in the drift-handling block
-        self.assertIn('clusters = drift.get("clusters", [])', src)
-        self.assertIn('c.get("drifts", [])', src)
-        self.assertIn("(json.JSONDecodeError, TypeError)", src)
-
-
 class TestLoopSubprocessTimeoutCentralised(unittest.TestCase):
     """Post-round-3 fix: loop-tick.SUBPROCESS_TIMEOUT was hardcoded 900s.
     Pulling from _config.LOOP_SUBPROCESS_TIMEOUT (default 1800s) so:

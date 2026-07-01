@@ -355,7 +355,7 @@ def render_regression_rescue(report: dict) -> str:
     try:
         log = subprocess.check_output(
             ["git", "log", "--oneline", "-10", "--",
-             "references/", "SKILL.md", "agents/", "i18n/"],
+             "references/", "SKILL.md", "agents/"],
             text=True, stderr=subprocess.DEVNULL,
         ).strip()
     except (subprocess.CalledProcessError, FileNotFoundError):
@@ -375,7 +375,7 @@ def render_regression_rescue(report: dict) -> str:
         "than the baseline — inspect the regressed list above before deciding.",
         "",
         "**Recent commits touching authored files** (`references/`, `SKILL.md`, "
-        "`agents/`, `i18n/`):",
+        "`agents/`):",
         "",
         "```",
         log,
@@ -385,13 +385,13 @@ def render_regression_rescue(report: dict) -> str:
         "",
         "```bash",
         "# Inspect what the most recent authored-file commit changed:",
-        "git show HEAD -- references/ SKILL.md agents/ i18n/ | less",
+        "git show HEAD -- references/ SKILL.md agents/ | less",
         "",
         "# Revert that single commit (creates a new revert commit, preserves history):",
         "git revert <SHA>",
         "",
         "# OR (rarely needed) discard the changes locally without a commit:",
-        "git checkout HEAD~1 -- references/ SKILL.md agents/ i18n/",
+        "git checkout HEAD~1 -- references/ SKILL.md agents/",
         "```",
         "",
         "**Before committing a revert**, re-run the eval that produced the regression "

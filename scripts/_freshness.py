@@ -2,8 +2,8 @@
 
 Detects the silent-foot-gun where someone runs lift-report / patch-proposer /
 attribution-check against an `eval-results.behavioral.json` that pre-dates the
-last edit to a watched authored file (references/, agents/, i18n/, SKILL.md).
-In that case the eval is stale: it does not reflect the current code, and any
+last edit to a watched authored file (references/, agents/, SKILL.md). In
+that case the eval is stale: it does not reflect the current code, and any
 report built on it draws wrong conclusions.
 
 Usage:
@@ -14,7 +14,7 @@ Usage:
         sys.exit(2)
 
 Watched paths (any descendant .md file counts):
-  references/   agents/   i18n/   SKILL.md
+  references/   agents/   SKILL.md
 Plus the eval spec itself:
   evals/evals.json — if the eval spec changes, old eval-results no longer
                      match the current contract even if no .md file changed.
@@ -28,7 +28,7 @@ try:
     from _config import WATCHED  # M6: centralised
 except ImportError:
     # fallback when imported via importlib without sys.path adjustment
-    WATCHED = ["references", "agents", "i18n", "SKILL.md", "evals/evals.json"]
+    WATCHED = ["references", "agents", "SKILL.md", "evals/evals.json"]
 
 
 def _latest_authored_mtime(root: Path) -> tuple[float, Path | None]:

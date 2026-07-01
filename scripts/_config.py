@@ -62,4 +62,4 @@ CANONICAL_VOCAB = [
 ]
 
 # Watched authored-file roots for eval freshness comparison
-WATCHED = ["references", "agents", "i18n", "SKILL.md", "evals/evals.json"]
+WATCHED = ["references", "agents", "SKILL.md", "evals/evals.json"]

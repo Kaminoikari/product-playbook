@@ -2,13 +2,12 @@
 """Single-pane status dashboard for the closed-loop harness.
 
 B6 of the optimisation pass. Aggregates the key numbers from across the
-deterministic stages (eval-debt + i18n-drift + loop-history + loop-summary)
-into one screen so you don't have to remember 3-4 separate commands every
-time you want to know "where are we".
+deterministic stages (eval-debt + loop-history + loop-summary) into one
+screen so you don't have to remember 3-4 separate commands every time you
+want to know "where are we".
 
 What it shows:
   - Latest eval: score, band, pass/fail counts (from --eval-results JSON)
-  - i18n drift: clean ratio + critical/warning counts
   - Last tick: timestamp, mode, patches applied/proposed, stage durations
   - Trajectory verdict: from loop-summary.judge() (✅/🟡/⚠️/🔴/⚪)
   - Next action: a single sentence tailored to the verdict
@@ -21,7 +20,6 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
-import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -55,35 +53,6 @@ def _read_eval(eval_path: Path) -> dict:
     }
 
 
-def _read_drift() -> dict:
-    """Run drift report --json once; tolerate non-zero exit (1/2 = drift found)."""
-    try:
-        result = subprocess.run(
-            ["python3", str(SCRIPTS / "i18n-drift-report.py"), "--json"],
-            capture_output=True, text=True, timeout=30,
-        )
-    except (subprocess.TimeoutExpired, FileNotFoundError):
-        return {}
-    if result.returncode not in (0, 1, 2):
-        return {}
-    try:
-        data = json.loads(result.stdout)
-    except json.JSONDecodeError:
-        return {}
-    summary = data.get("summary", {}) or {}
-    crit = sum(1 for c in data.get("clusters", [])
-               for d in c.get("drifts", []) if d.get("severity") == "critical")
-    warn = sum(1 for c in data.get("clusters", [])
-               for d in c.get("drifts", []) if d.get("severity") == "warning")
-    return {
-        "total_pairs": summary.get("total_pairs"),
-        "clean": summary.get("clean"),
-        "missing_files": summary.get("missing_files", 0),
-        "critical_drift": crit,
-        "warning_drift": warn,
-    }
-
-
 def _read_history(history_path: Path) -> list[dict]:
     if not history_path.is_file():
         return []
@@ -106,12 +75,9 @@ def _verdict(history: list[dict]) -> dict:
     return summary_mod.judge(history)
 
 
-def _next_action(verdict: dict, drift: dict, eval_data: dict) -> str:
+def _next_action(verdict: dict, eval_data: dict) -> str:
     status = verdict.get("status", "")
     if status == "converged":
-        if drift.get("critical_drift", 0) > 0 or drift.get("missing_files", 0) > 0:
-            return ("✅ eval converged but i18n has unresolved drift — run "
-                    "`python3 scripts/i18n-mirror-apply.py --apply` to close")
         return "✅ healthy plateau — stop iterating, ship when ready"
     if status == "improving":
         return ("🟡 keep iterating: `python3 scripts/loop-tick.py "
@@ -144,11 +110,10 @@ def main() -> int:
     args = ap.parse_args()
 
     eval_data = _read_eval(args.eval_results)
-    drift = _read_drift()
     history = _read_history(args.history)
     verdict = _verdict(history)
     last_tick = history[-1] if history else {}
-    next_action = _next_action(verdict, drift, eval_data)
+    next_action = _next_action(verdict, eval_data)
 
     # M2: stale-eval warning — if the eval JSON is older than the latest
     # authored-file change, the score on this dashboard reflects pre-change
@@ -166,7 +131,6 @@ def main() -> int:
     if args.json:
         payload = {
             "eval": eval_data or None,
-            "i18n_drift": drift or None,
             "last_tick": last_tick or None,
             "verdict": verdict,
             "next_action": next_action,
@@ -191,13 +155,6 @@ def main() -> int:
               f"← {eval_data['path']}")
     else:
         print(f"│ eval     (no eval results at {args.eval_results})")
-    if drift:
-        if drift.get("critical_drift", 0) == 0 and drift.get("missing_files", 0) == 0:
-            print(f"│ i18n     ✅ clean ({drift['clean']}/{drift['total_pairs']} pairs)")
-        else:
-            print(f"│ i18n     ⚠️  {drift['clean']}/{drift['total_pairs']} clean, "
-                  f"crit={drift['critical_drift']} warn={drift['warning_drift']} "
-                  f"missing={drift['missing_files']}")
     if last_tick:
         ts = last_tick.get("timestamp", "?")[:16].replace("T", " ")
         mode = last_tick.get("mode", "?")

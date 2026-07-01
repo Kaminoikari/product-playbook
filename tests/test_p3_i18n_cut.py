@@ -20,3 +20,16 @@ class TestP3I18nCut(unittest.TestCase):
         for f in ("i18n/", "README.zh-TW.md", "README.ja.md", "README.zh-CN.md",
                   "README.es.md", "README.ko.md"):
             self.assertNotIn(f, files, f)
+
+    def test_loop_machinery_no_dead_i18n_script_refs(self):
+        for rel in ["scripts/loop-tick.py", "scripts/loop-status.py",
+                    "scripts/eval-lift-report.py"]:
+            src = (ROOT / rel).read_text(encoding="utf-8")
+            self.assertNotIn("i18n-mirror-apply", src, rel)
+            self.assertNotIn("i18n-drift-report", src, rel)
+
+    def test_watched_lists_drop_i18n(self):
+        for rel in ["scripts/_config.py", "scripts/_freshness.py"]:
+            src = (ROOT / rel).read_text(encoding="utf-8")
+            # the WATCHED list must no longer contain a bare "i18n" path entry
+            self.assertNotIn('"i18n"', src, rel)
