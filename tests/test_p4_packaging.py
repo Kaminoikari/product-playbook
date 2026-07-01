@@ -31,3 +31,13 @@ class TestP4Packaging(unittest.TestCase):
         # the runtime read instruction no longer uses a bare assets/ path
         import re
         self.assertNotRegex(body, r"reads `assets/prd-style\.css`")
+
+    def test_readme_is_lens_architecture(self):
+        body = (ROOT / "README.md").read_text(encoding="utf-8")
+        # obsolete system vocabulary is gone
+        for banned in ("/product-full", "/product-quick", "6 modes", "22 PM frameworks",
+                       "README.zh-TW.md", "README.ja.md"):
+            self.assertNotIn(banned, body, banned)
+        # new architecture is described
+        for needed in ("lens", "provenance", "reload-plugins"):
+            self.assertIn(needed, body, needed)
