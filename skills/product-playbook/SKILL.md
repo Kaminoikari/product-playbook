@@ -38,10 +38,10 @@ Fallback during migration: if a framework you need has no lens skill yet, read t
 
 ## Ground in evidence (research)
 
-When the outcome depends on real-world facts the user has not provided (competitor behavior, market size, pricing benchmarks, whether a problem is validated outside this conversation), gather evidence before answering rather than relying on memory. Proportional, like the guardrails:
+When the outcome depends on real-world facts the user has not provided (competitor behavior, market size, pricing benchmarks, whether a problem is validated outside this conversation), gather evidence before answering; do not rely on memory alone. Proportional, like the guardrails:
 
-- A light single lookup (one competitor's page, one data point) — just do it with WebSearch / WebFetch.
-- A heavy multi-source competitive deep-dive — offer it in one line first ("want me to pull real data on the top 3 competitors? ~a minute"), then, on yes, fan out parallel research agents, verify adversarially, and synthesize with citations.
+- A light single lookup (one competitor's page, one data point): just do it with WebSearch / WebFetch.
+- A heavy multi-source competitive deep-dive: offer it in one line first ("want me to pull real data on the top 3 competitors? ~a minute"), then, on yes, fan out parallel research agents, verify adversarially, and synthesize with citations.
 
 Cite real sources and add a count to the provenance line: `— Frameworks: … | Sources: N cited`. The full parallel `market-research` orchestration and `competitive-analysis` lens ship in a dedicated later plan; here you own the judgment of when to reach for evidence.
 
@@ -59,7 +59,7 @@ Dormant by default. Surface only when the outcome would be materially harmed by 
 
 | Trigger | One-line nudge |
 |---|---|
-| Jumping straight to a solution/PRD with no problem statement | "There's no problem statement yet — want me to clarify it in a minute, or do you already have one to hand me?" |
+| Jumping straight to a solution/PRD with no problem statement | "There's no problem statement yet. Want me to clarify it in a minute, or do you already have one to hand me?" |
 | A rationalization that would hurt the outcome (e.g. skipping discovery on a 0-to-1) | name the risk in one sentence, then let the user decide |
 | Feature touches payments / permissions / data migration | one line to add the security lens (prd-and-handoff security section) |
 | About to write source code during planning | keep to documents; write code only once the user moves to build |
@@ -67,4 +67,4 @@ Dormant by default. Surface only when the outcome would be materially harmed by 
 
 ## Optional depth — recipes
 
-If the user explicitly wants a full end-to-end walk-through, or the task is a large whole-product plan, suggest one recipe: full-product-plan, quick-validation, product-revision, or feature-extension. Suggest, do not force. Recipes are not slash commands.
+If the user explicitly wants a full end-to-end walk-through, or the task is a large whole-product plan, suggest one recipe: full-product-plan, quick-validation, product-revision, or feature-extension. Suggest it; never force it. Recipes stay out of the slash-command surface.
