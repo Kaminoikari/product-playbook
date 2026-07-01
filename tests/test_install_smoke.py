@@ -87,17 +87,18 @@ class TestInstallScriptShape(unittest.TestCase):
         self.assertIn("--uninstall", self.install_sh,
                        "install.sh missing --uninstall flag")
 
-    def test_supports_lang_selection(self):
-        # documented i18n entry point
-        self.assertIn("--lang", self.install_sh,
-                       "install.sh missing --lang flag")
-
     def test_targets_documented_skill_dir(self):
         # MUST install into ~/.claude/skills/product-playbook
         self.assertIn("HOME", self.install_sh)
         self.assertIn(".claude/skills/product-playbook", self.install_sh,
                        "install.sh skill directory has changed — update docs "
                        "or the install script")
+
+    def test_installs_as_skills_directory_plugin(self):
+        # new model: copy the whole plugin (incl. its manifest) into the skills dir
+        self.assertIn(".claude/skills/product-playbook", self.install_sh)
+        self.assertNotIn("--lang", self.install_sh)   # i18n installer logic removed
+        self.assertNotIn("COMMANDS_DIR", self.install_sh)  # no slash commands to copy
 
 
 class TestCriticalUserFacingFiles(unittest.TestCase):
