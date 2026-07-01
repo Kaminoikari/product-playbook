@@ -269,4 +269,5 @@ meta-skill 是唯一 SessionStart 就注入的 skill，職責是把使用者需�
 
 - 相對性 guardrails 的觸發門檻校準：哪些情境值得現身、如何避免頻繁現身而退化成 ceremony（P3 用 eval 迭代）。
 - P-research 計畫相對 P1–P4 的排序（P0 後可平行）。
+- 遷移進來的 legacy framework body 帶有 pre-existing 寫作規則違規（句中 em-dash、rather-than 等）；P0 忠實遷移不動它們，P1 排一次系統性 copy-rule cleanup pass 統一清理。
 - closed-loop harness 是否隨此次重構一併更新，或列為後續獨立工作。
