@@ -156,6 +156,7 @@ meta-skill 是唯一 SessionStart 就注入的 skill，職責是把使用者需�
 - **融合時**：列出所有貢獻的 framework；單一時就一個。
 - **保持輕量**：固定一行，不做成大表格或分段。使用者要求 breakdown 時才展開「各框架各貢獻了什麼」。
 - **可關**：使用者說「不用標」就不標。它是回溯工具，不是新 ceremony。
+- **來源**：若動用了研究能力（§4.8），provenance 行加註來源計數，例 `｜Sources: N cited`；完整來源清單同 breakdown，要才展開。
 - **實作**：每顆 lens skill body 內含一句「產出時在末尾附上本框架標籤」；meta-skill 融合多顆時彙整成單行。
 
 ### 4.5 流程極致輕量化 + 相對性 guardrails
@@ -198,6 +199,16 @@ meta-skill 是唯一 SessionStart 就注入的 skill，職責是把使用者需�
 - 單一英文正本；每顆 skill 與 meta-skill body 內含指令：偵測使用者語言，framework 內容以英文撰寫，所有 user-facing 輸出比照使用者語言。此為 superpowers 既有做法。
 - 連帶解掉 `evals-zh-TW.json`、`i18n-mirror-apply.py`、`i18n-drift-report.py`、install.sh 的 `--lang` 六語邏輯。
 
+### 4.8 Evidence-grounded research（fan-out 研究能力）
+
+現行 lens 全部只在使用者提供的資訊上運作，不接觸真實外部資料。補一個 cross-cutting 研究能力，讓需要真實事實的 outcome（競品做法、市場規模、定價基準、問題是否被外部驗證）能被 grounding，而非僅憑模型記憶回答。
+
+- **結構**：仿 subagent-driven-development，但用於研究。fan-out 平行 agent（每個競品／每個資料源／每條主張各一）→ 各自實查真實網頁擷取（WebSearch / WebFetch）→ 對抗式查證 → 統整成帶引用的 findings brief。直接複用環境既有的 `deep-research` 與 `dispatching-parallel-agents`，不重造。
+- **形態**：一顆 cross-cutting capability `market-research`，加一顆研究型 lens `competitive-analysis`（競品拆解 + 比較矩陣）；並在 `problem-framing` / `positioning` / `pmf-gtm` 等既有 lens 加「證據掛鉤」，需要時拉研究能力進來 grounding。
+- **觸發（比例制，沿用相對性 guardrails 精神）**：outcome 取決於使用者沒給的真實事實時才派。輕量單點查詢（一個競品官網、一個數據）自動執行；重量多來源競品深研先一行提議再 fan-out。
+- **來源 provenance**：研究產出附真實 URL；provenance 行擴充來源計數，例 `— Frameworks: Positioning · Competitive-analysis｜Sources: 6 cited`。完整來源清單同 breakdown，要才展開。
+- **落地範圍**：P0 只在 meta-skill 織入「需要證據時派研究」的判斷與觸發語；完整的 `market-research` 平行編排 + `competitive-analysis` lens 另立專屬計畫（獨立子系統，見 §5 的 P-research）。
+
 ---
 
 ## 5. 遷移藍圖
@@ -209,6 +220,9 @@ meta-skill 是唯一 SessionStart 就注入的 skill，職責是把使用者需�
 | **P2 拆殼** | 刪 5 個 mode 脊椎檔 + optional-trigger/progress/end-of-flow 的編排部分 + dispatch hook；把 6-mode 帶路價值重寫成 4 顆選配 recipe；discovery-specialist subagent 刪除 | 編排層清空；預設走輕量融合 |
 | **P3 機器層** | 砍 i18n 5 鏡像 + 2 支 i18n script + 5 份 README；behavioral eval 改測「outcome 品質 + framework 選對沒 + provenance 有沒有標」（不再測 mode 選單）；trigger eval 60+ 沿用；closed-loop 的 `EVAL_ATTRIBUTION` map 改指向新 skill | i18n 債清零；eval 綠燈 |
 | **P4 封裝** | 更新 `plugin.json` / `marketplace.json` / `package.json`（三處版本同步 + description 改寫成 outcome-first）；改 install.sh 目錄佈局；bump 版本 | 三管道可發佈 |
+| **P-research（獨立）** | 建 `market-research` 平行研究編排（fan-out → 實查 → 對抗式查證 → 帶引用統整，複用 deep-research）+ `competitive-analysis` lens + 既有 lens 的證據掛鉤 | 可依情境自動 grounding、來源計入 provenance |
+
+> P-research 是獨立子系統計畫，與 P1–P4 不強制先後。P0 僅在 meta-skill 織入「需要證據時派研究」的觸發意識（見 §4.8）。
 
 ### 5.1 成本熱點排序
 
@@ -235,6 +249,7 @@ meta-skill 是唯一 SessionStart 就注入的 skill，職責是把使用者需�
 | provenance 變成新的 ceremony | 嚴格限一行、可關；預設不展開 breakdown |
 | 發布三管道版本 / 佈局不同步 | P4 明列三處版本同步 + install.sh 佈局改動 |
 | 平移時誤刪 C 類藏在膠水裡的知識 | P1 明列 C 類知識去向，逐一驗收 |
+| 自動研究爬取慢 / 耗資源 / 來源不可靠 | 比例制：輕量自動、重量先提議；對抗式查證過濾來源；provenance 附真實 URL 供使用者查核 |
 
 ---
 
@@ -246,10 +261,12 @@ meta-skill 是唯一 SessionStart 就注入的 skill，職責是把使用者需�
 - **framework lens**：定案 **16 顆**（§4.3），支援單一或融合，由 meta-skill 依情境判斷。
 - **provenance**：output 自帶輕量一行 framework 標記；**預設只標框架名**，breakdown 僅在使用者要求時展開；可關。
 - **recipe**：4 顆選配，**純靠 meta-skill 建議觸發，不露出成 slash command**。
+- **研究能力**：新增 evidence-grounded 研究（§4.8，fan-out 仿 subagent-driven、複用 deep-research）；**比例制自主**（輕量自動、重量先一行提議）；來源計入 provenance。**P0 僅織入 meta-skill 意識**，完整 `market-research` + `competitive-analysis` 另立 P-research 計畫。
 - **i18n**：全砍，改 runtime 語言偵測。
 - **相容性**：可大膽重構，6-mode 與 i18n 非硬約束。
 
 ## 8. 待實作階段釐清（非阻擋設計）
 
 - 相對性 guardrails 的觸發門檻校準：哪些情境值得現身、如何避免頻繁現身而退化成 ceremony（P3 用 eval 迭代）。
+- P-research 計畫相對 P1–P4 的排序（P0 後可平行）。
 - closed-loop harness 是否隨此次重構一併更新，或列為後續獨立工作。

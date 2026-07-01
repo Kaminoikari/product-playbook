@@ -6,7 +6,7 @@
 
 **Architecture:** A single lean `product-playbook` meta-skill is injected at session start by a hook (mirroring superpowers' `session-start`). It reads the user's desired outcome, selects one or several framework lenses, produces the outcome, and tags provenance. Framework knowledge lives in per-lens `skills/<name>/SKILL.md` files; for frameworks not yet migrated, the meta-skill falls back to the existing `references/NN-*.md`. This plan migrates 3 lenses (`jtbd`, `pre-mortem`, `solution-prioritization`) as the walking skeleton; P1 migrates the remaining 13.
 
-**Tech Stack:** Markdown skills (Claude Code plugin `skills/` convention), Python 3 hooks (`${CLAUDE_PLUGIN_ROOT}` + `hooks/hooks.json`), pytest for structural validation, existing JSON eval harness for behavioral checks.
+**Tech Stack:** Markdown skills (Claude Code plugin `skills/` convention), Python 3 hooks (`${CLAUDE_PLUGIN_ROOT}` + `hooks/hooks.json`), unittest for structural validation, existing JSON eval harness for behavioral checks.
 
 ## Global Constraints
 
@@ -18,6 +18,7 @@
 - User-facing copy rules (apply to all skill output): no em-dash as a mid-sentence pause (use ，：；。（）); no contrast constructions (「不是 X 而是 Y」/「X 而非 Y」/"not X but Y"/"rather than"/"instead of"); full-width CJK punctuation for CJK text.
 - Planning phase produces documents, never source code; only write code once the user explicitly moves to build.
 - Skill files live at `skills/<skill-name>/SKILL.md`. The meta-skill is `skills/product-playbook/SKILL.md` (currently a symlink to root `SKILL.md` — Task 2 replaces the symlink with a real file).
+- **Tests use `unittest.TestCase`, runnable by this repo's real command `python3 -m unittest discover tests -v`** (also `package.json` `test:all` and CI). Do NOT use pytest-only features (bare `test_*` functions, `tmp_path`); unittest discovery silently skips them and pytest is not a declared dependency. Use `tempfile.TemporaryDirectory` + `self.addCleanup` where a temp file is needed.
 
 ---
 
@@ -70,7 +71,7 @@ def test_workflow_leak_in_description_flagged(tmp_path):
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `python3 -m pytest tests/test_skill_structure.py -v`
+Run: `python3 -m unittest tests.test_skill_structure -v`
 Expected: FAIL with `ModuleNotFoundError: No module named 'validate_skill'`
 
 - [ ] **Step 3: Write minimal implementation**
@@ -112,7 +113,7 @@ def validate_skill(path: str) -> list[str]:
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `python3 -m pytest tests/test_skill_structure.py -v`
+Run: `python3 -m unittest tests.test_skill_structure -v`
 Expected: PASS (4 passed)
 
 - [ ] **Step 5: Commit**
@@ -138,33 +139,36 @@ git commit -m "test: add skill-structure validator for lens skills"
 
 ```python
 # tests/test_metaskill.py
-import pathlib, sys
+import unittest, pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "scripts"))
 from validate_skill import validate_skill
 
 META = "skills/product-playbook/SKILL.md"
 
-def test_metaskill_is_a_real_file_not_symlink():
-    p = pathlib.Path(META)
-    assert p.is_file() and not p.is_symlink()
+class TestMetaSkill(unittest.TestCase):
+    def test_is_a_real_file_not_symlink(self):
+        p = pathlib.Path(META)
+        self.assertTrue(p.is_file() and not p.is_symlink())
 
-def test_metaskill_passes_validator():
-    assert validate_skill(META) == []
+    def test_passes_validator(self):
+        self.assertEqual(validate_skill(META), [])
 
-def test_metaskill_has_required_anchors():
-    body = pathlib.Path(META).read_text(encoding="utf-8")
-    for anchor in ["## Relative guardrails", "— Frameworks:", "references/", "Available lenses"]:
-        assert anchor in body, f"missing anchor: {anchor}"
+    def test_has_required_anchors(self):
+        body = pathlib.Path(META).read_text(encoding="utf-8")
+        for anchor in ["## Relative guardrails", "— Frameworks:", "references/",
+                       "Available lenses", "Ground in evidence", "Sources:"]:
+            self.assertIn(anchor, body, f"missing anchor: {anchor}")
 
-def test_metaskill_has_no_mode_menu():
-    body = pathlib.Path(META).read_text(encoding="utf-8")
-    assert "Quick Mode" not in body and "Full Mode" not in body
+    def test_has_no_mode_menu(self):
+        body = pathlib.Path(META).read_text(encoding="utf-8")
+        self.assertNotIn("Quick Mode", body)
+        self.assertNotIn("Full Mode", body)
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `python3 -m pytest tests/test_metaskill.py -v`
-Expected: FAIL (`test_metaskill_is_a_real_file_not_symlink` — path is currently a symlink)
+Run: `python3 -m unittest tests.test_metaskill -v`
+Expected: FAIL (`test_is_a_real_file_not_symlink` — path is currently a symlink)
 
 - [ ] **Step 3: Replace the symlink and write the meta-skill**
 
@@ -213,6 +217,15 @@ Available lenses: strategy-kernel, persona-journey, jtbd, opportunity-solution-t
 
 Fallback during migration: if a framework you need has no lens skill yet, read the matching `references/NN-*.md` and apply it inline. (This line is removed once migration completes.)
 
+## Ground in evidence (research)
+
+When the outcome depends on real-world facts the user has not provided (competitor behavior, market size, pricing benchmarks, whether a problem is validated outside this conversation), gather evidence before answering rather than relying on memory. Proportional, like the guardrails:
+
+- A light single lookup (one competitor's page, one data point) — just do it with WebSearch / WebFetch.
+- A heavy multi-source competitive deep-dive — offer it in one line first ("want me to pull real data on the top 3 competitors? ~a minute"), then, on yes, fan out parallel research agents, verify adversarially, and synthesize with citations.
+
+Cite real sources and add a count to the provenance line: `— Frameworks: … | Sources: N cited`. The full parallel `market-research` orchestration and `competitive-analysis` lens ship in a dedicated later plan; here you own the judgment of when to reach for evidence.
+
 ## Step 3 — Produce (process minimalism)
 
 Do NOT do by default: mode menus, progress indicators, step-by-step confirmation, per-step self-review, or asking "shall I start?". Deliver the outcome directly, without filler.
@@ -240,8 +253,8 @@ If the user explicitly wants a full end-to-end walk-through, or the task is a la
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `python3 -m pytest tests/test_metaskill.py -v`
-Expected: PASS (4 passed)
+Run: `python3 -m unittest tests.test_metaskill -v`
+Expected: OK (4 tests). Also confirm the meta-skill body contains the `## Ground in evidence (research)` section from the spec §4.8 (proportional research: light lookups auto, heavy deep-dives offered first; sources counted in provenance).
 
 - [ ] **Step 5: Commit**
 
@@ -267,27 +280,28 @@ git commit -m "feat: lean outcome-first product-playbook meta-skill"
 
 ```python
 # tests/test_inject_hook.py
-import json, os, subprocess, pathlib
+import json, os, subprocess, pathlib, unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-def test_hook_emits_metaskill_in_additional_context():
-    env = {**os.environ, "CLAUDE_PLUGIN_ROOT": str(ROOT)}
-    proc = subprocess.run(
-        ["python3", str(ROOT / "hooks" / "session-start-inject-metaskill.py")],
-        input="{}", capture_output=True, text=True, env=env, timeout=10,
-    )
-    assert proc.returncode == 0, proc.stderr
-    payload = json.loads(proc.stdout)
-    ctx = payload["hookSpecificOutput"]["additionalContext"]
-    assert "PRODUCT-PLAYBOOK-METASKILL" in ctx
-    assert "Read the outcome" in ctx
+class TestInjectHook(unittest.TestCase):
+    def test_hook_emits_metaskill_in_additional_context(self):
+        env = {**os.environ, "CLAUDE_PLUGIN_ROOT": str(ROOT)}
+        proc = subprocess.run(
+            ["python3", str(ROOT / "hooks" / "session-start-inject-metaskill.py")],
+            input="{}", capture_output=True, text=True, env=env, timeout=10,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        payload = json.loads(proc.stdout)
+        ctx = payload["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("PRODUCT-PLAYBOOK-METASKILL", ctx)
+        self.assertIn("Read the outcome", ctx)
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `python3 -m pytest tests/test_inject_hook.py -v`
-Expected: FAIL (`No such file or directory` for the hook script)
+Run: `python3 -m unittest tests.test_inject_hook -v`
+Expected: FAIL/ERROR (`No such file or directory` for the hook script)
 
 - [ ] **Step 3: Write the hook**
 
@@ -337,8 +351,8 @@ Add a second object to the existing `SessionStart` array (keep `session-start-lo
 
 - [ ] **Step 5: Run test to verify it passes**
 
-Run: `python3 -m pytest tests/test_inject_hook.py -v`
-Expected: PASS (1 passed)
+Run: `python3 -m unittest tests.test_inject_hook -v`
+Expected: OK (1 test)
 
 - [ ] **Step 6: Verify the JSON is still well-formed**
 
@@ -368,26 +382,27 @@ git commit -m "feat: inject product-playbook meta-skill at session start (incl. 
 
 ```python
 # tests/test_lens_jtbd.py
-import pathlib, sys
+import unittest, pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "scripts"))
 from validate_skill import validate_skill
 
 SKILL = "skills/jtbd/SKILL.md"
 
-def test_jtbd_passes_validator():
-    assert validate_skill(SKILL) == []
+class TestJtbdLens(unittest.TestCase):
+    def test_passes_validator(self):
+        self.assertEqual(validate_skill(SKILL), [])
 
-def test_jtbd_declares_its_framework_tag():
-    body = pathlib.Path(SKILL).read_text(encoding="utf-8")
-    assert "`JTBD`" in body
-    # migrated framework substance is present, not an empty stub
-    assert "job" in body.lower() and len(body) > 1500
+    def test_declares_framework_tag_and_substance(self):
+        body = pathlib.Path(SKILL).read_text(encoding="utf-8")
+        self.assertIn("`JTBD`", body)          # provenance tag
+        self.assertIn("job", body.lower())     # migrated substance, not a stub
+        self.assertGreater(len(body), 1500)
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `python3 -m pytest tests/test_lens_jtbd.py -v`
-Expected: FAIL (skill file does not exist)
+Run: `python3 -m unittest tests.test_lens_jtbd -v`
+Expected: FAIL/ERROR (skill file does not exist)
 
 - [ ] **Step 3: Create the lens skill by migrating the framework body**
 
@@ -414,7 +429,7 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `python3 -m pytest tests/test_lens_jtbd.py -v`
+Run: `python3 -m unittest tests.test_lens_jtbd -v`
 Expected: PASS (2 passed)
 
 - [ ] **Step 5: Commit**
@@ -440,24 +455,26 @@ git commit -m "feat: migrate JTBD framework to jtbd lens skill"
 
 ```python
 # tests/test_lens_pre_mortem.py
-import pathlib, sys
+import unittest, pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "scripts"))
 from validate_skill import validate_skill
 
 SKILL = "skills/pre-mortem/SKILL.md"
 
-def test_pre_mortem_passes_validator():
-    assert validate_skill(SKILL) == []
+class TestPreMortemLens(unittest.TestCase):
+    def test_passes_validator(self):
+        self.assertEqual(validate_skill(SKILL), [])
 
-def test_pre_mortem_declares_tag_and_substance():
-    body = pathlib.Path(SKILL).read_text(encoding="utf-8")
-    assert "`Pre-mortem`" in body
-    assert "failed" in body.lower() and "scenario" in body.lower()
+    def test_declares_tag_and_substance(self):
+        body = pathlib.Path(SKILL).read_text(encoding="utf-8")
+        self.assertIn("`Pre-mortem`", body)
+        self.assertIn("failed", body.lower())
+        self.assertIn("scenario", body.lower())
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `python3 -m pytest tests/test_lens_pre_mortem.py -v`
+Run: `python3 -m unittest tests.test_lens_pre_mortem -v`
 Expected: FAIL (file missing)
 
 - [ ] **Step 3: Create the lens skill**
@@ -484,7 +501,7 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `python3 -m pytest tests/test_lens_pre_mortem.py -v`
+Run: `python3 -m unittest tests.test_lens_pre_mortem -v`
 Expected: PASS (2 passed)
 
 - [ ] **Step 5: Commit**
@@ -510,24 +527,27 @@ git commit -m "feat: migrate pre-mortem framework to pre-mortem lens skill"
 
 ```python
 # tests/test_lens_prioritization.py
-import pathlib, sys
+import unittest, pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "scripts"))
 from validate_skill import validate_skill
 
 SKILL = "skills/solution-prioritization/SKILL.md"
 
-def test_prioritization_passes_validator():
-    assert validate_skill(SKILL) == []
+class TestPrioritizationLens(unittest.TestCase):
+    def test_passes_validator(self):
+        self.assertEqual(validate_skill(SKILL), [])
 
-def test_prioritization_declares_tags_and_substance():
-    body = pathlib.Path(SKILL).read_text(encoding="utf-8")
-    assert "`RICE`" in body and "`GEM`" in body
-    assert "reach" in body.lower() and "effort" in body.lower()
+    def test_declares_tags_and_substance(self):
+        body = pathlib.Path(SKILL).read_text(encoding="utf-8")
+        self.assertIn("`RICE`", body)
+        self.assertIn("`GEM`", body)
+        self.assertIn("reach", body.lower())
+        self.assertIn("effort", body.lower())
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `python3 -m pytest tests/test_lens_prioritization.py -v`
+Run: `python3 -m unittest tests.test_lens_prioritization -v`
 Expected: FAIL (file missing)
 
 - [ ] **Step 3: Create the lens skill**
@@ -554,12 +574,12 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `python3 -m pytest tests/test_lens_prioritization.py -v`
+Run: `python3 -m unittest tests.test_lens_prioritization -v`
 Expected: PASS (2 passed)
 
 - [ ] **Step 5: Run the full structural suite**
 
-Run: `python3 -m pytest tests/ -v`
+Run: `python3 -m unittest discover tests -v`
 Expected: PASS (all tests from Tasks 1–6)
 
 - [ ] **Step 6: Commit**
