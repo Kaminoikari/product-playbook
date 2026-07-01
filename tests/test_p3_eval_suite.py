@@ -40,3 +40,16 @@ class TestP3EvalSuite(unittest.TestCase):
     def test_provenance_expectation_exists(self):
         blob = json.dumps(DATA, ensure_ascii=False)
         self.assertIn("Frameworks:", blob)  # at least one case scores the provenance line
+
+    def test_attribution_covers_new_eval_names(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "edr", str(ROOT / "scripts" / "eval-debt-report.py"))
+        edr = importlib.util.module_from_spec(spec); spec.loader.exec_module(edr)
+        keys = set(edr.EVAL_ATTRIBUTION.keys())
+        # every current evals.json case name has an attribution entry (patch coverage)
+        for name in NAMES:
+            self.assertIn(name, keys, f"{name} missing from EVAL_ATTRIBUTION")
+        # retired names no longer linger as dead keys (trigger-eval is the one allowed non-case key)
+        for retired in ("eval-mode-selection", "eval-subagent-discovery", "eval-revision-mode"):
+            self.assertNotIn(retired, keys, retired)

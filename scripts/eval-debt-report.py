@@ -44,68 +44,53 @@ INFRA_ERROR_PREFIXES = ("response error:", "judge error:")
 
 
 EVAL_ATTRIBUTION: dict[str, dict] = {
-    "eval-mode-selection": {
-        "primary": ["SKILL.md"],
+    "lens-selection-single": {
+        "primary": ["skills/product-playbook/SKILL.md"],
+        "secondary": ["skills/jtbd/SKILL.md"],
+        "hint": "Step 2 lens-selection table — a narrow ask takes exactly one lens.",
+    },
+    "lens-blend": {
+        "primary": ["skills/product-playbook/SKILL.md"],
+        "secondary": ["skills/solution-prioritization/SKILL.md", "skills/pre-mortem/SKILL.md"],
+        "hint": "Step 2 blended-lens rule — several perspectives merge into one integrated answer, not staged sections.",
+    },
+    "provenance-format": {
+        "primary": ["skills/product-playbook/SKILL.md"],
         "secondary": [],
-        "hint": "Onboarding Step 1 (Confirm mode) — neutral menu, no single-mode push.",
+        "hint": "Step 4 provenance tag — exact `— Frameworks: X` line, names only by default.",
     },
-    "eval-quick-mode-jtbd": {
-        "primary": ["references/02b-jtbd.md"],
+    "guardrail-proportional": {
+        "primary": ["skills/product-playbook/SKILL.md"],
         "secondary": [],
-        "hint": "Quick Mode S1 JTBD — three layers (functional/emotional/social), concrete scenario.",
+        "hint": "Relative guardrails table — single-line, non-blocking nudge for missing problem statement.",
     },
-    "eval-jtbd-depth": {
-        "primary": ["references/02b-jtbd.md"],
-        "secondary": ["references/rules-quality-review.md"],
-        "hint": "Per-Persona JTBD; Five Whys Q5 emotion vocab; B2B organisation-level Jobs.",
-    },
-    "eval-prfaq-output": {
-        "primary": ["references/04a-prfaq.md"],
-        "secondary": ["references/rules-quality-review.md"],
-        "hint": "PR-FAQ solution paragraph opens with user feel; ≥1 ❌ Hard Gate in self-check.",
-    },
-    "eval-revision-mode": {
-        "primary": ["references/recipes/product-revision.md"],
-        "secondary": [],
-        "hint": "Revision Mode post-S1 — concrete CTA menu, not open question.",
-    },
-    "eval-quality-hardgate": {
-        "primary": ["references/rules-quality-review.md"],
+    "jtbd-depth": {
+        "primary": ["skills/jtbd/SKILL.md"],
         "secondary": ["references/02b-jtbd.md"],
-        "hint": "≥1 ❌ in self-check with fix direction; Q5 emotional vocab not 'metacognitive'.",
+        "hint": "Per-persona JTBD; Five Whys Q5 emotion vocab; B2B organisation-level Jobs.",
     },
-    "eval-feature-extension": {
-        "primary": ["references/recipes/feature-extension.md"],
-        "secondary": [],
-        "hint": "Feature Extension Quick Path section.",
+    "prfaq-quality": {
+        "primary": ["skills/pr-faq/SKILL.md"],
+        "secondary": ["references/04a-prfaq.md"],
+        "hint": "PR-FAQ solution paragraph opens with user experience; External FAQ names a real competitor advantage.",
     },
-    "eval-context-bootstrap": {
-        "primary": ["references/rules-context.md"],
-        "secondary": ["references/rules-context-template.md"],
-        "hint": "Reuse declared stack; mention .product-context.md persistence.",
-    },
-    "eval-security-awareness": {
-        "primary": [
+    "security-awareness": {
+        "primary": ["skills/prd-and-handoff/SKILL.md"],
+        "secondary": [
             "references/08-security-checklist.md",
             "references/07a-handoff-core.md",
         ],
-        "secondary": ["references/07b-tasks-tickets.md"],
-        "hint": "Handoff: auth/CORS/CSP coverage; security tasks in TASKS.md; .gitignore mention.",
+        "hint": "Handoff: auth/CORS/CSP coverage; security tasks in the task list; concrete .gitignore body.",
     },
-    "eval-subagent-discovery": {
-        "primary": ["skills/persona-journey/SKILL.md", "skills/jtbd/SKILL.md"],
+    "strategy-critic-teardown": {
+        "primary": ["skills/strategy-critic/SKILL.md"],
         "secondary": [],
-        "hint": "B2B branch — separate Buyer Persona vs User Persona.",
+        "hint": "Rumelt diagnosis identification; quote specific sentence; no-rewrite enforcement.",
     },
-    "eval-subagent-strategy-critic": {
-        "primary": ["agents/strategy-critic.md"],
-        "secondary": ["SKILL.md"],
-        "hint": "Rumelt diagnosis identification; quote specific sentence; no-rewrite enforcement; dispatch-marker visibility (orchestrator-side).",
-    },
-    "eval-subagent-premortem": {
-        "primary": ["agents/pre-mortem-runner.md"],
+    "pre-mortem-scenarios": {
+        "primary": ["skills/pre-mortem/SKILL.md"],
         "secondary": [],
-        "hint": "15+ scenarios spanning all 5 categories; leading indicators; top-3 ranking.",
+        "hint": "≥10 scenarios spanning all 5 categories; leading indicators; top-3 ranking.",
     },
     # Trigger eval — different attribution shape (it tests the SKILL.md
     # trigger description and routing, not the framework rule files).
