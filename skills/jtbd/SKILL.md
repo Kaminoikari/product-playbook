@@ -11,7 +11,7 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 ## Framework
 
-<!-- migrated verbatim from references/02b-jtbd.md -->
+<!-- migrated from references/02b-jtbd.md; always-on gate / MUST-or-FAIL / contract-failure enforcement framing softened into proportional quality self-checks per the P0 consistency backfill, substance kept verbatim (including the Q5 canonical-vocabulary list) -->
 
 # Phase 1: Discovery — JTBD Analysis
 
@@ -19,13 +19,13 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 > "The unit of analysis is not the consumer, but the job the consumer is trying to get done." — Clayton Christensen
 
-**JTBD Three-Layer Coverage (Hard Gate — all three layers required):**
+**JTBD Three-Layer Coverage (quality check: cover all three layers):**
 
-Every JTBD analysis MUST surface **all three layers explicitly**: **Functional** (the task being completed), **Emotional** (how the user wants to feel during/after), and **Social** (how the user wants to be perceived). Producing only the Functional layer is the most common JTBD failure — Emotional and Social Jobs are routinely the real switching triggers, especially in B2B. If a single Persona genuinely has no meaningful Emotional or Social Job for the product, state that explicitly with one sentence of reasoning rather than silently omitting the row.
+A complete JTBD analysis covers **all three layers explicitly**: **Functional** (the task being completed), **Emotional** (how the user wants to feel during/after), and **Social** (how the user wants to be perceived). Producing only the Functional layer is the most common JTBD failure — Emotional and Social Jobs are routinely the real switching triggers, especially in B2B. If a single Persona genuinely has no meaningful Emotional or Social Job for the product, state that explicitly with one sentence of reasoning rather than silently omitting the row.
 
-**JTBD Canonical Form (Hard Gate — three-clause structure required):**
+**JTBD Canonical Form (quality check: three-clause structure):**
 
-Every JTBD statement (Primary, Functional, Emotional, Social — every layer) MUST be written as a complete three-clause sentence in the canonical form. All three clauses are required:
+Every JTBD statement (Primary, Functional, Emotional, Social — every layer) is written as a complete three-clause sentence in the canonical form. All three clauses matter:
 
 ```
 When [situation], I want to [motivation], so [outcome].
@@ -42,7 +42,7 @@ Example: **When** comparing mortgage options late at night and can't reach a ban
 
 **JTBD Four-Type Analysis Table:**
 
-Every cell (Persona 1 / Persona 2) MUST contain a complete three-clause JTBD sentence. **Short phrases like "Feel like I'm still showing up for myself", "log workouts daily", "track progress easily" all FAIL the Hard Gate.** Use the worked example below as the literal shape — every cell must read like a sentence with `When …, I want to …, so …`.
+Every cell (Persona 1 / Persona 2) should contain a complete three-clause JTBD sentence. **Short phrases like "Feel like I'm still showing up for myself", "log workouts daily", "track progress easily" all fall short of this bar: they skip the When/so structure the canonical form calls for.** Use the worked example below as the literal shape — every cell should read like a sentence with `When …, I want to …, so …`.
 
 Worked example (B2C fitness habit tracker, single Persona — replicate this shape for every cell):
 
@@ -78,28 +78,27 @@ Empty table (fill each cell with full `When …, I want to …, so …` sentence
 
 ### 📝 JTBD Quality Checklist
 
-Claude must self-check after producing JTBD output (each item must be marked ✅ or ❌; ❌ items must include how to improve):
+**Quality self-check (apply when the JTBD output's quality needs it):** after producing JTBD output, review each item below and mark it ✅ or ❌; for any ❌, note how to improve it.
 - [ ] Are **all three layers** (Functional / Emotional / Social) written in the full "When … I want to … so …" canonical form? (Any layer missing a clause → mark ❌)
 - [ ] Does it include a specific context? (Not "anytime, anywhere" — but "late at night when they can't reach a bank")
 - [ ] Does it focus on a single core job? (Not three jobs crammed into one sentence)
 - [ ] Can it be used to evaluate "Does this solution actually address this job?"
 - [ ] Does it include "current workarounds" and "gap"? (Gap = opportunity)
-- [ ] Does Q5 of the Deep-Dive **explicitly use at least one canonical-vocabulary word** (`fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`)? Paraphrased consequences like "credibility at risk" or "reputation damaged" FAIL this item — they describe outcomes, not the felt emotion.
+- [ ] Does Q5 of the Deep-Dive use at least one canonical-vocabulary word (`fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`)? Paraphrased consequences like "credibility at risk" or "reputation damaged" miss this: they describe outcomes, not the felt emotion.
 
-**Execution Rules (Hard Gate):**
-- Must mark each item ✅ or ❌ — blank [ ] or unexplained ✅ lists are not allowed
-- **The checklist MUST contain at least one ❌** (see `references/rules-quality-review.md` "Mandatory Critique" rule). A ⚠️ warning marker cannot replace ❌; a "weakest aspect" note appended outside the checklist cannot replace a ❌ inside it. If after honest review every item still feels like a pass, lower the bar and find the item most worth marking ❌, then specify how to strengthen it.
-- ❌ Common issues: incomplete three-clause form (missing When / I want to / so), too abstract, too many jobs merged, missing context, substituting product features for job descriptions, Q5 staying at the functional level
+A self-check that turns up zero ❌ items probably stopped too early. When every item genuinely passes, name the weakest or most fragile part of the analysis instead.
+
+Common issues to watch for: incomplete three-clause form (missing When / I want to / so), too abstract, too many jobs merged, missing context, substituting product features for job descriptions, Q5 staying at the functional level
 
 ---
 
-### 🏢 B2B Product Deep-Dive Requirements (Hard Gate)
+### 🏢 B2B Product Deep-Dive Requirements
 
-**Hard Gate — for any B2B (or B2B2C) product, the following three sub-analyses are all REQUIRED. Skipping any of them is a contract failure regardless of whether the user explicitly asked.** If the product type is ambiguous, ask one clarification question; do not silently default to B2C.
+For any B2B (or B2B2C) product, the following three sub-analyses are the framework's quality bar: all three apply regardless of whether the user explicitly asked for them, because skipping any one leaves the analysis unable to explain the actual switching decision. If the product type is ambiguous, ask one clarification question; do not silently default to B2C.
 
-#### Organizational-Level Job Analysis (Hard Gate — cover at least 2 levels)
+#### Organizational-Level Job Analysis (quality check: cover at least 2 levels)
 
-A B2B JTBD analysis that stays purely at the individual-user level FAILS this gate. Organizational-level Jobs (compliance auditing, cross-department approval workflows, cost control, headcount-policy alignment, audit-trail integrity) are needs that exist beyond any single user's daily task and routinely dominate B2B switching decisions. The table below MUST be produced and at least 2 of the 3 levels MUST contain non-empty B2B-specific Jobs (not generic productivity statements).
+A B2B JTBD analysis that stays purely at the individual-user level misses this bar. Organizational-level Jobs (compliance auditing, cross-department approval workflows, cost control, headcount-policy alignment, audit-trail integrity) are needs that exist beyond any single user's daily task and routinely dominate B2B switching decisions. Produce the table below, with at least 2 of the 3 levels containing non-empty B2B-specific Jobs (not generic productivity statements).
 
 | Level | Description | Examples |
 |-------|-------------|----------|
@@ -107,19 +106,19 @@ A B2B JTBD analysis that stays purely at the individual-user level FAILS this ga
 | **Operational Job** | Coordination needs at the process/department manager level | Approval workflow management, cross-team information sync |
 | **Task Job** | Day-to-day operational needs of individual users | Filling out forms, checking status, exporting reports |
 
-#### Buyer vs. User Analysis (Hard Gate)
+#### Buyer vs. User Analysis
 
-For B2B products, the buyer (signs the contract, controls budget) and the daily user (touches the product every day) are almost always different roles with **different Jobs**. Treating them as one persona is the single most common B2B Discovery failure. Hard Gate rule:
+For B2B products, the buyer (signs the contract, controls budget) and the daily user (touches the product every day) are almost always different roles with **different Jobs**. Treating them as one persona is the single most common B2B Discovery gap. Self-check:
 
 - If buyer ≠ user (default assumption for B2B), produce **two separate Persona+JTBD blocks**: one for the Buyer (ROI justification, risk reduction, compliance, vendor-consolidation, audit-readiness) and one for the User (efficiency, error reduction, day-in-the-life context). Cross-link them: note where the buyer's Job depends on the user's Job (e.g., "buyer's compliance Job depends on user actually filing the report each cycle").
 - If buyer = user (exceptional, e.g., founder-led tools), state explicitly in one sentence WHY the decision-maker is also the daily user in this specific scenario — do not assume.
-- Failing example: producing only one persona ("HR Manager") that conflates both budgeting authority and daily form-filling. That collapses two distinct Jobs into one fuzzy persona and the analysis cannot drive product decisions.
+- Self-check example: producing only one persona ("HR Manager") that conflates budgeting authority and daily form-filling collapses two distinct Jobs into one fuzzy persona; the analysis can't drive product decisions. Watch for this shape and split it before finalizing.
 
-#### Deep-Dive Five Questions — B2B Enhanced Version (Hard Gate)
+#### Deep-Dive Five Questions — B2B Enhanced Version
 
-**Hard Gate — Q5 MUST explicitly use at least one psychological/emotional vocabulary word from this canonical list**: `fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`. Paraphrased functional outcomes ("credibility at risk", "reputation damaged", "metric drops", "users churn", "loses trust", "career impact") FAIL this gate even when they describe genuine B2B stakes — they describe *consequences*, not the *felt emotion* the persona is moving away from.
+**Quality check: Q5 should use at least one psychological/emotional vocabulary word from this canonical list**: `fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`. Paraphrased functional outcomes ("credibility at risk", "reputation damaged", "metric drops", "users churn", "loses trust", "career impact") miss this bar even when they describe genuine B2B stakes: they name *consequences*, and the goal is the *felt emotion* the persona is moving away from.
 
-A Q5 that scores the persona's deepest motivation in functional language fails the Discovery contract: the entire purpose of Q5 is to surface the felt fear/anxiety that drives switching, because functional outcomes alone can be solved with incrementally better tools, while felt fear/anxiety is what gets a B2B buyer to override organizational inertia and sign a new contract.
+Q5's whole purpose is to surface the felt fear or anxiety that drives switching. Functional outcomes alone can be solved with incrementally better tools; felt fear or anxiety is what gets a B2B buyer to override organizational inertia and sign a new contract. A Q5 that stays at the functional layer undersells that purpose.
 
 **Passing examples** (each contains an underlined canonical-vocabulary word):
 - ✅ Professional identity: "She **fears** looking incompetent in front of leadership when this report represents her department's credibility"

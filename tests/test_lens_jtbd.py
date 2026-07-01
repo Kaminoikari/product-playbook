@@ -14,3 +14,4 @@ class TestJtbdLens(unittest.TestCase):
         self.assertIn("`JTBD`", body)          # provenance tag
         self.assertIn("job", body.lower())     # migrated substance, not a stub
         self.assertGreater(len(body), 1500)
+        self.assertNotIn("Hard Gate", body)    # softened to a proportional quality self-check

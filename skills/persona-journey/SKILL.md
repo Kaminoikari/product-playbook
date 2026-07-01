@@ -77,7 +77,7 @@ For **B2B products with multiple user personas**, check that the reasoning refer
 - **Budget authority** — who controls the line item; relevant when buyer ≠ user and the buyer's evaluation criteria dominate the initial-deal decision
 - **Audit / compliance pressure ownership** — whose role is on the line when audit findings hit; compliance-pressured personas often dominate prioritization in regulated B2B segments
 
-A pure "Persona X uses it more often" or "Persona Y has more users" reasoning is a weak signal for B2B products: frequency matters, but B2B switching is driven mostly by org-level pressure rather than individual usage rates.
+A pure "Persona X uses it more often" or "Persona Y has more users" reasoning is a weak signal for B2B products: frequency matters, but B2B switching is driven mostly by org-level pressure; individual usage rates are a weak predictor.
 
 For **B2C products**, check that the reasoning references at least one of: switching-trigger ownership, JTBD severity differential, network-effect seeding, or willingness-to-pay differential. Pure frequency-of-use reasoning is similarly weak for B2C.
 

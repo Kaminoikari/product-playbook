@@ -85,7 +85,7 @@ A strong opening paragraph (Aha Moment) includes all three:
 
 1. A **named or role-specific actor** ("Alex", "Chef Chen", "the kitchen manager at a 30-seat bistro") — never "users" generically.
 2. A **concrete time / place / trigger** ("Friday afternoon", "after the lunch rush", "before the weekend").
-3. **At least 2 specific numbers** — quantities, durations, dollar amounts, percentages. "Within 30 seconds", "across 3 lender scenarios", "$2,400/month", "20-minute prep window". Vague numbers ("a few minutes", "several options") FAIL this requirement.
+3. **At least 2 specific numbers** — quantities, durations, dollar amounts, percentages. "Within 30 seconds", "across 3 lender scenarios", "$2,400/month", "20-minute prep window". Vague numbers ("a few minutes", "several options") don't satisfy this: the lead needs concrete numbers.
 
 A lead that has the actor + scenario but no concrete numbers reads like marketing copy — the press release is supposed to make a specific outcome visible, not aspirational.
 
@@ -115,7 +115,7 @@ A: Name ONE specific assumption (not a list). Examples of well-formed answers:
 - "We assume listing photos contain enough resolution to extract square footage reliably. If image-based OCR fails on more than 20% of listings, the core 'snap and go' experience breaks."
 
 **Q: What is the smallest experiment that would invalidate this assumption?**
-A: Concrete pre-launch test — interview N users, smoke-test a landing page with conversion target X, run a 2-week internal pilot, etc. **Generic "we'll track engagement" or "we'll watch retention" FAILS this requirement** — those measure success after launch, not invalidation before commitment.
+A: Concrete pre-launch test — interview N users, smoke-test a landing page with conversion target X, run a 2-week internal pilot, etc. Generic "we'll track engagement" or "we'll watch retention" answers don't count here. Those measure success after launch. The experiment needs to test the assumption before the team commits to building it.
 
 The Internal FAQ is not for customers. It exists so the team forces itself to name what could kill the product BEFORE building it.
 

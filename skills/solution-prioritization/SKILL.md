@@ -11,7 +11,7 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 ## Framework
 
-<!-- migrated verbatim from references/04b-solutions.md §3.4 (GEM) + §3.5 (RICE) + Impact/Effort -->
+<!-- migrated from references/04b-solutions.md §3.4 (GEM) + §3.5 (RICE) + Impact/Effort; the deprecated-6-mode Applicable-style gating line dropped per the P0 consistency backfill -->
 
 ### 3.4 Gibson Biddle's GEM Prioritization Model (Netflix)
 
@@ -30,8 +30,6 @@ Detect the user's language and reply in it; the framework below is authored in E
 ```
 
 ### 3.5 RICE Quantitative Prioritization
-
-**Applicable: High completeness / audience is data scientists/executives**
 
 ```
 RICE Score = (Reach × Impact × Confidence) / Effort

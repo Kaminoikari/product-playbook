@@ -15,3 +15,4 @@ class TestPrioritizationLens(unittest.TestCase):
         self.assertIn("`GEM`", body)
         self.assertIn("reach", body.lower())
         self.assertIn("effort", body.lower())
+        self.assertNotIn("Applicable:", body)  # deprecated-6-mode gating line dropped
