@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
-"""UserPromptSubmit hook: detect off-topic prompts and change-propagation triggers.
+"""UserPromptSubmit hook: detect change-propagation triggers.
 
-Two soft-reminder modes, both active only when a planning session is in
-progress (signalled by a `.product-playbook-progress.md` whose status is
-not "complete"):
+Advisory reminder, active only when a planning session is in progress
+(signalled by a `.product-playbook-progress.md` whose status is not
+"complete"): if the prompt contains keywords that suggest revising an
+earlier step (e.g. "改 step 2", "update persona", "重做 JTBD"), remind
+Claude to apply `references/rules-change-propagation.md` so downstream
+artifacts stay consistent.
 
-1. Off-topic detection — if the user prompt contains debug / error /
-   "explain this code" keywords, remind Claude to follow the off-topic
-   handling rule documented in SKILL.md (save progress before answering,
-   then offer the continue/pause/end menu).
-
-2. Change-propagation trigger — if the prompt contains keywords that
-   suggest revising an earlier step (e.g. "改 step 2", "update persona",
-   "重做 JTBD"), remind Claude to apply
-   `references/rules-change-propagation.md` so downstream artifacts stay
-   consistent.
-
-Both reminders are advisory: the hook never blocks the user prompt. It
+The reminder is advisory: the hook never blocks the user prompt. It
 emits a JSON `systemMessage` that surfaces in Claude's context.
 """
 
@@ -27,23 +19,6 @@ import os
 import re
 import sys
 from pathlib import Path
-
-OFF_TOPIC_PATTERNS = [
-    r"\bdebug\b",
-    r"\berror\b",
-    r"\bstack[\s\-]?trace\b",
-    r"\bexception\b",
-    r"\btraceback\b",
-    r"報錯",
-    r"錯誤訊息",
-    r"報錯訊息",
-    r"为什么这段",
-    r"為什麼這段",
-    r"幫我寫.*(code|程式|代碼)",
-    r"幫我改.*(code|程式|代碼)",
-    r"why does this code",
-    r"fix this (bug|code|function)",
-]
 
 CHANGE_PROPAGATION_PATTERNS = [
     r"改\s*(step|步驟|S\d)",
@@ -91,31 +66,16 @@ def main() -> int:
     if not _planning_in_progress(progress):
         return 0
 
-    reminders: list[str] = []
-
-    if _matches_any(prompt, OFF_TOPIC_PATTERNS):
-        reminders.append(
-            "[product-playbook] Off-topic prompt detected during an active "
-            "planning session. Before answering, follow the rule in "
-            "SKILL.md > 'Off-topic Prompt Handling': (1) save progress to "
-            "`.product-playbook-progress.md` per `references/rules-progress.md`, "
-            "(2) answer the question, (3) append the Continue / Pause / End "
-            "menu so the user can return to the flow."
-        )
-
-    if _matches_any(prompt, CHANGE_PROPAGATION_PATTERNS):
-        reminders.append(
-            "[product-playbook] Change intent detected. Apply "
-            "`references/rules-change-propagation.md`: identify which "
-            "downstream tables depend on the modified step, update them in "
-            "lock-step, and surface the propagation summary to the user."
-        )
-
-    if not reminders:
+    if not _matches_any(prompt, CHANGE_PROPAGATION_PATTERNS):
         return 0
 
-    output = {"systemMessage": "\n\n".join(reminders)}
-    json.dump(output, sys.stdout)
+    message = (
+        "[product-playbook] Change intent detected. Apply "
+        "`references/rules-change-propagation.md`: identify which "
+        "downstream tables depend on the modified step, update them in "
+        "lock-step, and surface the propagation summary to the user."
+    )
+    json.dump({"systemMessage": message}, sys.stdout)
     return 0
 
 

@@ -35,6 +35,13 @@ class TestP2Teardown(unittest.TestCase):
         self.assertNotIn("/product-dev", src)
         self.assertNotIn("permissionDecision", src)  # stays non-blocking
 
+    def test_topic_switch_change_propagation_kept_offtopic_dropped(self):
+        src = (ROOT / "hooks" / "user-prompt-detect-topic-switch.py").read_text(encoding="utf-8")
+        self.assertIn("rules-change-propagation", src)   # consistency guardrail kept
+        self.assertNotIn("rules-progress", src)          # deleted file no longer referenced
+        self.assertNotIn("continue/pause/end", src)      # old mode menu removed
+        self.assertNotIn("permissionDecision", src)      # stays non-blocking
+
     def test_new_system_has_no_reference_to_deleted_orchestration(self):
         # The runtime new system (skills/) must not reference any deleted mode-spine file.
         # NOTE: grep skills/ ONLY — test files legitimately name the deleted files to assert
