@@ -42,6 +42,19 @@ class TestP2Teardown(unittest.TestCase):
         self.assertNotIn("continue/pause/end", src)      # old mode menu removed
         self.assertNotIn("permissionDecision", src)      # stays non-blocking
 
+    def test_recipe_docs_exist_with_sequences(self):
+        rec = ROOT / "references" / "recipes"
+        expected = {
+            "full-product-plan.md": ["strategy-kernel", "jtbd", "mvp-scoping", "success-metrics"],
+            "quick-validation.md": ["jtbd", "pr-faq", "success-metrics"],
+            "product-revision.md": ["problem-framing", "mvp-scoping", "success-metrics"],
+            "feature-extension.md": ["problem-framing", "solution-prioritization", "pre-mortem", "mvp-scoping"],
+        }
+        for fname, lenses in expected.items():
+            body = (rec / fname).read_text(encoding="utf-8")
+            for lens in lenses:
+                self.assertIn(lens, body, f"{fname} missing {lens}")
+
     def test_new_system_has_no_reference_to_deleted_orchestration(self):
         # The runtime new system (skills/) must not reference any deleted mode-spine file.
         # NOTE: grep skills/ ONLY — test files legitimately name the deleted files to assert

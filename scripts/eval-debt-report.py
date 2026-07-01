@@ -65,7 +65,7 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
         "hint": "PR-FAQ solution paragraph opens with user feel; ≥1 ❌ Hard Gate in self-check.",
     },
     "eval-revision-mode": {
-        "primary": [],
+        "primary": ["references/recipes/product-revision.md"],
         "secondary": [],
         "hint": "Revision Mode post-S1 — concrete CTA menu, not open question.",
     },
@@ -75,7 +75,7 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
         "hint": "≥1 ❌ in self-check with fix direction; Q5 emotional vocab not 'metacognitive'.",
     },
     "eval-feature-extension": {
-        "primary": [],
+        "primary": ["references/recipes/feature-extension.md"],
         "secondary": [],
         "hint": "Feature Extension Quick Path section.",
     },
