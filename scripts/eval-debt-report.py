@@ -92,10 +92,10 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
         "secondary": [],
         "hint": "≥10 scenarios spanning all 5 categories; leading indicators; top-3 ranking.",
     },
-    # Trigger eval — different attribution shape (it tests the SKILL.md
+    # Trigger eval — different attribution shape (it tests the meta-skill's
     # trigger description and routing, not the framework rule files).
     "trigger-eval": {
-        "primary": ["SKILL.md"],
+        "primary": ["skills/product-playbook/SKILL.md"],
         "secondary": [".claude-plugin/plugin.json"],
         "hint": "YAML frontmatter description / language-detect / DO-NOT-trigger list.",
     },

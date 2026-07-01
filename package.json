@@ -49,7 +49,6 @@
     ".claude-plugin/",
     "skills/",
     "install.sh",
-    "SKILL.md",
     "commands/",
     "agents/",
     "hooks/",

@@ -42,8 +42,7 @@ class TestPackageShape(unittest.TestCase):
         files = self.pkg["files"]
         # canonical user-facing entry points; if any of these go missing,
         # the plugin install will silently break
-        for required in (".claude-plugin/", "skills/", "SKILL.md",
-                          "agents/", "references/"):
+        for required in (".claude-plugin/", "skills/", "agents/", "references/"):
             self.assertIn(required, files,
                            f"{required!r} missing from package.json files — "
                            f"plugin consumers won't get it")
@@ -102,17 +101,16 @@ class TestInstallScriptShape(unittest.TestCase):
 
 
 class TestCriticalUserFacingFiles(unittest.TestCase):
-    def test_skill_md_exists(self):
-        self.assertTrue((REPO_ROOT / "SKILL.md").is_file(),
-                         "SKILL.md is the entry point — must exist")
+    META = "skills/product-playbook/SKILL.md"
 
-    def test_skill_md_has_frontmatter(self):
-        # Claude Code skill loader requires YAML frontmatter
-        text = (REPO_ROOT / "SKILL.md").read_text()
-        self.assertTrue(text.startswith("---\n"),
-                         "SKILL.md must begin with YAML frontmatter")
-        self.assertIn("\n---\n", text[3:],
-                       "SKILL.md frontmatter must be closed by ---")
+    def test_meta_skill_exists(self):
+        self.assertTrue((REPO_ROOT / self.META).is_file(),
+                         "meta-skill is the entry point — must exist")
+
+    def test_meta_skill_has_frontmatter(self):
+        text = (REPO_ROOT / self.META).read_text()
+        self.assertTrue(text.startswith("---\n"))
+        self.assertIn("\n---\n", text[3:])
 
 
 if __name__ == "__main__":
