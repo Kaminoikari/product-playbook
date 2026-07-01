@@ -27,6 +27,7 @@ from compute_eval_score import (
     format_summary_markdown,
     should_fail,
 )
+from eval_env import plugin_isolation_args
 
 
 JUDGE_SYSTEM_PROMPT = """You are a strict evaluator. You will receive an AI assistant's response together with a list of expectations. For each expectation, decide whether the response satisfies it.
@@ -46,6 +47,7 @@ def _run_claude(prompt: str, timeout: int, system: str | None = None, output_for
     cmd = ["claude", "-p", prompt, "--output-format", output_format]
     if system:
         cmd += ["--append-system-prompt", system]
+    cmd += plugin_isolation_args()
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
     proc = subprocess.run(
         cmd, capture_output=True, text=True, timeout=timeout, env=env

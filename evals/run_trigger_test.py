@@ -29,6 +29,7 @@ from compute_eval_score import (  # noqa: E402
     format_summary_markdown,
     should_fail,
 )
+from eval_env import plugin_isolation_args  # noqa: E402
 
 
 def test_single_query(query: str, timeout: int = 60) -> bool:
@@ -38,7 +39,7 @@ def test_single_query(query: str, timeout: int = 60) -> bool:
         "--output-format", "stream-json",
         "--verbose",
         "--max-turns", "1",
-    ]
+    ] + plugin_isolation_args()
 
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
 
