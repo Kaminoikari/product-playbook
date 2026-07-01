@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Test whether the installed product-playbook skill triggers for each query.
 
-Uses `claude -p` with stream-json output, checks if Skill tool is called
-with 'product-playbook' in the input. Tests the REAL installed skill,
-not a temp command file.
+Uses `claude -p` with stream-json output and counts a trigger when either an
+explicit Skill tool_use names a product-playbook skill or the response carries
+product-playbook's provenance line (the meta-skill is often applied inline
+without a formal Skill call). Tests the REAL installed skill, not a temp
+command file.
 
 Severity convention (since trigger items have no per-item severity):
   - false negative (should_trigger=true but skill did NOT fire) -> critical
@@ -18,6 +20,7 @@ noisy but recoverable (warning).
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -32,13 +35,56 @@ from compute_eval_score import (  # noqa: E402
 from eval_env import plugin_isolation_args  # noqa: E402
 
 
+# product-playbook's provenance line ("— Frameworks: X · Y") is unique to its
+# output, so finding it is a high-precision signal that the meta-skill drove the
+# response even when the skill was applied inline without a formal Skill call.
+_PROVENANCE_RE = re.compile(r"[-—–]{1,2}\s*Frameworks:")
+
+
+def _detect_trigger(output: str) -> bool:
+    """Whether stream-json `output` shows product-playbook engaged.
+
+    Either signal suffices:
+      1. an explicit Skill tool_use naming a product-playbook skill, or
+      2. the product-playbook provenance line in the assistant text, which it
+         emits inline even when it applies the meta-skill without a Skill call.
+    """
+    for line in output.split("\n"):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+
+        if event.get("type") == "assistant":
+            for block in event.get("message", {}).get("content", []):
+                btype = block.get("type")
+                if btype == "tool_use" and block.get("name") == "Skill":
+                    inp = json.dumps(block.get("input", {}))
+                    if "product-playbook" in inp or "product-" in inp:
+                        return True
+                if btype == "text" and _PROVENANCE_RE.search(block.get("text", "")):
+                    return True
+
+        if event.get("type") == "stream_event":
+            se = event.get("event", {})
+            if se.get("type") == "content_block_start":
+                cb = se.get("content_block", {})
+                if cb.get("type") == "tool_use" and cb.get("name") == "Skill":
+                    return True
+
+    return False
+
+
 def test_single_query(query: str, timeout: int = 60) -> bool:
     """Run a single query and return whether product-playbook skill was triggered."""
     cmd = [
         "claude", "-p", query,
         "--output-format", "stream-json",
         "--verbose",
-        "--max-turns", "1",
+        "--max-turns", "2",
     ] + plugin_isolation_args()
 
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
@@ -53,35 +99,7 @@ def test_single_query(query: str, timeout: int = 60) -> bool:
     except subprocess.TimeoutExpired:
         return False
 
-    for line in output.split("\n"):
-        line = line.strip()
-        if not line:
-            continue
-        try:
-            event = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-
-        if event.get("type") == "assistant":
-            message = event.get("message", {})
-            for block in message.get("content", []):
-                if block.get("type") == "tool_use":
-                    name = block.get("name", "")
-                    inp = json.dumps(block.get("input", {}))
-                    if name == "Skill" and "product-playbook" in inp:
-                        return True
-                    if name == "Skill" and "product-" in inp:
-                        return True
-
-        if event.get("type") == "stream_event":
-            se = event.get("event", {})
-            se_type = se.get("type", "")
-            if se_type == "content_block_start":
-                cb = se.get("content_block", {})
-                if cb.get("type") == "tool_use" and cb.get("name") == "Skill":
-                    return True
-
-    return False
+    return _detect_trigger(output)
 
 
 def main():
