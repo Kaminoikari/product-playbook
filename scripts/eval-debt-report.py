@@ -47,22 +47,22 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
     "lens-selection-single": {
         "primary": ["skills/product-playbook/SKILL.md"],
         "secondary": ["skills/jtbd/SKILL.md"],
-        "hint": "Step 2 lens-selection table — a narrow ask takes exactly one lens.",
+        "hint": "Step 2 lens-selection table: a narrow ask takes exactly one lens.",
     },
     "lens-blend": {
         "primary": ["skills/product-playbook/SKILL.md"],
         "secondary": ["skills/solution-prioritization/SKILL.md", "skills/pre-mortem/SKILL.md"],
-        "hint": "Step 2 blended-lens rule — several perspectives merge into one integrated answer, not staged sections.",
+        "hint": "Step 2 blended-lens rule: several perspectives merge into one integrated answer; staged sections are wrong here.",
     },
     "provenance-format": {
         "primary": ["skills/product-playbook/SKILL.md"],
         "secondary": [],
-        "hint": "Step 4 provenance tag — exact `— Frameworks: X` line, names only by default.",
+        "hint": "Step 4 provenance tag: exact `— Frameworks: X` line, names only by default.",
     },
     "guardrail-proportional": {
         "primary": ["skills/product-playbook/SKILL.md"],
         "secondary": [],
-        "hint": "Relative guardrails table — single-line, non-blocking nudge for missing problem statement.",
+        "hint": "Relative guardrails table: single-line, non-blocking nudge for missing problem statement.",
     },
     "jtbd-depth": {
         "primary": ["skills/jtbd/SKILL.md"],

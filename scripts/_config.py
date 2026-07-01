@@ -54,12 +54,5 @@ BAND_NEEDS_ATTENTION = _getenv_int("BAND_NEEDS_ATTENTION", 70)
 STALL_SCORE_TOLERANCE = _getenv_int("STALL_SCORE_TOLERANCE", 5)
 REGRESSION_SCORE_DROP = _getenv_int("REGRESSION_SCORE_DROP", 5)
 
-# Canonical vocabulary tokens — must remain English across all i18n
-CANONICAL_VOCAB = [
-    "fear", "anxiety", "shame", "worry", "dread",
-    "self-doubt", "sense of loss", "threat to identity",
-    "embarrassment", "guilt",
-]
-
 # Watched authored-file roots for eval freshness comparison
 WATCHED = ["references", "agents", "SKILL.md", "evals/evals.json"]
