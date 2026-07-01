@@ -30,6 +30,11 @@ class TestP2Teardown(unittest.TestCase):
     def test_change_propagation_kept(self):
         self.assertTrue((ROOT / "references" / "rules-change-propagation.md").exists())
 
+    def test_planning_gate_no_product_dev_command_ref(self):
+        src = (ROOT / "hooks" / "pre-write-planning-gate.py").read_text(encoding="utf-8")
+        self.assertNotIn("/product-dev", src)
+        self.assertNotIn("permissionDecision", src)  # stays non-blocking
+
     def test_new_system_has_no_reference_to_deleted_orchestration(self):
         # The runtime new system (skills/) must not reference any deleted mode-spine file.
         # NOTE: grep skills/ ONLY — test files legitimately name the deleted files to assert

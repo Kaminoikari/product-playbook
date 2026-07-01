@@ -2,9 +2,9 @@
 """PreToolUse hook: gate code-file writes during the planning phase.
 
 The product-playbook plugin draws a hard line between PLANNING (produces
-docs) and DEVELOPMENT (produces code). Until the user runs `/product-dev`
-to enter the dev-handoff phase — which creates a `.product-dev-active`
-marker file — Claude should not be writing source code.
+docs) and DEVELOPMENT (produces code). Once development has genuinely
+started, create a `.product-dev-active` marker file in the working
+directory; until then, Claude should not be writing source code.
 
 This hook fires on Write / Edit / MultiEdit. If:
   • a planning session is in progress (progress file exists, not complete)
@@ -12,8 +12,8 @@ This hook fires on Write / Edit / MultiEdit. If:
   • AND the target path looks like source code
 
 …it injects an advisory `systemMessage` reminding Claude to finish
-planning first. The hook does NOT block the tool call (permissionDecision
-remains unset / allowed) so the user retains an explicit override path.
+planning first. The hook stays advisory only: it never denies or alters
+the tool call, so the user retains an explicit override path.
 
 Doc/text files (.md, .txt, .json, etc.) are always allowed — those are
 expected planning artifacts.
@@ -90,9 +90,10 @@ def main() -> int:
         "but this project is still in the PLANNING phase (no "
         "`.product-dev-active` marker). The plugin's contract is "
         "planning-produces-docs, dev-produces-code. Recommended: finish "
-        "the current mode's remaining steps, then run `/product-dev` to "
-        "enter the dev-handoff phase. If the user has explicitly asked "
-        "for code now, acknowledge the override and proceed."
+        "the planning artifacts first. If development has genuinely "
+        "started, create a `.product-dev-active` file in the working "
+        "directory to silence this advisory. If the user has explicitly "
+        "asked for code now, acknowledge the override and proceed."
     )
     json.dump({"systemMessage": message}, sys.stdout)
     return 0
