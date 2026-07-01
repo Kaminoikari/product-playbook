@@ -1,12 +1,12 @@
 {
   "name": "product-playbook",
-  "description": "MUST use when user wants to plan or strategize a product/feature. 22 PM frameworks, 6 modes, multi-language, from idea to dev handoff",
-  "version": "1.2.12",
+  "description": "MUST use when the user wants to plan, strategize, validate, or scope a product or feature. Composable product-thinking lenses (JTBD, PR-FAQ, positioning, pre-mortem, RICE, North Star, MVP, GTM, and more) that snap to the outcome and blend when the situation needs it, from raw idea to dev handoff.",
+  "version": "2.0.0",
   "author": {
     "name": "Charles Chen"
   },
   "homepage": "https://github.com/kaminoikari/product-playbook",
   "repository": "https://github.com/kaminoikari/product-playbook",
   "license": "MIT",
-  "keywords": ["product-management", "planning", "pm", "jtbd", "prd", "mvp", "i18n"]
+  "keywords": ["product-management", "planning", "pm", "jtbd", "prd", "mvp", "strategy", "pr-faq"]
 }
