@@ -55,6 +55,11 @@ class TestP2Teardown(unittest.TestCase):
             for lens in lenses:
                 self.assertIn(lens, body, f"{fname} missing {lens}")
 
+    def test_metaskill_recipes_point_to_docs(self):
+        body = (ROOT / "skills" / "product-playbook" / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("references/recipes/", body)
+        self.assertNotIn("Fallback during migration", body)
+
     def test_new_system_has_no_reference_to_deleted_orchestration(self):
         # The runtime new system (skills/) must not reference any deleted mode-spine file.
         # NOTE: grep skills/ ONLY — test files legitimately name the deleted files to assert

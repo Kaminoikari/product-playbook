@@ -14,7 +14,7 @@ class TestMetaSkill(unittest.TestCase):
 
     def test_has_required_anchors(self):
         body = pathlib.Path(META).read_text(encoding="utf-8")
-        for anchor in ["## Relative guardrails", "— Frameworks:", "references/",
+        for anchor in ["## Relative guardrails", "— Frameworks:", "references/recipes/",
                        "Available lenses", "Ground in evidence", "Sources:"]:
             self.assertIn(anchor, body, f"missing anchor: {anchor}")
 
@@ -22,3 +22,8 @@ class TestMetaSkill(unittest.TestCase):
         body = pathlib.Path(META).read_text(encoding="utf-8")
         self.assertNotIn("Quick Mode", body)
         self.assertNotIn("Full Mode", body)
+
+    def test_migration_fallback_removed(self):
+        body = pathlib.Path(META).read_text(encoding="utf-8")
+        self.assertNotIn("no lens skill yet", body)
+        self.assertNotIn("Fallback during migration", body)

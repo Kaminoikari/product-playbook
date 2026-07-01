@@ -34,8 +34,6 @@ A narrow, well-defined deliverable takes a single lens. A decision needing sever
 
 Available lenses: strategy-kernel, persona-journey, jtbd, opportunity-solution-tree, problem-framing, positioning, pr-faq, pre-mortem, solution-prioritization, mvp-scoping, success-metrics, pmf-gtm, prd-and-handoff, document-export, product-spec-summary, strategy-critic.
 
-Fallback during migration: if a framework you need has no lens skill yet, read the matching `references/NN-*.md` or the matching `agents/*.md` (for example strategy-critic) and apply it inline; recipes are not built yet (P2). (This line is removed once migration completes.)
-
 ## Ground in evidence (research)
 
 When the outcome depends on real-world facts the user has not provided (competitor behavior, market size, pricing benchmarks, whether a problem is validated outside this conversation), gather evidence before answering; do not rely on memory alone. Proportional, like the guardrails:
@@ -70,3 +68,5 @@ Dormant by default. Surface only when the outcome would be materially harmed by 
 ## Optional depth — recipes
 
 If the user explicitly wants a full end-to-end walk-through, or the task is a large whole-product plan, suggest one recipe: full-product-plan, quick-validation, product-revision, or feature-extension. Suggest it; never force it. Recipes stay out of the slash-command surface.
+
+Each recipe's lens sequence lives in `references/recipes/<name>.md`: `full-product-plan.md`, `quick-validation.md`, `product-revision.md`, `feature-extension.md`. Read the matching doc once the user accepts the suggestion.
