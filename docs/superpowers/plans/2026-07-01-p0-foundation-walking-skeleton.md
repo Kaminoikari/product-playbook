@@ -448,7 +448,7 @@ git commit -m "feat: migrate JTBD framework to jtbd lens skill"
 - Test: `tests/test_lens_pre_mortem.py`
 
 **Interfaces:**
-- Consumes: `validate_skill`; framework body from `references/04b-solutions.md` §3.3 (Shreyas Doshi pre-mortem).
+- Consumes: `validate_skill`; framework METHOD from `agents/pre-mortem-runner.md` (the real engine: 15+ scenarios across 5 categories, leading-indicator discipline, likelihood/impact, top-3, pre-launch experiments) PLUS the "at least one security scenario" quality check from `references/04b-solutions.md` §3.3. (§3.3 alone is a thin table; the spec §4.4 names the subagent as the knowledge source.)
 - Produces: a lens whose output contributes the tag `Pre-mortem`.
 
 - [ ] **Step 1: Write the failing test**
@@ -479,7 +479,7 @@ Expected: FAIL (file missing)
 
 - [ ] **Step 3: Create the lens skill**
 
-Write `skills/pre-mortem/SKILL.md` with this frontmatter + wrapper, then paste the §3.3 pre-mortem body (imagine-it-failed, 15+ scenarios across 5 categories, leading indicators, the "at least one security scenario" quality check) from `references/04b-solutions.md`:
+Write `skills/pre-mortem/SKILL.md` with this frontmatter + wrapper, then migrate the framework METHOD from `agents/pre-mortem-runner.md` (premise: assume it shipped and failed, work backwards; deliverables: 15+ scenarios, a leading indicator each, likelihood + impact, top-3, pre-launch experiments; operating principles; the five failure categories with their patterns and ≥2-per-category discipline). Adapt the framing from "you are a subagent" to a lens, and drop the subagent-only scaffolding (the `status: out_of_scope` YAML, routing). Fold in the "at least one security scenario" quality check from `references/04b-solutions.md` §3.3. Adapted prose must follow the copy rules (no mid-sentence em-dash, no contrast constructions):
 
 ```markdown
 ---
