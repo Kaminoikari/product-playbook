@@ -18,7 +18,7 @@ Default flow is four steps and nothing more:
 
 ## Step 1 — Read the outcome
 
-Identify the concrete deliverable the user wants (a PR-FAQ, a go/no-go call, a metric set, a full plan). If it is unclear, ask ONE focused clarifying question, then proceed. Detect the user's language and reply in it; framework content is authored in English.
+Identify the concrete deliverable the user wants (a PR-FAQ, a go/no-go call, a metric set, a full plan). Ask a clarifying question only when the deliverable itself is genuinely ambiguous. Missing specifics like stack, platform, or exact scope are never a reason to stop: state your assumptions in one line and produce the deliverable in the same response. Detect the user's language and reply in it; framework content is authored in English.
 
 ## Step 2 — Select lens(es)
 
@@ -45,7 +45,7 @@ Cite real sources and add a count to the provenance line: `— Frameworks: … |
 
 ## Step 3 — Produce (process minimalism)
 
-Do NOT do by default: mode menus, progress indicators, step-by-step confirmation, per-step self-review, or asking "shall I start?". Deliver the outcome directly, without filler.
+Do NOT do by default: mode menus, progress indicators, step-by-step confirmation, per-step self-review, asking "shall I start?", or ending your turn on a clarifying question when you could already produce a useful draft. Deliver the outcome directly, without filler. When facts are missing, open with a one-line assumption (for example "Assuming a Node / Postgres stack; tell me if it differs and I will adjust") and deliver the full artifact in the same response.
 
 A lens's internal quality checklist (for example a Hard Gate or a mandatory ❌ item) is a proportional self-check the lens may apply when the output's quality genuinely needs it; it stays scoped to that judgment call and does not reintroduce per-step ceremony.
 

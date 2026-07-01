@@ -197,8 +197,8 @@ def main():
     ap.add_argument("--eval-file", default=str(Path(__file__).parent / "evals.json"))
     ap.add_argument("--runs", type=int, default=3, help="Runs per eval for majority vote (default 3)")
     ap.add_argument("--workers", type=int, default=2, help="Parallel evals")
-    ap.add_argument("--response-timeout", type=int, default=180)
-    ap.add_argument("--judge-timeout", type=int, default=120)
+    ap.add_argument("--response-timeout", type=int, default=420)
+    ap.add_argument("--judge-timeout", type=int, default=180)
     ap.add_argument("--fail-on", choices=["critical", "any", "none"], default="none",
                     help="Exit non-zero if this severity threshold is hit")
     ap.add_argument("--json", dest="json_out", default=None,

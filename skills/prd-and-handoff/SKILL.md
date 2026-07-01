@@ -278,11 +278,11 @@ Follow the Phase order in `TASKS.md`. After completing each Phase:
 3. If architectural questions arise, refer to `docs/ARCHITECTURE.md`
 ```
 
-#### Tech Stack Confirmation Flow
+#### Tech Stack (assume and state, do not block)
 
-Before producing the handoff package, the tech stack must be confirmed. If the user hasn't specified, ask in this order:
+If the user gave a stack, use it. If not, infer a sensible default from the product type using the recommendation logic below, state your choice in one line, and produce the handoff in the same response. Ask only when the product type itself is genuinely unclear.
 
-##### Must-Ask (Affects all outputs)
+##### Worth stating explicitly (affects all outputs)
 
 ```
 1. What type of application is this?
@@ -717,15 +717,14 @@ Display the following guidance once the files are generated:
   - The "Explicitly Not Doing" list in CLAUDE.md prevents Claude Code from building out of scope
 ```
 
-##### Pre-Output Final Confirmation
+##### Pre-Output Assumptions (state in one line, do not block)
 
 ```
-Before producing the development handoff package, I need to confirm a few things:
+Producing the handoff now under these assumptions (correct any and I will adjust):
 
-1. Tech stack: [Confirmed / Needs confirmation]
-2. Product name (for the project folder name): [Confirmed / Needs confirmation]
-3. Any other technical constraints or preferences?
-   - e.g., Must use a specific ORM, need to support specific browsers, existing CI/CD, etc.
+1. Tech stack: [inferred default, e.g. Node / Postgres / React]
+2. Product name (for the project folder): [inferred from the plan]
+3. Other constraints assumed: [none unless you name them, e.g. specific ORM, browser support, existing CI/CD]
 ```
 
 ---
