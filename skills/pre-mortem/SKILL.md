@@ -32,7 +32,7 @@ Produce:
 
 **Diversity over depth on the first pass.** Fifteen scenarios in one category and none in the others is a pre-mortem that missed where the real failure lives. Cover all five categories before deepening any single one.
 
-**Concrete failure stories, not abstract risks.**
+**Concrete failure stories beat abstract risks.**
 - Weak: "Adoption may be low."
 - Strong: "Six months post-launch, weekly active users plateau at 8% of registered users because the core JTBD only fires once per quarter for the target persona, so the product never becomes a habit."
 
