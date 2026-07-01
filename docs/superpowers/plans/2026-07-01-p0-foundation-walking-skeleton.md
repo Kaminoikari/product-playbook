@@ -614,10 +614,12 @@ Match the field names discovered in Step 1. The four cases assert the walking sk
 3. **provenance-names-only** — prompt: "Give me a North Star metric for a food-delivery app." → expect: a provenance line present with framework name(s) only, no per-framework breakdown unless asked.
 4. **guardrail-fires** — prompt: "Write the full PRD now." (no problem statement given) → expect: a one-line nudge about the missing problem statement, non-blocking, and it still offers to proceed.
 
-- [ ] **Step 3: Run the eval (manually, quota-aware)**
+- [ ] **Step 3: Run the eval — INTERACTIVE ONLY, quota-aware (do not run headless in this flow)**
 
-Run: `python3 evals/run_behavioral_eval.py evals/skeleton-eval.json`
-Expected: 4/4 pass. Note: this invokes `claude -p` and consumes quota; run once locally, do not wire into CI (repo policy: eval-gate is workflow_dispatch only).
+Run (only when appropriate, in an interactive session or with the skill installed at user level): `python3 evals/run_behavioral_eval.py --eval-file evals/skeleton-eval.json --runs 3`
+Expected: 4/4 pass.
+
+Do NOT run this via `claude -p` headless as part of P0 execution. Two reasons: (1) it invokes `claude -p` per case × runs and consumes quota; repo policy keeps eval-gate `workflow_dispatch` only. (2) The meta-skill is injected by a PLUGIN SessionStart hook (`hooks/session-start-inject-metaskill.py`), and plugin hooks do not fire in headless `claude -p`, so a headless run would exercise the model WITHOUT the meta-skill active and produce false negatives. The JSON stands as the documented behavioral acceptance spec; the structural unittest suite (81 tests) is the automated gate for P0. The behavioral run is a manual interactive validation the user triggers.
 
 - [ ] **Step 4: Commit**
 

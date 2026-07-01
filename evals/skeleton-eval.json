@@ -1,0 +1,52 @@
+{
+  "skill_name": "product-playbook",
+  "_notes": "P0 walking-skeleton behavioral acceptance criteria for the outcome-first lens architecture. RUN INTERACTIVELY (or with the skill installed at user level), NOT via `claude -p` headless: the meta-skill is injected by a plugin SessionStart hook (hooks/session-start-inject-metaskill.py), and plugin hooks do not fire in headless `claude -p`, so a headless run would test the model WITHOUT the meta-skill active and give false negatives. This file is the documented spec of 'the skeleton works end to end'; it is quota-heavy and is not wired into CI (repo policy: eval-gate is workflow_dispatch only). To run when appropriate: `python3 evals/run_behavioral_eval.py --eval-file evals/skeleton-eval.json --runs 3`.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "skeleton-single-lens-jtbd",
+      "prompt": "Write me a JTBD statement for a habit-tracking app.",
+      "expected_output": "Applies the single JTBD lens and produces a job statement in the three-clause form (situation + motivation + expected outcome), then ends with a one-line provenance naming JTBD. Does not spin up unrelated frameworks for this narrow ask.",
+      "expectations": [
+        {"text": "Produces a JTBD job statement (situation / motivation / expected outcome), applying the JTBD lens to a real habit-tracking scenario", "severity": "critical"},
+        {"text": "Ends with a provenance line of the form '— Frameworks: ...' whose framework list includes JTBD", "severity": "critical"},
+        {"text": "Stays to the single JTBD lens; does not walk Persona, PR-FAQ, RICE, or other frameworks the narrow ask did not call for", "severity": "info"},
+        {"text": "No mode menu, no progress indicator, no step-by-step confirmation ceremony", "severity": "info"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "skeleton-blend-go-no-go",
+      "prompt": "Is a dark-mode feature worth building for our note-taking app?",
+      "expected_output": "One integrated go/no-go recommendation that blends user-need (JTBD), prioritization (RICE), and failure-risk (pre-mortem) into a single answer, ending with one provenance line naming all three lenses together. Not three separate framework walkthroughs.",
+      "expectations": [
+        {"text": "Delivers a single integrated go/no-go recommendation for the dark-mode feature", "severity": "critical"},
+        {"text": "The reasoning visibly blends at least user-need (JTBD), prioritization (RICE), and failure-risk (pre-mortem)", "severity": "critical"},
+        {"text": "Ends with one provenance line naming JTBD, RICE, and Pre-mortem together (blended, on a single line)", "severity": "critical"},
+        {"text": "Does not present the three frameworks as three separate step-by-step sections or a staged walkthrough", "severity": "info"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "skeleton-provenance-names-only",
+      "prompt": "Rank these for our app by priority: dark mode, offline sync, and CSV export.",
+      "expected_output": "A priority ranking applying RICE or Impact/Effort, ending with a one-line provenance naming the framework(s) by name only, with no per-framework contribution breakdown (since the user did not ask for one).",
+      "expectations": [
+        {"text": "Produces a priority ranking of the three features applying RICE or Impact/Effort", "severity": "critical"},
+        {"text": "Ends with a one-line provenance naming the framework(s) used (e.g. RICE)", "severity": "critical"},
+        {"text": "Provenance is names-only: it does NOT expand a per-framework 'what each framework contributed' breakdown, because the user did not ask for one", "severity": "critical"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "skeleton-guardrail-no-problem-statement",
+      "prompt": "Write the full PRD now.",
+      "expected_output": "A single-line relative-guardrail nudge that there is no problem statement yet, offered before dumping a full PRD, and non-blocking: it lets the user proceed in one word if they already have a problem statement or want to continue anyway.",
+      "expectations": [
+        {"text": "Surfaces a one-line nudge that no problem statement exists yet, before producing a full PRD", "severity": "critical"},
+        {"text": "The guardrail is non-blocking: it offers to proceed if the user already has a problem statement or explicitly wants to continue", "severity": "critical"},
+        {"text": "The nudge is a single line, not a lecture, a mode menu, or a multi-step ceremony", "severity": "info"}
+      ]
+    }
+  ]
+}
