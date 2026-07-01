@@ -271,3 +271,8 @@ meta-skill 是唯一 SessionStart 就注入的 skill，職責是把使用者需�
 - P-research 計畫相對 P1–P4 的排序（P0 後可平行）。
 - 遷移進來的 legacy framework body 帶有 pre-existing 寫作規則違規（句中 em-dash、rather-than 等）；P0 忠實遷移不動它們，P1 排一次系統性 copy-rule cleanup pass 統一清理。
 - closed-loop harness 是否隨此次重構一併更新，或列為後續獨立工作。
+- **P0 驗證管道**：P0 僅以 repo-local 互動 session 驗證，用一顆指向本 repo 目錄的 dev plugin；不透過 `claude -p` headless（plugin hook 在 headless 下不會觸發），也不透過使用者層級的 `install.sh` 安裝（`install.sh` 目前只複製舊版根目錄 `SKILL.md`，即 6-mode orchestrator，不複製 `hooks/`，也不複製新的 `skills/*/` lens，走這條路徑驗證到的是舊系統）。
+- **版本與發佈時機**：Marketplace／npm 正式發佈，以及 `plugin.json` / `marketplace.json` / `package.json` 三處版本號同步，都屬於 P4 工作；P0 不發佈，因此目前殘留的 `1.2.12` 版本號是刻意維持，留待 P4 一次到位再 bump（plugin cache 依版本號為 key，中途 bump 卻無對應發佈只會製造混淆）。
+- **P1 決策項（lens 品質檢查措辭）**：接下來 13 顆 lens 遷移時，把已遷移 body 裡「Hard Gate／contract failure／強制 ❌」這類 always-on 阻擋式措辭，軟化成按比例套用的品質自我檢查，避免 ceremony 隨遷移擴散。P0 階段 `jtbd` lens 的措辭忠實保留原文不動，調和交由 meta-skill 層級的一句澄清承接（見 §4.5 相對性 guardrails 精神）。
+- **(6) plugin.json / marketplace.json description 待改寫**：兩處 description 目前仍寫「22 frameworks, 6 modes, multi-language」，沿用舊系統敘述；P4 封裝階段一併改寫成 outcome-first 用語。
+- **(7) 舊版 dispatch hook 為已知落差**：舊版 `user-prompt-detect-specialist-dispatch.py` 目前仍掛在 `UserPromptSubmit`，會在新 meta-skill 之外同時觸發 6-mode dispatch 提示，直到 P2 拆殼才移除；進行 P0 互動驗證時應留意這項已知落差，輸出可能同時帶有兩套系統的痕跡。

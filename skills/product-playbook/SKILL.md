@@ -1,6 +1,6 @@
 ---
 name: product-playbook
-description: Use when the user wants to plan, scope, validate, or strategize a product or feature, before producing any planning artifact. Routes the request to the minimal set of PM framework lenses that produce the outcome, single or blended. Triggers on "plan a feature", "add a feature", "is this worth building", "product strategy", "MVP", "PMF", "North Star", and the same intent in any language ("規劃新功能", "新機能を企画").
+description: Use when the user wants to plan, scope, validate, or strategize a product or feature, before producing any planning artifact. Triggers on "plan a feature", "add a feature", "is this worth building", "product strategy", "MVP", "PMF", "North Star", and the same intent in any language ("規劃新功能", "新機能を企画").
 ---
 
 # Product Playbook
@@ -34,7 +34,7 @@ A narrow, well-defined deliverable takes a single lens. A decision needing sever
 
 Available lenses: strategy-kernel, persona-journey, jtbd, opportunity-solution-tree, problem-framing, positioning, pr-faq, pre-mortem, solution-prioritization, mvp-scoping, success-metrics, pmf-gtm, prd-and-handoff, document-export, product-spec-summary, strategy-critic.
 
-Fallback during migration: if a framework you need has no lens skill yet, read the matching `references/NN-*.md` and apply it inline. (This line is removed once migration completes.)
+Fallback during migration: if a framework you need has no lens skill yet, read the matching `references/NN-*.md` or the matching `agents/*.md` (for example strategy-critic) and apply it inline; recipes are not built yet (P2). (This line is removed once migration completes.)
 
 ## Ground in evidence (research)
 
@@ -48,6 +48,8 @@ Cite real sources and add a count to the provenance line: `— Frameworks: … |
 ## Step 3 — Produce (process minimalism)
 
 Do NOT do by default: mode menus, progress indicators, step-by-step confirmation, per-step self-review, or asking "shall I start?". Deliver the outcome directly, without filler.
+
+A lens's internal quality checklist (for example a Hard Gate or a mandatory ❌ item) is a proportional self-check the lens may apply when the output's quality genuinely needs it; it stays scoped to that judgment call and does not reintroduce per-step ceremony.
 
 ## Step 4 — Tag provenance
 

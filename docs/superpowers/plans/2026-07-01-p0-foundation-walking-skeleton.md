@@ -600,6 +600,8 @@ git commit -m "feat: migrate RICE/GEM prioritization to solution-prioritization 
 **Interfaces:**
 - Consumes: the runner's existing `{cases: [{name, prompt, expect}]}` shape (mirror `evals/evals.json`'s structure exactly — inspect it first and copy the field names).
 
+**P0 validation surface:** P0 is validated only via a repo-local interactive session using a dev plugin pointed at this repo. It is not validated via `claude -p` headless (plugin hooks do not fire there) and not via a user-level `install.sh` install: `install.sh` currently copies only the old root `SKILL.md` (the 6-mode orchestrator) into `~/.claude/skills/`, and copies neither `hooks/` nor the new `skills/*/` lenses, so that path validates the OLD system, not this P0 architecture. Marketplace/npm release and the version bump across `plugin.json`, `marketplace.json`, and `package.json` are P4 work; P0 does not release, so the stale `1.2.12` version across those files is intentional for now.
+
 - [ ] **Step 1: Inspect the existing eval shape**
 
 Run: `python3 -c "import json; d=json.load(open('evals/evals.json')); print(list(d.keys())); print(json.dumps(d[list(d.keys())[0]][:1] if isinstance(d[list(d.keys())[0]], list) else d, ensure_ascii=False, indent=2)[:600])"`
@@ -616,10 +618,10 @@ Match the field names discovered in Step 1. The four cases assert the walking sk
 
 - [ ] **Step 3: Run the eval — INTERACTIVE ONLY, quota-aware (do not run headless in this flow)**
 
-Run (only when appropriate, in an interactive session or with the skill installed at user level): `python3 evals/run_behavioral_eval.py --eval-file evals/skeleton-eval.json --runs 3`
+Run (only when appropriate, in a repo-local interactive session using a dev plugin pointed at this repo directory): `python3 evals/run_behavioral_eval.py --eval-file evals/skeleton-eval.json --runs 3`
 Expected: 4/4 pass.
 
-Do NOT run this via `claude -p` headless as part of P0 execution. Two reasons: (1) it invokes `claude -p` per case × runs and consumes quota; repo policy keeps eval-gate `workflow_dispatch` only. (2) The meta-skill is injected by a PLUGIN SessionStart hook (`hooks/session-start-inject-metaskill.py`), and plugin hooks do not fire in headless `claude -p`, so a headless run would exercise the model WITHOUT the meta-skill active and produce false negatives. The JSON stands as the documented behavioral acceptance spec; the structural unittest suite (81 tests) is the automated gate for P0. The behavioral run is a manual interactive validation the user triggers.
+Do NOT run this via `claude -p` headless as part of P0 execution, and do NOT rely on a user-level `install.sh` install to validate it. Three reasons: (1) it invokes `claude -p` per case × runs and consumes quota; repo policy keeps eval-gate `workflow_dispatch` only. (2) The meta-skill is injected by a PLUGIN SessionStart hook (`hooks/session-start-inject-metaskill.py`), and plugin hooks do not fire in headless `claude -p`, so a headless run would exercise the model WITHOUT the meta-skill active and produce false negatives. (3) `install.sh` currently copies only the old root `SKILL.md` (the 6-mode orchestrator) to `~/.claude/skills/`, and copies neither `hooks/` nor the new `skills/*/` lenses, so a user-level install validates the OLD system, not this P0 architecture. The JSON stands as the documented behavioral acceptance spec; the structural unittest suite (81 tests) is the automated gate for P0. The behavioral run is a manual, repo-local interactive validation the user triggers via a dev plugin.
 
 - [ ] **Step 4: Commit**
 
