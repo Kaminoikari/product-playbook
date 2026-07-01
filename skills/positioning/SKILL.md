@@ -15,8 +15,6 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 ## 2.2 April Dunford's Positioning Framework
 
-**Applicable: Medium/high completeness / audience is executives/sales/marketing**
-
 Positioning is not a tagline — it's deciding where you compete and for whom:
 
 ```
