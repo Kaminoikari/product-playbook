@@ -20,3 +20,14 @@ class TestP4Packaging(unittest.TestCase):
         self.assertTrue(p.startswith(NEW_DESC_HEAD), p[:60])
         for banned in BANNED:
             self.assertNotIn(banned, p, banned)
+
+    def test_meta_skill_recipe_path_uses_plugin_root(self):
+        body = (ROOT / "skills/product-playbook/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("${CLAUDE_PLUGIN_ROOT}/references/recipes/", body)
+
+    def test_document_export_assets_use_skill_dir(self):
+        body = (ROOT / "skills/document-export/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("${CLAUDE_SKILL_DIR}/assets/", body)
+        # the runtime read instruction no longer uses a bare assets/ path
+        import re
+        self.assertNotRegex(body, r"reads `assets/prd-style\.css`")

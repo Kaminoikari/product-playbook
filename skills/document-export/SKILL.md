@@ -176,7 +176,7 @@ Applicable to: PRD, feature extension incremental updates, specs, any content wi
 
 **Step 1: Generate HTML Content**
 
-Claude reads `assets/prd-style.css` and generates a complete HTML document:
+Claude reads `${CLAUDE_SKILL_DIR}/assets/prd-style.css` and generates a complete HTML document:
 
 ```html
 <!DOCTYPE html>
@@ -184,7 +184,7 @@ Claude reads `assets/prd-style.css` and generates a complete HTML document:
 <head>
 <meta charset="UTF-8">
 <style>
-/* Read the full contents of assets/prd-style.css and inline here */
+/* Read the full contents of ${CLAUDE_SKILL_DIR}/assets/prd-style.css and inline here */
 </style>
 </head>
 <body>

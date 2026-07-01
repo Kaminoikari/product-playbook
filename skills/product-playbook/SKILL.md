@@ -69,4 +69,4 @@ Dormant by default. Surface only when the outcome would be materially harmed by 
 
 If the user explicitly wants a full end-to-end walk-through, or the task is a large whole-product plan, suggest one recipe: full-product-plan, quick-validation, product-revision, or feature-extension. Suggest it; never force it. Recipes stay out of the slash-command surface.
 
-Each recipe's lens sequence lives in `references/recipes/<name>.md`: `full-product-plan.md`, `quick-validation.md`, `product-revision.md`, `feature-extension.md`. Read the matching doc once the user accepts the suggestion.
+Each recipe's lens sequence lives in `${CLAUDE_PLUGIN_ROOT}/references/recipes/<name>.md`: `full-product-plan.md`, `quick-validation.md`, `product-revision.md`, `feature-extension.md`. Read the matching doc once the user accepts the suggestion.
