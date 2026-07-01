@@ -315,7 +315,7 @@ def main():
     skill = root / "skills" / "product-playbook" / "SKILL.md"
     try:
         body = skill.read_text(encoding="utf-8")
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:  # never crash the session on a bad read
         print(f"session-start-inject-metaskill: cannot read meta-skill: {exc}", file=sys.stderr)
         sys.exit(0)  # never block the session
     wrapped = (
