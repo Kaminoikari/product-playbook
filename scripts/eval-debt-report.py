@@ -66,20 +66,17 @@ EVAL_ATTRIBUTION: dict[str, dict] = {
     },
     "jtbd-depth": {
         "primary": ["skills/jtbd/SKILL.md"],
-        "secondary": ["references/02b-jtbd.md"],
+        "secondary": [],
         "hint": "Per-persona JTBD; Five Whys Q5 emotion vocab; B2B organisation-level Jobs.",
     },
     "prfaq-quality": {
         "primary": ["skills/pr-faq/SKILL.md"],
-        "secondary": ["references/04a-prfaq.md"],
+        "secondary": [],
         "hint": "PR-FAQ solution paragraph opens with user experience; External FAQ names a real competitor advantage.",
     },
     "security-awareness": {
         "primary": ["skills/prd-and-handoff/SKILL.md"],
-        "secondary": [
-            "references/08-security-checklist.md",
-            "references/07a-handoff-core.md",
-        ],
+        "secondary": ["skills/pre-mortem/SKILL.md"],
         "hint": "Handoff: auth/CORS/CSP coverage; security tasks in the task list; concrete .gitignore body.",
     },
     "strategy-critic-teardown": {

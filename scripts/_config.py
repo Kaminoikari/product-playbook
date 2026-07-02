@@ -55,4 +55,4 @@ STALL_SCORE_TOLERANCE = _getenv_int("STALL_SCORE_TOLERANCE", 5)
 REGRESSION_SCORE_DROP = _getenv_int("REGRESSION_SCORE_DROP", 5)
 
 # Watched authored-file roots for eval freshness comparison
-WATCHED = ["references", "agents", "SKILL.md", "evals/evals.json"]
+WATCHED = ["references", "agents", "skills", "evals/evals.json"]

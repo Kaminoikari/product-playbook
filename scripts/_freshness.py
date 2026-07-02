@@ -28,7 +28,7 @@ try:
     from _config import WATCHED  # M6: centralised
 except ImportError:
     # fallback when imported via importlib without sys.path adjustment
-    WATCHED = ["references", "agents", "SKILL.md", "evals/evals.json"]
+    WATCHED = ["references", "agents", "skills", "evals/evals.json"]
 
 
 def _latest_authored_mtime(root: Path) -> tuple[float, Path | None]:

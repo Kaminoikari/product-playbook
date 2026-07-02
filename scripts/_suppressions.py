@@ -8,7 +8,7 @@ loop-summary's stall detection ignores them when judging whether the loop
 has stalled.
 
 Format: docs/loop-suppressions.jsonl, one JSON object per line:
-    {"file": "references/02b-jtbd.md", "eval_name": "eval-jtbd-depth",
+    {"file": "skills/jtbd/SKILL.md", "eval_name": "jtbd-depth",
      "reason": "hand-tuning the priority-rule wording in branch foo",
      "added": "2026-05-29"}
 

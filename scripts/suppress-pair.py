@@ -7,8 +7,8 @@ mute a pair — annoying enough to skip, which defeats the feature.
 
 Usage:
   python3 scripts/suppress-pair.py \\
-    --file references/02b-jtbd.md \\
-    --eval eval-jtbd-depth \\
+    --file skills/jtbd/SKILL.md \\
+    --eval jtbd-depth \\
     --reason "hand-tuning the priority-rule wording in branch foo"
 
 Idempotent: if the (file, eval_name) pair is already present, prints "exists"
@@ -52,9 +52,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                   formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--file", required=True,
-                    help="Repo-relative path being patched (e.g. references/02b-jtbd.md)")
+                    help="Repo-relative path being patched (e.g. skills/jtbd/SKILL.md)")
     ap.add_argument("--eval", dest="eval_name", required=True,
-                    help="Eval name (e.g. eval-jtbd-depth)")
+                    help="Eval name (e.g. jtbd-depth)")
     ap.add_argument("--reason", default="",
                     help="One-line note for future-you about why this pair is muted")
     ap.add_argument("--path", type=Path, default=DEFAULT_PATH,
