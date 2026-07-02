@@ -20,7 +20,7 @@ on:
       - 'tests/**'
       - 'package.json'
       - 'install.sh'
-      - 'SKILL.md'
+      - 'skills/**'
       - '.claude-plugin/**'
       - '.github/workflows/test-closed-loop.yml'
   push:
@@ -30,7 +30,7 @@ on:
       - 'tests/**'
       - 'package.json'
       - 'install.sh'
-      - 'SKILL.md'
+      - 'skills/**'
       - '.claude-plugin/**'
   workflow_dispatch:
 

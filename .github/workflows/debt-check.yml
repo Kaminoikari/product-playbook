@@ -1,5 +1,5 @@
 # Eval Debt Check — runs the deterministic debt-report (no LLM, no eval run)
-# when references/, agents/, or SKILL.md changes in a PR. Predicts whether
+# when references/, agents/, or skills/ change in a PR. Predicts whether
 # this PR is likely to change the eval debt picture by comparing the debt
 # report at base vs head.
 #
@@ -19,7 +19,7 @@ on:
     paths:
       - 'references/**'
       - 'agents/**'
-      - 'SKILL.md'
+      - 'skills/**'
       - 'scripts/eval-debt-report.py'
   workflow_dispatch:
 
@@ -97,12 +97,12 @@ jobs:
         id: debt_diff
         run: |
           # Static prediction: for each file in the PR diff under references/,
-          # agents/, SKILL.md, look up which evals EVAL_ATTRIBUTION lists it
+          # agents/, skills/, look up which evals EVAL_ATTRIBUTION lists it
           # under primary. Print "this PR likely affects evals: [...]".
           # Pure Python; no LLM, no eval run.
           git fetch origin "${{ github.base_ref }}" --depth=1
           CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD \
-                    -- 'references/**' 'agents/**' 'SKILL.md' || true)
+                    -- 'references/**' 'agents/**' 'skills/**' || true)
           if [ -z "$CHANGED" ]; then
             echo "no_changes=true" >> "$GITHUB_OUTPUT"
             exit 0
