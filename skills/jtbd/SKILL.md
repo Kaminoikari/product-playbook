@@ -21,11 +21,11 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 **JTBD Three-Layer Coverage (quality check: cover all three layers):**
 
-A complete JTBD analysis covers **all three layers explicitly**: **Functional** (the task being completed), **Emotional** (how the user wants to feel during/after), and **Social** (how the user wants to be perceived). Producing only the Functional layer is the most common JTBD failure — Emotional and Social Jobs are routinely the real switching triggers, especially in B2B. If a single Persona genuinely has no meaningful Emotional or Social Job for the product, state that explicitly with one sentence of reasoning rather than silently omitting the row.
+A complete JTBD analysis covers **all three layers explicitly**: **Functional** (the task being completed), **Emotional** (how the user wants to feel during/after), and **Social** (how the user wants to be perceived). Producing only the Functional layer is the most common JTBD failure: Emotional and Social Jobs are routinely the real switching triggers, especially in B2B. If a single Persona genuinely has no meaningful Emotional or Social Job for the product, state that explicitly with one sentence of reasoning; do not silently omit the row.
 
 **JTBD Canonical Form (quality check: three-clause structure):**
 
-Every JTBD statement (Primary, Functional, Emotional, Social — every layer) is written as a complete three-clause sentence in the canonical form. All three clauses matter:
+Every JTBD statement in every layer (Primary, Functional, Emotional, Social) is written as a complete three-clause sentence in the canonical form. All three clauses matter:
 
 ```
 When [situation], I want to [motivation], so [outcome].
@@ -42,18 +42,18 @@ Example: **When** comparing mortgage options late at night and can't reach a ban
 
 **JTBD Four-Type Analysis Table:**
 
-Every cell (Persona 1 / Persona 2) should contain a complete three-clause JTBD sentence. **Short phrases like "Feel like I'm still showing up for myself", "log workouts daily", "track progress easily" all fall short of this bar: they skip the When/so structure the canonical form calls for.** Use the worked example below as the literal shape — every cell should read like a sentence with `When …, I want to …, so …`.
+Every cell (Persona 1 / Persona 2) should contain a complete three-clause JTBD sentence. **Short phrases like "Feel like I'm still showing up for myself", "log workouts daily", "track progress easily" all fall short of this bar: they skip the When/so structure the canonical form calls for.** Use the worked example below as the literal shape: every cell should read like a sentence with `When …, I want to …, so …`.
 
-Worked example (B2C fitness habit tracker, single Persona — replicate this shape for every cell):
+Worked example (B2C fitness habit tracker, single Persona; replicate this shape for every cell):
 
 | JTBD Type | Definition | Persona: Busy Professional |
 |-----------|------------|-----------|
 | Functional Job | Completing a specific task or achieving a functional goal | **When** I get home after a long workday and have 20 minutes before my next commitment, **I want to** log the workout I just did and see what's recommended next, **so** I can keep the streak going without spending mental energy planning. |
-| Emotional Job | How they feel or want to feel | **When** I miss a planned workout two days in a row, **I want to** feel that I'm still on track rather than starting over, **so** I don't fall into the all-or-nothing spiral that kills my consistency. |
+| Emotional Job | How they feel or want to feel | **When** I miss a planned workout two days in a row, **I want to** feel that I'm still on track, with no sense of starting over, **so** I don't fall into the all-or-nothing spiral that kills my consistency. |
 | Social Job | How they want to be perceived by others | **When** a friend asks how my training is going, **I want to** show a clean record of recent activity, **so** I'm seen as someone who follows through on commitments to themselves. |
-| Job Context | Under what circumstances they need to get this job done | **When** my schedule is volatile across the week (early meetings, evening calls), **I want to** fit workouts into 15–45 minute windows wherever they land, **so** training adapts to my life instead of competing with it. |
+| Job Context | Under what circumstances they need to get this job done | **When** my schedule is volatile across the week (early meetings, evening calls), **I want to** fit workouts into 15–45 minute windows wherever they land, **so** training adapts to my life and stops competing with it. |
 
-Empty table (fill each cell with full `When …, I want to …, so …` sentences — do NOT shorten to phrases):
+Empty table (fill each cell with full `When …, I want to …, so …` sentences; do NOT shorten to phrases):
 
 ```
 | JTBD Type | Definition | Persona 1 (must use "When … I want to … so …" full form) | Persona 2 (same) |
@@ -72,19 +72,19 @@ Empty table (fill each cell with full `When …, I want to …, so …` sentence
 5. **Ideal Solution**: If constraints were removed, what would their ideal solution look like?
 
 **Teresa Torres User Interview Best Practices:**
-- Focus on users' **actual past behavior**, not hypothetical future behavior
-- Ask "Last time you ran into this problem, what did you do?" instead of "What features would you like?"
+- Focus on users' **actual past behavior**; avoid probing hypothetical future behavior
+- Ask "Last time you ran into this problem, what did you do?"; "What features would you like?" invites hypothetical answers
 - Most common mistakes: asking hypothetical questions, introducing solution bias, not probing for details
 
 ### 📝 JTBD Quality Checklist
 
 **Quality self-check (apply when the JTBD output's quality needs it):** after producing JTBD output, review each item below and mark it ✅ or ❌; for any ❌, note how to improve it.
 - [ ] Are **all three layers** (Functional / Emotional / Social) written in the full "When … I want to … so …" canonical form? (Any layer missing a clause → mark ❌)
-- [ ] Does it include a specific context? (Not "anytime, anywhere" — but "late at night when they can't reach a bank")
+- [ ] Does it include a specific context? (e.g. "late at night when they can't reach a bank"; "anytime, anywhere" fails this check)
 - [ ] Does it focus on a single core job? (Not three jobs crammed into one sentence)
 - [ ] Can it be used to evaluate "Does this solution actually address this job?"
 - [ ] Does it include "current workarounds" and "gap"? (Gap = opportunity)
-- [ ] Does Q5 of the Deep-Dive use at least one canonical-vocabulary word (`fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`)? Paraphrased consequences like "credibility at risk" or "reputation damaged" miss this: they describe outcomes, not the felt emotion.
+- [ ] Does Q5 of the Deep-Dive use at least one canonical-vocabulary word (`fear`, `anxiety`, `shame`, `worry`, `dread`, `self-doubt`, `sense of loss`, `threat to identity`, `embarrassment`, `guilt`)? Paraphrased consequences like "credibility at risk" or "reputation damaged" miss this: they describe outcomes; the felt emotion is missing.
 
 A self-check that turns up zero ❌ items probably stopped too early. When every item genuinely passes, name the weakest or most fragile part of the analysis instead.
 
@@ -111,7 +111,7 @@ A B2B JTBD analysis that stays purely at the individual-user level misses this b
 For B2B products, the buyer (signs the contract, controls budget) and the daily user (touches the product every day) are almost always different roles with **different Jobs**. Treating them as one persona is the single most common B2B Discovery gap. Self-check:
 
 - If buyer ≠ user (default assumption for B2B), produce **two separate Persona+JTBD blocks**: one for the Buyer (ROI justification, risk reduction, compliance, vendor-consolidation, audit-readiness) and one for the User (efficiency, error reduction, day-in-the-life context). Cross-link them: note where the buyer's Job depends on the user's Job (e.g., "buyer's compliance Job depends on user actually filing the report each cycle").
-- If buyer = user (exceptional, e.g., founder-led tools), state explicitly in one sentence WHY the decision-maker is also the daily user in this specific scenario — do not assume.
+- If buyer = user (exceptional, e.g., founder-led tools), state explicitly in one sentence WHY the decision-maker is also the daily user in this specific scenario; do not assume.
 - Self-check example: producing only one persona ("HR Manager") that conflates budgeting authority and daily form-filling collapses two distinct Jobs into one fuzzy persona; the analysis can't drive product decisions. Watch for this shape and split it before finalizing.
 
 #### Deep-Dive Five Questions — B2B Enhanced Version
@@ -123,22 +123,22 @@ Q5's whole purpose is to surface the felt fear or anxiety that drives switching.
 **Passing examples** (each contains an underlined canonical-vocabulary word):
 - ✅ Professional identity: "She **fears** looking incompetent in front of leadership when this report represents her department's credibility"
 - ✅ Emotional motivation: "He carries quiet **anxiety** that his direct reports will catch him not having a firm grasp of the numbers"
-- ✅ Psychological fear: "Her biggest **dread** is the auditor catching a process gap — she was already warned once before, and the **shame** of a second incident would mark her file permanently"
+- ✅ Psychological fear: "Her biggest **dread** is the auditor catching a process gap: she was already warned once before, and the **shame** of a second incident would mark her file permanently"
 - ✅ Identity threat: "He feels a **threat to identity** when external consultants out-explain him on his own team's metrics in front of the board"
 
 **Failing examples** (functional / consequential, no canonical vocabulary):
 - ❌ "He needs a better tool to improve efficiency" (functional)
-- ❌ "Her credibility with leadership is at risk" (consequence, not felt emotion)
-- ❌ "She might lose her job if this report is wrong" (outcome, not felt emotion — what does she *feel* about that possibility?)
-- ❌ "His reputation in the organization would suffer" (consequence — replace with `embarrassment`, `shame`, or `dread`)
+- ❌ "Her credibility with leadership is at risk" (consequence only; the felt emotion is missing)
+- ❌ "She might lose her job if this report is wrong" (outcome only; what does she *feel* about that possibility?)
+- ❌ "His reputation in the organization would suffer" (consequence; replace with `embarrassment`, `shame`, or `dread`)
 
-If the persona's deepest motivation genuinely doesn't map to any of the canonical-vocabulary words after honest analysis, mark the JTBD Quality Checklist Q5 item as `❌` with the explanation "Q5 currently lives at the consequence layer; need one more interview question that probes felt emotion" — do not paraphrase the vocabulary list to make a checkmark appear.
+If the persona's deepest motivation genuinely doesn't map to any of the canonical-vocabulary words after honest analysis, mark the JTBD Quality Checklist Q5 item as `❌` with the explanation "Q5 currently lives at the consequence layer; need one more interview question that probes felt emotion"; do not paraphrase the vocabulary list to make a checkmark appear.
 
 #### Competitive Alternatives Analysis (Required)
 
 List the alternatives users are actually using today:
 - At least 2 named existing tools (e.g., Slack / Excel / paper forms / email / verbal communication)
-- For each tool, explain its "fundamental flaw": not that the features are weak, but "why this flaw has been accepted and left unsolved" (organizational inertia? switching costs? leadership doesn't care?)
+- For each tool, explain its "fundamental flaw": "why this flaw has been accepted and left unsolved" (organizational inertia? switching costs? leadership doesn't care?); "the features are weak" is too shallow an answer
 
 ### 📋 User Interview Plan Template
 
@@ -148,7 +148,7 @@ List the alternatives users are actually using today:
 **Research Goal**: Understand how [target Persona] deals with [specific problem] in [Job Context]
 **Screening Criteria**:
   - Must have experienced [specific behavior] within the past [X days/weeks]
-  - Exclude: [who is not a fit — e.g., internal employees, known power users]
+  - Exclude: [who is not a fit, e.g., internal employees, known power users]
 
 **Core Questions (5–7)**:
 1. Last time you ran into [problem], can you walk me through how you handled it? (Behavioral recall)

@@ -29,7 +29,7 @@ When the user says "produce a PRD" or "produce a document for engineers," consol
 
 ## 1. Background & Objectives
 
-**Problem Statement**: [Transformed from HMW question — one paragraph explaining what problem is solved for whom]
+**Problem Statement**: [Transformed from HMW question; one paragraph explaining what problem is solved for whom]
 **Target Persona**: [Which Persona]
 **Core JTBD**: [Target Customer] + wants to [Job] + in the context of [Job Context]
 **Success Metrics**: [North Star Metric + Hero Metric]
@@ -101,7 +101,7 @@ When the user says "produce a PRD" or "produce a document for engineers," consol
 |------|-----------|--------|-------------------|
 | | High/Med/Low | High/Med/Low | |
 
-**Core Assumptions**: [Assumptions that need validation — if proven wrong, the direction needs reassessment]
+**Core Assumptions**: [Assumptions that need validation; if proven wrong, the direction needs reassessment]
 
 ---
 
@@ -178,7 +178,7 @@ When the user says "produce a UI wireframe," output a low-fidelity wireframe in 
 
 #### Environment Constraints & Handoff Strategy
 
-**Key fact: Claude Chat / Cowork and Claude Code are separate runtime environments — you cannot launch Claude Code from within Chat.**
+**Key fact: Claude Chat / Cowork and Claude Code are separate runtime environments; you cannot launch Claude Code from within Chat.**
 
 The handoff strategy is therefore: **Produce a structured development handoff package (a set of files)** that the user downloads, places in their project folder, and can kick off the entire development workflow with a single prompt in Claude Code.
 
@@ -196,10 +196,10 @@ Produce the following file set, all placed in the project root:
 
 ```
 [project-name]/
-├── .gitignore             # Version control exclusions (.env, secrets, progress files, etc. — template below)
+├── .gitignore             # Version control exclusions (.env, secrets, progress files, etc.; template below)
 ├── CLAUDE.md              # Claude Code's project memory: product context + development guidelines
 ├── TASKS.md               # Feature breakdown + Phase milestones + per-Task acceptance criteria
-├── TICKETS.md             # Ticket content: title, description, acceptance criteria per ticket — PM can create tickets directly
+├── TICKETS.md             # Ticket content: title, description, acceptance criteria per ticket; PM can create tickets directly
 ├── docs/
 │   ├── PRD.md             # Full PRD (consolidated from the PRD Output Format above)
 │   ├── ARCHITECTURE.md    # Technical architecture: directory structure + DB schema + API endpoints + security architecture
@@ -210,7 +210,7 @@ Produce the following file set, all placed in the project root:
 
 #### 📄 CLAUDE.md Template
 
-CLAUDE.md is Claude Code's project memory file — Claude Code automatically reads it on every startup. It must include:
+CLAUDE.md is Claude Code's project memory file; Claude Code automatically reads it on every startup. It must include:
 
 ```markdown
 # [Product Name] — Project Guide
@@ -247,8 +247,8 @@ CLAUDE.md is Claude Code's project memory file — Claude Code automatically rea
 - [Feature 3]
 
 **Explicitly Not Doing**:
-- [Exclusion 1] — Reason: [rationale]
-- [Exclusion 2] — Reason: [rationale]
+- [Exclusion 1]. Reason: [rationale]
+- [Exclusion 2]. Reason: [rationale]
 
 ## Key Decision Log
 
@@ -465,7 +465,7 @@ As a [Persona], I want to [action], so that [value]
 ##### Ticketing Rules
 
 1. **Ticket-to-Task mapping**: Each Task in TASKS.md maps to one ticket (TKT-001 ↔ T0.1); overly large Tasks may be split into multiple tickets
-2. **Priority inheritance**: Phase 0-1 default to P0, Phase 2 defaults to P1, Phase 3-4 default to P2 — adjustable based on RICE scores
+2. **Priority inheritance**: Phase 0-1 default to P0, Phase 2 defaults to P1, Phase 3-4 default to P2; adjustable based on RICE scores
 3. **Dependencies**: Explicitly mark ticket-to-ticket dependencies to prevent engineers from skipping steps
 4. **Estimated hours**: Based on the Task granularity principle (1-4 hours), provide reasonable estimates
 5. **Suggested labels**: Include Phase, technical domain (frontend / backend / database / infra), feature module
@@ -547,7 +547,7 @@ A single User Story may map to 1-3 Tasks:
 
 ## Database Design
 
-[Consolidate from the PRD's DB Schema — convert to CREATE TABLE SQL or ORM model definitions]
+[Consolidate from the PRD's DB Schema; convert to CREATE TABLE SQL or ORM model definitions]
 
 ### ER Diagram
 
@@ -743,7 +743,7 @@ Before producing the development handoff package, verify each of the following s
 | Check Item | Status | Notes |
 |-----------|--------|-------|
 | Authentication method determined (JWT / Session / OAuth / Passkey) | | |
-| Token storage is secure (HttpOnly Cookie, not localStorage) | | |
+| Token storage is secure (HttpOnly Cookie; localStorage is unsafe for tokens) | | |
 | Token expiration and refresh mechanism designed | | |
 | Password storage uses bcrypt / argon2 (not MD5/SHA) | | |
 | Permission model defined (RBAC / ABAC / simple roles) | | |
@@ -793,9 +793,9 @@ Max-Age: 86400 (24 hours)
 ```
 
 **Validation Principles:**
-- Frontend validation is UX; backend validation is security — both are needed, but backend validation is non-negotiable
+- Frontend validation is UX; backend validation is security. Both are needed, but backend validation is non-negotiable
 - Use a Schema Validation Library (e.g., Zod, Joi, Pydantic) for unified validation logic
-- Reject inputs that don't match expected formats — don't try to "fix" user input
+- Reject inputs that don't match expected formats; don't try to "fix" user input
 
 ##### 4. CSRF Protection (Cross-Site Request Forgery)
 
@@ -856,9 +856,9 @@ Max-Age: 86400 (24 hours)
 ```
 
 **Layered Protection Strategy:**
-1. **Basic layer**: Rate Limiting + robots.txt — Every product should have this
-2. **Standard layer**: + CAPTCHA (registration/login) + Honeypot fields — Recommended for B2C products
-3. **Advanced layer**: + Behavioral analysis + IP reputation + Device Fingerprint — High-risk products
+1. **Basic layer**: Rate Limiting + robots.txt; every product should have this
+2. **Standard layer**: + CAPTCHA (registration/login) + Honeypot fields; recommended for B2C products
+3. **Advanced layer**: + Behavioral analysis + IP reputation + Device Fingerprint; for high-risk products
 
 ##### 8. Sensitive Data Protection
 
@@ -940,7 +940,7 @@ TASKS.md should carry security work as its own checkable line items: for example
 ```
 | Check Item | ✅/❌ |
 |-----------|------|
-| Authentication method explicitly chosen, not left as "TBD" | |
+| Authentication method explicitly chosen ("TBD" doesn't count) | |
 | At least 3 security headers planned | |
 | Rate limiting strategy tailored to product characteristics (not just copied from template) | |
 | .gitignore includes all sensitive files | |

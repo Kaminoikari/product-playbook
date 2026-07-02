@@ -22,7 +22,7 @@ Detect the user's language and reply in it; the framework below is authored in E
 |-------|------|----------------|-----------|----------------------|
 | Level 1 | Nascent PMF | Found 3-5 customers willing to pay for the solution | Deeply serve these early users, find a repeatable pattern | Pre-seed / Seed |
 | Level 2 | Developing PMF | Word-of-mouth starting, but growth is still unstable | Find a scalable acquisition channel, improve retention | Seed / Series A |
-| Level 3 | Strong PMF | "Fish are jumping into the boat" — referrals become the main growth driver | Build scalable demand channels, improve efficiency metrics | Series A / B |
+| Level 3 | Strong PMF | "Fish are jumping into the boat": referrals become the main growth driver | Build scalable demand channels, improve efficiency metrics | Series A / B |
 | Level 4 | Extreme PMF | Metrics are robust, company exceeds 100 people, considering TAM expansion | Enter new markets or launch new products | Series C+ |
 ```
 

@@ -19,7 +19,7 @@ Triggered when the user says "produce a report" or confirms the last stage conte
 
 ## Design Specifications
 
-Use a **modern design style** — a single HTML file (CSS and JS fully inlined), ensuring it's readable offline.
+Use a **modern design style**: a single HTML file (CSS and JS fully inlined), ensuring it's readable offline.
 
 **Overall Style:**
 - Gradient background Hero section (with mode, audience, date labels)
@@ -104,7 +104,7 @@ font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
 **PMF Level Chart:** Use a progress bar or step diagram showing four levels, marking the user's current position
 
-**PR-FAQ Card:** Simulated press release format with headline, subtitle, lead paragraph — visually resembling a real document
+**PR-FAQ Card:** Simulated press release format with headline, subtitle, lead paragraph, visually resembling a real document
 
 **Pre-mortem Risk Table:** High-risk items in red alert, medium-risk in yellow
 
@@ -120,10 +120,10 @@ font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
 ## Important Notes
 
-- All CSS and JS inlined in HTML — no external dependencies except Google Fonts CDN for Inter
-- If a stage was not completed, don't render an empty section — just skip it
+- All CSS and JS inlined in HTML, with no external dependencies except Google Fonts CDN for Inter
+- If a stage was not completed, don't render an empty section; just skip it
 - The Hero section displays the "Mode" and "Audience" so readers immediately understand the document's context
-- The page can be very long — TOC navigation is critical for quick jumping
+- The page can be very long, so TOC navigation is critical for quick jumping
 
 ## Framework Attribution & Further Reading (in footer)
 

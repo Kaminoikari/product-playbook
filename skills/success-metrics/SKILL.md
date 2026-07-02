@@ -34,15 +34,15 @@ A North Star metric must satisfy:
 ```
 North Star Metric: [A single number representing the core value created for users and the product]
 Definition: [Precise calculation method]
-Why this metric: [Explain why it represents real user value, not just a business outcome]
+Why this metric: [Explain why it represents real user value beyond a business outcome]
 ```
 
 ### 📝 North Star Quality Checklist
-- ✅ Does it reflect the value users receive? (Not revenue, not DAU)
+- ✅ Does it reflect the value users receive? (Revenue and DAU fail this test)
 - ✅ Can it grow continuously? (Doesn't hit a natural ceiling)
 - ✅ Does everyone on the team know what to do when they see this metric?
 - ✅ Can it be gamed? (If yes, guardrail metrics are needed)
-- ✅ B2B products: Does it reflect value at the organizational level, not just individual users?
+- ✅ B2B products: Does it reflect value at the organizational level, beyond individual users?
 
 Common pitfalls worth double-checking: using revenue as the North Star (revenue is a lagging business outcome; a North Star metric should track the upstream user behavior that creates that value), or landing on a metric too composite to act on.
 

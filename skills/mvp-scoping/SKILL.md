@@ -15,7 +15,7 @@ Detect the user's language and reply in it; the framework below is authored in E
 
 ### 3.2 Parallel Prototyping Principle
 
-Develop multiple parallel approaches simultaneously — don't design a single solution and rush to execute:
+Develop multiple parallel approaches simultaneously; don't design a single solution and rush to execute:
 
 ```
 | HMW Question | Solution A (Conservative/Incremental) | Solution B (Balanced) | Solution C (Bold/Disruptive) |

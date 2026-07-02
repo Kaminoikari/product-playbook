@@ -32,13 +32,13 @@ Self-check example: a JTBD analysis that ends with a populated RICE table, an MV
 
 ## Continuous Discovery Habits (Teresa Torres)
 
-Build one key habit: **Talk to at least one target user every week.** Discovery is not a one-time ritual — it's an ongoing system.
+Build one key habit: **Talk to at least one target user every week.** Discovery is an ongoing system; a one-time ritual won't sustain it.
 
 > "Product discovery should be a continuous habit, not a one-time ceremony before a project starts." — Teresa Torres
 
 ## 1.1 Build the Persona Table
 
-Personas are not segmented by age and gender, but by **purpose / task / motivation** to distinguish different types of users.
+Personas are segmented by **purpose / task / motivation** to distinguish different types of users; age and gender don't define the segments.
 
 ### 🏢 B2B: Buyer Persona vs User Persona
 
@@ -82,7 +82,7 @@ A pure "Persona X uses it more often" or "Persona Y has more users" reasoning is
 For **B2C products**, check that the reasoning references at least one of: switching-trigger ownership, JTBD severity differential, network-effect seeding, or willingness-to-pay differential. Pure frequency-of-use reasoning is similarly weak for B2C.
 
 ### 📝 Persona Quality Checklist
-- ✅ Is the segmentation based on "purpose/task/motivation" rather than demographics?
+- ✅ Is the segmentation based on "purpose/task/motivation"? (Demographics-only segmentation fails this check)
 - ✅ Are Personas MECE (mutually exclusive and collectively exhaustive of the target market)?
 - ✅ Is the primary TA vs. secondary TA clearly identified?
 - ✅ Are each Persona's "problems/challenges" based on real observations or reasonable inferences?

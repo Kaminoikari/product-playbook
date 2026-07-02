@@ -27,7 +27,7 @@ Principles: Qualitative validation (user interviews, diary studies) + quantitati
 
 ## 4.6 Product Spec Summary
 
-The Product Spec Summary is the final deliverable across all modes (Quick mode produces a one-page directional summary — different structure but same spirit).
+The Product Spec Summary is the final deliverable across all modes (Quick mode produces a one-page directional summary; different structure but same spirit).
 The Product Spec Summary has three sections, corresponding to different reading depths:
 
 ### Section 1: Decision Summary (Readable in 30 seconds)
@@ -99,7 +99,7 @@ Claude proactively identifies the following types of gaps based on the entire co
 | Type | Description | Recommended Next Step |
 |------|------------|----------------------|
 | Unexecuted steps | [Which frameworks were skipped and what blind spots this may cause] | |
-| Insufficient data | [Which decisions are based on assumptions rather than real user data] | |
+| Insufficient data | [Which decisions are based on assumptions, with no real user data behind them] | |
 | Logical leaps | [Where the reasoning lacks intermediate evidence] | |
 | Unvalidated hypotheses | [List all core hypotheses without a validation method yet] | |
 | Unclear definitions | [Which concepts need more precise definition before execution] | |
@@ -112,9 +112,9 @@ Claude proactively identifies the following types of gaps based on the entire co
 Claude provides 3-5 specific, actionable recommendations based on the product's characteristics, stage, and known risks:
 
 ```
-1. [Top priority]: [Specific action] — Rationale: [Why this matters most]
-2. [Second priority]: [Specific action] — Rationale:
-3. [Third priority]: [Specific action] — Rationale:
+1. [Top priority]: [Specific action]. Rationale: [Why this matters most]
+2. [Second priority]: [Specific action]. Rationale:
+3. [Third priority]: [Specific action]. Rationale:
 ...
 ```
 

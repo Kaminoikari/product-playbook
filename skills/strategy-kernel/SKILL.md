@@ -47,7 +47,7 @@ Confirm the team has genuine passion for this problem space. Teams lacking intri
 
 ### Strategy Blocks (Chandra Janakiraman / Headspace / Meta)
 
-The hierarchy of good strategy — each layer is the foundation for the next:
+The hierarchy of good strategy (each layer is the foundation for the next):
 
 ```
 Mission
@@ -60,9 +60,9 @@ Mission
 
 ### Richard Rumelt's Kernel of Good Strategy
 
-- **Diagnosis**: Clearly define the challenge you face (not all problems — the most critical one)
-- **Guiding Policy**: Your overall approach (not a goal, but a method)
-- **Coherent Actions**: Specific actions that reinforce each other, not a collection of independent plans
+- **Diagnosis**: Clearly define the challenge you face (the single most critical problem, and only that one)
+- **Guiding Policy**: Your overall approach (a method, distinct from a goal)
+- **Coherent Actions**: Specific actions that reinforce each other; a collection of independent plans doesn't qualify
 
 > Signs of bad strategy: Grand goals without diagnosis; fancy language masking hollow thinking; calling every plan a "strategy."
 
@@ -94,13 +94,13 @@ O (Overhead): Admin, meetings, paperwork → Finish quickly, don't over-invest
 
 Goals/OKRs in Strategy Blocks are the critical layer for cascading strategy downward. Minimum rules for writing good OKRs:
 
-**Objective**: Qualitative, inspiring, understandable. Describe a state you want to achieve, not a to-do item.
+**Objective**: Qualitative, inspiring, understandable. Describe a state you want to achieve; a to-do item doesn't qualify.
 - ✅ Good O: "Make new users feel the product's core value on day one"
-- ❌ Bad O: "Complete onboarding redesign" (that's a task, not an objective)
+- ❌ Bad O: "Complete onboarding redesign" (that's a task; an objective describes a state)
 
 **Key Results**: Quantitative, measurable, time-bound. Describe how you'll know you've achieved the objective.
 - ✅ Good KR: "Increase new user D1 core action completion rate from 20% to 40%"
-- ❌ Bad KR: "Launch new onboarding flow" (that's an output, not an outcome)
+- ❌ Bad KR: "Launch new onboarding flow" (that's an output; a KR measures an outcome)
 
 **Common pitfalls:**
 - Disguising a task list as OKRs ("Complete feature X" is not a KR)
@@ -118,7 +118,7 @@ O: Make target users love our product (PMF Level 2 → Level 3)
 
 ### Three Core Product Questions (Throughout the Entire Process)
 
-These three questions must be answered in order — **the sequence cannot be swapped**:
+These three questions must be answered in order; **the sequence cannot be swapped**:
 
 > **Q1: How to get people in the front door?**
 > **Q2: How to reach the Aha Moment as fast as possible?**

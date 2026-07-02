@@ -30,7 +30,7 @@ The OST starts from the product goal and systematically connects opportunities t
 ```
 
 Core principles:
-- The goal (Outcome) is a measurable result, not a feature or output
-- Opportunities come from user research, not internal brainstorming
-- Solutions map to opportunities — don't skip opportunities and jump straight to solutions
+- The goal (Outcome) is a measurable result; features and outputs don't qualify
+- Opportunities come from user research; internal brainstorming doesn't count as a source
+- Solutions map to opportunities; don't skip opportunities and jump straight to solutions
 - Go broad, then deep: list all opportunities first, then explore solutions one by one
