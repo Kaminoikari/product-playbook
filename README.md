@@ -104,7 +104,7 @@ For a larger, end-to-end ask, the meta-skill can suggest one of four recipes, a 
 
 ### 🪝 Session continuity
 
-Three lifecycle hooks (`hooks/hooks.json`) keep planning state without Claude needing to remember it across turns: injecting the meta-skill and any saved progress at session start, watching for off-topic detours mid-session, and reminding Claude to keep planning output to documents until the user explicitly moves to build. The session-start injection asserts product-playbook firmly for product and feature planning intent (so it holds its ground when other ideation plugins are installed) and stays dormant for everything else. No hook ever blocks you.
+Lifecycle hooks (`hooks/hooks.json`) keep planning state without Claude needing to remember it across turns: injecting the meta-skill and any saved progress at session start, watching for off-topic detours mid-session, and reminding Claude to keep planning output to documents until the user explicitly moves to build. The session-start injection asserts product-playbook firmly for product and feature planning intent (so it holds its ground when other ideation plugins are installed) and stays dormant for everything else. No hook ever blocks you.
 
 ### 📄 Document export
 
@@ -113,6 +113,12 @@ The `document-export` lens renders planning output as an interactive HTML report
 ### 🔒 Security awareness
 
 `prd-and-handoff` includes an OWASP-aligned security section (auth/authorization, CORS/CSP, input validation) and a `.gitignore` template in every dev handoff package, plus a dedicated security scenario category in `pre-mortem`.
+
+### 🛠 Engineering discipline (`dev-discipline`)
+
+When the session moves from planning into implementation, a lightweight discipline layer takes over: TDD first (failing test before production code), scope integrity (out-of-scope finds get flagged, never silently fixed), secret and security hygiene, subagent economy (implement inline by default), one independent fresh-context code review after each implementation milestone, and a finish-branch checklist that ends with the user choosing merge, PR, or keep.
+
+It is deliberately light: a ~250-token session-start digest, one on-demand skill (`skills/dev-discipline/SKILL.md`), and two deterministic hooks. The TDD gate raises a one-line advisory when production code lands with no test referencing it anywhere in the repo (silence it with a `.product-tdd-waived` marker). The secret guard pauses any write whose content matches a high-confidence credential pattern (AWS / GitHub / Anthropic / OpenAI / Slack / Google / Stripe / npm key shapes, private-key blocks) or whose target is a `.env` file, and asks you to approve in one word. No hook ever hard-stops.
 
 ---
 

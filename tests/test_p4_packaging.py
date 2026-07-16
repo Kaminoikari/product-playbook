@@ -6,11 +6,14 @@ BANNED = ("22 PM frameworks", "6 modes", "multi-language")
 def _load(p): return json.loads((ROOT / p).read_text(encoding="utf-8"))
 
 class TestP4Packaging(unittest.TestCase):
-    def test_all_three_versions_are_2_0_0(self):
-        self.assertEqual(_load("package.json")["version"], "2.0.0")
-        self.assertEqual(_load(".claude-plugin/plugin.json")["version"], "2.0.0")
-        mkt = _load(".claude-plugin/marketplace.json")
-        self.assertEqual(mkt["plugins"][0]["version"], "2.0.0")
+    def test_all_three_versions_are_synced_semver(self):
+        import re
+        pkg = _load("package.json")["version"]
+        plugin = _load(".claude-plugin/plugin.json")["version"]
+        mkt = _load(".claude-plugin/marketplace.json")["plugins"][0]["version"]
+        self.assertEqual(pkg, plugin)
+        self.assertEqual(pkg, mkt)
+        self.assertRegex(pkg, r"^\d+\.\d+\.\d+$")
 
     def test_descriptions_are_outcome_first_and_synced(self):
         p = _load(".claude-plugin/plugin.json")["description"]
