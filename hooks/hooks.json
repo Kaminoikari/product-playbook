@@ -1,5 +1,5 @@
 {
-  "description": "product-playbook hooks: auto-load planning state, detect off-topic / change-propagation prompts, and gate code-file writes during the planning phase.",
+  "description": "product-playbook hooks: auto-load planning state, detect off-topic / change-propagation prompts, gate code-file writes during the planning phase, and enforce dev discipline (TDD gate, secret guard, session-start discipline digest) once implementation starts.",
   "hooks": {
     "SessionStart": [
       {
@@ -18,6 +18,11 @@
           {
             "type": "command",
             "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/session-start-inject-metaskill.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/session-start-inject-dev-discipline.py",
             "timeout": 10
           }
         ]
@@ -41,6 +46,16 @@
           {
             "type": "command",
             "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/pre-write-planning-gate.py",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/pre-write-tdd-gate.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/pre-write-secret-guard.py",
             "timeout": 5
           }
         ]
