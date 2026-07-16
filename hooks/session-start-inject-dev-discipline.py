@@ -7,7 +7,7 @@ These gates apply whenever the session moves into implementation: writing or mod
 2. Scope integrity: build exactly what was agreed; flag out-of-scope discoveries in one line without silently fixing or expanding.
 3. Security hygiene: no hardcoded secrets, never touch .env files, validate inputs at system boundaries, and treat payments, auth, permissions, and migrations as high-risk surfaces.
 4. Subagent economy: implement inline by default; use subagents only for parallel independent research or exploration that you synthesize afterwards.
-5. Independent review: after an implementation milestone, dispatch one fresh-context code-review agent over the diff and address confirmed findings.
+5. Independent review: after an implementation milestone, dispatch two fresh-context reviewers in parallel: a code reviewer judging the diff on correctness and quality, and a spec reviewer checking the diff against the agreed requirements (nothing missing, nothing extra). Address confirmed findings from both.
 6. Finish the branch: run the full test suite and report real output, resolve review findings, and offer the user the close-out choice: merge, open a PR, or keep the branch.
 
 Full protocol: read {skill_path} once implementation starts.

@@ -1,6 +1,6 @@
 ---
 name: dev-discipline
-description: Use when implementation work starts on a feature or bug fix: writing or modifying source code, adding tests, or closing out a branch. Covers TDD-first, scope integrity, secret and security hygiene, independent post-implementation code review, and finish-branch closure. Triggers on "implement", "start coding", "build the feature", "write the code", "fix the bug", "finish the branch", "wrap up the branch", and the same intent in any language ("開始實作", "開發這個功能", "收尾", "実装して").
+description: Use when implementation work starts on a feature or bug fix: writing or modifying source code, adding tests, or closing out a branch. Covers TDD-first, scope integrity, secret and security hygiene, dual post-implementation review (code reviewer plus spec reviewer), and finish-branch closure. Triggers on "implement", "start coding", "build the feature", "write the code", "fix the bug", "finish the branch", "wrap up the branch", and the same intent in any language ("開始實作", "開發這個功能", "收尾", "実装して").
 ---
 
 # Dev Discipline
@@ -41,9 +41,14 @@ Build exactly what was agreed. When you discover an out-of-scope problem, flag i
 
 Implement inline by default; every subagent costs a full context of tokens. Reach for subagents only when the task genuinely benefits from parallel independent work, typically research or exploration across several areas whose results you synthesize afterwards. One subagent per implementation task is the anti-pattern to avoid.
 
-### 5. Independent code review
+### 5. Independent review, two reviewers
 
-After an implementation milestone is complete and tests are green, dispatch one independent reviewer with fresh context over the diff (a code-review agent, or the built-in `/code-review`). Fresh context matters: the author's context defends the code, a reviewer's context reads it. Address confirmed findings; report the findings you decided against acting on. Skip the review only when the user waives it or the change is trivial (typo, comment, config value).
+After an implementation milestone is complete and tests are green, dispatch two independent reviewers with fresh context, in parallel:
+
+- **Code reviewer** — gets the diff only. Judges the code on its own merits: correctness, bugs, security, error handling, maintainability. A code-review agent or the built-in `/code-review` both qualify.
+- **Spec reviewer** — gets the agreed requirements (the task statement, plan, or PRD) plus the diff. Checks that the implementation delivers exactly what was agreed: nothing missing, nothing extra. This is the scope-integrity gate re-applied at review time, by a reader with no stake in the code.
+
+Fresh context matters: the author's context defends the code, a reviewer's context reads it. The two lenses catch different failures: code review finds bugs in what was built, spec review finds gaps between what was built and what was asked. Address confirmed findings from both; report the findings you decided against acting on. Skip the reviews only when the user waives them or the change is trivial (typo, comment, config value).
 
 ### 6. Finish the branch
 

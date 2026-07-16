@@ -42,9 +42,19 @@ class TestDevDisciplineLens(unittest.TestCase):
         self.assertIn("Subagent", self.text)
         self.assertIn("inline", self.text.lower())
 
-    def test_review_gate_requires_fresh_context_reviewer(self):
-        self.assertIn("Independent code review", self.text)
+    def test_review_gate_requires_fresh_context_reviewers(self):
+        self.assertIn("Independent review", self.text)
         self.assertIn("fresh context", self.text.lower())
+
+    def test_review_gate_dispatches_code_and_spec_reviewers(self):
+        self.assertIn("code reviewer", self.text.lower())
+        self.assertIn("spec reviewer", self.text.lower())
+
+    def test_spec_reviewer_checks_diff_against_agreed_scope(self):
+        self.assertRegex(
+            self.text,
+            re.compile(r"spec reviewer.*(scope|agreed|requirement)", re.IGNORECASE | re.DOTALL),
+        )
 
     def test_finish_branch_offers_user_the_close_out_choice(self):
         self.assertIn("Finish the branch", self.text)

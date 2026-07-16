@@ -116,7 +116,7 @@ The `document-export` lens renders planning output as an interactive HTML report
 
 ### 🛠 Engineering discipline (`dev-discipline`)
 
-When the session moves from planning into implementation, a lightweight discipline layer takes over: TDD first (failing test before production code), scope integrity (out-of-scope finds get flagged, never silently fixed), secret and security hygiene, subagent economy (implement inline by default), one independent fresh-context code review after each implementation milestone, and a finish-branch checklist that ends with the user choosing merge, PR, or keep.
+When the session moves from planning into implementation, a lightweight discipline layer takes over: TDD first (failing test before production code), scope integrity (out-of-scope finds get flagged, never silently fixed), secret and security hygiene, subagent economy (implement inline by default), dual fresh-context review after each implementation milestone (a code reviewer for correctness plus a spec reviewer checking the diff against the agreed requirements), and a finish-branch checklist that ends with the user choosing merge, PR, or keep.
 
 It is deliberately light: a ~250-token session-start digest, one on-demand skill (`skills/dev-discipline/SKILL.md`), and two deterministic hooks. The TDD gate raises a one-line advisory when production code lands with no test referencing it anywhere in the repo (silence it with a `.product-tdd-waived` marker). The secret guard pauses any write whose content matches a high-confidence credential pattern (AWS / GitHub / Anthropic / OpenAI / Slack / Google / Stripe / npm key shapes, private-key blocks) or whose target is a `.env` file, and asks you to approve in one word. No hook ever hard-stops.
 

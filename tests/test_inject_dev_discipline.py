@@ -27,6 +27,11 @@ class TestInjectDevDiscipline(unittest.TestCase):
                             "Subagent economy", "Independent review", "Finish the branch"):
             self.assertIn(gate_marker, ctx)
 
+    def test_digest_review_gate_names_both_reviewers(self):
+        ctx = json.loads(_run().stdout)["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("code reviewer", ctx)
+        self.assertIn("spec reviewer", ctx)
+
     def test_digest_offers_finish_branch_choices(self):
         ctx = json.loads(_run().stdout)["hookSpecificOutput"]["additionalContext"]
         self.assertIn("merge", ctx)
