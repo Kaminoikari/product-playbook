@@ -45,10 +45,14 @@ meta_text = (skills_dir / "product-playbook" / "SKILL.md").read_text(
     adapt.adapt_meta(meta_text), encoding="utf-8"
 )
 
+# dev-discipline governs local coding sessions and leans on plugin hooks
+# that do not exist on claude.ai, so it stays out of the bundle.
+NON_LENS_SKILLS = {"product-playbook", "dev-discipline"}
+
 lens_count = 0
 for lens_dir in sorted(skills_dir.iterdir()):
     skill_md = lens_dir / "SKILL.md"
-    if lens_dir.name == "product-playbook" or not skill_md.is_file():
+    if lens_dir.name in NON_LENS_SKILLS or not skill_md.is_file():
         continue
     body = adapt.adapt_lens(
         lens_dir.name, skill_md.read_text(encoding="utf-8")

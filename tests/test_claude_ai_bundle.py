@@ -89,3 +89,15 @@ class TestAdaptLens(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestBundleSweepExclusions(unittest.TestCase):
+    BUILD_SCRIPT = (REPO_ROOT / "scripts" / "build-claude-ai-bundle.sh").read_text(
+        encoding="utf-8"
+    )
+
+    def test_dev_discipline_is_excluded_from_the_lens_sweep(self):
+        # dev-discipline governs local coding sessions and references plugin
+        # hooks that do not exist on claude.ai; shipping it in the bundle
+        # would document machinery the environment cannot run.
+        self.assertIn("dev-discipline", self.BUILD_SCRIPT)
