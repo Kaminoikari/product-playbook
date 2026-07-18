@@ -67,7 +67,17 @@ Build exactly what was agreed. When you discover an out-of-scope problem, flag i
 
 ### 4. Subagent economy
 
-Implement inline by default; every subagent costs a full context of tokens. Reach for subagents only when the task genuinely benefits from parallel independent work, typically research or exploration across several areas whose results you synthesize afterwards. One subagent per implementation task is the anti-pattern to avoid.
+Implement inline by default; every subagent costs a full context of tokens. Reach for subagents only when the task genuinely benefits from parallel independent work, typically research or exploration across several areas whose results you synthesize afterwards. One subagent per implementation task is the anti-pattern to avoid. The threshold test: when the context-setup cost exceeds the parallelism benefit, do it inline.
+
+**Dispatch protocol** — when a subagent IS justified, brief it like this:
+
+- The task instruction goes in the last paragraph of the prompt (recency gets it the most attention); background comes first, task comes last.
+- Never paste harness noise into the brief: no system-reminders, no git status dumps, no directory trees, no full file contents, no skill bodies. Give file paths and line numbers; the subagent reads the files itself and re-derives current state.
+- Background is a summary: the 2-3 relevant recent turns, plus a list of files already read and tools already used; tool outputs appear as short previews (under ~200 chars) or as paths to saved output.
+- Declare the I/O contract: what the agent Expects in the prompt (required inputs) and what it Produces (an output file at an agreed path, reported in its final line). Chain stages through files, never by re-narrating results through context.
+- Route models by role: exploration, summarization, and mechanical transformation go to the cheapest model; implementation and adversarial review stay on the strong model. When the cheap path is unavailable, skip the nicety rather than paying full price for it.
+- Reviewers and explorers get read-only tools; second rounds of the same work (fixing findings, retrying a failed implementation) resume the original agent rather than cold-starting a new one.
+- Mid-task corrections to a running agent go one instruction per message, verbatim, never merged into a digest of several asks; the agent decides whether to finish its current step first.
 
 ### 5. Independent review, two reviewers
 

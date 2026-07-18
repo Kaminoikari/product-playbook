@@ -225,6 +225,14 @@ token 控制點：plan 一次凍結（不重談）、reviewer 稽核不重建、
 **P1（hook 工程，一次投資長期零 token 回報）**：B1–B6、C4、C6、E 全部
 **P2（新 skill 與長期習慣）**：D1–D4、F
 
+## 六、落地狀態（2026-07-18 更新）
+
+- **P0 全數落地**（plugin 2.2.0，commit 2de8d8d）：A1–A6、C1、C2、C3、C5，外加提前拉入的 C4（strategist 一行）與 C6（digest 尺寸回歸測試）。
+- **P1 落地**（plugin 2.3.0 ＋ 四個 user-global hooks）：B1（stop-verification-gate.py）、B2（post-tool-observer.py doom-loop）、B3 核心（bash-policy-guard.py ＋ permissions.deny 的 .env 與 *.pem 兩條，.pem 出自本報告 B3 建議）、B5（HOOK-STANDARDS.md）、B6 logger 半邊、E-1..8 進 dev-discipline gate 4、E-9 一行、E-10（subagent-git-ledger.py）。
+- **B4 修正**：實查官方文件確認 PreCompact 的 stdout 會被 harness 忽略，注入式 PreCompact hook 不可行；改以 CLAUDE.md compaction 習慣規則 ＋ 既有 SessionStart(compact) digest 再注入承接。限制記錄於 HOOK-STANDARDS.md。
+- **明確延後（原因）**：B3 的 cat 巨檔警告（需 stat 目標檔且誤報面大，待設計好 size 判準再上，先由「大輸出導檔」CLAUDE.md 規則承接）；B6 的 eval token ledger（等下一次 eval 迭代時直接改 evals/run_*.py 記 usage JSON，避免無執行路徑的死程式碼）。
+- **P2 未動**：D1–D4、F 依原優先序排程。
+
 預期效益對照目標：
 - 品質：C1（收斂的 adversarial review）+ C3（launch check 補前端盲點）+ A2（測試誠實性）直接對應「零已知問題才上線」
 - token：E（subagent 規約）與 B3（規則出 context 進 hook）是最大節流；A1 的 anti-ratchet 砍掉 review 無限迴圈；C5 讓小任務近零開銷

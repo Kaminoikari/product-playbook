@@ -138,6 +138,41 @@ class TestDevDisciplineLens(unittest.TestCase):
         self.assertIn("screenshot", self.text.lower())
         self.assertRegex(self.text, re.compile(r"run it twice", re.IGNORECASE))
 
+    def test_dispatch_protocol_puts_task_last_and_forbids_noise(self):
+        self.assertIn("Dispatch protocol", self.text)
+        self.assertRegex(
+            self.text,
+            re.compile(r"task (instruction|brief).*(last|final)", re.IGNORECASE | re.DOTALL),
+        )
+        self.assertRegex(
+            self.text,
+            re.compile(r"(paths|file paths).*(read|reads).*(itself|themselves)",
+                       re.IGNORECASE | re.DOTALL),
+        )
+
+    def test_dispatch_protocol_declares_io_contract(self):
+        self.assertIn("Expects", self.text)
+        self.assertIn("Produces", self.text)
+
+    def test_dispatch_protocol_routes_models_by_role(self):
+        self.assertRegex(
+            self.text,
+            re.compile(r"cheap(est)? model.*(strong|top|main) model",
+                       re.IGNORECASE | re.DOTALL),
+        )
+
+    def test_dispatch_protocol_has_anti_delegation_heuristic(self):
+        self.assertRegex(
+            self.text,
+            re.compile(r"context.setup cost.*parallelism", re.IGNORECASE | re.DOTALL),
+        )
+
+    def test_dispatch_protocol_sends_corrections_one_per_message(self):
+        self.assertRegex(
+            self.text,
+            re.compile(r"one instruction per message.*verbatim", re.IGNORECASE | re.DOTALL),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
