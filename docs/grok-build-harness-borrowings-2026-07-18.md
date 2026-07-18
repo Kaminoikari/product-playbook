@@ -1,7 +1,7 @@
 # grok-build Harness 借鏡報告（2026-07-18）
 
 來源：https://github.com/xai-org/grok-build（xAI 開源的 Grok Build CLI/agent runtime，Rust，2,761 檔案）。
-研究方法：12 個平行 reader 深讀各子系統（prompt templates、goal-mode 編排、內建 skills、24 篇 user-guide、compaction、subagent resolution、hooks 引擎、circuit breaker、changelog 全掃、本地現況盤點），其中 7 個領域經 adversarial verifier 逐條覆核。goal-mode 與 core-prompts 的 8 份模板與 3 份 skill 由本 session 親讀原檔；引用的關鍵數字（85% compaction、retry 15、classifier cap 10、stall threshold 2 等）已用 grep 對原始碼逐一覆核。
+研究方法：12 個平行 reader 深讀各子系統（prompt templates、goal-mode 編排、內建 skills、24 篇 user-guide、compaction、subagent resolution、hooks 引擎、circuit breaker、changelog 全掃、本地現況盤點），其中 7 個領域經 adversarial verifier 逐條覆核。共萃取 180 個機制（per-domain：core-prompts 19、goal-mode 12、builtin-skills 8、docs-config 22、docs-hooks-memory 14、docs-modes-safety 22、token-economy 16、subagents-lifecycle 10、context-state 8、reliability-hooks 17、changelog-sweep 17、local-inventory 15）。goal-mode 與 core-prompts 的 8 份模板與 3 份 skill 由本 session 親讀原檔；引用的關鍵數字（85% compaction、retry 15、classifier cap 10、stall threshold 2 等）已用 grep 對原始碼逐一覆核。
 
 **驗證狀態聲明**：builtin-skills、docs 三領域、subagents-lifecycle 經獨立 verifier 確認；token-economy、context-state、reliability-hooks-engine、changelog-sweep 的 verifier 撞到 session limit 未跑，本報告只引用其中已由本 session grep 覆核或有雙讀者交叉印證的細節，未覆核的個別數字在文中標註。
 
