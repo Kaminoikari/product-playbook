@@ -231,7 +231,11 @@ token 控制點：plan 一次凍結（不重談）、reviewer 稽核不重建、
 - **P1 落地**（plugin 2.3.0 ＋ 四個 user-global hooks）：B1（stop-verification-gate.py）、B2（post-tool-observer.py doom-loop）、B3 核心（bash-policy-guard.py ＋ permissions.deny 的 .env 與 *.pem 兩條，.pem 出自本報告 B3 建議）、B5（HOOK-STANDARDS.md）、B6 logger 半邊、E-1..8 進 dev-discipline gate 4、E-9 一行、E-10（subagent-git-ledger.py）。
 - **B4 修正**：實查官方文件確認 PreCompact 的 stdout 會被 harness 忽略，注入式 PreCompact hook 不可行；改以 CLAUDE.md compaction 習慣規則 ＋ 既有 SessionStart(compact) digest 再注入承接。限制記錄於 HOOK-STANDARDS.md。
 - **明確延後（原因）**：B3 的 cat 巨檔警告（需 stat 目標檔且誤報面大，待設計好 size 判準再上，先由「大輸出導檔」CLAUDE.md 規則承接）；B6 的 eval token ledger（等下一次 eval 迭代時直接改 evals/run_*.py 記 usage JSON，避免無執行路徑的死程式碼）。
-- **P2 未動**：D1–D4、F 依原優先序排程。
+- **P2 落地**（user-global skills ＋ 本 repo docs）：
+  - D1 `~/.claude/skills/check-work/`（trace 注入、VERDICT fail-closed、3 輪上限、比例閥、Phase B 含 build/tests/linters 與 scratchpad 限定的自寫探測）；D2 `~/.claude/skills/best-of-n/`（diversity 指令、明確請求才觸發、贏家接 dev-discipline review）；D3 `~/.claude/skills/session-handoff/`（9 段結構；已實跑產出 docs/handoffs/2026-07-18-grok-borrowings.md）。三者 validate_skill 通過且 harness 熱載入確認。
+  - D4 `docs/INDEX.md` ＋ 進入點 `CLAUDE.md`（repo 級，每 session 載入，指向 index）。
+  - F(a) 活性指令標籤禁令：三處落地——session-handoff skill 規則、`~/.claude/hooks/memory-lint.sh` deterministic 檢查（反引號提及豁免；正反向驗證過）、fable-soul `references/maintenance.md` 新增 Memory Hygiene 節（sync_soul.py 已同步 codex mirror）。
+  - F(b) 已覆蓋／延後：date 慣例與 >90d age 檢查由既有 memory-lint 承接（already covered）；LLM 合併式 consolidation routine **延後**——現行 weekly reflection 已回報 contradictions/near-duplicates，等其報告出現值得合併的量再上 merge 版，避免為空需求建 routine。
 
 預期效益對照目標：
 - 品質：C1（收斂的 adversarial review）+ C3（launch check 補前端盲點）+ A2（測試誠實性）直接對應「零已知問題才上線」
