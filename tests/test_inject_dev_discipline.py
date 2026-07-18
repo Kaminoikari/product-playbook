@@ -47,6 +47,23 @@ class TestInjectDevDiscipline(unittest.TestCase):
         ctx = json.loads(_run().stdout)["hookSpecificOutput"]["additionalContext"]
         self.assertIn("dormant", ctx)
 
+    def test_digest_carries_test_theater_and_launch_check(self):
+        ctx = json.loads(_run().stdout)["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("test theater", ctx.lower())
+        self.assertIn("entry-point launch check", ctx.lower())
+
+    def test_digest_carries_review_convergence_contract(self):
+        ctx = json.loads(_run().stdout)["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("VERDICT", ctx)
+        self.assertIn("three rounds", ctx.lower())
+
+    def test_digest_stays_under_size_ceiling(self):
+        # The digest is always-on context in every session; a size ceiling
+        # stops it from bloating release over release (grok-build keeps the
+        # same invariant with per-template char-limit unit tests).
+        ctx = json.loads(_run().stdout)["hookSpecificOutput"]["additionalContext"]
+        self.assertLessEqual(len(ctx), 3000, "digest exceeds 3000 chars (~750 tokens)")
+
     def test_hook_survives_malformed_stdin(self):
         proc = _run(stdin="not json {{{")
         self.assertEqual(proc.returncode, 0)
