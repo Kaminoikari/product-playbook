@@ -1,0 +1,10 @@
+[
+  {"query": "開始實作這個功能：使用者可以把文章加入書籤，之後在個人頁面看到清單", "should_trigger": true},
+  {"query": "Implement the bookmark feature we agreed on: add the API endpoint and the list view.", "should_trigger": true},
+  {"query": "修這個 bug：登入成功後會被 redirect 到 404 頁面", "should_trigger": true},
+  {"query": "幫我收尾這個 branch，準備可以合併的狀態", "should_trigger": true},
+  {"query": "実装してください：CSV エクスポート機能", "should_trigger": true},
+  {"query": "解釋一下這段 code 在做什麼就好，不用改任何東西", "should_trigger": false},
+  {"query": "What is the difference between JWT and session-based auth? Just explain, no code.", "should_trigger": false},
+  {"query": "幫我看一下最近五筆 git commits 的訊息", "should_trigger": false}
+]

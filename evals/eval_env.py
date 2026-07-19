@@ -31,7 +31,14 @@ def plugin_isolation_args() -> list[str]:
         return []
     raw = os.environ.get("PRODUCT_PLAYBOOK_EVAL_DISABLE_PLUGINS", _DEFAULT_INTERFERING)
     names = [n.strip() for n in raw.split(",") if n.strip()]
-    if not names:
+    enabled: dict[str, bool] = {name: False for name in names}
+    # Force-enable the plugin under test. The user may scope product-playbook
+    # per-project (user-level enabledPlugins false + a repo-local true), and
+    # evals run `claude -p` from $HOME where only the user-level false applies:
+    # without this line the plugin never loads headless and every
+    # should_trigger case is a structural zero regardless of model or content.
+    if os.environ.get("PRODUCT_PLAYBOOK_EVAL_ENSURE_SELF", "1") != "0":
+        enabled["product-playbook@skills-dir"] = True
+    if not enabled:
         return []
-    settings = {"enabledPlugins": {name: False for name in names}}
-    return ["--settings", json.dumps(settings)]
+    return ["--settings", json.dumps({"enabledPlugins": enabled})]
