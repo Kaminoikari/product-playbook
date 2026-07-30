@@ -1,7 +1,7 @@
 {
   "name": "product-playbook",
   "description": "MUST use when the user wants to plan, strategize, validate, or scope a product or feature. Composable product-thinking lenses (JTBD, PR-FAQ, positioning, pre-mortem, RICE, North Star, MVP, GTM, and more) that snap to the outcome and blend when the situation needs it, from raw idea to dev handoff.",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "author": {
     "name": "Charles Chen"
   },
