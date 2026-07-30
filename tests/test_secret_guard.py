@@ -8,12 +8,23 @@ AWS_DOC_EXAMPLE_KEY = "AKIAIOSFODNN7EXAMPLE"
 AWS_LIVE_SHAPE_KEY = "AKIA" + "J7Q2ZKN4RP8W5TBH"
 
 
-def _run(payload: dict | str) -> subprocess.CompletedProcess:
+GUARD_ENV_VAR = "PRODUCT_PLAYBOOK_SECRET_GUARD"
+
+
+def _run(payload: dict | str, guard: str | None = None) -> subprocess.CompletedProcess:
     stdin = payload if isinstance(payload, str) else json.dumps(payload)
+    env = {**os.environ, "CLAUDE_PLUGIN_ROOT": str(ROOT)}
+    # Pin the switch instead of inheriting it: an operator who turned the guard
+    # off in their own shell would otherwise silently flip every default-mode
+    # assertion below into a false pass.
+    if guard is None:
+        env.pop(GUARD_ENV_VAR, None)
+    else:
+        env[GUARD_ENV_VAR] = guard
     return subprocess.run(
         ["python3", str(HOOK)],
         input=stdin, capture_output=True, text=True,
-        env={**os.environ, "CLAUDE_PLUGIN_ROOT": str(ROOT)}, timeout=10,
+        env=env, timeout=10,
     )
 
 
@@ -83,6 +94,47 @@ class TestSecretGuard(unittest.TestCase):
         proc = _run("not json {{{")
         self.assertEqual(proc.returncode, 0)
         self.assertEqual(proc.stdout.strip(), "")
+
+
+class TestSecretGuardTurnedOff(unittest.TestCase):
+    """`PRODUCT_PLAYBOOK_SECRET_GUARD=off` — for unattended runs where a consent
+    dialog has nobody to answer it. Detection must still happen and still be
+    visible; only the blocking is dropped."""
+
+    def test_live_shape_key_writes_without_a_prompt(self):
+        proc = _run(_write_payload("config.py", f'AWS_KEY = "{AWS_LIVE_SHAPE_KEY}"\n'), guard="off")
+        self.assertEqual(proc.returncode, 0)
+        self.assertEqual(proc.stdout.strip(), "", "a decision was emitted, so the write still stalls")
+
+    def test_env_file_write_goes_through_without_a_prompt(self):
+        proc = _run(_write_payload(".env", "API_KEY=whatever\n"), guard="off")
+        self.assertEqual(proc.stdout.strip(), "")
+
+    def test_the_finding_is_still_reported_on_stderr(self):
+        proc = _run(_write_payload("config.py", f'AWS_KEY = "{AWS_LIVE_SHAPE_KEY}"\n'), guard="off")
+        self.assertIn("AWS", proc.stderr)
+
+    def test_stderr_report_never_echoes_the_secret_itself(self):
+        proc = _run(_write_payload("config.py", f'AWS_KEY = "{AWS_LIVE_SHAPE_KEY}"\n'), guard="off")
+        self.assertNotIn(AWS_LIVE_SHAPE_KEY, proc.stderr)
+
+    def test_clean_content_stays_silent_on_stderr_too(self):
+        proc = _run(_write_payload("config.py", 'NAME = "charles"\n'), guard="off")
+        self.assertEqual(proc.stdout.strip(), "")
+        self.assertEqual(proc.stderr.strip(), "")
+
+    def test_only_an_explicit_off_value_disables_the_guard(self):
+        # A stray or misspelled value must fail SAFE — still ask.
+        for value in ("", "on", "ask", "1", "true", "OFFF", "disabled"):
+            with self.subTest(value=value):
+                out = _decision(_run(_write_payload(".env", "A=1\n"), guard=value))
+                self.assertEqual(out["permissionDecision"], "ask")
+
+    def test_off_is_case_and_whitespace_insensitive(self):
+        for value in ("off", "OFF", " Off ", "0", "false", "no"):
+            with self.subTest(value=value):
+                proc = _run(_write_payload(".env", "A=1\n"), guard=value)
+                self.assertEqual(proc.stdout.strip(), "")
 
 
 if __name__ == "__main__":
