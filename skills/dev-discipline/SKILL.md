@@ -119,6 +119,6 @@ Closing checklist, in order:
 Two plugin hooks enforce the highest-value gates outside the model's discretion:
 
 - `pre-write-tdd-gate.py` raises a one-line advisory when production code is written and no test referencing it exists anywhere in the repo. Silence it project-wide with a `.product-tdd-waived` marker file.
-- `pre-write-secret-guard.py` pauses the write for user confirmation when file content matches a high-confidence credential pattern, or when the target is a `.env` file.
+- `pre-write-secret-guard.py` pauses the write for user confirmation when file content matches a high-confidence credential pattern, or when the target is a `.env` file. Set `PRODUCT_PLAYBOOK_SECRET_GUARD=off` for unattended runs, where a confirmation dialog has nobody to answer it: detection still reports to stderr, but the write is no longer held. Only `off` / `0` / `false` / `no` disable it; any other value keeps the confirmation.
 
 Both follow the plugin's relative-guardrail style: one line, user overrides in one word, never a hard stop.

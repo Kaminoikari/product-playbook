@@ -12,16 +12,28 @@ call in one word. Lines that look like documentation placeholders
 (example / dummy / redacted / <angle-bracket> values) are skipped. The
 matched secret is never echoed back; the reason names only the pattern
 and line number.
+
+Asking is the only thing a PreToolUse hook can do here: it cannot both let
+the write land and stop it for review. That makes this hook unusable in an
+unattended run, where no one is there to answer and the dialog just stalls
+the session. `PRODUCT_PLAYBOOK_SECRET_GUARD=off` downgrades the prompt to a
+stderr note, so detection still lands in the transcript while the write goes
+through. Default stays `ask`; turning it off means nothing stops a real
+credential from being written.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 WATCHED_TOOLS = {"Write", "Edit", "MultiEdit"}
+
+# Read at call time, not import time, so a test can set it per subprocess.
+GUARD_ENV_VAR = "PRODUCT_PLAYBOOK_SECRET_GUARD"
 
 SECRET_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("AWS access key id", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
@@ -74,7 +86,16 @@ def _find_secrets(content: str) -> list[str]:
     return hits
 
 
+def _guard_off() -> bool:
+    return os.environ.get(GUARD_ENV_VAR, "").strip().lower() in {"off", "0", "false", "no"}
+
+
 def _ask(reason: str) -> None:
+    if _guard_off():
+        # Record the finding where a human reviewing the transcript will see it,
+        # then emit no decision at all so the write proceeds untouched.
+        print(reason, file=sys.stderr)
+        return
     json.dump({"hookSpecificOutput": {
         "hookEventName": "PreToolUse",
         "permissionDecision": "ask",
